@@ -1,0 +1,87 @@
+{
+        "@id": host_schema,
+        "@type": "owl:Ontology",
+        "@context": {
+            "maxCount": {
+                "@id": "sh:maxCount",
+                "@type": "xsd:integer"
+            },
+            "minCount": {
+                "@id": "sh:minCount",
+                "@type": "xsd:integer"
+            },
+            "datatype": {
+                "@id": "sh:datatype",
+                "@type": "@id"
+            },
+            "name": "sh:name",
+            "path": {
+                "@id": "sh:path",
+                "@type": "@id"
+            },
+            "nodeKind": {
+                "@id": "node:Kind",
+                "@type": "@id"
+            },
+            "description": "sh:description",
+            "class": {
+                "@id": "sh:class",
+                "@type": "@id"
+            },
+            "property": {
+                "@id": "sh:property",
+                "@type": "@id"
+            },
+            "isDefinedBy": {
+                "@id": "rdfs:isDefinedBy",
+                "@type": "@id"
+            },
+            "targetClass": {
+                "@id": "sh:targetClass",
+                "@type": "@id"
+            },
+            "targetObjectOf": {
+                "@id": "sh:targetObjectOf",
+                "@type": "@id"
+            },
+            "node": {
+                "@id": "sh:node",
+                "@type": "@id"
+            },
+            "rest": {
+                "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
+                "@type": "@id"
+            },
+            "first": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
+            "in": {
+                "@id": "sh:in",
+                "@type": "@id"
+            },
+            "schema": "http://schema.org/",
+            "this": host_schema,
+            "foaf": "http://xmlns.com/foaf/0.1/",
+            "sh": "http://www.w3.org/ns/shacl#",
+            "owl": "http://www.w3.org/2002/07/owl#",
+            "xsd": "http://www.w3.org/2001/XMLSchema#",
+            "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+            "shapes": {
+                "@reverse": "rdfs:isDefinedBy",
+                "@type": "@id"
+            }
+        },
+        "shapes": [
+            {
+              "@id": "foaf:PersonShape",
+                "@type": "sh:NodeShape",
+                "property": [
+                    {
+                     "path": "foaf:name",
+                     "minCount": 1,
+                     "maxCount": 1,
+                     "datatype": "xsd:string" 
+                    }
+                ],
+                "targetClass": "foaf:Person"
+            }
+        ]
+}
