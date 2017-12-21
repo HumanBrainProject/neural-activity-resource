@@ -1,0 +1,90 @@
+/*
+
+ nar-sh-node-validate: node.js SHACL command line validator 
+
+ @msuzen
+ January 2018
+
+ See README.md for installation/usage notes
+
+ Usage:
+  node nar-sh-node-validate --data samples/data01.ttl --shapes samples/shapes01.ttl --type="text/turtle"
+
+ Notes:
+   * install node.js v8.x.x
+   * Set NODE_PATH
+     export NODE_PATH=/usr/bin/nodejs:/usr/local/lib/node_modules:/usr/share/javascript
+
+
+*/
+
+const commandLineArgs = require('command-line-args');
+var $rdf = require('rdflib');
+
+const optionDefinitions = [{
+    name: 'data',
+    alias: 'd',
+    type: String
+}, {
+    name: 'shapes',
+    alias: 's',
+    type: String
+}, {
+    name: 'type',
+    type: String,
+    defaultOption: true,
+    defaultValue: "text/turtle"
+}, {
+    name: 'help',
+    alias: 'h',
+}, ];
+
+const options = commandLineArgs(optionDefinitions);
+
+// var options = {data: "samples/data01.ttl", shapes: "samples/shapes01.ttl", type: "text/turtle"}
+console.log("data file:", options.data, "shapes file:", options.shapes);
+var fs = require('fs');
+var pdata = process.cwd() + '/' + options.data
+var data = fs.readFileSync(pdata, 'utf-8').toString();
+var pshapes = process.cwd() + '/' + options.shapes
+var shapes = fs.readFileSync(pshapes, 'utf-8').toString();
+
+// We don't need RDF graphs 
+// but code is retained for future reference
+var uri = 'http://example.org/ns#'
+var body = data
+var mimeType = options.type
+var data_graph = $rdf.graph()
+
+
+try {
+    $rdf.parse(body, data_graph, uri, mimeType)
+} catch (err) {
+    console.log(err)
+}
+
+var uri = 'http://schema.org/'
+var body = shapes
+var mimeType = options.type
+var shapes_graph = $rdf.graph()
+
+try {
+    $rdf.parse(body, shapes_graph, uri, mimeType)
+} catch (err) {
+    console.log(err)
+}
+
+
+var SHACLValidator = require("./shacl-js/index.js")
+var validator = new SHACLValidator();
+console.log("mimeType= ", options.type);
+
+function cb(e, report) {
+    console.log("Conforms? " + report.conforms());
+    if (report.conforms() === false) {
+        report.results().forEach(function(result) {
+            console.log(" - Severity: " + result.severity() + " for " + result.sourceConstraintComponent());
+        });
+    }
+}
+validator.validate(data, options.type, shapes, options.type, cb);

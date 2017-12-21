@@ -182,6 +182,20 @@ test_schema = {
         ]
     }
 
+test_schema= {'@context': {'foaf': 'http://xmlns.com/foaf/0.1/',
+  'narci': 'http://www.purl.org/narci/v0.2.1/schema#',
+  'owl': 'http://www.w3.org/2002/07/owl#',
+  'rdf': 'http://www.w3.org/2000/01/rdf-schema#',
+  'rdfs': 'http://www.w3.org/1999/02/22-rdf-syntax-ns',
+  'schema': 'http://schema.org/',
+  'skos': 'http://www.w3.org/2004/02/skos/core#',
+  'xsd': 'http://www.w3.org/2001/XMLSchema/'},
+ '@id': '_:ub4bL15C21',
+ 'https://www.w3.org/ns/shacl.ttldatatype': {'@id': 'http://www.w3.org/2001/XMLSchema#string'},
+ 'https://www.w3.org/ns/shacl.ttlmaxCount': 1,
+ 'https://www.w3.org/ns/shacl.ttlminCount': 1,
+ 'https://www.w3.org/ns/shacl.ttlpath': {'@id': 'foaf:name'}}
+
 from pyxus.resources.repository import SchemaRepository, Schema
 #
 # Create/publish a dummy schema called 'foafsh_schema'
