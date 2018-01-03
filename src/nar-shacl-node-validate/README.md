@@ -24,9 +24,21 @@ based on `node.js` package `shacl.js` ([link](https://github.com/TopQuadrant/sha
 
 ## Usage
 
-* For turtle format there are samples under `samples` directory.
-* Execute 
+* Major file types are valid, for example, `text/turtle`, `text/jsonld`.
+  Argument is `--type`
+* There are samples under `samples` directory.
+  Arguments are `--data` and `--shapes` respectively.
+* Example command line execution
+
   `node nar-sh-node-validate --data samples/data01.ttl --shapes samples/shapes01.ttl --type="text/turtle"` 
+  
+   This should give following output
+
+  `mimeType=  text/turtle
+Conforms? false
+ - Severity: Violation for http://www.w3.org/ns/shacl#LessThanConstraintComponent
+ - Severity: Violation for http://www.w3.org/ns/shacl#NodeConstraintComponent
+   `
 
 ## Issues/Bug
 Any issue use github ticketing.
