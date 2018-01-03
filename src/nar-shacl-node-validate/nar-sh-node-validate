@@ -8,7 +8,7 @@
  See README.md for installation/usage notes
 
  Usage:
-  node nar-sh-node-validate --data samples/data01.ttl --shapes samples/shapes01.ttl
+  node nar-sh-node-validate --data samples/data01.ttl --shapes samples/shapes01.ttl --type="text/turtle"
 
  Notes:
    * install node.js v8.x.x
@@ -44,14 +44,14 @@ const options = commandLineArgs(optionDefinitions);
 
 // var options = {data: "data.ttl", shapes: "shapes.ttl", type: "text/turtle"}
 console.log("data file:", options.data, "shapes file:", options.shapes);
-var fs = require('fs');
-var pdata = process.cwd() + '/' + options.data
-var data = fs.readFileSync(pdata, 'utf-8').toString();
+var fs      = require('fs');
+var pdata   = process.cwd() + '/' + options.data
+var data    = fs.readFileSync(pdata, 'utf-8').toString();
 var pshapes = process.cwd() + '/' + options.shapes
-var shapes =   fs.readFileSync(pshapes, 'utf-8').toString();
+var shapes  = fs.readFileSync(pshapes, 'utf-8').toString();
 
-var uri  = 'http://example.org/ns#'
-var body = data
+var uri        = 'http://example.org/ns#'
+var body       = data
 var mimeType   = options.type
 var data_graph = $rdf.graph()
 
@@ -61,10 +61,10 @@ try {
    console.log(err)
 }
 
-var uri  = 'http://schema.org/'
-var body = shapes
-var mimeType = options.type
-var shapes_graph= $rdf.graph()
+var uri          = 'http://schema.org/'
+var body         = shapes
+var mimeType     = options.type
+var shapes_graph = $rdf.graph()
 
 try {
   $rdf.parse(body, shapes_graph, uri, mimeType)
