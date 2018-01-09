@@ -36,7 +36,7 @@ narci_sh:APD a foaf:Person;
 # NARCI shapes Ontology
 <http://www.purl.org/narci_sh/schema#> a owl:Ontology ;
      dcterm:title "narci" ;
-     dcterm:modified "2017-11-09"^^<http://www.w3.org/2001/XMLSchema#date>;
+     dcterm:modified "2018-01-09"^^<http://www.w3.org/2001/XMLSchema#date>;
      dcterm:description """
                             (c) 2017 Le Centre National de la Recherche Scientifique (CRNS)
                                      Forschungszentrum Juelich GmbH
