@@ -1,0 +1,7 @@
+@prefix narci: <http://www.purl.org/narci/v0.2.1/schema#> .
+
+<#twoI> a narci:TwoPhotonImaging ;
+           narci:imaging_depth 300.0 .
+
+<#meta> a narci:Metadata;
+           narci:twoPhotonImaging <#twoI> 

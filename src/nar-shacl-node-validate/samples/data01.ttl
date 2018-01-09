@@ -14,4 +14,4 @@ ex:Bob
 
 ex:BobsAddress
     schema:streetAddress "1600 Amphitheatre Pkway" ;
-    schema:postalCode 9404 .
+    schema:postalCode 12000 .

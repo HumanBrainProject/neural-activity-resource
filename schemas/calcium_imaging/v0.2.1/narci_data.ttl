@@ -1,0 +1,24 @@
+@prefix narci: <http://www.purl.org/narci/v0.2.1/schema#> .
+
+#
+# Class instances from narci
+#
+<#subject> a narci:Subject .
+
+<#craniotomyProtocol> a narci:CraniotomyProtocol .
+
+<#craniotomyProcedure> a narci:CraniotomyProcedure .
+
+<#craniotomy> a narci:Craniotomy .
+
+<#twoPhotonImaging> a narci:TwoPhotonImaging;
+           narci:imaging_depth 300.0 .
+
+<#anaesthesiaProtocol> a narci:AnaesthesiaProtocol .
+
+<#twoImagingSystem> a narci:TwoImagingSystem .
+
+
+<#meta> a narci:Metadata;
+           narci:subject <#subject>;
+           narci:twoPhotonImaging <#twoPhotonImaging> .

@@ -19,16 +19,16 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix narci: <http://www.purl.org/narci/v0.2.1/schema#> .
 @prefix narci_sh: <http://www.purl.org/narci_sh/v0.2.1/schema#> .
-@prefix sh: <https://www.w3.org/ns/shacl.ttl> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
 # Authors
-narci_sh:MS a foaf:Person;
+narci:MS a foaf:Person;
    foaf:name "Mehmet Suezen";
    foaf:publications <https://scholar.google.com/citations?user=cUt21NIAAAAJ>;
    foaf:workplaceHomepage <http://www.fz-juelich.de> .
 
-narci_sh:APD a foaf:Person;   
+narci:APD a foaf:Person;
    foaf:name "Andrew P. Davison";
    foaf:publications <https://scholar.google.com/citations?user=a_sFeLwAAAAJ>;
    foaf:workplaceHomepage <http://www.cnrs.fr> .
@@ -36,9 +36,9 @@ narci_sh:APD a foaf:Person;
 # NARCI shapes Ontology
 <http://www.purl.org/narci_sh/schema#> a owl:Ontology ;
      dcterm:title "narci" ;
-     dcterm:modified "2017-11-09"^^<http://www.w3.org/2001/XMLSchema#date>;
+     dcterm:modified "2018-01-09"^^<http://www.w3.org/2001/XMLSchema#date>;
      dcterm:description """
-                            (c) 2017 Le Centre National de la Recherche Scientifique (CRNS)
+                            (c) 2018 Le Centre National de la Recherche Scientifique (CRNS)
                                      Forschungszentrum Juelich GmbH
 
                             narci_sh is a shapes ontology for calcium imaging.
@@ -51,25 +51,95 @@ narci_sh:APD a foaf:Person;
                  
                          """@en ;
      dcterm:creator narci_sh:MS;
-     dcterm:creator narci_sh:APD .
+     dcterm:contributor narci_sh:APD .
 
 
-# narci:Experiment class shape
-narci_sh:ExperimentShape
+#
+# narci:Metadata class shapes
+#
+# At least one definition from all 
+# classes are expected
+# 
+narci_sh:MetadataShape
 	a sh:NodeShape ;
-	sh:targetClass narci:Experiment;   
-        #
-        # narci:imaging_depth should be 
-        #   Type of double
-        #   Greater than 0.0 mm
-        #   Less than 10.0 mm
-        #   Provided at least once
-        #    
+	sh:targetClass narci:Metadata;   
 	sh:property [                 
-		     sh:path narci:imaging_depth; 
-		     sh:minCount 1 ;
-		     sh:maxCount 1 ;
-                     sh:minExclusive 0.0;
-                     sh:maxInclusive 1000.0;
-		     sh:datatype xsd:double;
-	            ] .
+		     sh:path narci:subject; 
+		     sh:minCount 1;
+		     sh:datatype narci:Subject
+	            ];
+	sh:property [                 
+		     sh:path narci:craniotomyProtocol;
+		     sh:minCount 1;
+		     sh:datatype narci:CraniotomyProtocol
+                    ];
+	sh:property [                 
+		     sh:path narci:craniotomyProcedure;
+		     sh:minCount 1;
+		     sh:datatype narci:CraniotomyProcedure
+                    ];
+	sh:property [                 
+		     sh:path narci:craniotomy;
+		     sh:minCount 1;
+		     sh:datatype narci:Craniotomy
+                    ];
+	sh:property [                 
+		     sh:path narci:twoPhotonImaging;
+		     sh:minCount 1;
+		     sh:datatype narci:TwoPhotonImaging
+                    ];
+	sh:property [                 
+		     sh:path narci:anaesthesiaProtocol;
+		     sh:minCount 1;
+		     sh:datatype narci:AnaesthesiaProtocol
+                    ];
+	sh:property [                 
+		     sh:path narci:twoImagingSystem;
+		     sh:minCount 1;
+		     sh:datatype narci:TwoImagingSystem
+                    ];
+	sh:property [                 
+		     sh:path narci:visualStimulation;
+		     sh:minCount 1;
+		     sh:datatype narci:VisualStimulation
+                    ];
+	sh:property [                 
+		     sh:path narci:VisualStimulus;
+		     sh:minCount 1;
+		     sh:datatype narci:VisualStimulus
+                    ];
+	sh:property [                 
+		     sh:path narci:visualStimulusPresentation;
+		     sh:minCount 1;
+		     sh:datatype narci:VisualStimulusPresentation
+                    ];
+	sh:property [                 
+		     sh:path narci:imageSequence;
+		     sh:minCount 1;
+		     sh:datatype narci:ImageSequence
+                    ];
+	sh:property [                 
+		     sh:path narci:regionOfInterest;
+		     sh:minCount 1;
+		     sh:datatype narci:RegionOfInterest
+                    ];
+	sh:property [                 
+		     sh:path narci:regionClassification;
+		     sh:minCount 1;
+		     sh:datatype narci:RegionClassification
+                    ];
+	sh:property [                 
+		     sh:path narci:cellFromRegionOfInterest;
+		     sh:minCount 1;
+		     sh:datatype narci:CellFromRegionOfInterest
+                    ];
+	sh:property [                 
+		     sh:path narci:timeSeriesExtract;
+		     sh:minCount 1;
+		     sh:datatype narci:TimeSeriesExtract
+                    ];
+	sh:property [                 
+		     sh:path narci:fluorescenceActivity;
+		     sh:minCount 1;
+		     sh:datatype narci:FluorescenceActivity
+                    ] .
