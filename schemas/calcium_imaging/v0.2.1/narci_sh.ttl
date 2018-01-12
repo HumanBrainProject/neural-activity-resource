@@ -66,80 +66,146 @@ narci_sh:MetadataShape
 	sh:property [                 
 		     sh:path narci:subject; 
 		     sh:minCount 1;
-		     sh:datatype narci:Subject
+		     sh:class narci:Subject
 	            ];
 	sh:property [                 
 		     sh:path narci:craniotomyProtocol;
 		     sh:minCount 1;
-		     sh:datatype narci:CraniotomyProtocol
+		     sh:class narci:CraniotomyProtocol
                     ];
 	sh:property [                 
 		     sh:path narci:craniotomyProcedure;
 		     sh:minCount 1;
-		     sh:datatype narci:CraniotomyProcedure
+		     sh:class narci:CraniotomyProcedure
                     ];
 	sh:property [                 
 		     sh:path narci:craniotomy;
 		     sh:minCount 1;
-		     sh:datatype narci:Craniotomy
+		     sh:class narci:Craniotomy
                     ];
 	sh:property [                 
 		     sh:path narci:twoPhotonImaging;
 		     sh:minCount 1;
-		     sh:datatype narci:TwoPhotonImaging
+		     sh:class narci:TwoPhotonImaging
                     ];
 	sh:property [                 
 		     sh:path narci:anaesthesiaProtocol;
 		     sh:minCount 1;
-		     sh:datatype narci:AnaesthesiaProtocol
+		     sh:class narci:AnaesthesiaProtocol
                     ];
 	sh:property [                 
 		     sh:path narci:twoImagingSystem;
 		     sh:minCount 1;
-		     sh:datatype narci:TwoImagingSystem
+		     sh:class narci:TwoImagingSystem
                     ];
 	sh:property [                 
 		     sh:path narci:visualStimulation;
 		     sh:minCount 1;
-		     sh:datatype narci:VisualStimulation
+		     sh:class narci:VisualStimulation
                     ];
 	sh:property [                 
-		     sh:path narci:VisualStimulus;
+		     sh:path narci:visualStimulus;
 		     sh:minCount 1;
-		     sh:datatype narci:VisualStimulus
+		     sh:class narci:VisualStimulus
                     ];
 	sh:property [                 
 		     sh:path narci:visualStimulusPresentation;
 		     sh:minCount 1;
-		     sh:datatype narci:VisualStimulusPresentation
+		     sh:class narci:VisualStimulusPresentation
                     ];
 	sh:property [                 
 		     sh:path narci:imageSequence;
 		     sh:minCount 1;
-		     sh:datatype narci:ImageSequence
+		     sh:class narci:ImageSequence
                     ];
 	sh:property [                 
 		     sh:path narci:regionOfInterest;
 		     sh:minCount 1;
-		     sh:datatype narci:RegionOfInterest
+		     sh:class narci:RegionOfInterest
                     ];
 	sh:property [                 
 		     sh:path narci:regionClassification;
 		     sh:minCount 1;
-		     sh:datatype narci:RegionClassification
+		     sh:class narci:RegionClassification
                     ];
 	sh:property [                 
 		     sh:path narci:cellFromRegionOfInterest;
 		     sh:minCount 1;
-		     sh:datatype narci:CellFromRegionOfInterest
+		     sh:class narci:CellFromRegionOfInterest
                     ];
 	sh:property [                 
 		     sh:path narci:timeSeriesExtract;
 		     sh:minCount 1;
-		     sh:datatype narci:TimeSeriesExtract
+		     sh:class narci:TimeSeriesExtract
                     ];
 	sh:property [                 
 		     sh:path narci:fluorescenceActivity;
 		     sh:minCount 1;
-		     sh:datatype narci:FluorescenceActivity
+		     sh:class narci:FluorescenceActivity
                     ] .
+
+#
+# narci:Subject class shapes
+# 
+narci_sh:SubjectShape
+	a sh:NodeShape ;
+	sh:targetClass narci:Subject;
+	sh:property [                 
+                     sh:path narci:animal_identification;
+                     sh:minCount 1;
+                     sh:datatype xsd:string   
+	            ] .
+
+#
+# narci:CraniotomyProtocol class shapes
+#
+
+#
+# narci:CraniotomyProcedure class shapes
+#
+
+#
+# narci:Craniotomy class shapes
+#
+
+#
+# narci:AnaesthesiaProtocol class shapes
+#
+narci_sh:AnaesthesiaProtocolShape
+        a sh:NodeShape ;
+        sh:targetClass narci:AnaesthesiaProtocol;
+        sh:property [
+                     sh:path narci:anesthetics_type;
+                     sh:minCount 1;
+                     sh:datatype xsd:string
+                    ];
+        sh:property [
+                     sh:path narci:anesthetics_machine;
+                     sh:minCount 1;
+                     sh:datatype xsd:string
+                    ];
+        sh:property [
+                     sh:path narci:anesthetics_drug;
+                     sh:minCount 1;
+                     sh:datatype xsd:string
+                    ];
+        sh:property [
+                     sh:path narci:anesthetics_drug_flowrate;
+                     sh:minCount 1;
+                     sh:datatype xsd:double;
+                     sh:minExclusive 0.0; # in between (0.0, 250.0] ml/min
+                     sh:maxInclusive 250.0
+                    ];
+        sh:property [
+                     sh:path narci:anesthetics_oxygen;
+                     sh:minCount 1;
+                     sh:datatype xsd:nonNegativeInteger;
+                     sh:minExclusive 0; # in between (0, 100) percentage
+                     sh:maxInclusive 100
+                    ];
+        sh:property [
+                     sh:path narci:anesthetics_monitor;
+                     sh:minCount 1;
+                     sh:datatype xsd:string
+                    ] .
+

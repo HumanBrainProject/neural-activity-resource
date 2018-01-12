@@ -1,9 +1,13 @@
 @prefix narci: <http://www.purl.org/narci/v0.2.1/schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Values are all dummy
 
 #
-# Class instances from narci
+# Class instances from narci with actual metadata
 #
-<#subject> a narci:Subject .
+<#subject> a narci:Subject;
+         narci:animal_identification "mice" .
 
 <#craniotomyProtocol> a narci:CraniotomyProtocol .
 
@@ -12,13 +16,53 @@
 <#craniotomy> a narci:Craniotomy .
 
 <#twoPhotonImaging> a narci:TwoPhotonImaging;
-           narci:imaging_depth 300.0 .
+           narci:imaging_depth 15.0 .
 
-<#anaesthesiaProtocol> a narci:AnaesthesiaProtocol .
+<#anaesthesiaProtocol> a narci:AnaesthesiaProtocol;
+           narci:anesthetics_type "local";
+           narci:anesthetics_machine "a brand"; 
+           narci:anesthetics_drug "profol";
+           narci:anesthetics_drug_flowrate "10.0"^^xsd:double;
+           narci:anesthetics_oxygen "10"^^xsd:nonNegativeInteger;
+           narci:anesthetics_monitor "Phillips" .
 
 <#twoImagingSystem> a narci:TwoImagingSystem .
 
+<#visualStimulation> a narci:VisualStimulation .
 
+<#visualStimulus> a narci:VisualStimulus .
+
+<#visualStimulusPresentation> a narci:VisualStimulusPresentation .
+
+<#imageSequence> a narci:ImageSequence .
+
+<#regionOfInterest> a narci:RegionOfInterest .
+
+<#regionClassification> a narci:RegionClassification .
+
+<#cellFromRegionOfInterest> a narci:CellFromRegionOfInterest .
+
+<#timeSeriesExtract> a narci:TimeSeriesExtract .
+
+<#fluorescenceActivity> a narci:FluorescenceActivity .
+
+#
+# Now place all objects into Metadata
+#
 <#meta> a narci:Metadata;
            narci:subject <#subject>;
-           narci:twoPhotonImaging <#twoPhotonImaging> .
+           narci:craniotomyProtocol <#craniotomyProtocol> ;
+           narci:craniotomyProcedure <#craniotomyProcedure>;
+           narci:craniotomy  <#craniotomy>;
+           narci:twoPhotonImaging <#twoPhotonImaging>;
+           narci:anaesthesiaProtocol <#anaesthesiaProtocol>;
+           narci:twoImagingSystem <#twoImagingSystem>;
+           narci:visualStimulation <#visualStimulation>;
+           narci:visualStimulus <#visualStimulus>;
+           narci:visualStimulusPresentation <#visualStimulusPresentation>;
+           narci:imageSequence <#imageSequence>;
+           narci:regionOfInterest <#regionOfInterest>;
+           narci:regionClassification <#regionClassification>;
+           narci:cellFromRegionOfInterest <#cellFromRegionOfInterest>;
+           narci:timeSeriesExtract <#timeSeriesExtract>;
+           narci:fluorescenceActivity <#fluorescenceActivity> .

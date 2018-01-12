@@ -1,0 +1,1338 @@
+#
+#  narci is an ontology for calcium imaging.
+#  (c) 2017
+#
+#  University of Amsterdam
+#  Forschungszentrum Juelich GmbH
+#  The German Neuroinformatics Node (G-Node)
+#  Le Centre National de la Recherche Scientifique (CRNS)
+#
+#  Distributed under the terms of the Creative Commons 
+#  Attribution 4.0 Generic (CC BY 4.0)
+#
+
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix dcterm: <http://dublincore.org/documents/dcmi-terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix narci: <http://www.purl.org/narci/v0.2.1/schema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+
+# Authors
+narci:MS a foaf:Person;
+   foaf:name "Mehmet Suezen";
+   foaf:publications <https://scholar.google.com/citations?user=cUt21NIAAAAJ>;
+   foaf:workplaceHomepage <http://www.fz-juelich.de> .
+
+narci:GTM a foaf:Person;
+   foaf:name "Guido T. Meijer"; 
+   foaf:publications <https://scholar.google.com/citations?user=uA8cczIAAAAJ>;
+   foaf:workplaceHomepage <http://www.uva.nl> .
+
+narci:XT a foaf:Person;
+   foaf:name "Xoana Troncoso"; 
+   foaf:publications <https://scholar.google.com/citations?user=OtTtYxUAAAAJ>;
+   foaf:workplaceHomepage <http://www.cnrs.fr> .
+
+narci:JSM a foaf:Person;
+   foaf:name "Jorrit S. Montijn";
+   foaf:publications <https://scholar.google.de/citations?user=6D9I2KcAAAAJ>;
+   foaf:workplaceHomepage <http://www.uva.nl> .
+
+narci:CSL a foaf:Person;
+   foaf:name "Carien S. Lansink";
+   foaf:publications <https://scholar.google.com/citations?user=9hBHfFUAAAAJ>;
+   foaf:workplaceHomepage <http://www.uva.nl> .
+
+narci:APD a foaf:Person;   
+   foaf:name "Andrew P. Davison";
+   foaf:publications <https://scholar.google.com/citations?user=a_sFeLwAAAAJ>;
+   foaf:workplaceHomepage <http://www.cnrs.fr> .
+
+narci:MD a foaf:Person;
+   foaf:name "Michael Denker";
+   foaf:publications <http://dblp.uni-trier.de/pers/hd/d/Denker:Michael>;
+   foaf:workplaceHomepage <http://www.fz-juelich.de> .
+
+narci:TW a foaf:Person;
+   foaf:name "Thomas Wachtler";
+   foaf:publications <http://dblp.uni-trier.de/pers/hd/w/Wachtler:Thomas>;
+   foaf:workplaceHomepage <http://www.lmu.de> .
+
+narci:SG a foaf:Person;
+   foaf:name "Sonja Gruen";
+   foaf:publications <https://scholar.google.com/citations?user=b4DhWyQAAAAJ>;
+   foaf:workplaceHomepage <http://www.fz-juelich.de> ;
+   foaf:workplaceHomepage <http://www.rwth-aachen.de/> .
+
+narci:CMAP a foaf:Person;
+   foaf:name "Cyriel M.A. Pennartz";
+   foaf:publications <https://scholar.google.com/citations?user=9YosOMoAAAAJ>;
+   foaf:workplaceHomepage <http://www.uva.nl> .
+
+
+# NARCI Ontology
+<http://www.purl.org/narci/v0.2.1/schema#> a owl:Ontology ;
+     dcterm:title "narci version 0.2.1" ;
+     dcterm:modified "2017-11-27"^^<http://www.w3.org/2001/XMLSchema#date>;
+     dcterm:description """
+                            (c) 2017 University of Amsterdam
+                                     Forschungszentrum Juelich GmbH
+                                     The German Neuroinformatics Node (G-Node)
+                                     Le Centre National de la Recherche Scientifique (CRNS)
+
+                            narci is an ontology for calcium imaging.
+                            Developed under the auspices of 
+                            European Union
+                            Human Brain Project (HBP)
+                            Work package SP 5.7.2 named NAR.
+                            NAR stands for Neural Activity Resource.
+                            narci stands for NAR Calcium Imaging.
+                 
+                         """@en ;
+     dcterm:creator narci:MS;
+     dcterm:contributor narci:GTM;
+     dcterm:contributor narci:XT;
+     dcterm:contributor narci:JSM;
+     dcterm:contributor narci:CSL;
+     dcterm:contributor narci:MD;
+     dcterm:contributor narci:APD;
+     dcterm:contributor narci:TW;
+     dcterm:contributor narci:SG;
+     dcterm:contributor narci:CMAP .
+
+#
+# Class Definitions
+#
+narci:Metadata a rdfs:Class;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#> ;
+     rdfs:label "Metadata";
+     skos:definition """
+                     Calcium imaging metadata root class.
+                     """@en .
+
+narci:Subject a rdfs:Class;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "Subject";
+     rdfs:subClassOf prov:Entity;
+     rdfs:subClassOf narci:Metadata;
+     skos:definition """
+                     An experimental subject in calcium imaging. 
+                     Usually a rodent.
+                     """@en .
+
+narci:subject a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "subject";
+     rdfs:range narci:Metadata;
+     rdf:domain narci:Subject;
+     rdf:type owl:DatatypeProperty;
+     skos:definition """
+                     Instance of narci:Subject.
+                     """@en .
+
+
+narci:CraniotomyProtocol a rdfs:Class;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:subClassOf prov:Entity;
+     rdfs:subClassOf narci:Metadata;
+     rdfs:label "CraniotomyProtocol";
+     skos:definition """
+                     An experimental protocol for surgical operation in which 
+                     a bone flap is temporarily removed from skull to access to the brain.
+                     Usually rodents in calcium imaging context.
+                     """@en .
+
+narci:craniotomyProtocol a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "craniotomyProtocol";
+     rdfs:range narci:Metadata;
+     rdf:domain narci:CraniotomyProtocol;
+     rdf:type owl:DatatypeProperty;
+     skos:definition """
+                     Instance of narci:CraniotomyProtocol.
+                     """@en .
+
+narci:CraniotomyProcedure a rdfs:Class;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#> ;
+     rdfs:subClassOf prov:Activity;
+     rdfs:subClassOf narci:Metadata;
+     rdfs:label "CraniotomyProcedure";
+     skos:definition """
+                     An experimental procedure, that might use different protocol, 
+                     for surgical operation in which a bone flap is temporarily removed 
+                     from skull to access to the brain. Usually rodents in calcium 
+                     imaging context.
+                     """@en .
+
+narci:craniotomyProcedure a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "narci:craniotomyProcedure";
+     rdfs:range narci:Metadata;
+     rdf:domain narci:CraniotomyProcedure;
+     rdf:type owl:DatatypeProperty;
+     skos:definition """
+                     Instance of narci:CraniotomyProcedure.
+                     """@en .
+
+narci:Craniotomy a rdfs:Class;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#> ;
+     rdfs:subClassOf prov:Entity;
+     rdfs:subClassOf narci:Metadata;
+     rdfs:label "Craniotomy";
+     skos:definition """
+                     An experimental craniotomy procedure applied.
+                     """@en .
+
+narci:craniotomy a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "narci:craniotomy";
+     rdfs:range narci:Metadata;
+     rdf:domain narci:Craniotomy;
+     rdf:type owl:DatatypeProperty;
+     skos:definition """
+                     Instance of narci:Craniotomy .
+                     """@en .
+
+
+narci:TwoPhotonImaging a rdfs:Class;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#> ;
+     rdfs:subClassOf prov:Activity;
+     rdfs:subClassOf narci:Metadata;
+     rdfs:label "TwoPhotonImaging";
+     skos:definition """
+                     Two-photon excitation microscopy is a fluorescence 
+                     imaging technique that allows imaging of living 
+                     tissue up to about one millimeter in depth.
+                     """@en .
+
+narci:twoPhotonImaging  a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "twoPhotonImaging";
+     rdfs:range narci:Metadata;
+     rdf:domain narci:TwoPhotonImaging;
+     rdf:type owl:DatatypeProperty;
+     skos:definition """
+                     Instance of narci:TwoPhotonImaging.
+                     """@en .
+
+narci:AnaesthesiaProtocol a rdfs:Class;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#> ;
+     rdfs:subClassOf prov:Entity;
+     rdfs:subClassOf narci:Metadata;
+     rdfs:label "AnaesthesiaProtocol";
+     skos:definition """
+                     A protocol to apply anasthetic drug for the surgery.
+                     """@en .
+
+narci:anaesthesiaProtocol a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "anaesthesiaProtocol";
+     rdfs:range narci:Metadata;
+     rdf:domain narci:AnaesthesiaProtocol;
+     rdf:type owl:DatatypeProperty;
+     skos:definition """
+                     Instance of narci:AnaesthesiaProtocol.
+                     """@en .
+
+narci:TwoImagingSystem a rdfs:Class;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#> ;
+     rdfs:subClassOf prov:Entity;
+     rdfs:subClassOf narci:Metadata;
+     rdfs:label "TwoImagingSystem";
+     skos:definition """
+                     Two-photon excitation microscopy system.
+                     """@en .
+
+narci:twoImagingSystem a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "twoImagingSystem";
+     rdfs:range narci:Metadata;
+     rdf:domain narci:TwoImagingSystem;
+     rdf:type owl:DatatypeProperty;
+     skos:definition """
+                     Instance of narci:TwoImagingSystem.
+                     """@en .
+
+narci:VisualStimulation a rdfs:Class;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#> ;
+     rdfs:subClassOf prov:Activity;
+     rdfs:subClassOf narci:Metadata;
+     rdfs:label "VisualStimulation";
+     skos:definition """
+                     Visual stimulation details during experiment.
+                     """@en .
+
+narci:visualStimulation a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "visualStimulation";
+     rdfs:range narci:Metadata;
+     rdf:domain narci:VisualStimulation;
+     rdf:type owl:DatatypeProperty;
+     skos:definition """
+                     Instance of narci:VisualStimulation.
+                     """@en .
+
+narci:VisualStimulus a rdfs:Class;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#> ;
+     rdfs:subClassOf prov:Entity;
+     rdfs:subClassOf narci:Metadata;
+     rdfs:label "VisualStimulus";
+     skos:definition """
+                     Type or details of visual stimulation, 
+                     likely not be changed during experiment.
+                     """@en .
+
+narci:visualStimulus a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "visualStimulus";
+     rdfs:range narci:Metadata;
+     rdf:domain narci:VisualStimulus;
+     rdf:type owl:DatatypeProperty;
+     skos:definition """
+                     Instance of narci:VisualStimulus.
+                     """@en .
+
+narci:VisualStimulusPresentation a rdfs:Class;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#> ;
+     rdfs:subClassOf prov:Entity;
+     rdfs:subClassOf narci:Metadata;
+     rdfs:label "VisualStimulusPresentation";
+     skos:definition """
+                     Type or details of visual stimulation, 
+                     how it is presented. Likely not be 
+                     changed during experiment.
+                     """@en .
+
+narci:visualStimulusPresentation a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "visualStimulusPresentation";
+     rdfs:range narci:Metadata;
+     rdf:domain narci:VisualStimulusPresentation;
+     rdf:type owl:DatatypeProperty;
+     skos:definition """
+                     Instance of narci:VisualStimulusPresentation.
+                     """@en .
+
+narci:ImageSequence a rdfs:Class;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#> ;
+     rdfs:subClassOf prov:Entity;
+     rdfs:subClassOf narci:Metadata;
+     rdfs:label "ImageSequence";
+     skos:definition """
+                     Calcium imaging output, raw 
+                     image sequences.
+                     """@en .
+
+narci:imageSequence a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "imageSequence";
+     rdfs:range narci:Metadata;
+     rdf:domain narci:ImageSequence;
+     rdf:type owl:DatatypeProperty;
+     skos:definition """
+                     Instance of narci:ImageSequence
+                     """@en .
+
+narci:RegionOfInterest a rdfs:Class;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:subClassOf prov:Entity;
+     rdfs:subClassOf narci:Metadata;
+     rdfs:label "RegionOfInterest";
+     skos:definition """
+                     Brain area or biological entity that
+                     is interesting for the experiment.
+                     Could be cell somata blood vessels
+                     neurophil.
+                     """@en .
+
+narci:regionOfInterest a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "regionOfInterest";
+     rdfs:range narci:Metadata;
+     rdf:domain narci:RegionOfInterest;
+     rdf:type owl:DatatypeProperty;
+     skos:definition """
+                     Instance of narci:RegionOfInterest.
+                     """@en .
+
+narci:RegionClassification a rdfs:Class;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:subClassOf prov:Activity;
+     rdfs:subClassOf narci:Metadata;
+     rdfs:label "RegionClassification";
+     skos:definition """
+                     A classification from ROI. 
+                     """@en .
+
+narci:regionClassification a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "regionClassification";
+     rdfs:range narci:Metadata;
+     rdf:domain narci:RegionClassification;
+     rdf:type owl:DatatypeProperty;
+     skos:definition """
+                     Instance of narci:RegionClassification.
+                     """@en .
+
+narci:CellFromRegionOfInterest a rdfs:Class;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:subClassOf prov:Entity;
+     rdfs:subClassOf narci:Metadata;
+     rdfs:label "CellFromRegionOfInterest";
+     skos:definition """
+                     Cell types interesting for the experiment
+                     from ROI.
+                     """@en .
+
+narci:cellFromRegionOfInterest a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "cellFromRegionOfInterest";
+     rdfs:range narci:Metadata;
+     rdf:domain narci:CellFromRegionOfInterest;
+     rdf:type owl:DatatypeProperty;
+     skos:definition """
+                     Instance of narci:CellFromRegionOfInterest.
+                     """@en .
+
+narci:TimeSeriesExtract a rdfs:Class;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#> ;
+     rdfs:subClassOf prov:Activity;
+     rdfs:subClassOf narci:Metadata;
+     rdfs:label "TimeSeriesExtract";
+     skos:definition """
+                     Extracting image sequences.
+                     """@en .
+
+narci:timeSeriesExtract a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "timeSeriesExtract";
+     rdfs:range narci:Metadata;
+     rdf:domain narci:TimeSeriesExtract;
+     rdf:type owl:DatatypeProperty;
+     skos:definition """
+                     Instance of narci:TimeSeriesExtract
+                     """@en .
+
+narci:FluorescenceActivity a rdfs:Class;
+     rdfs:isDefinedBy <http://www.purl.org/narci/prov#> ;
+     rdfs:subClassOf prov:Entity;
+     rdfs:subClassOf narci:Metadata;
+     rdfs:label "FluorescenceActivity";
+     skos:definition """
+                     Fluorescence Activity trace from 
+                     time series. 
+                     """@en .
+
+narci:fluorescenceActivity a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "fluorescenceActivity";
+     rdfs:range narci:Metadata;
+     rdf:domain narci:FluorescenceActivity;
+     rdf:type owl:DatatypeProperty;
+     skos:definition """
+                     Instance of narci:FluorescenceActivity.
+                     """@en .
+
+
+narci:Properties a rdfs:Class;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "Properties";
+     rdfs:subClassOf narci:Metadata;
+     rdfs:subClassOf prov:Entity;
+     rdf:type owl:DatatypeProperty;
+     skos:definition """
+                     Calcium imaging additional properties
+                     that can be used as a property for
+                     properties.
+                     """@en .
+
+#
+# narci:Properties, prov:Entity
+#
+narci:reference a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "reference";
+     rdfs:range xsd:string;
+     rdf:domain narci:Properties;
+     rdf:type owl:DatatypeProperty;
+     skos:definition """
+                     A reference to concept or property definition.
+                     """@en .
+
+narci:unit a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#> ;
+     rdfs:label "unit";
+     rdf:range xsd:string;
+     rdf:domain narci:Properties;
+     rdf:type owl:DatatypeProperty;
+     skos:definition """
+                     A unit for a physical measurement.
+                     """@en .
+
+narci:onto a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "onto" ;
+     rdfs:range xsd:string;
+     rdf:domain narci:Properties;
+     rdf:type owl:DatatypeProperty;
+     skos:definition """
+                     Reference to other ontology on the given 
+                     individual.
+                     """@en .
+
+narci:relatedTo a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#> ;
+     rdfs:label "relatedTo";
+     rdfs:range xsd:string;
+     rdf:domain narci:Properties;
+     rdf:type owl:ObjectProperty;
+     skos:definition """
+                     Two individuals are conceptually related to
+                     each other. 
+                     """@en .
+
+#
+# narci:Subject, prov:Entity
+#
+narci:animal_identification a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#> ;
+     rdfs:label "animal_identification";
+     rdfs:domain narci:Subject;
+     rdfs:range xsd:string;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "https://en.wikipedia.org/wiki/Animal_identification";
+     narci:reference "https://en.wikipedia.org/wiki/Microchip_implant_(animal)";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo owl:Nothing;
+     skos:definition """
+                     Internal identification of the animal that 
+                     experiment is performed on. Usually, 
+                     animal identification, using a means of 
+                     marking is a process done to identify and 
+                     track specific animals.
+                     """@en .
+
+#
+# narci:CraniotomyProtocol, prov:Entity
+#
+
+#
+# narci:CraniotomyProcedure, prov:Activity
+#
+
+#
+# narci:Craniotomy, prov:Activity
+#
+
+#
+# narci:AnaesthesiaProtocol, prov:Entity
+#
+narci:anesthetics_type a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "anesthetics_type";
+     rdfs:domain narci:AnaesthesiaProtocol;
+     rdfs:range xsd:string;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Allen Brain Observatory, https://en.wikipedia.org/wiki/Anesthetic";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     skos:definition """
+                     Type of anesthesia administred during 
+                     animal preperation. Such as Local,
+                     General or any other specific type.
+                     """@en .
+
+narci:anesthetics_machine a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "anesthetics_machine";
+     rdfs:domain narci:AnaesthesiaProtocol;
+     rdfs:range xsd:string;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Allen Brain Observatory, https://en.wikipedia.org/wiki/Anesthetic";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:anesthetics_type;
+     skos:definition """
+                     The supporting machine or system that helps in 
+                     administering anesthesia.
+                     """@en .
+
+narci:anesthetics_drug a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "anesthetics_drug";
+     rdfs:domain narci:AnaesthesiaProtocol;
+     rdfs:range xsd:string;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Allen Brain Observatory";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:anesthetics_type;
+     skos:definition """
+                     The name of the anaesthetic drug administered.
+                     """@en .
+
+narci:anesthetics_drug_flowrate a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "anesthetics_drug_flowrate";
+     rdfs:domain narci:AnaesthesiaProtocol;
+     rdfs:range xsd:double;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Allen Brain Observatory";
+     narci:unit "ml/min";
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:anesthetics_type;
+     skos:definition """
+                     Flow rate of the anaesthetic drug injected into 
+                     animal.
+                     """@en .
+
+narci:anesthetics_oxygen a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "anesthetics_oxygen";
+     rdfs:domain narci:AnaesthesiaProtocol;
+     rdfs:range xsd:nonNegativeInteger;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Allen Brain Observatory";
+     narci:unit "percent";
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:anesthetics_type;
+     skos:definition """
+                     Supplemented oxygen level during anesthesia. 
+                     """@en .
+
+narci:anesthetics_monitor a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "anesthetics_monitor";
+     rdfs:domain narci:AnaesthesiaProtocol;
+     rdfs:range xsd:string;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Allen Brain Observatory";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:anesthetics_type;
+     skos:definition """
+                     A machine to monitor vital signs of the 
+                     animal during anesthesia.
+                     """@en .
+
+
+#
+# narci:TwoPhotonImaging,prov:Activity
+# 
+narci:imaging_date a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#> ;
+     rdfs:label "imaging_date";
+     rdfs:domain narci:TwoPhotonImaging;
+     rdfs:range xsd:date;
+     rdf:type owl:DatatypeProperty;
+     narci:reference owl:Nothing;
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo owl:Nothing;
+     skos:definition """
+                     A date when experiment(s) are performed 
+                     formatted with yyyy-mm-dd.
+                     """@en .
+
+narci:imaging_session a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#> ;
+     rdfs:label "imaging_session";
+     rdfs:domain narci:TwoPhotonImaging;
+     rdfs:range xsd:string;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Allen Brain Observatory";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:imaging_date;
+     skos:definition """
+                     A tag for continuous time frame where calcium 
+                     imaging acquisition is performed.
+                     """@en .
+
+narci:imaging_session_id a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#> ;
+     rdfs:label "imaging_session_id";
+     rdfs:domain narci:TwoPhotonImaging;
+     rdfs:range xsd:nonNegativeInteger;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Pennarz Lab";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:imaging_session;
+     skos:definition """
+                     The session identification for the performed 
+                     imaging experiment.
+                     """@en .
+
+narci:imaging_depth a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#> ;
+     rdfs:label "imaging_depth";
+     rdfs:domain narci:TwoPhotonImaging;
+     rdfs:range xsd:nonNegativeInteger;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Pennarz Lab";
+     narci:unit "micrometer";
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:imaging_calcium_device;
+     narci:relatedTo narci:visual_cortex;
+     skos:definition """
+                     Physical depth of image plane from
+                     the surface of visual cortex. 
+                     """@en .
+
+narci:cortical_depth owl:sameAs narci:imaging_depth .
+
+narci:imaging_session_start a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "imaging_session_start";
+     rdfs:domain narci:TwoPhotonImaging;
+     rdfs:range xsd:date;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Pennartz Lab";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:imaging_session;
+     skos:definition """
+                     A wall clock time where the imaging
+                     session starts. (hh:mm:ss)
+                     """@en .
+
+narci:imaging_session_end a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "imaging_session_end";
+     rdfs:domain narci:TwoPhotonImaging;
+     rdfs:range xsd:date;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Pennartz Lab";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:imaging_session;
+     skos:definition """
+                     A wall clock time where the imaging  
+                     session ends. (hh:mm:ss)
+                     """@en .
+
+narci:imaging_session_duration a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "imaging_session_duration";
+     rdfs:domain narci:TwoPhotonImaging; 
+     rdfs:range xsd:double;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Pennartz Lab";
+     narci:unit "s";
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:imaging_session;
+     skos:definition """
+                     The total wall clock time of the
+                     imaging session.
+                     """@en .
+
+
+#
+# narci:TwoImagingSystem,prov:Entity
+# 
+narci:image_acquisition_system a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "image_acquisition_system";
+     rdfs:domain narci:TwoImagingSystem;
+     rdfs:range xsd:string;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "https://en.wikipedia.org/wiki/Medical_imaging";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo owl:Nothing;
+     skos:definition """
+                     A system to perform medical imaging, that is 
+                     the technique and process of creating visual 
+                     representations of the interior of a body for 
+                     clinical analysis and medical intervention, 
+                     as well as visual representation of the 
+                     function of some organs or tissues 
+                     (physiology).
+                     """@en .
+
+narci:imaging_hardware owl:sameAs narci:image_acquisition_system .
+narci:imaging_system owl:sameAs narci:image_acquisition_system .
+
+narci:imaging_calcium_device a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#> ;
+     rdfs:label "imaging_calcium_device";
+     rdfs:domain narci:TwoImagingSystem;
+     rdfs:range xsd:string;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Grienberger-Konnerth, Neuron 73, 862-885 (2012), DOI:10.1016/j.neuron.2012.02.011";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:image_acquisition_system;
+     skos:definition """
+                     A device that provides 3D brain tissue 
+                     imaging capabilities, including confocal 
+                     and two-photon microscopy.
+                     """@en .
+
+narci:two_photon_imaging_instrument owl:sameAs narci:imaging_calcium_device .
+
+narci:frame_rate a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "rate";
+     rdfs:domain narci:TwoImagingSystem;
+     rdfs:range xsd:double;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "https://en.wikipedia.org/wiki/Frame_rate";
+     narci:unit "Hz";
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:image_acquisition_system;
+     skos:definition """
+                     Rate that imaging hardware captures visual representation snap shots.
+                     """@en .
+
+narci:PMT a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "PMT";
+     rdfs:domain narci:TwoImagingSystem;
+     rdfs:range xsd:string;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "https://en.wikipedia.org/wiki/Photomultiplier";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:image_acquisition_system;
+     skos:definition """
+                     Rate that imaging hardware captures visual representation snap shots.
+                     """@en .
+
+narci:PMT_count a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "PMT_count";
+     rdfs:domain narci:TwoImagingSystem;
+     rdfs:range xsd:integer;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Pennartz Lab";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:PMT;
+     skos:definition """
+                     The number of PMTs used.
+                     """@en .
+
+narci:PMT_gain a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "PMT_gain";
+     rdfs:domain narci:TwoImagingSystem;
+     rdfs:range xsd:string;
+     rdf:type owl:DatatypeProperty;
+     skos:note "The string of double vector is needed. Todo vector types in rdfs range.";
+     narci:reference "https://en.wikipedia.org/wiki/Photomultiplier";
+     narci:reference "Pennartz Lab";
+     narci:unit "dB";
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:PMT;
+     skos:definition """
+                     Electronic gain of the PMTs. 
+                     """@en .
+
+narci:PMT_offset a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "PMT_offset";
+     rdfs:domain narci:TwoImagingSystem;
+     rdfs:range xsd:string;
+     rdf:type owl:DatatypeProperty;
+     skos:note "The string of double vector is needed. Todo vector types in rdfs range.";
+     narci:reference "Pennartz Lab, https://en.wikipedia.org/wiki/DC_bias";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:PMT;
+     skos:definition """
+                     Mean value of the waveform from PMTs.
+                     """@en .
+
+narci:DC_bias owl:sameAs narci:PMT_offset .
+narci:DC_coefficient owl:sameAs narci:PMT_offset .
+
+narci:motion_correction a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "motion_correction";
+     rdfs:domain narci:TwoImagingSystem;
+     rdfs:range xsd:double;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Allen Brain Observatory, Pennartz Lab";
+     narci:unit "pix";
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:image_acquisition_system;
+     skos:definition """
+                     The two-photon calcium imaging videos exhibited non-trivial 
+                     frame-to-frame motion artifacts likely due to animal or 
+                     brain motion. Scan line correction.
+                     """@en .
+
+narci:phase_correction owl:sameAs narci:motion_correction .
+
+narci:laser_wavelength a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "laser_wavelength";
+     rdfs:domain narci:TwoImagingSystem;
+     rdfs:range xsd:double;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "https://en.wikipedia.org/wiki/Laser";
+     narci:unit "nm";
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:image_acquisition_system;
+     skos:definition """
+                     Lasers are characterized according to their wavelength in a vacuum.
+                     """@en .
+
+narci:wavelength owl:sameAs narci:laser_wavelength .
+
+narci:image_microscopy_zoom a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "image_microscopy_zoom";
+     rdfs:domain narci:TwoImagingSystem;
+     rdfs:range xsd:double;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Pennartz Lab";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:image_acquisition_system;
+     skos:definition """
+                     Ability of an optical instrument to enlarge the appearance of 
+                     scanned area.
+                     """@en .
+
+narci:zoom owl:sameAs narci:image_microscopy_zoom .
+
+narci:image_microscopy_channels a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "image_microscopy_channels";
+     rdfs:domain narci:TwoImagingSystem;
+     rdfs:range xsd:string;
+     skos:note "The string of double vector is needed. Todo vector types in rdfs range.";
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Pennartz Lab";
+     narci:unit "nm";
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:image_acquisition_system;
+     skos:definition """
+                     Multispectral wavelengths.
+                     """@en .
+
+narci:channel_wavelength owl:sameAs narci:image_microscopy_channels .
+
+narci:imaging_microscopy_objective_type a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "imaging_microscopy_objective_type";
+     rdfs:domain narci:TwoImagingSystem;
+     rdfs:range xsd:double;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Allen Brain Observatory, Pennartz Lab";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:image_acquisition_system;
+     skos:definition """
+                     Objective to use in focusing the light on the sample
+                     and to direct fluorescence through the emission path
+                     of the system.
+                     """@en .
+
+narci:objective owl:sameAs narci:imaging_microscopy_objective_type .
+
+narci:imaging_microscopy_device a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "imaging_microscopy_device";
+     rdfs:domain narci:TwoImagingSystem;
+     rdfs:range xsd:string;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Pennartz Lab, https://en.wikipedia.org/wiki/Image_scanner";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:image_acquisition_system;
+     skos:definition """
+                     Optical scanner applied to in-vivo biological area.
+                     """@en .
+
+narci:scanner owl:sameAs narci:imaging_microscopy_device .
+narci:image_scanner owl:sameAs narci:imaging_microscopy_device .
+
+narci:laser_excitation_device a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "laser_excitation_device";
+     rdfs:domain narci:TwoImagingSystem;
+     rdfs:range xsd:string;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "https://en.wikipedia.org/wiki/Laser";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:image_acquisition_system;
+     skos:definition """
+                     Summary of specification of a laser, a device that emits 
+                     light through a process of optical amplification based on 
+                     the stimulated emission of electromagnetic radiation.
+                     """@en .
+
+narci:laser owl:sameAs narci:laser_excitation_device .
+narci:laser_spec owl:sameAs narci:laser_excitation_device .
+
+narci:laser_power a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "laser_power";
+     rdfs:domain narci:TwoImagingSystem;
+     rdfs:range xsd:double;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "https://en.wikipedia.org/wiki/Laser#Examples_by_power";
+     narci:unit "mW";
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:image_acquisition_system;
+     skos:definition """
+                     Summary of specification of a laser, a device that emits
+                     light through a process of optical amplification based on 
+                     the stimulated emission of electromagnetic radiation.
+                     """@en .
+
+     
+
+# 
+# narci:VisualStimulation,prov:Activity
+# 
+
+# 
+# narci:VisualStimulus,prov:Entity
+#
+narci:visual_stimuli a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#> ;
+     rdfs:label "visual_stimuli";
+     rdfs:domain narci:VisualStimulus;
+     rdfs:range xsd:string;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Allen Brain Observatory";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:stimulus;
+     narci:relatedTo narci:sensory_neurons;
+     skos:definition """
+                     An external light sources able to emit modulated light, 
+                     that generates neuronal response.
+                     """@en .
+
+#
+# narci:VisualStimulusPresentation,prov:Entity
+#
+narci:perception a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#> ;
+     rdfs:label "perception";
+     rdfs:domain narci:VisualStimulusPresentation;
+     rdfs:range xsd:string;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "https://en.wikipedia.org/wiki/Perception, Schacter, Daniel (2011). Psychology. Worth Publishers.";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo owl:Nothing;
+     skos:definition """
+                     Perception (from the Latin perceptio) is the organization, 
+                     identification, and interpretation of sensory information 
+                     in order to represent and understand the presented 
+                     information, or the environment. All perception involves 
+                     signals that go through the nervous system, which in turn 
+                     result from physical or chemical stimulation of the 
+                     sensory system.
+                     """@en .
+
+narci:stimulus a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#> ;
+     rdfs:label "stimulus";
+     rdfs:domain narci:VisualStimulusPresentation;
+     rdfs:range xsd:string;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "https://en.wikipedia.org/wiki/Stimulus_(physiology)";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:perception;
+     skos:definition """
+                     A stimulus (plural stimuli) is a detectable change in the 
+                     internal or external environment.
+                     """@en .
+
+narci:stim_protocol owl:sameAs narci:stimulus .
+
+#
+# narci:ImageSequence,prov:Entity
+#
+narci:image_microscopy_voxel_size a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "image_microscopy_voxel_size";
+     rdfs:domain narci:ImageSequence;
+     rdfs:range xsd:double;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Pennartz Lab";
+     narci:unit "um/pix";
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:image_acquisition_system;
+     skos:definition """
+                     The volume element, defined in 3D space.
+                     """@en .
+
+narci:voxel_size owl:sameAs narci:image_microscopy_voxel_size .
+
+narci:ca_image_count a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "ca_image_count";
+     rdfs:domain narci:ImageSequence;
+     rdfs:range xsd:integer;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Pennartz Lab";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:image_acquisition_system;
+     skos:definition """
+                     Summary of specification of a laser, a device that emits
+                     light through a process of optical amplification based on
+                     the stimulated emission of electromagnetic radiation.
+                     """@en .
+
+narci:ca_image_resolution a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "ca_image_resolution";
+     rdfs:domain narci:ImageSequence; 
+     rdfs:range xsd:string;
+     skos:note "The string of a integer vector is needed. Todo vector types in rdfs range;";
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Pennartz Lab";
+     narci:unit "pixel/frame";
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:image_acquisition_system;
+     skos:definition """
+                     Acquired image resolution (Width x Height).
+                     """@en .
+
+narci:ca_image_cortical_z_stacks a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "ca_image_cortical_z_stacks";
+     rdfs:domain narci:ImageSequence;
+     rdfs:range xsd:integer;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Pennartz Lab, Allen Brain Observatory";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:image_acquisition_system;
+     skos:definition """
+                     The number of set of images acquired along cortical depth simultaneously.
+                     """@en .
+
+#
+# narci:RegionOfInterest,prov:Entity
+#
+narci:visual_cortex a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#> ;
+     rdfs:label "visual_cortex";
+     rdfs:domain narci:RegionOfInterest;
+     rdfs:range xsd:string;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "https://en.wikipedia.org/wiki/Visual_cortex";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:visual_stimuli;
+     skos:definition """
+                     An external light sources able to emit modulated light, 
+                     that generates neuronal response.
+                     """@en .
+
+#
+# narci:RegionClassification,prov:Activity
+#
+narci:ca_target_cell_count a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "ca_target_cell_types_all";
+     rdfs:domain narci:RegionClassification;
+     rdfs:range xsd:string;
+     skos:note "The string of integer vector is needed. Todo vector types in rdfs range; ";
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Pennartz Lab";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:ca_target_cell_types_all;
+     skos:definition """
+                     Cell types imaged for calcium dynamics.
+                     Such as Neuron, PV for entire experiment.
+                     """@en .
+
+#
+# narci:CellFromRegionOfInterest,prov:Activity
+#
+narci:sensory_neurons a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#> ;
+     rdfs:label "sensory_neurons";
+     rdfs:domain narci:CellFromRegionOfInterest;
+     rdfs:range xsd:string;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "https://en.wikipedia.org/wiki/Sensory_neuron";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:stimulus;
+     skos:definition """
+                     Sensory neurons also known as afferent neurons are neurons 
+                     that convert a specific type of stimulus, via their 
+                     receptors, into action potentials or graded potentials.
+                     """@en .
+
+narci:neuronal_calcium_sensors a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "neuronal_calcium_sensors";
+     rdfs:domain narci:CellFromRegionOfInterest;
+     rdfs:range xsd:string;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Allen Brain Observatory;https://en.wikipedia.org/wiki/Calcium_imaging#Chemical_indicators; Burgoyne, Nat Rev Neurosci. 2007 March ; 8(3): 182–193. doi:10.1038/nrn2093 ; Badura et. al. Neurophotonics, 1(2), 025008 (2014). doi:10.1117/1.NPh.1.2.025008, https://www.janelia.org/gcamp6-calcium-indicators-0";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:imaging_calcium_device;
+     narci:relatedTo narci:visual_cortex;
+     skos:definition """
+                     Fluorescent molecules, usually protein, that can 
+                     respond to the binding of Ca2+ ions by changing 
+                     their fluorescence properties. This usually manifest 
+                     as genetically encoded into transgenetic animal. 
+                     Plasmids: CMV-GCaMP6s, CMV-GCaMP6m, CMV-GCaMP6f. 
+                     Virusus: AAV1.Syn.GCaMP6f.WPRE.SV40, 
+                     AAV1.Syn.GCaMP6s.WPRE.SV40, 
+                     AAV1.Syn.GCaMP6m.WPRE.SV40, AAV5.Syn.GCaMP6m.WPRE.SV40, 
+                     AAV5.Syn.GCaMP6f.WPRE.SV40, AAV5.Syn.GCaMP6s.WPRE.SV40, 
+                     AAV9.Syn.GCaMP6f.WPRE.SV40, AAV9.Syn.GCaMP6m.WPRE.SV40, 
+                     AAV9.Syn.GCaMP6s.WPRE.SV40, AAV1.CAG.GCaMP6s.WPRE.SV40, 
+                     AAV5.CAG.GCaMP6s.WPRE.SV40, AAV9.CAG.GCaMP6s.WPRE.SV40, 
+                     AAV1.CAG.Flex.GCaMP6f.WPRE.SV40, 
+                     AAV1.CAG.Flex.GCaMP6m.WPRE.SV40, 
+                     AAV1.CAG.Flex.GCaMP6s.WPRE.SV40, 
+                     AAV1.Syn.Flex.GCaMP6f.WPRE.SV40, 
+                     AAV1.Syn.Flex.GCaMP6m.WPRE.SV40, 
+                     AAV1.Syn.Flex.GCaMP6s.WPRE.SV40, 
+                     AAV5.CAG.Flex.GCaMP6f.WPRE.SV40, 
+                     AAV5.CAG.Flex.GCaMP6m.WPRE.SV40, 
+                     AAV5.CAG.Flex.GCaMP6s.WPRE.SV40, 
+                     AAV5.Syn.Flex.GCaMP6f.WPRE.SV40, 
+                     AAV5.Syn.Flex.GCaMP6m.WPRE.SV40, 
+                     AAV5.Syn.Flex.GCaMP6s.WPRE.SV40, 
+                     AAV9.CAG.Flex.GCaMP6f.WPRE.SV40, 
+                     AAV9.CAG.Flex.GCaMP6m.WPRE.SV40, 
+                     AAV9.CAG.Flex.GCaMP6s.WPRE.SV40, 
+                     AAV9.Syn.Flex.GCaMP6f.WPRE.SV40, 
+                     AAV9.Syn.Flex.GCaMP6m.WPRE.SV40, 
+                     AAV9.Syn.Flex.GCaMP6s.WPRE.SV40
+                     """@en .
+
+
+narci:fluorescent_calcium_indicator owl:sameAs narci:neuronal_calcium_sensors .
+narci:fluorescent_calcium_sensors owl:sameAs narci:neuronal_calcium_sensors .
+narci:calcium_sensor_proteins owl:sameAs narci:neuronal_calcium_sensors .
+
+narci:ca_target_cell_types_all a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "ca_target_cell_types_all";
+     rdfs:domain narci:CellFromRegionOfInterest;
+     rdfs:range xsd:string;
+     skos:note "The string of a string vector is needed. Todo vector types in rdfs range; ";
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Pennartz Lab";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:imaging_session;
+     skos:definition """
+                     Cell types imaged for calcium dynamics. 
+                     Such as Neuron, PV for entire experiment.
+                     """@en .
+
+narci:ca_target_cell_id a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "ca_target_cell_id";
+     rdfs:domain narci:CellFromRegionOfInterest;
+     rdfs:range xsd:integer;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Pennartz Lab";
+     narci:unit owl:Nothing;
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:image_acquisition_system;
+     skos:definition """
+                     The cell identification that is imaged for calcium dynamics (traced).
+                     """@en .
+
+narci:ca_target_cell_x a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "ca_target_cell_x";
+     rdfs:domain narci:CellFromRegionOfInterest;
+     rdfs:range xsd:double;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Pennartz Lab";
+     narci:unit "pixel";
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:image_acquisition_system;
+     skos:definition """
+                     The cell x-coordinate on the digital image, 
+                     that is imaged for calcium dynamics (traced).
+                     """@en .
+
+narci:ca_target_cell_y a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "ca_target_cell_y";
+     rdfs:domain narci:CellFromRegionOfInterest;
+     rdfs:range xsd:double;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Pennartz Lab";
+     narci:unit "pixel";
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:image_acquisition_system;
+     skos:definition """
+                     The cell y-coordinate on the digital image, 
+                     that is imaged for calcium dynamics (traced).
+                     """@en .
+
+narci:ca_target_cell_size a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "ca_target_cell_size";
+     rdfs:domain narci:CellFromRegionOfInterest;
+     rdfs:range xsd:double;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Pennartz Lab";
+     narci:unit "pixel";
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:image_acquisition_system;
+     skos:definition """
+                     The cell size that is imaged for calcium 
+                     dynamics (traced).
+                     """@en .
+
+narci:ca_target_cell_type a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "ca_target_cell_type";
+     rdfs:domain narci:CellFromRegionOfInterest;
+     rdfs:range xsd:double;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Pennartz Lab";
+     narci:unit "pixel";
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:image_acquisition_system;
+     skos:definition """
+                     The cell size that is imaged for calcium
+                     dynamics (traced).
+                     """@en .
+#
+# narci:TimeSeriesExtract,prov:Activity
+# 
+
+#
+# narci:FluorescenceActivity,prov:Entity
+# 
+narci:ca_target_cell_raw_trajectory a rdfs:Property;
+     rdfs:isDefinedBy <http://www.purl.org/narci/v0.2.1/schema#>;
+     rdfs:label "ca_target_cell_raw_trajectory";
+     rdfs:domain narci:FluorescenceActivity;
+     rdfs:range xsd:string;
+     rdf:type owl:DatatypeProperty;
+     narci:reference "Pennartz Lab";
+     narci:unit "pixel";
+     narci:onto owl:Nothing;
+     narci:relatedTo narci:image_acquisition_system;
+     skos:definition """
+                     The raw fluorescence traces of the cell that is 
+                     imaged for calcium dynamics (traced).
+                     """@en .
