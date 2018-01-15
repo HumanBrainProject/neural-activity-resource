@@ -44,9 +44,9 @@ const options = commandLineArgs(optionDefinitions);
 // var options = {data: "samples/data01.ttl", shapes: "samples/shapes01.ttl", type: "text/turtle"}
 console.log("data file:", options.data, "shapes file:", options.shapes);
 var fs = require('fs');
-var pdata = process.cwd() + '/' + options.data
+var pdata = options.data
 var data = fs.readFileSync(pdata, 'utf-8').toString();
-var pshapes = process.cwd() + '/' + options.shapes
+var pshapes = options.shapes
 var shapes = fs.readFileSync(pshapes, 'utf-8').toString();
 
 // We don't need RDF graphs 
@@ -83,8 +83,8 @@ function cb(e, report) {
     console.log("Conforms? " + report.conforms());
     if (report.conforms() === false) {
         report.results().forEach(function(result) {
-            console.log(" - Severity: " + result.severity() + " for " + result.sourceConstraintComponent());
+            console.log(JSON.stringify(result,  null, 1)); // for JSON output
         });
     }
 }
-validator.validate(data, options.type, shapes, options.type, cb);
+validator.validate(data, options.type, shapes, options.type, cb)
