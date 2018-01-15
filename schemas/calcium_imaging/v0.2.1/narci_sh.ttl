@@ -153,7 +153,7 @@ narci_sh:SubjectShape
 	sh:property [                 
                      sh:path narci:animal_identification;
                      sh:minCount 1;
-                     sh:datatype xsd:string   
+                     sh:datatype xsd:string 
 	            ] .
 
 #
@@ -209,3 +209,236 @@ narci_sh:AnaesthesiaProtocolShape
                      sh:datatype xsd:string
                     ] .
 
+#
+# narci:twoImagingSystem class shapes
+#
+narci_sh:twoImagingSystemShape
+        a sh:NodeShape ;
+        sh:targetClass narci:twoImagingSystem;
+        sh:property [
+                     sh:path narci:image_acquisition_system;
+                     sh:minCount 1;
+                     sh:datatype xsd:string
+                    ];
+        sh:property [
+                     sh:path narci:imaging_calcium_device;
+                     sh:minCount 1;
+                     sh:datatype xsd:string
+                    ];
+        sh:property [
+                     sh:path narci:frame_rate;
+                     sh:minCount 1;
+                     sh:datatype xsd:double
+                    ];
+        sh:property [
+                     sh:path narci:PMT;
+                     sh:minCount 1;
+                     sh:datatype xsd:string
+                    ];
+        sh:property [
+                     sh:path narci:PMT_count;
+                     sh:minCount 1;
+                     sh:datatype xsd:integer
+                    ];
+        sh:property [
+                     sh:path narci:PMT_gain;
+                     sh:minCount 1;
+                     sh:datatype xsd:string
+                    ];
+        sh:property [
+                     sh:path narci:PMT_offset;
+                     sh:minCount 1;
+                     sh:datatype xsd:string
+                    ];
+        sh:property [
+                     sh:path narci:motion_correction;
+                     sh:minCount 1;
+                     sh:datatype xsd:double
+                    ];
+        sh:property [
+                     sh:path narci:laser_wavelength;
+                     sh:minCount 1;
+                     sh:datatype xsd:double
+                    ];
+        sh:property [
+                     sh:path narci:image_microscopy_zoom;
+                     sh:minCount 1;
+                     sh:datatype xsd:string
+                    ];
+        sh:property [
+                     sh:path narci:image_microscopy_channels;
+                     sh:minCount 1;
+                     sh:datatype xsd:string
+                    ];
+        sh:property [
+                     sh:path narci:imaging_microscopy_objective_type;
+                     sh:minCount 1;
+                     sh:datatype xsd:double
+                    ];
+        sh:property [
+                     sh:path narci:imaging_microscopy_device;
+                     sh:minCount 1;
+                     sh:datatype xsd:string
+                    ];
+        sh:property [
+                     sh:path narci:laser_excitation_device;
+                     sh:minCount 1;
+                     sh:datatype xsd:string
+                    ];
+        sh:property [
+                     sh:path narci:laser_power;
+                     sh:minCount 1;
+                     sh:datatype xsd:double
+                    ] .
+
+#
+# narci:visualStimulation class shapes
+#
+
+#
+# narci:visualStimulus class shapes
+# 
+narci_sh:visualStimulusShape
+        a sh:NodeShape ;
+        sh:targetClass narci:visualStimulus;
+        sh:property [
+                     sh:path narci:visual_stimuli;
+                     sh:minCount 1;
+                     sh:datatype xsd:string
+                    ] .
+
+# 
+# narci:visualStimulusPresentation class shapes
+#
+narci_sh:visualStimulusPresentationShape
+        a sh:NodeShape ;
+        sh:targetClass narci:visualStimulusPresentation;
+        sh:property [
+                     sh:path narci:perception;
+                     sh:minCount 1;
+                     sh:datatype xsd:string
+                    ];
+        sh:property [
+                     sh:path narci:stimulus;
+                     sh:minCount 1;
+                     sh:datatype xsd:string
+                    ] .
+
+#
+# narci:imageSequence class shapes
+#
+narci_sh:imageSequenceShape
+        a sh:NodeShape ;
+        sh:targetClass narci:imageSequence;
+        sh:property [
+                     sh:path narci:image_microscopy_voxel_size;
+                     sh:minCount 1;
+                     sh:datatype xsd:double
+                    ];
+        sh:property [
+                     sh:path narci:ca_image_count;
+                     sh:minCount 1;
+                     sh:datatype xsd:integer
+                    ];
+        sh:property [
+                     sh:path narci:ca_image_resolution;
+                     sh:minCount 1;
+                     sh:datatype xsd:string
+                    ];
+        sh:property [
+                     sh:path narci:ca_image_cortical_z_stacks;
+                     sh:minCount 1;
+                     sh:datatype xsd:integer
+                    ] .
+
+#
+# narci:regionOfInterest class shapes
+#
+narci_sh:regionOfInterestShape
+        a sh:NodeShape ;
+        sh:targetClass narci:regionOfInterest;
+        sh:property [
+                     sh:path narci:visual_cortex;
+                     sh:minCount 1;
+                     sh:datatype xsd:string
+                    ] .
+
+#
+# narci:regionClassification class shapes
+#
+narci_sh:RegionClassificationShape
+        a sh:NodeShape ;
+        sh:targetClass narci:RegionClassification;
+        sh:property [
+                     sh:path narci:ca_target_cell_count;
+                     sh:minCount 1;
+                     sh:datatype xsd:string
+                    ] .
+
+#
+# narci:cellFromRegionOfInterest class shapes
+#
+narci_sh:cellFromRegionOfInterestShape
+        a sh:NodeShape ;
+        sh:targetClass narci:CellFromRegionOfInterest;
+        sh:property [
+                     sh:path narci:sensory_neurons;
+                     sh:minCount 1;
+                     sh:datatype xsd:string
+                    ];
+        sh:property [
+                     sh:path narci:neuronal_calcium_sensors;
+                     sh:minCount 1;
+                     sh:datatype xsd:string
+                    ];
+        sh:property [
+                     sh:path narci:ca_target_cell_types_all;
+                     sh:minCount 1;
+                     sh:datatype xsd:string
+                    ];
+        sh:property [
+                     sh:path narci:ca_target_cell_id;
+                     sh:minCount 1;
+                     sh:datatype xsd:integer
+                    ];
+        sh:property [
+                     sh:path narci:ca_target_cell_x;
+                     sh:minCount 1;
+                     sh:datatype xsd:double
+                    ];
+        sh:property [
+                     sh:path narci:ca_target_cell_y;
+                     sh:minCount 1;
+                     sh:datatype xsd:double
+                    ];
+        sh:property [
+                     sh:path narci:ca_target_cell_y;
+                     sh:minCount 1;
+                     sh:datatype xsd:double
+                    ];
+        sh:property [
+                     sh:path narci:ca_target_cell_size;
+                     sh:minCount 1;
+                     sh:datatype xsd:double
+                    ];
+        sh:property [
+                     sh:path narci:ca_target_cell_type;
+                     sh:minCount 1;
+                     sh:datatype xsd:double
+                    ] .
+
+# 
+# narci:timeSeriesExtract class shapes
+#
+
+#
+# narci:fluorescenceActivity class shapes
+#
+narci_sh:fluorescenceActivityShape
+        a sh:NodeShape ;
+        sh:targetClass narci:FluorescenceActivity;
+        sh:property [
+                     sh:path narci:ca_target_cell_raw_trajectory;
+                     sh:minCount 1;
+                     sh:datatype xsd:string
+                    ] .

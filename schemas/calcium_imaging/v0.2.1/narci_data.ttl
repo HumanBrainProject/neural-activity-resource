@@ -1,7 +1,12 @@
 @prefix narci: <http://www.purl.org/narci/v0.2.1/schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-# Values are all dummy
+# An example data graph for calcium imaging
+# 
+# * Values are all dummy
+# * We use all metada definition from the schema.
+# 
+
 
 #
 # Class instances from narci with actual metadata
@@ -26,25 +31,64 @@
            narci:anesthetics_oxygen "10"^^xsd:nonNegativeInteger;
            narci:anesthetics_monitor "Phillips" .
 
-<#twoImagingSystem> a narci:TwoImagingSystem .
+<#twoImagingSystem> a narci:TwoImagingSystem;
+           narci:image_acquisition_system "Tor Labs dummy system";
+           narci:imaging_calcium_device "Phillips";
+           narci:frame_rate "5.0"^^xsd:double; # schema needs to be updated for integer
+           narci:PMT "Hamatsu device";
+           narci:PMT_count "20"^^xsd:integer;
+           narci:PMT_gain "15";
+           narci:PMT_offset "1.2"; # Schema needs to be update for double
+           narci:PMT_offset "1.3"; # Schema needs to be update for double
+           narci:motion_correction "1.1"^^xsd:double;
+           narci:laser_wavelength  "900.1"^^xsd:double;
+           narci:image_microscopy_zoom "0.6"^^xsd:double;
+           narci:image_microscopy_channels "0.1";
+           narci:image_microscopy_channels "0.2";
+           narci:imaging_microscopy_objective_type "2.1"^^xsd:double;
+           narci:imaging_microscopy_device "Conica";
+           narci:laser_excitation_device "800nm";
+           narci:laser_power "200"^^xsd:double .
+           
+           
 
 <#visualStimulation> a narci:VisualStimulation .
 
-<#visualStimulus> a narci:VisualStimulus .
+<#visualStimulus> a narci:VisualStimulus;
+              narci:visual_stimuli "Grading image" .
 
-<#visualStimulusPresentation> a narci:VisualStimulusPresentation .
+<#visualStimulusPresentation> a narci:VisualStimulusPresentation;
+              narci:perception "visual";
+              narci:stimulus "Moving image" .
+              
+<#imageSequence> a narci:ImageSequence;
+              narci:image_microscopy_voxel_size "1.2"^^xsd:double;
+              narci:ca_image_count "200"^^xsd:integer;
+              narci:ca_image_resolution "256x256";
+              narci:ca_image_cortical_z_stacks "200"^^xsd:integer .
+              
+<#regionOfInterest> a narci:RegionOfInterest;
+              narci:visual_cortex "V1" .
 
-<#imageSequence> a narci:ImageSequence .
+<#regionClassification> a narci:RegionClassification;
+              narci:ca_target_cell_count "2000" .
 
-<#regionOfInterest> a narci:RegionOfInterest .
-
-<#regionClassification> a narci:RegionClassification .
-
-<#cellFromRegionOfInterest> a narci:CellFromRegionOfInterest .
+<#cellFromRegionOfInterest> a narci:CellFromRegionOfInterest;
+              narci:sensory_neurons "afferent neuron";
+              narci:neuronal_calcium_sensors "CMV-GCaMP6s";
+              narci:ca_target_cell_types_all "PV";
+              narci:ca_target_cell_types_all "neuron";
+              narci:ca_target_cell_id "1"^^xsd:integer;
+              narci:ca_target_cell_x "2.5"^^xsd:double;
+              narci:ca_target_cell_y "2.5"^^xsd:double;
+              narci:ca_target_cell_size "0.2"^^xsd:double;
+              narci:ca_target_cell_type "10.0"^^xsd:double .
+              
 
 <#timeSeriesExtract> a narci:TimeSeriesExtract .
 
-<#fluorescenceActivity> a narci:FluorescenceActivity .
+<#fluorescenceActivity> a narci:FluorescenceActivity;
+             narci:ca_target_cell_raw_trajectory "10"^^xsd:string .
 
 #
 # Now place all objects into Metadata
@@ -66,3 +110,4 @@
            narci:cellFromRegionOfInterest <#cellFromRegionOfInterest>;
            narci:timeSeriesExtract <#timeSeriesExtract>;
            narci:fluorescenceActivity <#fluorescenceActivity> .
+
