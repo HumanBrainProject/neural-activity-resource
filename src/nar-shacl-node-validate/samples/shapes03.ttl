@@ -1,0 +1,23 @@
+@prefix narci: <http://www.purl.org/narci/v0.2.1/schema#> .
+@prefix narci_sh: <http://www.purl.org/narci_sh/schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+
+# narci:TwoPhotonImaging class shape
+narci_sh:ExperimentShape
+        a sh:NodeShape ;
+        sh:targetClass narci:TwoPhotonImaging;
+        #
+        # narci:imaging_depth should be
+        #   Type of double
+        #   Greater than 0.0 mm
+        #   Less than 200.0 mm
+        #   Provided at least once
+        #
+        sh:property [  
+                     sh:path narci:imaging_depth; 
+                     sh:minCount 1 ;
+                     sh:maxCount 1 ;
+                     sh:minExclusive 0.0;
+                     sh:maxInclusive 200.0
+                    ] .
