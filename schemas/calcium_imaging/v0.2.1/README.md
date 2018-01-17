@@ -3,6 +3,7 @@
 * `schema`         : copy of narci v0.2.1.
 * `narci_sh.ttl`   : narci Shapes graph using narci v0.2.1.
 * `narci_data.ttl` : An example data graph that is valid.
+* `auto_json`      : Auto generate JSON-LD files from turtle for nexus.
 
 # Data/shapes validation
 
