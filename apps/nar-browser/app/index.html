@@ -146,6 +146,16 @@
               <span flex="20">Number of traces</span>
               <div flex>{{app.traces.length}}</div>
             </md-list-item>
+            <md-list-item layout="row"  class="even">
+                <span flex="20">Data files</span>
+                <div flex>
+                  <ul>
+                    <li ng-repeat="file_url in app.data_files">
+                      {{file_url}}
+                    </li>
+                  </ul>
+                </div>
+              </md-list-item>
         </md-list>
 
       </md-content>

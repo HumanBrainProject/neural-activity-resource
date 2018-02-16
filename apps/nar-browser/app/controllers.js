@@ -214,7 +214,14 @@ angular.module('nar')
                 function(traces) {
                     vm.traces = traces;
 
-                    // todo: get a list of the data file(s) containing the traces
+                    console.log(vm.traces[0].data.distribution[0].downloadURL);
+                    // get a list of the data file(s) containing the traces
+                    var data_files = new Set();
+                    for (let trace of vm.traces) {
+                        data_files.add(trace.data.distribution[0].downloadURL);
+                    }
+                    vm.data_files = Array.from(data_files);
+                    console.log(vm.data_files);
                 },
                 error
             );
