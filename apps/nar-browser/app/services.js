@@ -94,6 +94,8 @@ angular.module('nar')
                 var label = instance.data["@id"];
                 if (instance.data.hasOwnProperty('name')) {
                     label = instance.data.name;
+                } else if (instance.data.hasOwnProperty('schema:name')) {
+                    label = instance.data['schema:name'];
                 } else if (instance.data.hasOwnProperty('familyName')) {
                     label = instance.data.givenName + " " + instance.data.familyName;
                 } else if (instance.data.hasOwnProperty('label')) {
