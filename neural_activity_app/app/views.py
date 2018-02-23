@@ -70,10 +70,4 @@ def segment(request):
     return HttpResponse("test")
 
 
-def home(request):
-    """
-    home page
-    """
-    return HttpResponse("test")
-
 
