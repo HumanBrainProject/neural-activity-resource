@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from app.views import browse, segment, home
+from app.views import browse, segment
+from neural_activity_app.views import home
+
 # from rest_framework import routers
 
 # router = routers.DefaultRouter()
@@ -26,6 +28,8 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^browse/', browse, name='browse'),
     url(r'^segment/', segment, name='segment'),
-    url(r'^home/', home, name='home'),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    url(r'^', home, name='home'),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url('', include('social.apps.django_app.urls', namespace='social')),
+    url('', include('hbp_app_python_auth.urls', namespace='hbp-social')),
 ]
