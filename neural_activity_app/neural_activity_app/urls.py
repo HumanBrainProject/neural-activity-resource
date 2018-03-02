@@ -27,12 +27,12 @@ urlpatterns = [
     url('', include('social.apps.django_app.urls', namespace='social')),
     url('', include('hbp_app_python_auth.urls', namespace='hbp-social')),
     url(r'^', home, name='home'),
-
+    url(r'^config.json$', config, name='config'),
     # url(r'^', include(router.urls)),
     # url(r'^admin/', admin.site.urls),
     # url(r'^browse/', browse, name='browse'),
     # url(r'^segment/', segment, name='segment'),
     # url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^config.json$', config, name='config'),
+   
     url(r'^edit/$',edit, name='edit'),
 ]

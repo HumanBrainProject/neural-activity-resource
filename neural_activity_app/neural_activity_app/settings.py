@@ -164,13 +164,11 @@ HBP_STORAGE_SERVICE_URL = 'https://services.humanbrainproject.eu/storage/v1/api/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'none')
-print("secret key",SECRET_KEY)
 auth_settings.SOCIAL_AUTH_HBP_KEY = os.environ.get('HBP_OIDC_CLIENT_ID')
 SOCIAL_AUTH_HBP_KEY = auth_settings.SOCIAL_AUTH_HBP_KEY
-print("social key",SOCIAL_AUTH_HBP_KEY)
 auth_settings.SOCIAL_AUTH_HBP_SECRET = os.environ.get('HBP_OIDC_CLIENT_SECRET')
 SOCIAL_AUTH_HBP_SECRET = auth_settings.SOCIAL_AUTH_HBP_SECRET 
-print("social secret",SOCIAL_AUTH_HBP_SECRET)
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

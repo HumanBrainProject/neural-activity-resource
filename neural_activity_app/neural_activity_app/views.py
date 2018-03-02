@@ -15,12 +15,11 @@ from app.url_handler import get_url_ctx
 @login_required(login_url='/login/hbp/')
 def home(request):
 
-    print(request)
     ctx = get_url_ctx(request)
-    print('getting ctx:',ctx)
+
     #to get app_id
     social_auth = request.user.social_auth.get()
-    print('getting social_auth:', social_auth)
+
     headers = {
         'Authorization': get_auth_header(request.user.social_auth.get())
     }
@@ -29,8 +28,6 @@ def home(request):
     url = '%scollab/context/%s/' % (svc_url, ctx)
     
     res = requests.get(url, headers=headers)
-    print("res",res)
-    app_id = res.json()['id']
 
     return render(request, 'home.html', {})
 
@@ -38,7 +35,7 @@ def home(request):
 @login_required(login_url='/login/hbp/')
 def config(request):
     '''Render the config file'''
-
+    print("configuration")
     res = requests.get(settings.HBP_ENV_URL)
     config = res.json()
 
