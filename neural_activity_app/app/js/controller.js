@@ -1,17 +1,15 @@
 'use strict';
 
 /* Controllers */
-var  NeuralActivityApp = angular.module(' NeuralActivityApp');
+var NeuralActivityApp = angular.module('NeuralActivityApp');
 
- NeuralActivityApp.controller('HomeCtrl', ['$scope', '$rootScope', '$http', '$location',
+NeuralActivityApp.controller('HomeCtrl', ['$scope', '$rootScope', '$http', '$location',
     function($scope, $rootScope, $http, $location) {
-
-
 
     }
 ]);
 
- NeuralActivityApp.controller('FileViewCtrl', ['$scope', '$rootScope', '$http', '$location',
+NeuralActivityApp.controller('FileViewCtrl', ['$scope', '$rootScope', '$http', '$location',
     function($scope, $rootScope, $http, $location) {
 
     }

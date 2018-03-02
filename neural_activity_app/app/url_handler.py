@@ -1,5 +1,4 @@
 def _get_url_args (request):
-    print('here')
     try :
         ctxstate, format_ = request.META['QUERY_STRING'][4:].split("&")
         try :
