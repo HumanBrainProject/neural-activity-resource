@@ -10,10 +10,11 @@ import requests
 from hbp_app_python_auth.auth import get_access_token, get_token_type, get_auth_header
 
 
-from url_handler import get_url_ctx
+from app.url_handler import get_url_ctx
 
 @login_required(login_url='/login/hbp/')
 def home(request):
+
     print(request)
     ctx = get_url_ctx(request)
     print('getting ctx:',ctx)
@@ -54,3 +55,7 @@ def config(request):
     config['build'] = settings.BUILD_INFO
 
     return HttpResponse(json.dumps(config), content_type='application/json')
+
+@login_required(login_url='/login/hbp/')
+def edit(request):
+    return render(request, 'edit.html', {})

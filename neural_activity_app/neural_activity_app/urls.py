@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from app.views import browse, segment
-from neural_activity_app.views import home
+from neural_activity_app.views import home, config, edit
 
 # from rest_framework import routers
 
@@ -24,12 +24,15 @@ from neural_activity_app.views import home
 # router.register(r'users', UserViewSet)
 
 urlpatterns = [
-    # url(r'^', include(router.urls)),
-    url(r'^admin/', admin.site.urls),
-    url(r'^browse/', browse, name='browse'),
-    url(r'^segment/', segment, name='segment'),
-    url(r'^', home, name='home'),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url('', include('social.apps.django_app.urls', namespace='social')),
     url('', include('hbp_app_python_auth.urls', namespace='hbp-social')),
+    url(r'^', home, name='home'),
+
+    # url(r'^', include(router.urls)),
+    # url(r'^admin/', admin.site.urls),
+    # url(r'^browse/', browse, name='browse'),
+    # url(r'^segment/', segment, name='segment'),
+    # url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^config.json$', config, name='config'),
+    url(r'^edit/$',edit, name='edit'),
 ]

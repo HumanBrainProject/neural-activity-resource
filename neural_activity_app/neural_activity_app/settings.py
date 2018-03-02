@@ -18,14 +18,14 @@ import hbp_app_python_auth.settings as auth_settings
 
 # ENV = os.environ.get('VALIDATION_SERVICE_ENV', 'production')
 ENV = 'dev'
-auth_settings.ENV = ENV
+# auth_settings.ENV = ENV
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True#os.environ.get('DEBUG') in ['True', '1']
-
+LOCAL_DB = True
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -39,18 +39,20 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'app',
+    #'social_django',
     'jsonify',
     'social.apps.django_app.default',
     'hbp_app_python_auth',
+    'markdown_deux',
     'corsheaders',
+    'rest_framework',
+    'app',
 ]
 
 if ENV == "dev":
@@ -60,22 +62,24 @@ if ENV == "dev":
 
 from django.utils.functional import SimpleLazyObject
 
-MIDDLEWARE = [
-    'middleware.personal_middleware.DisableCsrfCheck',
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
+MIDDLEWARE_CLASSES = [
+    'app.middleware.personal_middleware.DisableCsrfCheck',
+
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+
+    'corsheaders.middleware.CorsMiddleware',
+    
+    'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-   
+    'django.middleware.security.SecurityMiddleware',
+    
     'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'neural_activity_app.urls'
-
 AUTHENTICATION_BACKENDS = (
     'hbp_app_python_auth.auth.HbpAuth',
     'django.contrib.auth.backends.ModelBackend',
@@ -160,13 +164,13 @@ HBP_STORAGE_SERVICE_URL = 'https://services.humanbrainproject.eu/storage/v1/api/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'none')
-
+print("secret key",SECRET_KEY)
 auth_settings.SOCIAL_AUTH_HBP_KEY = os.environ.get('HBP_OIDC_CLIENT_ID')
 SOCIAL_AUTH_HBP_KEY = auth_settings.SOCIAL_AUTH_HBP_KEY
-
+print("social key",SOCIAL_AUTH_HBP_KEY)
 auth_settings.SOCIAL_AUTH_HBP_SECRET = os.environ.get('HBP_OIDC_CLIENT_SECRET')
 SOCIAL_AUTH_HBP_SECRET = auth_settings.SOCIAL_AUTH_HBP_SECRET 
-
+print("social secret",SOCIAL_AUTH_HBP_SECRET)
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -207,7 +211,7 @@ else:
 CSRF_TRUSTED_ORIGINS = [    
     'localhost:8000',
     '127.0.0.1:9000',
-    'https://localhost:8000/app/' 
+    # 'https://localhost:8000/app/' 
     ]
 
 CORS_ORIGIN_WHITELIST = (
