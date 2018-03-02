@@ -5,18 +5,14 @@
 window.base_url = 'https://127.0.0.1:8000/';
 
 window.ver_api = '/api/v2/';
-console.log('here')
+
 angular.bootstrap().invoke(function($http, $log, $location) {
-    console.log('getting /config.json', $http.get('/config.json'))
+
     $http.get('/config.json').then(function(res) {
         window.bbpConfig = res.data;
 
         angular.element(document).ready(function() {
-
-            console.log('bootsrapping')
             angular.bootstrap(document.getElementById("neural-activity-app"), ['NeuralActivityApp']);
-            console.log('boostrapp done')
-            alert('in app.js config')
 
             setTimeout(function() {
 

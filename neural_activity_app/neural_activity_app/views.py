@@ -14,7 +14,6 @@ from app.url_handler import get_url_ctx
 
 @login_required(login_url='/login/hbp/')
 def home(request):
-
     ctx = get_url_ctx(request)
 
     #to get app_id
@@ -35,7 +34,6 @@ def home(request):
 @login_required(login_url='/login/hbp/')
 def config(request):
     '''Render the config file'''
-    print("configuration")
     res = requests.get(settings.HBP_ENV_URL)
     config = res.json()
 
