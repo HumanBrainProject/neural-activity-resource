@@ -3,15 +3,43 @@
 /* Controllers */
 var NeuralActivityApp = angular.module('NeuralActivityApp');
 
-NeuralActivityApp.controller('HomeCtrl', ['$scope', '$rootScope', '$http', '$location',
-    function($scope, $rootScope, $http, $location) {
+NeuralActivityApp.controller('HomeCtrl', ['$scope', '$rootScope', '$http', '$location', 'Context', 'FileService',
 
+    function($scope, $rootScope, $http, $location, Context, FileService) {
+
+        //variables
+
+        //functions
+        $scope.goToFileView = function() {
+            FileService.set("File_AlphaOmega_2.map").then(function() {
+                $location.path("/home/file-view");
+            })
+        }
+
+
+        //main code
+        Context.setService().then(function() {
+            $scope.Context = Context;
+
+        });
     }
 ]);
 
-NeuralActivityApp.controller('FileViewCtrl', ['$scope', '$rootScope', '$http', '$location',
-    function($scope, $rootScope, $http, $location) {
+NeuralActivityApp.controller('FileViewCtrl', ['$scope', '$rootScope', '$http', '$location', 'Context', 'FileService',
 
+    function($scope, $rootScope, $http, $location, Context, FileService) {
+        //variables
+        $scope.filename;
+        $scope.data;
+
+        //functions
+
+
+        //main code
+        Context.setService().then(function() {
+            $scope.Context = Context;
+            $scope.data = FileService.getData();
+        });
     }
 ]);
 

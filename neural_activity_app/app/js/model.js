@@ -9,3 +9,26 @@ var ApiCommunicationServices = angular.module('ApiCommunicationServices', ['ngRe
 //         });
 //     }
 // ]);
+ApiCommunicationServices.factory('BlockDataRest', ['$resource',
+    function($resource) {
+        return $resource('blockdata/', { id: '@eUuid' }, {
+            get: { method: 'GET', params: { format: 'json' }, isArray: false },
+        })
+    }
+]);
+
+ApiCommunicationServices.factory('CollabIDRest', ['$resource',
+    function($resource) {
+        return $resource('collabid/:uuid', { id: '@eUuid' }, {
+            get: { method: 'GET', params: { format: 'json' }, isArray: false },
+        })
+    }
+]);
+
+ApiCommunicationServices.factory('AppIDRest', ['$resource',
+    function($resource) {
+        return $resource('appid/:uuid', { id: '@eUuid' }, {
+            get: { method: 'GET', params: { format: 'json' }, isArray: false },
+        })
+    }
+]);
