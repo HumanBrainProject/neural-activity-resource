@@ -1,11 +1,23 @@
 <div ng-controller="HomeCtrl">
 
     <nav class="navbar">
-       
+
     </nav>
 
     <body>
-        <h1>  Neural activity Visualizer  </h1>
+        <h1 align=center> Neural activity Visualizer </h1>
+
+        <nav>
+            <table class="table-create">
+                <tr>
+                    <td>
+                        <label> Search :  <input id="search_file_in_collab"  ng-model='search.$'> </label>
+                    </td>
+                    <td>
+                        <div align=right> <button class="button-MC" ng-click="goToFileView()">View File</button></div>
+                    </td>
+                </tr>
+            </table>
     </body>
 
 </div>
