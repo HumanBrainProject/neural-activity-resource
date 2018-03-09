@@ -63,10 +63,68 @@ NeuralActivityApp.config(
                 controller: 'HelpCtrl'
             })
             .state('file_view', {
-                url: '/home/file-view',
+                url: '/home/file-view/:file_name',
                 templateUrl: '/static/templates/file-view.tpl.html',
                 controller: 'FileViewCtrl'
             })
+            .state('file_view.block', {
+                parent: 'file_view',
+                url: '/home/file-view/block/{block_id:[0-9]{1,8}}',
+                views: {
+                    'detail@file_view': {
+                        templateUrl: '/static/templates/block-view.tpl.html',
+                        controller: 'BlockViewCtrl'
+                    }
+                }
+            })
+            .state('file_view.segment', {
+                parent: 'file_view',
+                url: '/home/file-view/segment/{block_id:[0-9]{1,8}}?{segment_id:[0-9]{1,8}}',
+                views: {
+                    'detail': {
+                        templateUrl: '/static/templates/segment-view.tpl.html',
+                        controller: 'SegmentViewCtrl'
+                    }
+                }
+            })
+            .state('file_view.analog_signal', {
+                parent: 'file_view',
+                url: '/home/file-view/analog_signal/{block_id:[0-9]{1,8}}?{segment_id:[0-9]{1,8}}?{analog_signal_id:[0-9]{1,8}}',
+                views: {
+                    'detail': {
+                        templateUrl: '/static/templates/analog-signal-view.tpl.html',
+                        controller: 'AnalogSignalViewCtrl'
+                    }
+                }
+            })
+            // .state('file_view', {
+            //     url: '/home/file-view',
+            //     views: {
+            //         'menu': {
+            //             templateUrl: '/static/navbar/navbar.tpl.html',
+            //             controller: 'NavBarCtrl'
+            //         },
+            //         'detail_view': {
+            //             templateUrl: '/static/templates/file-view.tpl.html',
+            //             controller: 'FileViewCtrl'
+            //         }
+            //     }
+            // })
+
+        // .state('menu_bar', {
+        //     parent: 'file_view',
+        //     views: {
+        //         'menu': {
+        //             templateUrl: '/static/navbar/navbar.tpl.html',
+        //             controller: 'NavBarCtrl'
+        //         },
+        //         'detail@file_view': {
+
+        //         }
+        //     }
+        // })
+
+
 
         $urlRouterProvider.otherwise('/home');
 

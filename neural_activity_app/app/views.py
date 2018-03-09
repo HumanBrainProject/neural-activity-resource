@@ -100,9 +100,20 @@ class Block(APIView):
      
         # encoder = DjangoJSONEncoder(ensure_ascii=False, indent=4)
         # return render(request, 'browse.html', {'data': encoder.encode(block_data)})
-       
+        #return Response({'data': json.dumps(block_data)})
         return Response({'data': jsonpickle.encode(block_data)})
 
+class Segment(APIView): 
+   
+    def get(self, request, format=None, **kwargs):
+      
+        return Response()
+
+class AnalogSignal(APIView): 
+   
+    def get(self, request, format=None, **kwargs):
+       
+        return Response()
 
 # def browse(request):
 #     """

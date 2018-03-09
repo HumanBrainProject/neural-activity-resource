@@ -3,7 +3,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 # from app.views import browse, segment
 
-from views import CollabID, AppID, Block
+from views import CollabID, AppID, Block, Segment, AnalogSignal
 
 # from rest_framework import routers
 
@@ -16,6 +16,9 @@ urlpatterns = [
     url(r'^collabidrest/$', CollabID.as_view()),
     url(r'^appid/$',AppID.as_view()),
     url(r'^blockdata/$', Block.as_view()),
+     url(r'^segmentdata/$', Segment.as_view()),
+    url(r'^analogsignaldata/$', AnalogSignal.as_view()),
+  
     # url(r'^', include(router.urls)),
     # url(r'^admin/', admin.site.urls),
     # url(r'^browse/', browse, name='browse'),
