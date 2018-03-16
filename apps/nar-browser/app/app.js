@@ -21,30 +21,30 @@ Author: Andrew P. Davison, UNIC, CNRS
 (function() {
   'use strict';
 
-//   window.bbpConfig =  {
-//       api: {
-//           user: {
-//               v0: "https://services.humanbrainproject.eu/oidc/v0/api"
-//           }
-//       },
-//       auth: {
-//           url: "https://services.humanbrainproject.eu/oidc",
-//           clientId: "395947a2-16b5-4e04-9180-93088459a7f2"
-//       }
-//   }
+  window.bbpConfig =  {
+      api: {
+          user: {
+              v0: "https://services.humanbrainproject.eu/oidc/v0/api"
+          }
+      },
+      auth: {
+          url: "https://services.humanbrainproject.eu/oidc",
+          clientId: "395947a2-16b5-4e04-9180-93088459a7f2"
+      }
+  }
 
   angular.module('nar', [
-    //'bbpOidcClient',
+    'bbpOidcClient',
     //'ui.router',
     'ngMaterial'
   ])
   //.config(function($urlRouterProvider) {
   //  $urlRouterProvider.otherwise("/");
   //})
-//   .config(function(bbpOidcSessionProvider) {
-//     // set to true if missing token should automatically redirect to login page.
-//     bbpOidcSessionProvider.alwaysPromptLogin(true)
-//     // set to true if the app should ensure a valid token is present before displaying the page.
-//     bbpOidcSessionProvider.ensureToken(true)
-//   })
+  .config(function(bbpOidcSessionProvider) {
+    // set to true if missing token should automatically redirect to login page.
+    bbpOidcSessionProvider.alwaysPromptLogin(true)
+    // set to true if the app should ensure a valid token is present before displaying the page.
+    bbpOidcSessionProvider.ensureToken(true)
+  })
 })();

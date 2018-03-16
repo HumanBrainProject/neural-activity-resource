@@ -164,14 +164,14 @@ angular.module('nar')
         return Resource;
     };
 })
-.service("KGIndex", function($http, PathHandler, bbpOidcSession) {
+.service("KGIndex", function($http, PathHandler) { //, bbpOidcSession) {
 
     var error = function(response) {
         console.log(response);
     };
 
     var config = {
-        Authorization: "Bearer " + bbpOidcSession.token()
+        //Authorization: "Bearer " + bbpOidcSession.token()
     };
 
     var KGIndex = {
