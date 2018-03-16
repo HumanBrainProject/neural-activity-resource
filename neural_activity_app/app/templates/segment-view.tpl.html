@@ -1,0 +1,48 @@
+<div ng-controller="SegmentViewCtrl">
+
+    <body>
+        <h1 align=center> Segment #{{segment_id}} </h1>
+
+        <panel class=description-panel>
+
+            <table class="table-create">
+                <thead>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>description: </td>
+                        <td>{{data_segment.description}}</td>
+
+                    </tr>
+                    <tr>
+                        <td>file origin: </td>
+                        <td>{{data_segment.file_origin}}</td>
+                    </tr>
+                    <tr>
+                        <td>name: </td>
+                        <td>{{data_segment.name}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </panel>
+        <br>
+        <br>
+        <h2>Analogsignals Array</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="width: 15%">Id</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="analogSignal in data_segment.analogsignals">
+                    <td style="width: 15%">{{ analogSignal.id }}</td>
+                    <td style="width: 15%">
+
+                    </td>
+            </tbody>
+        </table>
+
+    </body>
+</div>

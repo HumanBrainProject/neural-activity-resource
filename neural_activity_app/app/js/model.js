@@ -17,6 +17,22 @@ ApiCommunicationServices.factory('BlockDataRest', ['$resource',
     }
 ]);
 
+ApiCommunicationServices.factory('SegmentDataRest', ['$resource',
+    function($resource) {
+        return $resource('segmentdata/', { id: '@eUuid' }, {
+            get: { method: 'GET', params: { format: 'json' }, isArray: false },
+        })
+    }
+]);
+
+ApiCommunicationServices.factory('AnalogSignalDataRest', ['$resource',
+    function($resource) {
+        return $resource('analogsignaldata/', { id: '@eUuid' }, {
+            get: { method: 'GET', params: { format: 'json' }, isArray: false },
+        })
+    }
+]);
+
 ApiCommunicationServices.factory('CollabIDRest', ['$resource',
     function($resource) {
         return $resource('collabid/:uuid', { id: '@eUuid' }, {

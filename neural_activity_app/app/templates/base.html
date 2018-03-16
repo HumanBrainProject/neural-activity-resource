@@ -1,4 +1,4 @@
-{% load staticfiles %} {% load oidc_session %}
+{% load staticfiles %}
 
 <!DOCTYPE html>
 <html>
@@ -10,14 +10,15 @@
 
     <link rel="stylesheet" href="{% static 'static/hbp-collaboratory-theme/dist/css/bootstrap.css' %}">
     <link rel="stylesheet" href="{% static 'css/app.css' %}">
-    <!--<link rel="stylesheet" href="{% static 'css/Model_catalog.css' %}">-->
+    <link rel="stylesheet" href="{% static 'css/menu.css' %}">
+    <!--<link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">-->
     <!--<link rel="stylesheet" href="{% static 'css/parameters_configuration.css' %}">-->
     <link rel="stylesheet" href="{% static 'static/nvd3/build/nv.d3.css' %}">
 
 </head>
 
 <body>
-    {% hbp_oidc_session_handler request.user %}
+
 
 
 
@@ -165,7 +166,11 @@
     <script type="text/javascript" src="{% static 'js/app.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/model.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/service.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/controller.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/mainCtrl.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/blockCtrl.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/segmentCtrl.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/analogSignalCtrl.js' %}"></script>
+
     <script src="//cdnjs.cloudflare.com/ajax/libs/showdown/0.3.1/showdown.min.js"></script>
     <script type="text/javascript" src="{% static 'static/angular-bootstrap-multiselect/dist/angular-bootstrap-multiselect.js' %}"></script>
 
