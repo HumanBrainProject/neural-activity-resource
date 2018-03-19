@@ -1,0 +1,48 @@
+<div ng-controller="BlockViewCtrl">
+
+    <body>
+        <h1 align=center>Block #{{block_id}} </h1>
+
+        <panel class=description-panel>
+
+            <table class="table-create">
+                <thead>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>description: </td>
+                        <td>{{data_block.description}}</td>
+
+                    </tr>
+                    <tr>
+                        <td>file origin: </td>
+                        <td>{{data_block.file_origin}}</td>
+                    </tr>
+                    <tr>
+                        <td>name: </td>
+                        <td>{{data_block.name}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </panel>
+        <br>
+        <br>
+        <h2>Segments Array</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="width: 15%">Id</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="segment in data_block.segments">
+                    <td style="width: 15%">{{ segment.name }}</td>
+                    <td style="width: 15%">
+
+                    </td>
+            </tbody>
+        </table>
+
+    </body>
+</div>

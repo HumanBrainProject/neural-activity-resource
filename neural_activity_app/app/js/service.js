@@ -1,223 +1,210 @@
-var ContextServices = angular.module('ContextServices', ['ngResource', 'ApiCommunicationServices']);
-
-ContextServices.service('Context', ['$rootScope', '$location', 'CollabIDRest', 'AppIDRest',
-    function($rootScope, $location, CollabIDRest, AppIDRest) {
-
-        var goToFileView = function() {
-            alert('working')
-            $location.path("/home/file-view");
-        }
-
-        var ctx;
-        var state_type = undefined;
-        var state = undefined;
-        var external = undefined;
-        var collabID = undefined;
-        var appID = undefined;
-        var serviceSet = false;
-
-
-        var getCurrentLocationSearch = function() {
-            return window.location.search;
-        }
-        var setService = function() {
-            return new Promise(function(resolve, reject) {
-
-                if (serviceSet == false) {
-                    // _getState();
-                    var location = getCurrentLocationSearch();
-                    temp_state = location.split("&")[1];
-
-
-                    if (temp_state != undefined && temp_state != "ctxstate=") {
-                        temp_state2 = temp_state.split("%2C")[0];
-                        temp_state2 = temp_state2.substring(9);
-                        state_type = temp_state2.split(".")[0]
-                        state = temp_state2.split(".")[1]
-
-                        if (temp_state.split("%2C")[1] != undefined) {
-                            external = temp_state.split("%2C")[1];
-                        }
-                    }
-
-                    // _getCtx();
-                    if (ctx == undefined) {
-                        ctx = window.location.search.split("&")[0].substring(5);
-                    }
-
-                    // getCollabID();
-                    if (collabID == undefined || collabID == "") {
-                        var collab_request = CollabIDRest.get({ ctx: ctx }); //.collab_id;
-                        collab_request.$promise.then(function() {
-                            collabID = collab_request.collab_id
-                        });
-                    }
-
-                    // getAppID();
-                    if (appID == undefined || appID == "") {
-                        var app_request = AppIDRest.get({ ctx: ctx }); //.collab_id;
-                        app_request.$promise.then(function() {
-                            appID = app_request.app_id
-                        });
-                    }
-
-                    if (app_request == undefined) {
-                        if (collab_request == undefined) {
-                            serviceSet = true;
-                            resolve();
-                        } else {
-                            collab_request.$promise.then(function() {
-                                serviceSet = true;
-                                resolve();
-                            });
-                        }
-                    } else {
-                        app_request.$promise.then(function() {
-
-                            if (collab_request == undefined) {
-                                serviceSet = true;
-                                resolve();
-
-                            } else {
-                                collab_request.$promise.then(function() {
-                                    serviceSet = true;
-                                    resolve();
-                                });
-                            }
-                        });
-                    }
-
-                } else {
-                    resolve();
-                }
-
-            });
-        };
-
-        var setState = function(id) {
-            state = id;
-        };
-
-
-        var getExternal = function() {
-            return external;
-        }
-
-        var getState = function() {
-            return state;
-        };
-
-        var getStateType = function() {
-            return state_type;
-        }
-
-        var getCtx = function() {
-            return ctx;
-        };
-
-        var setCtx = function(context) {
-            ctx = context;
-        }
-
-        var getCollabID = function() {
-            return collabID;
-        };
-
-        var getAppID = function() {
-            return appID;
-        };
-
-        var getServiceSet = function() {
-            return serviceSet;
-        }
-
-        var sendState = function(type, id) {
-            state_type = type;
-            window.parent.postMessage({
-                eventName: 'workspace.context',
-
-                data: {
-                    state: type + '.' + id
-                }
-            }, 'https://collab.humanbrainproject.eu/');
-        };
-
-
-        var clearState = function() {
-
-            window.parent.postMessage({
-                eventName: 'workspace.context',
-
-                data: {
-                    state: ''
-                }
-            }, 'https://collab.humanbrainproject.eu/');
-
-            state = "";
-            state_type = undefined;
-
-
-            setTimeout(function() {
-                // window.location.href = "ctx=" + getCtx() + "&ctxstate=";
-                window.location.hash = "ctx=" + getCtx() + "&ctxstate=";
-                // console.log(window.location.hash);
-
-                // window.location.search = "ctx=" + getCtx() + "&ctxstate=";
-
-
-            }, 300);
-
-        };
-
-        var clearExternal = function() {
-            sendState(state_type, state);
-            // window.location.search = "ctx=" + getCtx() + "&ctxstate="+state_type+"."+state;
-            window.location.search = "ctx=" + getCtx() + "&ctxstate=";
-        };
-
-        return {
-            setService: setService,
-            setCtx: setCtx,
-            getCtx: getCtx,
-            getCollabID: getCollabID,
-            getAppID: getAppID,
-            getState: getState,
-            getServiceSet: getServiceSet,
-            sendState: sendState,
-            clearState: clearState,
-            clearExternal: clearExternal,
-            setState: setState,
-            getExternal: getExternal,
-            getStateType: getStateType,
-            getCurrentLocationSearch: getCurrentLocationSearch,
-            goToFileView: goToFileView,
-        }
-    }
-]);
-
-
-
-
 var FileServices = angular.module('FileServices', ['ngResource', 'ApiCommunicationServices']);
 
-FileServices.service('FileService', ['$rootScope', 'BlockDataRest',
-    function($rootScope, BlockDataRest) {
+// FileServices.factory('dataShare', function($rootScope, $timeout) {
+//     var service = {};
+//     service.data = false;
+//     this.data = [];
+//     service.sendData = function(data) {
+//         this.data = data;
+//         $timeout(function() {
+//             $rootScope.$broadcast('data_shared');
+//         }, 100);
+//     };
+//     service.getData = function() {
+//         return this.data;
+//     };
+//     return service;
+// });
 
+FileServices.service('FileService', ['$rootScope', '$timeout', 'BlockDataRest', 'SegmentDataRest', 'AnalogSignalDataRest',
+
+    function($rootScope, $timeout, BlockDataRest, SegmentDataRest, AnalogSignalDataRest) {
+        var fake_data = {
+            block: [{
+                description: "a fake block",
+                file_origin: "comming from nowhere",
+                name: 'fake block 1',
+                segments: [{
+                    name: "segment 1",
+                    description: "a first fake segment",
+                    file_origin: "nowhere",
+                    nb_analog_signals: 3,
+                    nb_spiketrains: 2,
+                    spiketrains: [],
+                    analogsignals: []
+                }, {
+                    name: "segment 2",
+                    description: "a second fake segment",
+                    file_origin: "nowhere",
+                    nb_analog_signals: 1,
+                    nb_spiketrains: 2,
+                    spiketrains: [],
+                    analogsignals: []
+                }, {
+                    name: "segment 3",
+                    description: "a third fake segment",
+                    file_origin: "nowhere",
+                    nb_analog_signals: 5,
+                    nb_spiketrains: 1,
+                    spiketrains: [],
+                    analogsignals: []
+                }]
+            }]
+        }
+        var fake_seg = [{
+                name: "segment 1",
+                description: "a first fake segment",
+                file_origin: "nowhere",
+                nb_analog_signals: 3,
+                nb_spiketrains: 2,
+                spiketrains: [
+                    { id: 1 },
+                    { id: 2 },
+                ],
+                analogsignals: [
+                    { id: 1 },
+                    { id: 2 },
+                    { id: 3 },
+                ]
+            },
+            {
+                name: "segment 2",
+                description: "a second fake segment",
+                file_origin: "nowhere",
+                nb_analog_signals: 1,
+                nb_spiketrains: 2,
+                spiketrains: [
+                    { id: 1 }
+                ],
+                analogsignals: [
+                    { id: 1 },
+                    { id: 2 },
+                ]
+            }, {
+                name: "segment 3",
+                description: "a third fake segment",
+                file_origin: "nowhere",
+                nb_analog_signals: 5,
+                nb_spiketrains: 1,
+                spiketrains: [
+                    { id: 1 },
+                ],
+                analogsignals: [
+                    { id: 1 },
+                    { id: 2 },
+                    { id: 2 },
+                    { id: 2 },
+                    { id: 5 },
+                ]
+            }
+        ]
+
+        var fake_signal = [{
+                signal_id: 1,
+                values: [
+
+                ]
+            },
+            {
+                signal_id: 2
+            },
+            {
+                signal_id: 3
+            }
+        ]
         var fileName = undefined;
         var fileUrl = undefined;
         var data = undefined;
-        var set = function(filename) {
+
+        var setService = function(filename) {
+            ////set the service if a filename is given /// TODO: check if necessary to add promises in each function 
             return new Promise(function(resolve, reject) {
                 setFileName(filename);
-
                 var url = getUrlFromCollab();
                 setFileUrl(url);
 
-                getBlockData().then(function() {
-                    resolve();
+                if (data == undefined) {
+                    getBlockData().then(function(temp_data) {
+                        data = fake_data //temp_data;
+                        resolve(fake_data); ///temp_data
+                    })
+                } else {
+                    // $timeout(function() {
+                    //     $rootScope.$broadcast('data_shared');
+                    // }, 100);
+                    console.log('data already loaded')
+                    resolve(data)
+                }
+            })
+        }
+
+        // var loadBlock = function(block_id) {
+        //     return new Promise(function(resolve, reject) {
+
+        //         getBlockData(block_id).then(function(block_data) {
+
+        //             if (data == undefined) {
+        //                 // getBlockData().then(function(temp_data) {
+        //                 //     data = fake_data //temp_data;
+        //                 //     resolve(fake_data); ///temp_data
+        //                 // })
+        //                 resolve(segment_data)
+        //             } else {
+        //                 console.log("data alrady loaded so")
+        //                 data.block[block_id].segments[segment_id] = segment_data;
+        //                 console.log(data.block[block_id].segments[segment_id])
+        //                 $rootScope.$broadcast('data_updated');
+        //                 console.log('data updated')
+        //                 resolve(segment_data)
+        //             }
+        //         })
+        //     })
+        // }
+
+        var loadSegment = function(block_id, segment_id) {
+            return new Promise(function(resolve, reject) {
+
+                getSegmentData(block_id, segment_id).then(function(segment_data) {
+
+                    if (data == undefined) {
+                        // getBlockData().then(function(temp_data) {
+                        //     data = fake_data //temp_data;
+                        //     resolve(fake_data); ///temp_data
+                        // })
+                        resolve(segment_data)
+                    } else {
+                        console.log("data alrady loaded so")
+                        data.block[block_id].segments[segment_id] = segment_data;
+                        console.log(data.block[block_id].segments[segment_id])
+                        $rootScope.$broadcast('data_updated');
+                        console.log('data updated')
+                        resolve(segment_data)
+                    }
                 })
             })
         }
+
+        var loadAnalogSignal = function(block_id, segment_id, signal_id) {
+            return new Promise(function(resolve, reject) {
+
+                getAnalogSignalData(block_id, segment_id, signal_id).then(function(signal_data) {
+
+                    if (data == undefined) {
+                        // getBlockData().then(function(temp_data) {
+                        //     data = fake_data //temp_data;
+                        //     resolve(fake_data); ///temp_data
+                        // })
+                        resolve(signal_data)
+                    } else {
+                        console.log("data alrady loaded so")
+                        data.block[block_id].segments[segment_id].analogsignals[signal_id] = signal_data;
+                        $rootScope.$broadcast('data_updated');
+                        resolve(signal_data)
+                    }
+                })
+            })
+        }
+
 
         var getUrlFromCollab = function() {
             //TODO WITH COLLAB 
@@ -226,17 +213,36 @@ FileServices.service('FileService', ['$rootScope', 'BlockDataRest',
         }
 
         var getBlockData = function() {
+            ///get block information from the api 
             return new Promise(function(resolve, reject) {
                 var temp_data = BlockDataRest.get({ url: fileUrl });
                 temp_data.$promise.then(function(data) {
-                    data = data;
-                    console.log('data is filled:', data)
-                    resolve();
+
+                    resolve(fake_data); //resolve(data);
                 });
             })
         }
 
-        //sets 
+        var getSegmentData = function(block_id, segment_id) {
+            ///get segment information from the api 
+            return new Promise(function(resolve, reject) {
+                var temp_data = SegmentDataRest.get({ block_id: block_id, segment_id: segment_id });
+                temp_data.$promise.then(function(segment_data) {
+                    resolve(fake_seg[segment_id]);
+                });
+            })
+        }
+
+        var getAnalogSignalData = function(block_id, segment_id, signal_id) {
+                ///get analogsignam information from the api 
+                return new Promise(function(resolve, reject) {
+                    var temp_data = AnalogSignalDataRest.get({ block_id: block_id, segment_id: segment_id, analog_signal_id: signal_id });
+                    temp_data.$promise.then(function(signal_data) {
+                        resolve(fake_signal[signal_id]);
+                    });
+                })
+            }
+            //sets 
         var setFileName = function(name) {
             fileName = name;
         }
@@ -260,10 +266,18 @@ FileServices.service('FileService', ['$rootScope', 'BlockDataRest',
             return data;
         }
 
-        return {
-            set: set,
-            getUrlFromCollab: getUrlFromCollab,
+        var get_navigation_data = function() {
 
+            return {}
+        }
+
+        return {
+            setService: setService,
+            // GetStoredDataOrsetService: GetStoredDataOrsetService,
+            getUrlFromCollab: getUrlFromCollab,
+            loadSegment: loadSegment,
+            // loadBlock: loadBlock,
+            loadAnalogSignal: loadAnalogSignal,
 
             //sets
             setFileName: setFileName,
@@ -273,9 +287,11 @@ FileServices.service('FileService', ['$rootScope', 'BlockDataRest',
             getFileName: getFileName,
             getFileUrl: getFileUrl,
             getData: getData,
+            get_navigation_data: get_navigation_data,
         }
     }
 ])
+
 
 var GraphicsServices = angular.module('GraphicsServices', ['ngResource', 'btorfs.multiselect', 'ApiCommunicationServices', 'ParametersConfigurationServices', 'ContextServices']);
 

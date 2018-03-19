@@ -15,7 +15,13 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from neural_activity_app.views import home, config
+from app.views import home
+# from rest_framework import routers
+
+# router = routers.DefaultRouter()
+# router.register(r'users', UserViewSet)
+
+from app.views import Block, Segment, AnalogSignal
 
 # from rest_framework import routers
 
@@ -23,9 +29,13 @@ from neural_activity_app.views import home, config
 # router.register(r'users', UserViewSet)
 
 urlpatterns = [
-    url('', include('social.apps.django_app.urls', namespace='social')),
-    url('', include('hbp_app_python_auth.urls', namespace='hbp-social')),
-    url('', include('app.urls', namespace='app')),
-    url(r'^config.json$', config, name='config'),
-    url(r'^', home, name='home'),
+
+    #general 
+    url(r'^blockdata/$', Block.as_view()),
+     url(r'^segmentdata/$', Segment.as_view()),
+    url(r'^analogsignaldata/$', AnalogSignal.as_view()),
+  
+    # url(r'^', include(router.urls)),
+    url(r'^admin/', admin.site.urls),
+    url(r'^', home, name='home')
 ]
