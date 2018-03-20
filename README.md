@@ -1,1 +1,0 @@
-# neural-activity-visualizer

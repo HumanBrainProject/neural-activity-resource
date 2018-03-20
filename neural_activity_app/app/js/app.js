@@ -62,7 +62,9 @@ NeuralActivityApp.config(
             })
             .state('file_view.block', {
                 parent: 'file_view',
-                url: '/home/file-view/block/{block_id:[0-9]{1,8}}',
+
+                url: '/home/file-view/block',
+
                 views: {
                     'detail@file_view': {
                         templateUrl: '/static/templates/block-view.tpl.html',
@@ -72,7 +74,9 @@ NeuralActivityApp.config(
             })
             .state('file_view.segment', {
                 parent: 'file_view',
-                url: '/home/file-view/segment/{block_id:[0-9]{1,8}}?{segment_id:[0-9]{1,8}}',
+
+                url: '/home/file-view/segment/{segment_id:[0-9]{1,8}}',
+
                 views: {
                     'detail': {
                         templateUrl: '/static/templates/segment-view.tpl.html',
@@ -82,7 +86,8 @@ NeuralActivityApp.config(
             })
             .state('file_view.analog_signal', {
                 parent: 'file_view',
-                url: '/home/file-view/analog_signal/{block_id:[0-9]{1,8}}?{segment_id:[0-9]{1,8}}?{analog_signal_id:[0-9]{1,8}}',
+                url: '/home/file-view/analog_signal/{segment_id:[0-9]{1,8}}?{analog_signal_id:[0-9]{1,8}}',
+
                 views: {
                     'detail': {
                         templateUrl: '/static/templates/analog-signal-view.tpl.html',
@@ -90,6 +95,7 @@ NeuralActivityApp.config(
                     }
                 }
             })
+
 
         $urlRouterProvider.otherwise('/home');
 

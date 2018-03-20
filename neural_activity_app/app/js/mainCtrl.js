@@ -19,9 +19,6 @@ NeuralActivityApp.controller('HomeCtrl', ['$scope', '$rootScope', '$http', '$loc
             })
         }
 
-
-        //main code
-
     }
 ]);
 
@@ -39,46 +36,42 @@ NeuralActivityApp.controller('FileViewCtrl', ['$scope', '$rootScope', '$http', '
         $scope.$on('data_updated', function() {
             $scope.data = FileService.getData();
             $scope.$apply();
-            console.log("data updated", $scope.data)
         });
-
-
 
 
         FileService.setService($stateParams.file_name).then(function() {
             $scope.data = FileService.getData();
             $scope.$apply();
-            console.log("in fileview ctr data:", $scope.data)
-        })
+        });
 
     }
 ]);
-NeuralActivityApp.controller('MenuCtrl', ['$scope', '$rootScope', '$http', '$location', '$stateParams', 'FileService',
+NeuralActivityApp.controller('MenuCtrl', ['$scope', '$rootScope', '$http', '$location', '$stateParams', '$state', 'FileService',
 
-    function($scope, $rootScope, $http, $location, $stateParams, FileService) {
+    function($scope, $rootScope, $http, $location, $stateParams, $state, FileService) {
         var ctrl = this;
         // var menu_data = FileService.getData();
-        $scope.data = undefined;
-        $scope.menu_blocks_to_show = [];
+        // $scope.data = undefined;
+        // $scope.menu_blocks_to_show = [];
         $scope.menu_segments_to_show = [];
 
-        $scope.showBlock = function(block_id) {
+        // $scope.showBlock = function(block_id) {
 
-            if (!$scope.isInArray(block_id, $scope.menu_blocks_to_show)) {
-                $scope.menu_blocks_to_show.push(block_id);
-                document.getElementById("arrow-block-" + block_id).className = "glyphicon glyphicon-menu-up";
-            } else {
-                var i = $scope.menu_blocks_to_show.indexOf(block_id);
-                if (i == 0) {
-                    $scope.menu_blocks_to_show.splice(0, 1);
-                } else { $scope.menu_blocks_to_show.splice(i, i); }
+        //     if (!$scope.isInArray(block_id, $scope.menu_blocks_to_show)) {
+        //         $scope.menu_blocks_to_show.push(block_id);
+        //         document.getElementById("arrow-block-" + block_id).className = "glyphicon glyphicon-menu-up";
+        //     } else {
+        //         var i = $scope.menu_blocks_to_show.indexOf(block_id);
+        //         if (i == 0) {
+        //             $scope.menu_blocks_to_show.splice(0, 1);
+        //         } else { $scope.menu_blocks_to_show.splice(i, i); }
 
-                document.getElementById("arrow-block-" + block_id).className = "glyphicon glyphicon-menu-down";
-            };
-        }
+        //         document.getElementById("arrow-block-" + block_id).className = "glyphicon glyphicon-menu-down";
+        //     };
+        // }
 
-        $scope.showSegment = function(block_id, segment_id) {
-            var id = block_id + "-" + segment_id;
+        $scope.showSegment = function(segment_id) {
+            var id = segment_id;
             // var classe = document.getElementById("arrow-segment-" + id).className;
             if (!$scope.isInArray(id, $scope.menu_segments_to_show)) {
                 $scope.menu_segments_to_show.push(id);
@@ -97,26 +90,13 @@ NeuralActivityApp.controller('MenuCtrl', ['$scope', '$rootScope', '$http', '$loc
             return array.indexOf(value) > -1;
         }
 
-        $scope.isInArraySegment = function(value1, value2, array) {
-            var value = value1 + "-" + value2;
-            console.log(array.indexOf(value) > -1)
-            return array.indexOf(value) > -1;
-        }
-
         $scope.$on('data_updated', function() {
             $scope.data = FileService.getData();
             $scope.$apply();
-            console.log("data updated in menu", $scope.data)
         });
-
-
+        //code
         $scope.data = $scope.$parent.data;
-        $(document).ready(function() {
-            $scope.menu_blocks_to_show.push(0);
-            // document.getElementById("arrow-block-" + 0).className = "glyphicon glyphicon-menu-up";
-        });
-        console.log("menu ctrl data", $scope.$parent)
-
+        $state.go('.block')
     }
 ]);
 

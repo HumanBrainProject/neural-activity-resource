@@ -19,6 +19,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from neo import io
+import quantities as pq
 # import numpy as np
 # from django.core.serializers.json import DjangoJSONEncoder
 # from neo.io import get_io
@@ -90,29 +91,44 @@ class AnalogSignal(APIView):
    
     def get(self, request, format=None, **kwargs):
         print(request.GET)
-        id_block = request.GET['block_id']
         id_segment = int(request.GET['segment_id'])
         id_analog_signal = int(request.GET['analog_signal_id'])
-        print("ids: block",id_block, " segment ", id_segment, "analog signal", id_analog_signal )
-        print("\n loading file")
+    
         r = io.AlphaOmegaIO(filename='File_AlphaOmega_2.map')
-        block = r.read_block(lazy=False, cascade=True)
-        print("block",block)
-        
-        segment = block.segments[0]
-        print("segment: ",segment)
-        analogsignal = segment.analogsignals
+        block = r.read_block(lazy=False, cascade=True)  
+        segment = block.segments[id_segment]
+        analogsignal = segment.analogsignals[id_analog_signal]
+
+        # unit = analogsignal.units 
+        # t_start = analogsignal.t_start
+        # sampling_rate = analogsignal.sampling_rate
+        # time_laps = 1/sampling_rate
+
         print("anaolgsignals", analogsignal, len(analogsignal))
-        for value in analogsignal:
-            print(value)
-            print("length",len(value))
-        
+        print( "units",analogsignal.units)
+        print( "t_start",analogsignal.t_start)
+        print("sampling_rate", analogsignal.sampling_rate)
+        print( "t_stop",analogsignal.t_stop)
+        print( "times",analogsignal.times)
+        print("time_laps",time_laps) 
+        print("duration",analogsignal.duration)      
+   
         # print('analogsignal', analogsignal[0], analogsignal[0].sampling_rate)
         # analog_signal = block.segments[id_segment].analogsignals[id_analog_signal]
         # print(analog_signal)
+  
+        analog_signal_values = []
+        for item in analogsignal:
+            analog_signal_values.append(item.item())
 
+        analog_signal_times= []
+        for item in analogsignal.times:
+            analog_signal_times.append(item.item())
 
-        return Response()
+        graph_data = {"values": analog_signal_values, "times": analog_signal_times,"t_start" : analogsignal.t_start.item(), "t_stop" : analogsignal.t_stop.item()}
+        # data = JSON.dumps(graph_data)
+        return JsonResponse(graph_data)
+
 
 # def browse(request):
 #     """
