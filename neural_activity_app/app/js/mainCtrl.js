@@ -3,9 +3,9 @@
 /* Controllers */
 var NeuralActivityApp = angular.module('NeuralActivityApp');
 
-NeuralActivityApp.controller('HomeCtrl', ['$scope', '$rootScope', '$http', '$location', 'Context', 'FileService',
+NeuralActivityApp.controller('HomeCtrl', ['$scope', '$rootScope', '$http', '$location', 'FileService',
 
-    function($scope, $rootScope, $http, $location, Context, FileService) {
+    function($scope, $rootScope, $http, $location, FileService) {
 
         //variables
 
@@ -19,18 +19,12 @@ NeuralActivityApp.controller('HomeCtrl', ['$scope', '$rootScope', '$http', '$loc
             })
         }
 
-
-        //main code
-        Context.setService().then(function() {
-            $scope.Context = Context;
-
-        });
     }
 ]);
 
-NeuralActivityApp.controller('FileViewCtrl', ['$scope', '$rootScope', '$http', '$location', '$stateParams', 'Context', 'FileService',
+NeuralActivityApp.controller('FileViewCtrl', ['$scope', '$rootScope', '$http', '$location', '$stateParams', 'FileService',
 
-    function($scope, $rootScope, $http, $location, $stateParams, Context, FileService) {
+    function($scope, $rootScope, $http, $location, $stateParams, FileService) {
         //variables
         $scope.filename;
         $scope.data;
@@ -42,29 +36,22 @@ NeuralActivityApp.controller('FileViewCtrl', ['$scope', '$rootScope', '$http', '
         $scope.$on('data_updated', function() {
             $scope.data = FileService.getData();
             $scope.$apply();
-            console.log("data updated", $scope.data)
         });
 
 
-
-        Context.setService().then(function() {
-            $scope.Context = Context;
-
-            FileService.setService($stateParams.file_name).then(function() {
-                $scope.data = FileService.getData();
-                $scope.$apply();
-                console.log("in fileview ctr data:", $scope.data)
-            })
+        FileService.setService($stateParams.file_name).then(function() {
+            $scope.data = FileService.getData();
+            $scope.$apply();
         });
 
     }
 ]);
-NeuralActivityApp.controller('MenuCtrl', ['$scope', '$rootScope', '$http', '$location', '$stateParams', 'Context', 'FileService',
+NeuralActivityApp.controller('MenuCtrl', ['$scope', '$rootScope', '$http', '$location', '$stateParams', '$state', 'FileService',
 
-    function($scope, $rootScope, $http, $location, $stateParams, Context, FileService) {
+    function($scope, $rootScope, $http, $location, $stateParams, $state, FileService) {
         var ctrl = this;
         // var menu_data = FileService.getData();
-        $scope.data = undefined;
+        // $scope.data = undefined;
         // $scope.menu_blocks_to_show = [];
         $scope.menu_segments_to_show = [];
 
@@ -107,11 +94,9 @@ NeuralActivityApp.controller('MenuCtrl', ['$scope', '$rootScope', '$http', '$loc
             $scope.data = FileService.getData();
             $scope.$apply();
         });
-
-        Context.setService().then(function() {
-            $scope.Context = Context;
-            $scope.data = $scope.$parent.data;
-        });
+        //code
+        $scope.data = $scope.$parent.data;
+        $state.go('.block')
     }
 ]);
 

@@ -111,12 +111,8 @@ class AnalogSignal(APIView):
         # analog_signal = block.segments[id_segment].analogsignals[id_analog_signal]
         # print(analog_signal)
 
-
-<<<<<<< HEAD
-        return Response(analog_signal)
-=======
         return Response()
->>>>>>> upstream/master
+
 
 # def browse(request):
 #     """

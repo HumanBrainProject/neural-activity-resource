@@ -161,10 +161,10 @@ FileServices.service('FileService', ['$rootScope', '$timeout', 'BlockDataRest', 
         //     })
         // }
 
-        var loadSegment = function(block_id, segment_id) {
+        var loadSegment = function(segment_id) {
             return new Promise(function(resolve, reject) {
 
-                getSegmentData(block_id, segment_id).then(function(segment_data) {
+                getSegmentData(segment_id).then(function(segment_data) {
 
                     if (data == undefined) {
                         // getBlockData().then(function(temp_data) {
@@ -174,8 +174,8 @@ FileServices.service('FileService', ['$rootScope', '$timeout', 'BlockDataRest', 
                         resolve(segment_data)
                     } else {
                         console.log("data alrady loaded so")
-                        data.block[block_id].segments[segment_id] = segment_data;
-                        console.log(data.block[block_id].segments[segment_id])
+                        data.block[0].segments[segment_id] = segment_data;
+                        console.log(data.block[0].segments[segment_id])
                         $rootScope.$broadcast('data_updated');
                         console.log('data updated')
                         resolve(segment_data)
@@ -185,10 +185,10 @@ FileServices.service('FileService', ['$rootScope', '$timeout', 'BlockDataRest', 
         }
 
 
-        var loadAnalogSignal = function(block_id, segment_id, signal_id) {
+        var loadAnalogSignal = function(segment_id, signal_id) {
             return new Promise(function(resolve, reject) {
 
-                getAnalogSignalData(block_id, segment_id, signal_id).then(function(signal_data) {
+                getAnalogSignalData(segment_id, signal_id).then(function(signal_data) {
 
                     if (data == undefined) {
                         // getBlockData().then(function(temp_data) {
@@ -198,7 +198,7 @@ FileServices.service('FileService', ['$rootScope', '$timeout', 'BlockDataRest', 
                         resolve(signal_data)
                     } else {
                         console.log("data alrady loaded so")
-                        data.block[block_id].segments[segment_id].analogsignals[signal_id] = signal_data;
+                        data.block[0].segments[segment_id].analogsignals[signal_id] = signal_data;
                         $rootScope.$broadcast('data_updated');
                         resolve(signal_data)
                     }
@@ -223,20 +223,20 @@ FileServices.service('FileService', ['$rootScope', '$timeout', 'BlockDataRest', 
             })
         }
 
-        var getSegmentData = function(block_id, segment_id) {
+        var getSegmentData = function(segment_id) {
             ///get segment information from the api 
             return new Promise(function(resolve, reject) {
-                var temp_data = SegmentDataRest.get({ block_id: block_id, segment_id: segment_id });
+                var temp_data = SegmentDataRest.get({ segment_id: segment_id });
                 temp_data.$promise.then(function(segment_data) {
                     resolve(fake_seg[segment_id]);
                 });
             })
         }
 
-        var getAnalogSignalData = function(block_id, segment_id, signal_id) {
+        var getAnalogSignalData = function(segment_id, signal_id) {
                 ///get analogsignam information from the api 
                 return new Promise(function(resolve, reject) {
-                    var temp_data = AnalogSignalDataRest.get({ block_id: block_id, segment_id: segment_id, analog_signal_id: signal_id });
+                    var temp_data = AnalogSignalDataRest.get({ segment_id: segment_id, analog_signal_id: signal_id });
                     temp_data.$promise.then(function(signal_data) {
                         resolve(fake_signal[signal_id]);
                     });

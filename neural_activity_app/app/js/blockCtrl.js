@@ -6,20 +6,17 @@ NeuralActivityApp.controller('BlockViewCtrl', ['$scope', '$rootScope', '$http', 
 
 
         //variables
-        $scope.block_id = $stateParams.block_id;
-        $scope.data_block = $scope.$parent.data.block[$scope.block_id];
+        // $scope.block_id = $stateParams.block_id;
+        $scope.data_block = $scope.$parent.data.block[0];
         //functions
 
 
         //main code
         $scope.$on('data_updated', function() {
-            $scope.data_block = $scope.$parent.data.block[$scope.block_id];
+            $scope.data_block = $scope.$parent.data.block[0];
             $scope.$apply();
-            console.log("data updated in detail view", $scope.data_block)
         });
-
-        console.log("is loading BLOCK view", $stateParams.block_id)
-            // FileService.loadBlock($scope.block_id);
+        // FileService.loadBlock($scope.block_id);
 
 
     }
