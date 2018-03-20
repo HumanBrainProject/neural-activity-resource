@@ -90,10 +90,9 @@ class AnalogSignal(APIView):
    
     def get(self, request, format=None, **kwargs):
         print(request.GET)
-        id_block = request.GET['block_id']
         id_segment = int(request.GET['segment_id'])
         id_analog_signal = int(request.GET['analog_signal_id'])
-        print("ids: block",id_block, " segment ", id_segment, "analog signal", id_analog_signal )
+        print("ids: block", " segment ", id_segment, "analog signal", id_analog_signal )
         print("\n loading file")
         r = io.AlphaOmegaIO(filename='File_AlphaOmega_2.map')
         block = r.read_block(lazy=False, cascade=True)
