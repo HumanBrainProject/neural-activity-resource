@@ -216,9 +216,9 @@ var FileServices = angular.module('FileServices', ['ngResource', 'ApiCommunicati
 //     return service;
 // });
 
-FileServices.service('FileService', ['$rootScope', '$timeout', 'BlockDataRest', 'SegmentDataRest',
+FileServices.service('FileService', ['$rootScope', '$timeout', 'BlockDataRest', 'SegmentDataRest', 'AnalogSignalDataRest',
 
-    function($rootScope, $timeout, BlockDataRest, SegmentDataRest) {
+    function($rootScope, $timeout, BlockDataRest, SegmentDataRest, AnalogSignalDataRest) {
         var fake_data = {
             block: [{
                 description: "a fake block",
@@ -300,7 +300,10 @@ FileServices.service('FileService', ['$rootScope', '$timeout', 'BlockDataRest', 
         ]
 
         var fake_signal = [{
-                signal_id: 1
+                signal_id: 1,
+                values: [
+
+                ]
             },
             {
                 signal_id: 2
@@ -312,7 +315,6 @@ FileServices.service('FileService', ['$rootScope', '$timeout', 'BlockDataRest', 
         var fileName = undefined;
         var fileUrl = undefined;
         var data = undefined;
-
 
         var setService = function(filename) {
             ////set the service if a filename is given /// TODO: check if necessary to add promises in each function 

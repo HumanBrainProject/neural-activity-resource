@@ -112,8 +112,30 @@ class Segment(APIView):
 class AnalogSignal(APIView): 
    
     def get(self, request, format=None, **kwargs):
-       
-        return Response()
+        print(request.GET)
+        id_block = request.GET['block_id']
+        id_segment = int(request.GET['segment_id'])
+        id_analog_signal = int(request.GET['analog_signal_id'])
+        print("ids: block",id_block, " segment ", id_segment, "analog signal", id_analog_signal )
+        print("\n loading file")
+        r = io.AlphaOmegaIO(filename='File_AlphaOmega_2.map')
+        block = r.read_block(lazy=False, cascade=True)
+        print("block",block)
+        
+        segment = block.segments[0]
+        print("segment: ",segment)
+        analogsignal = segment.analogsignals
+        print("anaolgsignals", analogsignal, len(analogsignal))
+        for value in analogsignal:
+            print(value)
+            print("length",len(value))
+        
+        # print('analogsignal', analogsignal[0], analogsignal[0].sampling_rate)
+        # analog_signal = block.segments[id_segment].analogsignals[id_analog_signal]
+        # print(analog_signal)
+
+
+        return Response(analog_signal)
 
 # def browse(request):
 #     """

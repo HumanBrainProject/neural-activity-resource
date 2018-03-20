@@ -8,30 +8,30 @@
     </nav>
     <div class="content">
         <nav id=menu-panel class="menu" ng-controller=MenuCtrl>
-            <ul id="menu-block" class="nav-item-1 dropdown" ng-repeat="(b_key,block) in $parent.data.block">
+            <ul id="menu-block" class="nav-item-1">
                 <li>
                     <div class="card">
                         <div class="card-header" id="headingOne">
-                            <a id=item-block-{{b_key}} ng-click=showBlock(b_key) ui-sref="file_view.block({block_id:{{b_key}}})" ui-sref-active="active" class="btn btn-link"> Block #{{b_key}}<i id="arrow-block-{{b_key}}" class="glyphicon glyphicon-menu-down"></i></a>
+                            <a id=item-block ui-sref="file_view.block" ui-sref-active="active" class="btn btn-link"> Block </a>
                         </div>
-                        <div ng-show="isInArray(b_key,menu_blocks_to_show)">
-                            <ul id=menu-block-{{b_key}} class="nav-item-2" ng-repeat="(s_key,segment) in block.segments">
-                                <li>
-                                    <div class="card">
-                                        <div class="card-header" id="headingOne">
-                                            <a id=item-segment-{{s_key}} ng-click="showSegment(b_key, s_key)" ui-sref="file_view.segment({block_id:{{b_key}},segment_id:{{s_key}}})" ui-sref-active="active" class="btn btn-link"> Segment #{{s_key}}<i id="arrow-segment-{{b_key}}-{{s_key}}"  class="glyphicon glyphicon-menu-down"></i></a>
-                                        </div>
 
-                                        <div class="card card-body" ng-show="isInArraySegment(b_key,s_key,menu_segments_to_show)">
-                                            <ul id=menu-segment-{{b_key}}-{{s_key}} class="menu-signal" ng-repeat="(as_key,analog_signal) in segment.analogsignals">
-                                                <li><a ui-sref="file_view.analog_signal({block_id:{{b_key}},segment_id:{{s_key}},analog_signal_id:{{as_key}}})" ui-sref-active="active">AnalogSignal #{{as_key}}</a></li>
-                                            </ul>
-                                        </div>
-
+                        <ul id=menu-block class="nav-item-2" ng-repeat="(s_key,segment) in block.segments">
+                            <li>
+                                <div class="card">
+                                    <div class="card-header" id="headingOne">
+                                        <a id=item-segment-{{s_key}} ng-click="showSegment(s_key)" ui-sref="file_view.segment({segment_id:{{s_key}}})" ui-sref-active="active" class="btn btn-link"> Segment #{{s_key}}<i id="arrow-segment-{{s_key}}"  class="glyphicon glyphicon-menu-down"></i></a>
                                     </div>
-                                </li>
-                            </ul>
-                        </div>
+
+                                    <div class="card card-body" ng-show="isInArraySegment(s_key,menu_segments_to_show)">
+                                        <ul id=menu-segment-{{s_key}} class="menu-signal" ng-repeat="(as_key,analog_signal) in segment.analogsignals">
+                                            <li><a ui-sref="file_view.analog_signal({segment_id:{{s_key}},analog_signal_id:{{as_key}}})" ui-sref-active="active">AnalogSignal #{{as_key}}</a></li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </li>
+                        </ul>
+
                     </div>
                 </li>
 

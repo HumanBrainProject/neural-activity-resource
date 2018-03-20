@@ -65,29 +65,28 @@ NeuralActivityApp.controller('MenuCtrl', ['$scope', '$rootScope', '$http', '$loc
         var ctrl = this;
         // var menu_data = FileService.getData();
         $scope.data = undefined;
-        $scope.menu_blocks_to_show = [];
+        // $scope.menu_blocks_to_show = [];
         $scope.menu_segments_to_show = [];
 
-        $scope.showBlock = function(block_id) {
+        // $scope.showBlock = function(block_id) {
 
-            var classe = document.getElementById("arrow-block-" + block_id).className;
-            if (classe == "glyphicon glyphicon-menu-down") {
-                $scope.menu_blocks_to_show.push(block_id);
-                document.getElementById("arrow-block-" + block_id).className = "glyphicon glyphicon-menu-up";
-            } else {
-                var i = $scope.menu_blocks_to_show.indexOf(block_id);
-                if (i == 0) {
-                    $scope.menu_blocks_to_show.splice(0, 1);
-                } else { $scope.menu_blocks_to_show.splice(i, i); }
+        //     if (!$scope.isInArray(block_id, $scope.menu_blocks_to_show)) {
+        //         $scope.menu_blocks_to_show.push(block_id);
+        //         document.getElementById("arrow-block-" + block_id).className = "glyphicon glyphicon-menu-up";
+        //     } else {
+        //         var i = $scope.menu_blocks_to_show.indexOf(block_id);
+        //         if (i == 0) {
+        //             $scope.menu_blocks_to_show.splice(0, 1);
+        //         } else { $scope.menu_blocks_to_show.splice(i, i); }
 
-                document.getElementById("arrow-block-" + block_id).className = "glyphicon glyphicon-menu-down";
-            };
-        }
+        //         document.getElementById("arrow-block-" + block_id).className = "glyphicon glyphicon-menu-down";
+        //     };
+        // }
 
-        $scope.showSegment = function(block_id, segment_id) {
-            var id = block_id + "-" + segment_id;
-            var classe = document.getElementById("arrow-segment-" + id).className;
-            if (classe == "glyphicon glyphicon-menu-down") {
+        $scope.showSegment = function(segment_id) {
+            var id = segment_id;
+            // var classe = document.getElementById("arrow-segment-" + id).className;
+            if (!$scope.isInArray(id, $scope.menu_segments_to_show)) {
                 $scope.menu_segments_to_show.push(id);
                 document.getElementById("arrow-segment-" + id).className = "glyphicon glyphicon-menu-up";
             } else {
@@ -95,7 +94,6 @@ NeuralActivityApp.controller('MenuCtrl', ['$scope', '$rootScope', '$http', '$loc
                 if (i == 0) {
                     $scope.menu_segments_to_show.splice(0, 1);
                 } else { $scope.menu_segments_to_show.splice(i, i); }
-
                 document.getElementById("arrow-segment-" + id).className = "glyphicon glyphicon-menu-down";
             };
         }
@@ -105,25 +103,14 @@ NeuralActivityApp.controller('MenuCtrl', ['$scope', '$rootScope', '$http', '$loc
             return array.indexOf(value) > -1;
         }
 
-        $scope.isInArraySegment = function(value1, value2, array) {
-            var value = value1 + "-" + value2;
-            console.log(array.indexOf(value) > -1)
-            return array.indexOf(value) > -1;
-        }
-
         $scope.$on('data_updated', function() {
             $scope.data = FileService.getData();
             $scope.$apply();
-            console.log("data updated in menu", $scope.data)
         });
 
         Context.setService().then(function() {
             $scope.Context = Context;
             $scope.data = $scope.$parent.data;
-            $(function() {
-                $scope.showBlock(0);
-            });
-            console.log("menu ctrl data", $scope.$parent)
         });
     }
 ]);
