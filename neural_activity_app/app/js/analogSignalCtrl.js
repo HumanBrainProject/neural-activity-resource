@@ -18,7 +18,9 @@ NeuralActivityApp.controller('AnalogSignalViewCtrl', ['$scope', '$rootScope', '$
             $scope.$apply();
         });
 
-        FileService.loadAnalogSignal($scope.segment_id, $scope.analog_signal_id);
+        FileService.loadAnalogSignal($scope.segment_id, $scope.analog_signal_id).then(function(signal) {
+            console.log("signal", signal)
+        })
 
     }
 ]);

@@ -238,7 +238,8 @@ FileServices.service('FileService', ['$rootScope', '$timeout', 'BlockDataRest', 
                 return new Promise(function(resolve, reject) {
                     var temp_data = AnalogSignalDataRest.get({ segment_id: segment_id, analog_signal_id: signal_id });
                     temp_data.$promise.then(function(signal_data) {
-                        resolve(fake_signal[signal_id]);
+                        //resolve(fake_signal[signal_id]);
+                        resolve(signal_data);
                     });
                 })
             }
