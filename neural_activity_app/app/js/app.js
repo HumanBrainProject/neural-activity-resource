@@ -8,44 +8,37 @@ window.ver_api = '/api/v2/';
 
 angular.bootstrap().invoke(function($http, $log, $location) {
 
-    $http.get('/config.json').then(function(res) {
-        window.bbpConfig = res.data;
+    // $http.get('/config.json').then(function(res) {
+    //     window.bbpConfig = res.data;
 
-        angular.element(document).ready(function() {
-            angular.bootstrap(document.getElementById("neural-activity-app"), ['NeuralActivityApp']);
+    angular.element(document).ready(function() {
+        angular.bootstrap(document.getElementById("neural-activity-app"), ['NeuralActivityApp']);
 
-            setTimeout(function() {
+        setTimeout(function() {
 
-            }, 1000);
+        }, 1000);
 
-            $log.info('Booted nmpi application');
-        });
-
-    }, function() {
-        $log.error('Cannot boot nmpi application');
-        // window.location.href = '/login/hbp/?next=' + encodeURIComponent(window.location.pathname + window.location.search + window.location.hash);
+        $log.info('Booted nmpi application');
     });
+
+    // }, function() {
+    //     $log.error('Cannot boot nmpi application');
+    //     // window.location.href = '/login/hbp/?next=' + encodeURIComponent(window.location.pathname + window.location.search + window.location.hash);
+    // });
 });
 
 
 var NeuralActivityApp = angular.module('NeuralActivityApp', [
     'ui.router',
     'ng',
-    'ngResource',
-    'ContextServices',
+    'ngResource', ,
     'ApiCommunicationServices',
     'FileServices',
-    // 'DataHandlerServices',
+
     // 'GraphicsServices',
     'ngCookies',
     'nvd3',
     'ngTextTruncate',
-    // 'HelpServices', //will have to add it later
-
-    'clb-ui-error',
-    'clb-env',
-    'clb-app',
-    'hbpCollaboratory',
 ]);
 
 NeuralActivityApp.config(
@@ -69,7 +62,9 @@ NeuralActivityApp.config(
             })
             .state('file_view.block', {
                 parent: 'file_view',
+
                 url: '/home/file-view/block',
+
                 views: {
                     'detail@file_view': {
                         templateUrl: '/static/templates/block-view.tpl.html',
@@ -79,7 +74,9 @@ NeuralActivityApp.config(
             })
             .state('file_view.segment', {
                 parent: 'file_view',
+
                 url: '/home/file-view/segment/{segment_id:[0-9]{1,8}}',
+
                 views: {
                     'detail': {
                         templateUrl: '/static/templates/segment-view.tpl.html',
@@ -90,6 +87,7 @@ NeuralActivityApp.config(
             .state('file_view.analog_signal', {
                 parent: 'file_view',
                 url: '/home/file-view/analog_signal/{segment_id:[0-9]{1,8}}?{analog_signal_id:[0-9]{1,8}}',
+
                 views: {
                     'detail': {
                         templateUrl: '/static/templates/analog-signal-view.tpl.html',
@@ -97,36 +95,8 @@ NeuralActivityApp.config(
                     }
                 }
             })
-            // .state('file_view', {
-            //     url: '/home/file-view',
-            //     views: {
-            //         'menu': {
-            //             templateUrl: '/static/navbar/navbar.tpl.html',
-            //             controller: 'NavBarCtrl'
-            //         },
-            //         'detail_view': {
-            //             templateUrl: '/static/templates/file-view.tpl.html',
-            //             controller: 'FileViewCtrl'
-            //         }
-            //     }
-            // })
-
-        // .state('menu_bar', {
-        //     parent: 'file_view',
-        //     views: {
-        //         'menu': {
-        //             templateUrl: '/static/navbar/navbar.tpl.html',
-        //             controller: 'NavBarCtrl'
-        //         },
-        //         'detail@file_view': {
-
-        //         }
-        //     }
-        // })
-
 
 
         $urlRouterProvider.otherwise('/home');
 
     });
-// });

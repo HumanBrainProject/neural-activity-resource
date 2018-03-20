@@ -13,44 +13,31 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 import sys
 import json
-import hbp_app_python_auth.settings as auth_settings
-
-
-# ENV = os.environ.get('VALIDATION_SERVICE_ENV', 'production')
-ENV = 'dev'
-# auth_settings.ENV = ENV
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ENV = 'dev'
 
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True#os.environ.get('DEBUG') in ['True', '1']
-LOCAL_DB = True
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
-# # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = '$4zyq@#shcuqmvk!mvt^m_w7intuj^hd)f=(@ykvnympnb=*)i'
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = '$4zyq@#shcuqmvk!mvt^m_w7intuj^hd)f=(@ykvnympnb=*)i'
 
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = []
 
 
 # Application definition
 
 INSTALLED_APPS = [
-     'django.contrib.admin',
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #'social_django',
-    'jsonify',
-    'social.apps.django_app.default',
-    'hbp_app_python_auth',
-    'markdown_deux',
-    'corsheaders',
     'rest_framework',
     'app',
 ]
@@ -59,31 +46,17 @@ if ENV == "dev":
     INSTALLED_APPS.append('sslserver')
     sys.path.append("..")
 
-
-from django.utils.functional import SimpleLazyObject
-
-MIDDLEWARE_CLASSES = [
-    'app.middleware.personal_middleware.DisableCsrfCheck',
-
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-
-    'corsheaders.middleware.CorsMiddleware',
-    
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    
-    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'neural_activity_app.urls'
-AUTHENTICATION_BACKENDS = (
-    'hbp_app_python_auth.auth.HbpAuth',
-    'django.contrib.auth.backends.ModelBackend',
-)
 
 TEMPLATES = [
     {
@@ -103,7 +76,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'neural_activity_app.wsgi.application'
 
-APPEND_SLASH = False
+
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
@@ -114,24 +87,29 @@ DATABASES = {
     }
 }
 
+STATIC_URL = '/static/'
+STATIC_ROOT = "%s/static/" % BASE_DIR
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "app"),
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
-# AUTH_PASSWORD_VALIDATORS = [
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-#     },
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-#     },
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-#     },
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-#     },
-# ]
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
 
 
 # Internationalization
@@ -152,103 +130,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = "%s/static/" % BASE_DIR
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "app"),
-]
-
-HBP_COLLAB_SERVICE_URL = 'https://services.humanbrainproject.eu/collab/v0/'
-HBP_ENV_URL = 'https://collab.humanbrainproject.eu/config.json'
-HBP_IDENTITY_SERVICE_URL = 'https://services.humanbrainproject.eu/idm/v1/api'
-HBP_STORAGE_SERVICE_URL = 'https://services.humanbrainproject.eu/storage/v1/api/entity/'
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'none')
-auth_settings.SOCIAL_AUTH_HBP_KEY = os.environ.get('HBP_OIDC_CLIENT_ID')
-SOCIAL_AUTH_HBP_KEY = auth_settings.SOCIAL_AUTH_HBP_KEY
-auth_settings.SOCIAL_AUTH_HBP_SECRET = os.environ.get('HBP_OIDC_CLIENT_SECRET')
-SOCIAL_AUTH_HBP_SECRET = auth_settings.SOCIAL_AUTH_HBP_SECRET 
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': '/var/log/django.log',
-            'formatter': 'verbose'
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'INFO',
-        },
-        'app': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-        }
-    },
-    'formatters': {
-        'verbose': {
-            'format': '%(asctime)s %(levelname)s %(name)s: %(message)s'
-        },
-    },
-}
-if ENV == "dev":
-    LOGGING['handlers']['file']['filename'] = 'django.log'
-
-if os.path.exists(os.path.join(BASE_DIR, "build_info.json")):
-    with open(os.path.join(BASE_DIR, "build_info.json"), "r") as fp:
-        BUILD_INFO = json.load(fp)
-else:
-    BUILD_INFO = None
-
-
-CSRF_TRUSTED_ORIGINS = [    
-    'localhost:8000',
-    '127.0.0.1:9000',
-    # 'https://localhost:8000/app/' 
-    ]
-
-CORS_ORIGIN_WHITELIST = (
-    'localhost:8000',
-    '127.0.0.1:9000',
-    'https://localhost:8000/app/',
-)
-CORS_ALLOW_CREDENTIALS = True
-
-# CORS_ORIGIN_ALLOW_ALL = True  
-# ACCESS_CONTROL_ALLOW_ORIGIN = 'Access-Control-Allow-Origin'
-
-CSRF_COOKIE_DOMAIN = (
-    # ".mydomain.com",
-    '.localhost:8000',
-    '.127.0.0.1:9000'
-
-)
-
-CORS_ALLOW_HEADERS = (
-'x-requested-with',
-'content-type',
-'accept',
-'origin',
-'authorization',
-'X-CSRFToken',
-'access-control-allow-origin'
-)
-
-REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 100,
-    # 'DEFAULT_PERMISSION_CLASSES': (
-    #     'rest_framework.permissions.IsAuthenticated',
-    # )
-
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        # 'rest_framework_expiring_authtoken.authentication.ExpiringTokenAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-    )
-}

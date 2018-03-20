@@ -1,7 +1,9 @@
 var NeuralActivityApp = angular.module('NeuralActivityApp');
-NeuralActivityApp.controller('BlockViewCtrl', ['$scope', '$rootScope', '$http', '$location', '$stateParams', 'Context', 'FileService',
 
-    function($scope, $rootScope, $http, $location, $stateParams, Context, FileService) {
+NeuralActivityApp.controller('BlockViewCtrl', ['$scope', '$rootScope', '$http', '$location', '$stateParams', 'FileService',
+
+    function($scope, $rootScope, $http, $location, $stateParams, FileService) {
+
 
         //variables
         $scope.block_id = $stateParams.block_id;
@@ -16,10 +18,9 @@ NeuralActivityApp.controller('BlockViewCtrl', ['$scope', '$rootScope', '$http', 
             console.log("data updated in detail view", $scope.data_block)
         });
 
-        Context.setService().then(function() {
-            $scope.Context = Context;
-            console.log("is loading BLOCK view", $stateParams.block_id)
-                // FileService.loadBlock($scope.block_id);
-        });
+        console.log("is loading BLOCK view", $stateParams.block_id)
+            // FileService.loadBlock($scope.block_id);
+
+
     }
 ]);

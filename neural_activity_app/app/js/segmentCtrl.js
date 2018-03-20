@@ -1,8 +1,8 @@
 var NeuralActivityApp = angular.module('NeuralActivityApp');
 
-NeuralActivityApp.controller('SegmentViewCtrl', ['$scope', '$rootScope', '$http', '$location', '$stateParams', 'Context', 'FileService',
+NeuralActivityApp.controller('SegmentViewCtrl', ['$scope', '$rootScope', '$http', '$location', '$stateParams', 'FileService',
 
-    function($scope, $rootScope, $http, $location, $stateParams, Context, FileService) {
+    function($scope, $rootScope, $http, $location, $stateParams, FileService) {
 
         //variables
         $scope.block_id = $stateParams.block_id;
@@ -18,10 +18,7 @@ NeuralActivityApp.controller('SegmentViewCtrl', ['$scope', '$rootScope', '$http'
             console.log("data updated in detail view", $scope.dat_segment)
         });
 
-        Context.setService().then(function() {
-            $scope.Context = Context;
-            console.log("is loading SEGMENT view", $stateParams.block_id, $stateParams.segment_id)
-            FileService.loadSegment($scope.block_id, $scope.segment_id);
-        });
+        console.log("is loading SEGMENT view", $stateParams.block_id, $stateParams.segment_id)
+        FileService.loadSegment($scope.block_id, $scope.segment_id);
     }
 ]);
