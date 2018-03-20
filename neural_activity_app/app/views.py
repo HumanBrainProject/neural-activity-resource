@@ -110,7 +110,6 @@ class AnalogSignal(APIView):
         print("sampling_rate", analogsignal.sampling_rate)
         print( "t_stop",analogsignal.t_stop)
         print( "times",analogsignal.times)
-        print("time_laps",time_laps) 
         print("duration",analogsignal.duration)      
    
         # print('analogsignal', analogsignal[0], analogsignal[0].sampling_rate)

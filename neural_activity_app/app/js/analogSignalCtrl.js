@@ -1,8 +1,8 @@
 var NeuralActivityApp = angular.module('NeuralActivityApp');
 
-NeuralActivityApp.controller('AnalogSignalViewCtrl', ['$scope', '$rootScope', '$http', '$location', '$stateParams', 'FileService',
+NeuralActivityApp.controller('AnalogSignalViewCtrl', ['$scope', '$rootScope', '$http', '$location', '$stateParams', 'FileService', 'Graphics',
 
-    function($scope, $rootScope, $http, $location, $stateParams, FileService) {
+    function($scope, $rootScope, $http, $location, $stateParams, FileService, Graphics) {
 
 
         //variables
@@ -19,7 +19,11 @@ NeuralActivityApp.controller('AnalogSignalViewCtrl', ['$scope', '$rootScope', '$
         });
 
         FileService.loadAnalogSignal($scope.segment_id, $scope.analog_signal_id).then(function(signal) {
-            console.log("signal", signal)
+            $scope.signal = signal;
+            Graphics.initGraph(signal).then(function(graph_data) {
+                $scope.graph_data = graph_data;
+                $scope.options = Graphics.getOptions("View of analogsignal", "", "Voltage", "", graph_data.values, $scope.signal)
+            });
         })
 
     }
