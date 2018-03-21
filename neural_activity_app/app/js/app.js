@@ -35,7 +35,7 @@ var NeuralActivityApp = angular.module('NeuralActivityApp', [
     'ApiCommunicationServices',
     'FileServices',
 
-    // 'GraphicsServices',
+    'GraphicsServices',
     'ngCookies',
     'nvd3',
     'ngTextTruncate',
