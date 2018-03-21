@@ -125,8 +125,9 @@ FileServices.service('FileService', ['$rootScope', '$timeout', 'BlockDataRest', 
 
                 if (data == undefined) {
                     getBlockData().then(function(temp_data) {
-                        data = fake_data //temp_data;
-                        resolve(fake_data); ///temp_data
+                        // data = fake_data //temp_data;
+                        data = temp_data;
+                        resolve(temp_data); ///temp_data
                     })
                 } else {
                     // $timeout(function() {
@@ -218,7 +219,8 @@ FileServices.service('FileService', ['$rootScope', '$timeout', 'BlockDataRest', 
                 var temp_data = BlockDataRest.get({ url: fileUrl });
                 temp_data.$promise.then(function(data) {
 
-                    resolve(fake_data); //resolve(data);
+                    // resolve(fake_data); //resolve(data);
+                    resolve(data);
                 });
             })
         }
