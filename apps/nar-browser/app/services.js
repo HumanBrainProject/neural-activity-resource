@@ -47,7 +47,7 @@ angular.module('nar')
     return PathHandler;
 })
 
-.factory("KGResource", function($http, $q, PathHandler) { //, bbpOidcSession) {
+.factory("KGResource", function($http, $q, PathHandler, bbpOidcSession) {
     var error = function(response) {
         console.log(response);
     };
@@ -61,7 +61,7 @@ angular.module('nar')
         };
 
         var config = {
-            //Authorization: "Bearer " + bbpOidcSession.token()
+            Authorization: "Bearer " + bbpOidcSession.token()
         };
         collection_uri += "?deprecated=False";
 
@@ -120,8 +120,10 @@ angular.module('nar')
         };
 
         Resource.query = function(filter) {
+            var resource_uri = collection_uri;
             if (filter) {
-                collection_uri += "&filter=" + encodeURIComponent(JSON.stringify(filter));
+                resource_uri += "&filter=" + encodeURIComponent(JSON.stringify(filter.filter)) + "&context=" + encodeURIComponent(JSON.stringify(filter['@context']));
+                console.log(resource_uri);
             }
 
             var get_next = function(next, promises) {
@@ -143,7 +145,7 @@ angular.module('nar')
 
             };
 
-            return get_next(collection_uri, []).then(
+            return get_next(resource_uri, []).then(
                 function(promises) {
                     // ... when they all resolve, we put the data
                     // into an array, which is returned when the promise
@@ -164,14 +166,14 @@ angular.module('nar')
         return Resource;
     };
 })
-.service("KGIndex", function($http, PathHandler) { //, bbpOidcSession) {
+.service("KGIndex", function($http, PathHandler, bbpOidcSession) {
 
     var error = function(response) {
         console.log(response);
     };
 
     var config = {
-        //Authorization: "Bearer " + bbpOidcSession.token()
+        Authorization: "Bearer " + bbpOidcSession.token()
     };
 
     var KGIndex = {

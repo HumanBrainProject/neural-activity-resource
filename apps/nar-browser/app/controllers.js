@@ -25,7 +25,7 @@ angular.module('nar')
 
 
 //.controller('DefaultController', function($location, $rootScope, bbpOidcSession, $http) {
-.controller('DefaultController', function($location, $rootScope, KGResource, $http) {
+.controller('DefaultController', function($location, $rootScope, KGResource, bbpOidcSession, $http) {
     var vm = this;
     var base_url = "https://nexus-int.humanbrainproject.org/v0/";
 
@@ -39,8 +39,8 @@ angular.module('nar')
     console.log("LOCATION: " + $location.url());
 
     // controller actions to login and logout
-    //vm.handleLogin = function() {bbpOidcSession.login();}
-    //vm.handleLogout = function() {bbpOidcSession.logout();}
+    vm.handleLogin = function() {bbpOidcSession.login();}
+    vm.handleLogout = function() {bbpOidcSession.logout();}
 
     //console.log(bbpOidcSession.token());
 
@@ -52,7 +52,7 @@ angular.module('nar')
     //     error);
 
     var config = {
-        //Authorization: "Bearer " + bbpOidcSession.token()
+        Authorization: "Bearer " + bbpOidcSession.token()
     };
 
     vm.selected = null;
@@ -64,7 +64,7 @@ angular.module('nar')
         //$location.url(experiment.path.id);
     };
 
-    var Experiments = KGResource(base_url + "data/bbp/electrophysiology/stimulusexperiment/v0.1.0/");
+    var Experiments = KGResource(base_url + "data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/");
     Experiments.query().then(
         function(experiments) {
             vm.experiments = experiments;
@@ -73,7 +73,7 @@ angular.module('nar')
     );
 
     // get the stimulus experiment
-    //$http.get('https://nexus-int.humanbrainproject.org/v0/data/bbp/electrophysiology/stimulusexperiment/v0.1.0/7ccced68-37a7-4fb6-8180-53e9ea985753', config).then(
+    //$http.get('https://nexus-int.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/7ccced68-37a7-4fb6-8180-53e9ea985753', config).then(
     //    function(response) {
     //        vm.stimulus_experiment = response.data;
 
@@ -94,7 +94,7 @@ angular.module('nar')
                 //console.log(vm.patched_cell);
 
                 // get the patched cell collection of which the cell is a part
-                var PatchedCellCollection = KGResource(base_url + "data/bbp/experiment/patchedcellcollection/v0.1.0");
+                var PatchedCellCollection = KGResource(base_url + "data/neuralactivity/experiment/patchedcellcollection/v0.1.0");
                 PatchedCellCollection.query(
                     {
                         "@context": {
@@ -111,14 +111,14 @@ angular.module('nar')
                         //console.log(patched_cell_collections[0].data);
 
                         // get the slice in which the cell was patched
-                        var PatchedSlices = KGResource(base_url + "data/bbp/experiment/patchedslice/v0.1.0");
+                        var PatchedSlices = KGResource(base_url + "data/neuralactivity/experiment/patchedslice/v0.1.0");
                         PatchedSlices.query(
                             {
                                 "@context": {
-                                    "dcterms": "http://purl.org/dc/terms/",
+                                    "nsg": "https://bbp-nexus.epfl.ch/vocabs/bbp/neurosciencegraph/core/v0.1.0/",
                                 },
                                 "filter": {
-                                    "path": "dcterms:hasPart",
+                                    "path": "nsg:hasPart",
                                     "op": "in",
                                     "value": patched_cell_collections[0].data["@id"]
                                 }
@@ -129,7 +129,7 @@ angular.module('nar')
                                 vm.patched_slice = patched_slices[0].data;
 
                                 // get patchclamp activity
-                                var PatchClampActivities = KGResource(base_url + "data/bbp/experiment/wholecellpatchclamp/v0.1.0");
+                                var PatchClampActivities = KGResource(base_url + "data/neuralactivity/experiment/wholecellpatchclamp/v0.1.0");
                                 PatchClampActivities.query(
                                     {
                                         "@context": {
@@ -168,7 +168,7 @@ angular.module('nar')
                                         vm.slice = response.data;
 
                                         // get the slicing activity
-                                        var BrainSlicingActivities = KGResource(base_url + "data/bbp/experiment/brainslicing/v0.1.0");
+                                        var BrainSlicingActivities = KGResource(base_url + "data/neuralactivity/experiment/brainslicing/v0.1.0");
                                         BrainSlicingActivities.query(
                                             {
                                                 "@context": {
@@ -219,7 +219,7 @@ angular.module('nar')
             error);
     
         // get the recorded traces
-        var Traces = KGResource(base_url + "data/bbp/electrophysiology/trace/v0.1.0");
+        var Traces = KGResource(base_url + "data/neuralactivity/electrophysiology/trace/v0.1.0");
         Traces.query(
             {
                 "@context": {
