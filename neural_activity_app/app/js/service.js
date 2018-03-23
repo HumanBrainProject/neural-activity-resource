@@ -20,84 +20,84 @@ FileServices.service('FileService', ['$rootScope', '$timeout', 'BlockDataRest', 
 
     function($rootScope, $timeout, BlockDataRest, SegmentDataRest, AnalogSignalDataRest) {
         var fake_data = {
-                block: [{
-                    description: "a fake block",
-                    file_origin: "comming from nowhere",
-                    name: 'fake block 1',
-                    segments: [{
-                        name: "segment 1",
-                        description: "a first fake segment",
-                        file_origin: "nowhere",
-                        nb_analog_signals: 3,
-                        nb_spiketrains: 2,
-                        spiketrains: [],
-                        analogsignals: []
-                    }, {
-                        name: "segment 2",
-                        description: "a second fake segment",
-                        file_origin: "nowhere",
-                        nb_analog_signals: 1,
-                        nb_spiketrains: 2,
-                        spiketrains: [],
-                        analogsignals: []
-                    }, {
-                        name: "segment 3",
-                        description: "a third fake segment",
-                        file_origin: "nowhere",
-                        nb_analog_signals: 5,
-                        nb_spiketrains: 1,
-                        spiketrains: [],
-                        analogsignals: []
-                    }]
+            block: [{
+                description: "a fake block",
+                file_origin: "comming from nowhere",
+                name: 'fake block 1',
+                segments: [{
+                    name: "segment 1",
+                    description: "a first fake segment",
+                    file_origin: "nowhere",
+                    nb_analog_signals: 3,
+                    nb_spiketrains: 2,
+                    spiketrains: [],
+                    analogsignals: []
+                }, {
+                    name: "segment 2",
+                    description: "a second fake segment",
+                    file_origin: "nowhere",
+                    nb_analog_signals: 1,
+                    nb_spiketrains: 2,
+                    spiketrains: [],
+                    analogsignals: []
+                }, {
+                    name: "segment 3",
+                    description: "a third fake segment",
+                    file_origin: "nowhere",
+                    nb_analog_signals: 5,
+                    nb_spiketrains: 1,
+                    spiketrains: [],
+                    analogsignals: []
                 }]
+            }]
+        }
+        var fake_seg = [{
+                name: "segment 1",
+                description: "a first fake segment",
+                file_origin: "nowhere",
+                nb_analog_signals: 3,
+                nb_spiketrains: 2,
+                spiketrains: [
+                    { id: 1 },
+                    { id: 2 },
+                ],
+                analogsignals: [
+                    { id: 1 },
+                    { id: 2 },
+                    { id: 3 },
+                ]
+            },
+            {
+                name: "segment 2",
+                description: "a second fake segment",
+                file_origin: "nowhere",
+                nb_analog_signals: 1,
+                nb_spiketrains: 2,
+                spiketrains: [
+                    { id: 1 }
+                ],
+                analogsignals: [
+                    { id: 1 },
+                    { id: 2 },
+                ]
+            }, {
+                name: "segment 3",
+                description: "a third fake segment",
+                file_origin: "nowhere",
+                nb_analog_signals: 5,
+                nb_spiketrains: 1,
+                spiketrains: [
+                    { id: 1 },
+                ],
+                analogsignals: [
+                    { id: 1 },
+                    { id: 2 },
+                    { id: 2 },
+                    { id: 2 },
+                    { id: 5 },
+                ]
             }
-            // var fake_seg = [{
-            //         name: "segment 1",
-            //         description: "a first fake segment",
-            //         file_origin: "nowhere",
-            //         nb_analog_signals: 3,
-            //         nb_spiketrains: 2,
-            //         spiketrains: [
-            //             { id: 1 },
-            //             { id: 2 },
-            //         ],
-            //         analogsignals: [
-            //             { id: 1 },
-            //             { id: 2 },
-            //             { id: 3 },
-            //         ]
-            //     },
-            //     {
-            //         name: "segment 2",
-            //         description: "a second fake segment",
-            //         file_origin: "nowhere",
-            //         nb_analog_signals: 1,
-            //         nb_spiketrains: 2,
-            //         spiketrains: [
-            //             { id: 1 }
-            //         ],
-            //         analogsignals: [
-            //             { id: 1 },
-            //             { id: 2 },
-            //         ]
-            //     }, {
-            //         name: "segment 3",
-            //         description: "a third fake segment",
-            //         file_origin: "nowhere",
-            //         nb_analog_signals: 5,
-            //         nb_spiketrains: 1,
-            //         spiketrains: [
-            //             { id: 1 },
-            //         ],
-            //         analogsignals: [
-            //             { id: 1 },
-            //             { id: 2 },
-            //             { id: 2 },
-            //             { id: 2 },
-            //             { id: 5 },
-            //         ]
-            //     }
-            // ]
+        ]
 
         var fake_signal = [{
                 signal_id: 1,
@@ -263,7 +263,7 @@ GraphicsServices.factory('Graphics', ['$rootScope',
 
         //graphs functions 
         var getOptions = function(title, subtitle, caption, graph_data, raw_data) {
-            console.log("raw_data in getoptions graphic service", raw_data)
+
             var yminymax = _get_min_max_values(raw_data.values);
 
             var xminxmax = _get_min_max_values(raw_data.times);
