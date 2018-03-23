@@ -138,72 +138,32 @@ FileServices.service('FileService', ['$rootScope', '$timeout', 'BlockDataRest', 
                 }
             })
         }
-
-        // var loadBlock = function(block_id) {
-        //     return new Promise(function(resolve, reject) {
-
-        //         getBlockData(block_id).then(function(block_data) {
-
-        //             if (data == undefined) {
-        //                 // getBlockData().then(function(temp_data) {
-        //                 //     data = fake_data //temp_data;
-        //                 //     resolve(fake_data); ///temp_data
-        //                 // })
-        //                 resolve(segment_data)
-        //             } else {
-        //                 console.log("data alrady loaded so")
-        //                 data.block[block_id].segments[segment_id] = segment_data;
-        //                 console.log(data.block[block_id].segments[segment_id])
-        //                 $rootScope.$broadcast('data_updated');
-        //                 console.log('data updated')
-        //                 resolve(segment_data)
-        //             }
-        //         })
-        //     })
-        // }
-
         var loadSegment = function(segment_id) {
             return new Promise(function(resolve, reject) {
-
-                getSegmentData(segment_id).then(function(segment_data) {
-
-                    if (data == undefined) {
-                        // getBlockData().then(function(temp_data) {
-                        //     data = fake_data //temp_data;
-                        //     resolve(fake_data); ///temp_data
-                        // })
-                        resolve(segment_data)
-                    } else {
-                        console.log("data alrady loaded so")
+                if (data.block[0].segments[segment_id].analogsignals[0] == undefined) {
+                    getSegmentData(segment_id).then(function(segment_data) {
                         data.block[0].segments[segment_id] = segment_data;
-                        console.log(data.block[0].segments[segment_id])
                         $rootScope.$broadcast('data_updated');
-                        console.log('data updated')
                         resolve(segment_data)
-                    }
-                })
+                    })
+                } else {
+                    resolve(data.block[0].segments[segment_id])
+                }
             })
         }
 
 
         var loadAnalogSignal = function(segment_id, signal_id) {
             return new Promise(function(resolve, reject) {
-
-                getAnalogSignalData(segment_id, signal_id).then(function(signal_data) {
-
-                    if (data == undefined) {
-                        // getBlockData().then(function(temp_data) {
-                        //     data = fake_data //temp_data;
-                        //     resolve(fake_data); ///temp_data
-                        // })
-                        resolve(signal_data)
-                    } else {
-                        console.log("data alrady loaded so")
+                if (data.block[0].segments[segment_id].analogsignals[signal_id].values == undefined) {
+                    getAnalogSignalData(segment_id, signal_id).then(function(signal_data) {
                         data.block[0].segments[segment_id].analogsignals[signal_id] = signal_data;
                         $rootScope.$broadcast('data_updated');
                         resolve(signal_data)
-                    }
-                })
+                    })
+                } else {
+                    resolve(data.block[0].segments[segment_id].analogsignals[signal_id])
+                }
             })
         }
 
@@ -230,7 +190,7 @@ FileServices.service('FileService', ['$rootScope', '$timeout', 'BlockDataRest', 
             return new Promise(function(resolve, reject) {
                 var temp_data = SegmentDataRest.get({ segment_id: segment_id });
                 temp_data.$promise.then(function(segment_data) {
-                    resolve(fake_seg[segment_id]);
+                    resolve(segment_data);
                 });
             })
         }
@@ -302,7 +262,7 @@ GraphicsServices.factory('Graphics', ['$rootScope',
     function($rootScope) {
 
         //graphs functions 
-        var getOptions = function(title, subtitle, Yaxislabel, caption, graph_data, raw_data) {
+        var getOptions = function(title, subtitle, caption, graph_data, raw_data) {
 
             var yminymax = _get_min_max_values(raw_data.values);
 
@@ -328,17 +288,16 @@ GraphicsServices.factory('Graphics', ['$rootScope',
                         tooltipHide: function(e) { console.log("tooltipHide"); },
                     },
                     xAxis: {
-                        axisLabel: 'time (s)',
+                        axisLabel: raw_data.times_dimensionality,
                     },
 
                     yAxis: {
-                        axisLabel: Yaxislabel,
+                        axisLabel: raw_data.values_units,
                         showMaxMin: false,
                         tickFormat: function(d) {
                             return d3.format('.02f')(d);
                         },
                         axisLabelDistance: -10,
-
                     },
 
                     xDomain: xminxmax.value,
@@ -347,19 +306,7 @@ GraphicsServices.factory('Graphics', ['$rootScope',
                     yRange: null,
                     tooltips: true,
                     callback: function(chart) {
-                        chart.lines.dispatch.on('elementClick', function(e) {
-                            var list_of_results_id = [];
-                            var i = 0;
-                            for (i; i < e.length; i++) {
-                                var j = 0;
-                                for (j; j < e[i].series.values.length; j++) {
-                                    if (e[i].series.values[j].x == e[i].point.x) {
-                                        list_of_results_id.push({});
-                                    }
-                                }
-                            }
-                            focus(list_of_results_id, graph_data);
-                        });
+
                     }
                 },
                 title: {
@@ -389,16 +336,16 @@ GraphicsServices.factory('Graphics', ['$rootScope',
 
         }
 
-        var focus = function(list_id_couple, results_data) {
-            // var list_data = [];
-            // var i = 0;
-            // for (i; i < list_id_couple.length; i++) {
-            //     data = find_result_in_data(list_id_couple[i], results_data, type);
-            //     data.line_id = list_id_couple[i].id_line;
-            //     list_data.push(data);
-            // }
-            // $rootScope.$broadcast('data_focussed:updated', list_data, graph_key);
-        };
+        // var focus = function(list_id_couple, results_data) {
+        //     // var list_data = [];
+        //     // var i = 0;
+        //     // for (i; i < list_id_couple.length; i++) {
+        //     //     data = find_result_in_data(list_id_couple[i], results_data, type);
+        //     //     data.line_id = list_id_couple[i].id_line;
+        //     //     list_data.push(data);
+        //     // }
+        //     // $rootScope.$broadcast('data_focussed:updated', list_data, graph_key);
+        // };
 
         // var find_result_in_data = function(id_couple, results_data, type) {
         //     var result_to_return = undefined;
@@ -529,9 +476,9 @@ GraphicsServices.factory('Graphics', ['$rootScope',
         }
         return {
             getOptions: getOptions,
-            find_result_in_data: find_result_in_data,
-            focus: focus,
-            getUpdatedGraph: getUpdatedGraph,
+            // find_result_in_data: find_result_in_data,
+            // focus: focus,
+            // getUpdatedGraph: getUpdatedGraph,
             _get_min_max_values: _get_min_max_values,
 
             initGraph: initGraph,

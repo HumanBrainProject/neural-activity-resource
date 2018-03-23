@@ -40,8 +40,8 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="analogSignal in data_segment.analogsignals">
-                    <td style="width: 15%">{{ analogSignal.id }}</td>
+                <tr class=tr-clickable ng-repeat="(as_key,analogSignal) in data_segment.analogsignals">
+                    <td style="width: 15%">{{as_key}}</td>
                     <td style="width: 15%">
 
                     </td>

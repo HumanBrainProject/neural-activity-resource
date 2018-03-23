@@ -63,7 +63,7 @@ NeuralActivityApp.config(
             .state('file_view.block', {
                 parent: 'file_view',
 
-                url: '/home/file-view/block',
+                url: '/block',
 
                 views: {
                     'detail@file_view': {
@@ -73,9 +73,8 @@ NeuralActivityApp.config(
                 }
             })
             .state('file_view.segment', {
-                parent: 'file_view',
 
-                url: '/home/file-view/segment/{segment_id:[0-9]{1,8}}',
+                url: '/segment/{segment_id:[0-9]{1,8}}',
 
                 views: {
                     'detail': {
@@ -85,8 +84,8 @@ NeuralActivityApp.config(
                 }
             })
             .state('file_view.analog_signal', {
-                parent: 'file_view',
-                url: '/home/file-view/analog_signal/{segment_id:[0-9]{1,8}}?{analog_signal_id:[0-9]{1,8}}',
+
+                url: '/analog_signal/{segment_id:[0-9]{1,8}}?{analog_signal_id:[0-9]{1,8}}',
 
                 views: {
                     'detail': {
