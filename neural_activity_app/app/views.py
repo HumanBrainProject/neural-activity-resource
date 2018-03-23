@@ -22,7 +22,7 @@ from neo import io
 # import quantities as pq
 # import numpy as np
 # from django.core.serializers.json import DjangoJSONEncoder
-# from neo.io import get_io
+from neo.io import get_io
 import jsonpickle
 import jsonpickle.ext.numpy as jsonpickle_numpy
 import json
@@ -31,8 +31,10 @@ from datetime import datetime
 
 jsonpickle_numpy.register_handlers()
 
-r = io.AlphaOmegaIO(filename='File_AlphaOmega_2.map')
-block = r.read_block(lazy=False, cascade=True)
+# r = io.AlphaOmegaIO(filename='File_AlphaOmega_2.map')
+# block = r.read_block(lazy=False, cascade=True)
+block = get_io('File_AlphaOmega_2.map').read_block()
+
 
 class DatetimeHandler(jsonpickle.handlers.BaseHandler):
     def flatten(self, obj, data):
@@ -87,22 +89,24 @@ class Segment(APIView):
    
     def get(self, request, format=None, **kwargs):
 
-        seg_data = [{
-                    'name': s.name or "",
-                    # 'annotations': s.annotations,
-                    'description': "fwefjwepfkdj",
-                    # 'epochs': s.epochs,
-                    # 'events': s.events,
-                    'spiketrains': 'hi',
-                    'rec_datetime': s.rec_datetime,
-                    # 'irregularlysampledsignals': s.irregularlysampledsignals,
-                    # 'index': s.index,
-                    'file_origin': s.file_origin or "",
-                    # 'block': s.block,
-                    'analogsignals': [],
+        id_segment = int(request.GET['segment_id'])
+        segment = block.segments[id_segment]
+
+        seg_data_test = {
+                    'name': "segment 1",
+                    'description': "a first fake segment",
+                    'file_origin': "nowhere",
+                    'spiketrains': [{}, {}],
+                    'analogsignals': [{}, {}, {}]
                     }
-                    for s in block.segments
-                    ]
+
+        seg_data = {
+                    'name': segment.name or "",
+                    'description': segment.description or "",
+                    'file_origin': segment.file_origin or "",
+                    'spiketrains': segment.spiketrains,
+                    'analogsignals': [{} for a in segment.analogsignals]
+                    }
       
         return JsonResponse(seg_data, safe=False)
 
