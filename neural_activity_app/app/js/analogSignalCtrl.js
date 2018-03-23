@@ -22,7 +22,7 @@ NeuralActivityApp.controller('AnalogSignalViewCtrl', ['$scope', '$rootScope', '$
             $scope.signal = signal;
             Graphics.initGraph(signal).then(function(graph_data) {
                 $scope.graph_data = graph_data;
-                $scope.options = Graphics.getOptions("View of analogsignal", "", "Voltage", "", graph_data.values, $scope.signal)
+                $scope.options = Graphics.getOptions("View of analogsignal", "", "", graph_data.values, $scope.signal)
             });
         })
 

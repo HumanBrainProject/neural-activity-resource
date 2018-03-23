@@ -1,7 +1,7 @@
 <div ng-controller="BlockViewCtrl">
 
     <body>
-        <h1 align=center>Block #{{block_id}} </h1>
+        <h1 align=center>Block </h1>
 
         <panel class=description-panel>
 
@@ -36,8 +36,8 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="segment in data_block.segments">
-                    <td style="width: 15%">{{ segment.name }}</td>
+                <tr class=tr-clickable ng-repeat="(s_key,segment) in data_block.segments" ng-click="showSegment(s_key)" ui-sref="file_view.segment({segment_id:{{s_key}}})" ui-sref-active="active">
+                    <td style="width: 15%">{{ s_key }}</td>
                     <td style="width: 15%">
 
                     </td>

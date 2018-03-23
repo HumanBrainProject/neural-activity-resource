@@ -72,7 +72,6 @@ NeuralActivityApp.controller('MenuCtrl', ['$scope', '$rootScope', '$http', '$loc
 
         $scope.showSegment = function(segment_id) {
             var id = segment_id;
-            // var classe = document.getElementById("arrow-segment-" + id).className;
             if (!$scope.isInArray(id, $scope.menu_segments_to_show)) {
                 $scope.menu_segments_to_show.push(id);
                 document.getElementById("arrow-segment-" + id).className = "glyphicon glyphicon-menu-up";
