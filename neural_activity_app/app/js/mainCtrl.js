@@ -94,8 +94,18 @@ NeuralActivityApp.controller('MenuCtrl', ['$scope', '$rootScope', '$http', '$loc
             $scope.$apply();
         });
         //code
-        $scope.data = $scope.$parent.data;
-        $state.go('.block')
+
+        // if ($state.current.name = 'file_view' && $state.current.url != "/block") {
+        if ($state.current.views == undefined) {
+            $scope.data = $scope.$parent.data;
+            $state.go('.block')
+        } else {
+            FileService.setService($stateParams.file_name).then(function() {
+                $scope.data = FileService.getData();
+                $scope.$apply();
+            });
+        }
+
     }
 ]);
 

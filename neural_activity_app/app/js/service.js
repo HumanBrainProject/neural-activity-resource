@@ -1,20 +1,5 @@
 var FileServices = angular.module('FileServices', ['ngResource', 'ApiCommunicationServices']);
 
-// FileServices.factory('dataShare', function($rootScope, $timeout) {
-//     var service = {};
-//     service.data = false;
-//     this.data = [];
-//     service.sendData = function(data) {
-//         this.data = data;
-//         $timeout(function() {
-//             $rootScope.$broadcast('data_shared');
-//         }, 100);
-//     };
-//     service.getData = function() {
-//         return this.data;
-//     };
-//     return service;
-// });
 
 FileServices.service('FileService', ['$rootScope', '$timeout', 'BlockDataRest', 'SegmentDataRest', 'AnalogSignalDataRest',
 
@@ -130,14 +115,12 @@ FileServices.service('FileService', ['$rootScope', '$timeout', 'BlockDataRest', 
                         resolve(temp_data); ///temp_data
                     })
                 } else {
-                    // $timeout(function() {
-                    //     $rootScope.$broadcast('data_shared');
-                    // }, 100);
                     console.log('data already loaded')
                     resolve(data)
                 }
             })
         }
+
         var loadSegment = function(segment_id) {
             return new Promise(function(resolve, reject) {
                 if (data.block[0].segments[segment_id].analogsignals[0] == undefined) {
