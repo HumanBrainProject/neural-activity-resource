@@ -10,9 +10,12 @@
                 </thead>
                 <tbody>
                     <tr>
+                        <td>name: </td>
+                        <td>{{data_block.name}}</td>
+                    </tr>
+                    <tr>
                         <td>description: </td>
                         <td>{{data_block.description}}</td>
-
                     </tr>
                     <tr>
                         <td>file origin: </td>
@@ -25,6 +28,14 @@
                 </tbody>
             </table>
         </panel>
+        <br>
+        <h4>Annotations</h4>
+        <table class="table">
+            <tbody>
+                <tr ng-repeat="(key,value) in data_block.annotations">
+                    <th scope="row">{{key}}</th><td>{{value}}</td>
+            </tbody>
+        </table>
         <br>
         <br>
         <h2>Segments Array</h2>
