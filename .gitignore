@@ -69,8 +69,8 @@ Thumbs.db
 .key
 
 #packages
-/static
-/app/static/
+static
+app/static/
 packages/*
 !packages/.keep 
 

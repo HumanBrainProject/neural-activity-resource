@@ -33,7 +33,7 @@ jsonpickle_numpy.register_handlers()
 
 # r = io.AlphaOmegaIO(filename='File_AlphaOmega_2.map')
 # block = r.read_block(lazy=False, cascade=True)
-block = get_io('File_AlphaOmega_2.map').read_block()
+block = get_io('File_AlphaOmega_1.map').read_block()
 
 
 class DatetimeHandler(jsonpickle.handlers.BaseHandler):

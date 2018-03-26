@@ -7,7 +7,7 @@ NeuralActivityApp.controller('BlockViewCtrl', ['$scope', '$rootScope', '$http', 
 
         //variables
         // $scope.block_id = $stateParams.block_id;
-        $scope.data_block = $scope.$parent.data.block[0];
+
         //functions
 
 
@@ -18,6 +18,10 @@ NeuralActivityApp.controller('BlockViewCtrl', ['$scope', '$rootScope', '$http', 
         });
         // FileService.loadBlock($scope.block_id);
 
-
+        FileService.setService($stateParams.file_name).then(function() {
+            $scope.data = FileService.getData();
+            $scope.$apply();
+            $scope.data_block = $scope.$parent.data.block[0];
+        });
     }
 ]);
