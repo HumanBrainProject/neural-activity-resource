@@ -1,47 +1,20 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.views.generic import View, ListView, DetailView, TemplateView
-from django.http import (HttpResponse, JsonResponse,
-                         HttpResponseBadRequest,     # 400
-                         HttpResponseForbidden,      # 403
-                         HttpResponseNotFound,       # 404
-                         HttpResponseNotAllowed,     # 405
-                         HttpResponseNotModified,    # 304
-                         HttpResponseRedirect)       # 302
-from rest_framework import (viewsets,
-                            status,
-                            mixins,
-                            generics,
-                            permissions,)
+from django.http import JsonResponse
 from rest_framework.views import APIView
-from rest_framework.response import Response
 
-from neo import io
+# from neo import io
 # import quantities as pq
 # import numpy as np
-# from django.core.serializers.json import DjangoJSONEncoder
 from neo.io import get_io
-import jsonpickle
-import jsonpickle.ext.numpy as jsonpickle_numpy
-import json
-from datetime import datetime
-
-
-jsonpickle_numpy.register_handlers()
+# import jsonpickle
+# import jsonpickle.ext.numpy as jsonpickle_numpy
+# import json
 
 # r = io.AlphaOmegaIO(filename='File_AlphaOmega_2.map')
 # block = r.read_block(lazy=False, cascade=True)
 block = get_io('File_AlphaOmega_1.map').read_block()
-
-
-class DatetimeHandler(jsonpickle.handlers.BaseHandler):
-    def flatten(self, obj, data):
-        return obj.strftime('%Y-%m-%d %H:%M:%S.%f')
-
-
-jsonpickle.handlers.registry.register(datetime, DatetimeHandler)
 
 
 class Block(APIView): 
@@ -53,7 +26,7 @@ class Block(APIView):
         # TO FILL
         # read neo file from hd
         block_data = {'block': [{
-            # 'annotations': block.annotations,
+            'annotations': block.annotations,
             # 'channel_indexes': block.channel_indexes,
             'description': block.description or "",
             # 'file_datetime': block.file_datetime,
@@ -65,7 +38,7 @@ class Block(APIView):
             'segments': [
                 {
                     'name': s.name or "",
-                    # 'annotations': s.annotations,
+                    'annotations': s.annotations,
                     'description': s.description or "",
                     # 'epochs': s.epochs,
                     # 'events': s.events,
@@ -104,8 +77,10 @@ class Segment(APIView):
                     'name': segment.name or "",
                     'description': segment.description or "",
                     'file_origin': segment.file_origin or "",
+                    'annotations': segment.annotations,
                     'spiketrains': segment.spiketrains,
-                    'analogsignals': [{} for a in segment.analogsignals]
+                    'analogsignals': [{} for a in segment.analogsignals],
+                    'as_prop': [{'size': e.size, 'name': e.name.decode('cp1252')} for e in segment.analogsignals]
                     }
       
         return JsonResponse(seg_data, safe=False)
@@ -131,7 +106,9 @@ class AnalogSignal(APIView):
         print("sampling_rate", analogsignal.sampling_rate)
         print( "t_stop",analogsignal.t_stop)
         print( "times",analogsignal.times)
-        print("duration",analogsignal.duration)      
+        print("duration",analogsignal.duration)
+        print("name", analogsignal.name)
+        print("size", analogsignal.size)
    
         # print('analogsignal', analogsignal[0], analogsignal[0].sampling_rate)
         # analog_signal = block.segments[id_segment].analogsignals[id_analog_signal]
