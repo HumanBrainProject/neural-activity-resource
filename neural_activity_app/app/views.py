@@ -79,7 +79,8 @@ class Segment(APIView):
                     'file_origin': segment.file_origin or "",
                     'annotations': segment.annotations,
                     'spiketrains': segment.spiketrains,
-                    'analogsignals': [{} for a in segment.analogsignals]
+                    'analogsignals': [{} for a in segment.analogsignals],
+                    'as_prop': [{'size': e.size, 'name': e.name.decode('cp1252')} for e in segment.analogsignals]
                     }
       
         return JsonResponse(seg_data, safe=False)
