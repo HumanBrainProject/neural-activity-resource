@@ -64,6 +64,25 @@ angular.module('nar')
         //$location.url(experiment.path.id);
     };
 
+    vm.validURL = function(url) {
+        if (url.startsWith('http')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    vm.relativePath = function(url) {
+        if (url.startsWith('http')) {
+            var link = document.createElement("a");
+            link.href = url;
+            console.log(url);
+            return link.pathname.split('/').slice(3).join("/");
+        } else {
+            return url;
+        }
+    };
+
     var Experiments = KGResource(base_url + "data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/");
     Experiments.query().then(
         function(experiments) {
@@ -88,7 +107,7 @@ angular.module('nar')
 
         // get the patched cell
         //console.log(vm.stimulus_experiment["prov:used"][0]["@id"]);
-        $http.get(vm.stimulus_experiment["prov:used"][0]["@id"], config).then(
+        $http.get(vm.stimulus_experiment["prov:used"]["@id"], config).then(
             function(response) {
                 vm.patched_cell = response.data;
                 //console.log(vm.patched_cell);

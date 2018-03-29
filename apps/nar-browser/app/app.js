@@ -36,7 +36,8 @@ Author: Andrew P. Davison, UNIC, CNRS
   angular.module('nar', [
     'bbpOidcClient',
     //'ui.router',
-    'ngMaterial'
+    'ngMaterial',
+    'ngSanitize'
   ])
   //.config(function($urlRouterProvider) {
   //  $urlRouterProvider.otherwise("/");
