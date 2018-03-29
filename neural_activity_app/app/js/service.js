@@ -253,16 +253,18 @@ GraphicsServices.factory('Graphics', ['$rootScope',
 
             options = {
                 chart: {
-                    type: 'lineChart',
-                    height: 450,
+                    type: 'lineWithFocusChart',
+                    height: 600,
                     margin: {
                         top: 100,
                         right: 100,
-                        bottom: 100,
+                        bottom: 50,
                         left: 100
                     },
+                    duration: 700,
                     x: function(d) { return d.x; },
                     y: function(d) { return d.y; },
+                    y2: function(d) { return d.y; },
                     useInteractiveGuideline: true,
                     dispatch: {
                         stateChange: function(e) { console.log("stateChange"); },
@@ -277,6 +279,12 @@ GraphicsServices.factory('Graphics', ['$rootScope',
                             return d3.format('.02f')(d.toPrecision(5));
                         },
                     },
+                    x2Axis: {
+                        axisLabel: raw_data.times_dimensionality,
+                        tickFormat: function(d) {
+                            return d3.format('.02f')(d.toPrecision(5));
+                        },
+                    },
 
                     yAxis: {
                         axisLabel: raw_data.values_units,
@@ -284,22 +292,31 @@ GraphicsServices.factory('Graphics', ['$rootScope',
                         tickFormat: function(d) {
                             return d3.format('.02f')(d.toPrecision(5));
                         },
+                        rotateYLabel: true,
                         axisLabelDistance: 20,
                         css: {
                             'text-align': 'center',
                             'margin': '10px 13px 10px 7px'
                         }
                     },
-
-                    xDomain: xminxmax.value,
+                    y2Axis: {
+                        showMaxMin: false,
+                        tickValues: null,
+                    },
+                    // xDomain: xminxmax.value,
                     xRange: null,
-                    yDomain: yminymax,
+                    // yDomain: yminymax,
                     yRange: null,
                     tooltips: true,
-                    callback: function(chart) {
-
-                    }
+                    interpolate: 'linear',
+                    interactive: true,
+                    interactiveUpdateDelay: 10,
+                    focusEnable: true,
+                    focusShowAxisX: true,
+                    focusShowAxisY: true,
+                    callback: function(chart) {}
                 },
+
                 title: {
                     enable: false,
                     text: ""
@@ -319,7 +336,8 @@ GraphicsServices.factory('Graphics', ['$rootScope',
                         'text-align': 'justify',
                         'margin': '10px 13px 0px 7px'
                     }
-                }
+                },
+
             };
 
             return options;
