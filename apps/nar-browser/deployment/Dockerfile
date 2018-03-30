@@ -5,7 +5,7 @@
 #
 
 
-FROM debian:stretch
+FROM debian:stretch-slim
 MAINTAINER andrew.davison@unic.cnrs-gif.fr
 
 RUN apt-get update --fix-missing; apt-get -y -q install supervisor nginx-extras
@@ -13,6 +13,7 @@ RUN apt-get update --fix-missing; apt-get -y -q install supervisor nginx-extras
 COPY deployment/nginx_default /etc/nginx/sites-enabled/default
 COPY app /usr/share/nginx/html/app
 COPY node_modules /usr/share/nginx/html/node_modules
+COPY lib /usr/share/nginx/html/lib
 
 RUN ln -sf /dev/stdout /var/log/nginx/access.log
 RUN ln -sf /dev/stderr /var/log/nginx/error.log

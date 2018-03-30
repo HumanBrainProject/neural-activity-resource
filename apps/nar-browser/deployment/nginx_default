@@ -16,4 +16,7 @@ server {
 
     location /node_modules/ {
     }
+
+    location /lib/ {
+    }
 }
