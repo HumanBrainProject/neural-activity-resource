@@ -1,0 +1,8 @@
+# Generate 
+
+Generate `json-ld` files from NARCI turtle shape graph and data graph, that
+are nexus compatible using `ttl2jsonxus` tool.
+
+## Run 
+
+`source generate_json.bash`
