@@ -1,0 +1,17 @@
+#content  {
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-top: 5px;
+}
+
+md-list .md-button.selected {
+  color: #03a9f4;
+}
+
+.odd {
+  background-color: f6f6f6;
+}
+
+.even {
+  background-color: f8f8f8;
+}

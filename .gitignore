@@ -1,7 +1,17 @@
-.idea
-.ipynb_checkpoints
-__pycache__
-*.log
 
-apps/nar-browser/lib
+
+# editors
+.idea
+.vscode
+
+# apps
 apps/nar-browser/node_modules
+apps/nar-browser/lib
+
+# Python stuff
+*.egg-info
+__pycache__
+.ipynb_checkpoints
+
+# other
+*.log
