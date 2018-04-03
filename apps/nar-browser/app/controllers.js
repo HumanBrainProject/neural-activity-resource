@@ -58,6 +58,14 @@ angular.module('nar')
     vm.selected = null;
 
     vm.selectExperiment = function(experiment) {
+        vm.stimulus_experiment = null;  // trying to blank fields
+        vm.patched_cell = null;
+        vm.patching_activity = null;
+        vm.slice = null;
+        vm.slicing_activity = null;
+        vm.subject = null;
+        vm.traces = [];
+        vm.data_files = [];
         vm.selected = experiment;
         console.log(vm.selected);
         build_metadata(experiment);
@@ -87,6 +95,7 @@ angular.module('nar')
     Experiments.query().then(
         function(experiments) {
             vm.experiments = experiments;
+            vm.selectExperiment(experiments[0]);
         },
         error
     );
@@ -97,8 +106,10 @@ angular.module('nar')
     //        vm.stimulus_experiment = response.data;
 
     var build_metadata = function(stimulus_experiment) {
+        var name = stimulus_experiment.get_label();
         vm.stimulus_experiment = stimulus_experiment.data;
-        vm.stimulus_experiment.name = vm.stimulus_experiment['schema:name'];
+        //vm.stimulus_experiment.name = vm.stimulus_experiment['schema:name'];
+        vm.stimulus_experiment.name = name;
         //console.log(vm.stimulus_experiment['schema:name']);
 
         vm.stimulus_experiment.stimulus = {
