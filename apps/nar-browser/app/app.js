@@ -35,13 +35,49 @@ Author: Andrew P. Davison, UNIC, CNRS
 
   angular.module('nar', [
     'bbpOidcClient',
-    //'ui.router',
+    'ui.router',
     'ngMaterial',
     'ngSanitize'
   ])
-  //.config(function($urlRouterProvider) {
-  //  $urlRouterProvider.otherwise("/");
-  //})
+  .config(function($stateProvider, $urlRouterProvider) {
+    $stateProvider
+    .state('home', {
+        url: '/',
+        templateUrl: '/app/templates/home.tpl.html',
+        controller: 'HomeController as app'
+      })
+      .state('patch-clamp', {
+        url: '/patch-clamp',
+        templateUrl: '/app/templates/patch-clamp.tpl.html',
+        controller: 'PatchClampController as app'
+      })
+      .state('sharp-electrode', {
+        url: '/sharp-electrode',
+        templateUrl: '/app/templates/sharp-electrode.tpl.html',
+        controller: 'SharpElectrodeController as app'
+      })
+      .state('mea', {
+        url: '/mea',
+        templateUrl: '/app/templates/mea.tpl.html',
+        controller: 'MEAController as app'
+      })
+      .state('two-photon', {
+        url: '/two-photon',
+        templateUrl: '/app/templates/two-photon.tpl.html',
+        controller: 'TwoPhotonController as app'
+      })
+      .state('EEG', {
+        url: '/eeg',
+        templateUrl: '/app/templates/eeg.tpl.html',
+        controller: 'EEGController as app'
+      })
+      .state('fMRI', {
+        url: '/fMRI',
+        templateUrl: '/app/templates/fMRI.tpl.html',
+        controller: 'FMRIController as app'
+      })
+    $urlRouterProvider.otherwise("/");
+  })
   .config(function(bbpOidcSessionProvider) {
     // set to true if missing token should automatically redirect to login page.
     bbpOidcSessionProvider.alwaysPromptLogin(true)

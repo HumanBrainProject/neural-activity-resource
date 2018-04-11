@@ -9,6 +9,7 @@
   "author": "",
   "license": "Apache License version 2.0",
   "dependencies": {
+    "@uirouter/angularjs": "^1.0.15",
     "angular": "^1.6.7",
     "angular-material": "^1.1.5"
   },

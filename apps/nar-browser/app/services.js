@@ -166,6 +166,42 @@ angular.module('nar')
         return Resource;
     };
 })
+
+.factory("KGResourceCount", function($http, bbpOidcSession) {
+    var error = function(response) {
+        console.log(response);
+    };
+
+    return function (collection_uri) {
+        console.log("Constructing a resource count for " + collection_uri);
+
+        // a constructor for new resources
+        var ResourceCount = function (data) {
+            angular.extend(this, data);
+        };
+
+        var config = {
+            Authorization: "Bearer " + bbpOidcSession.token()
+        };
+        collection_uri += "?deprecated=False";
+
+        ResourceCount.count = function(filter) {
+            var resource_uri = collection_uri;
+            if (filter) {
+                resource_uri += "&filter=" + encodeURIComponent(JSON.stringify(filter.filter)) + "&context=" + encodeURIComponent(JSON.stringify(filter['@context']));
+                console.log(resource_uri);
+            }
+
+            return $http.get(resource_uri, config).then(
+                    function(response) {
+                        return response.data.total;
+                    },
+                    error);
+        }
+        return ResourceCount;
+    };
+})
+
 .service("KGIndex", function($http, PathHandler, bbpOidcSession) {
 
     var error = function(response) {

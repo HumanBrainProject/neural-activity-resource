@@ -22,6 +22,7 @@
   <script src="/node_modules/angular-messages/angular-messages.js"></script>
   <script src="/node_modules/angular-material/angular-material.js"></script>
   <script src="/node_modules/angular-sanitize/angular-sanitize.js"></script>
+  <script src="/node_modules/angular-ui-router/release/angular-ui-router.js"></script>
   
   <!-- authentication/authorization -->
   <script src="/lib/angular-bbp-config/angular-bbp-config.js"></script>
@@ -30,141 +31,55 @@
   <!-- our angular app -->
   <script src="/app/app.js"></script>
   <script src="/app/services.js"></script>
-  <script src="/app/controllers.js"></script>
+  <script src="/app/controllers/home.js"></script>
+  <script src="/app/controllers/eeg.js"></script>
+  <script src="/app/controllers/fMRI.js"></script>
+  <script src="/app/controllers/mea.js"></script>
+  <script src="/app/controllers/patch-clamp.js"></script>	
+  <script src="/app/controllers/sharp-electrode.js"></script>
+  <script src="/app/controllers/two-photon.js"></script>
 </head>
+
 
 <body ng-app="nar" layout="column">
 
       <!-- Toolbar -->
     <md-toolbar layout="row" class="md-toolbar-tools">
 
+      <md-menu md-offset="0 40">
+        <md-button class="md-icon-button" aria-label="Menu" ng-click="$mdMenu.open($event);">
+          <md-icon md-menu-origin>menu</md-icon>
+        </md-button>
+        <md-menu-content width="6">
+          <md-menu-item>
+              <md-button ui-sref="home">Home</md-button>
+          </md-menu-item>
+          <md-menu-item>
+              <md-button ui-sref="patch-clamp">Patch clamp recording</md-button>
+          </md-menu-item>
+          <md-menu-item>
+              <md-button ui-sref="sharp-electrode">Intracellular sharp-electrode recording</md-button>
+          </md-menu-item>
+          <md-menu-item>
+              <md-button ui-sref="mea">Multi-electrode array recording</md-button>
+          </md-menu-item>
+          <md-menu-item>
+              <md-button ui-sref="two-photon">Two-photon calcium imaging</md-button>
+          </md-menu-item>
+          <md-menu-item>
+              <md-button ui-sref="EEG">EEG</md-button>
+          </md-menu-item>
+          <md-menu-item>
+              <md-button ui-sref="fMRI">fMRI</md-button>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
 
       <h1 flex><a href="/app">Neural Activity Resource (alpha)</a></h1>
     </md-toolbar>
 
-    <!-- Container for sidebar and main content -->
-    <div flex layout="row" ng-controller="DefaultController as app">
-
-      <!-- Sidebar -->
-      <md-sidenav md-is-locked-open="true" class="md-whiteframe-4dp">
-        <md-list>
-          <md-list-item ng-repeat="experiment in app.experiments | orderBy:'get_label()'">
-            <md-button ng-click="app.selectExperiment(experiment)" ng-class="{'selected' : experiment === app.selected }" md-truncate>
-              <small>{{experiment.get_label()}}</small>
-            </md-button>
-          </md-list-item>
-        </md-list>
-      </md-sidenav>
-
-      <!-- Main content -->
-      <md-content flex id="content">
-
-        
-        <h2 class="md-display-1">Patch clamp experiment: {{app.stimulus_experiment.name}}</h2>
-
-        <md-list>
-          <md-list-item layout="row" class="odd">
-            <span flex="20">Stimulus:</span>
-            <div flex>{{app.stimulus_experiment.stimulus.name}}
-            </div>
-          </md-list-item>
-          <md-list-item layout="row" class="even">
-            <span flex="20">Brain region:</span>
-            <div flex><a href="{{app.patched_cell.brainLocation.brainRegion['@id']}}" target="_blank">{{app.patched_cell.brainLocation.brainRegion.label}}</a>
-            </div>
-          </md-list-item>
-          <!--<md-list-item layout="row">
-            <span flex="20">Patched slice id</span>
-            <div flex>{{app.patched_slice.name}}</div>
-          </md-list-item>-->
-          <md-list-item layout="row">
-            <span flex="20">Patching performed by:</span>
-            <div flex>
-              <ul>
-                <li ng-repeat="person in app.patching_activity.people">
-                  {{person.givenName}} {{person.familyName}}
-                </li>
-              </ul>
-            </div>
-          </md-list-item>
-          <md-list-item layout="row" class="even">
-            <span flex="20">Slice id:</span>
-            <div flex>{{app.slice.name}}</div>
-          </md-list-item>
-          <md-list-item layout="row">
-            <span flex="20">Slicing performed by:</span>
-            <div flex>
-                <ul>
-                  <li ng-repeat="person in app.slicing_activity.people">
-                    {{person.givenName}} {{person.familyName}}
-                  </li>
-                </ul>
-              </div>
-          </md-list-item>
-          <md-list-item layout="row" class="even">
-            <span flex="20">Cutting thickness:</span>
-            <div flex>{{app.slicing_activity.cuttingThickness.value}} {{app.slicing_activity.cuttingThickness.label}}</div>
-          </md-list-item>
-          <md-list-item layout="row">
-            <span flex="20">Slicing angle:</span>
-            <div flex>{{app.slicing_activity.slicingAngle}}</div>
-          </md-list-item>
-          <md-list-item layout="row" class="even">
-            <span flex="20">Slicing plane:</span>
-            <div flex>{{app.slicing_activity.slicingPlane}}</div>
-          </md-list-item>
-          <md-list-item layout="row">
-            <span flex="20">Slicing solution:</span>
-            <div flex ng-bind-html="app.slicing_activity.solution"></div>
-          </md-list-item>
-          <md-list-item layout="row" class="even">
-            <span flex="20">Date/time:</span>
-            <div flex>{{app.slicing_activity.startedAtTime['@value']}}</div>
-          </md-list-item>
-          <!--<md-list-item layout="row">
-            <span flex="20">Subject death date</span>
-            <div flex>{{app.subject.deathDate}}</div>
-          </md-list-item>-->
-          <md-list-item layout="row">
-            <span flex="20">Subject age:</span>
-            <div flex>{{app.subject.age.value.value}} {{app.subject.age.value.label}}</div>
-          </md-list-item>
-          <md-list-item layout="row" class="even">
-            <span flex="20">Subject name:</span>
-            <div flex>{{app.subject.name}}</div>
-          </md-list-item>
-          <!--<md-list-item layout="row">
-            <span flex="20">Subject id</span>
-            <div flex>{{app.subject.providerId}}</div>
-          </md-list-item>-->
-          <md-list-item layout="row">
-            <span flex="20">Subject sex:</span>
-            <div flex>{{app.subject.sex.label}}</div>
-          </md-list-item>
-          <md-list-item layout="row"  class="even">
-            <span flex="20">Subject species:</span>
-            <div flex><a href="{{app.subject.species['@id']}}" target="_blank">{{app.subject.species.label}}</a></div>
-          </md-list-item>
-          <md-list-item layout="row">
-              <span flex="20">Number of traces:</span>
-              <div flex>{{app.traces.length}}</div>
-            </md-list-item>
-            <md-list-item layout="row"  class="even">
-                <span flex="20">Data files:</span>
-                <div flex>
-                  <ul>
-                    <li ng-repeat="file_url in app.data_files">
-                      <a ng-if="app.validURL(file_url)" href="{{file_url}}" target="_blank">{{app.relativePath(file_url)}}</a>
-                      <span ng-if="!app.validURL(file_url)">{{file_url}}</span>
-                    </li>
-                  </ul>
-                </div>
-              </md-list-item>
-        </md-list>
-
-      </md-content>
-
-    </div>
+    
+    <ui-view></ui-view>
 
 
 </body>
