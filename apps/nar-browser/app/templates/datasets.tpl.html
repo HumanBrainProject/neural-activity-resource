@@ -11,9 +11,14 @@
                 </md-card-title-media>
             </md-card-title>
             <md-card-content>
-                <ul>
-                    <li ng-repeat="trace in dataset.traces">{{trace.experiment.get_label()}}</li>
-                </ul>
+                <md-list>
+                    <md-subheader class="md-no-sticky">Patch clamp experiments</md-subheader>
+                    <md-list-item ng-repeat="trace in dataset.traces" 
+                                    ui-sref="patch-clamp-instance({ instanceId: trace.experiment.path.uuid })" 
+                                    ng-click="null">
+                        {{trace.experiment.get_label()}}
+                    </md-list-item>
+                </md-list>
             </md-card-content>
             <md-card-actions layout="row" layout-align="end center">
             </md-card-actions>
