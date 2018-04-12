@@ -1,0 +1,22 @@
+<md-content class="md-padding" layout="column">
+    
+        <md-card ng-repeat="dataset in app.datasets" md-theme="default">
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">{{dataset.get_label()}}</span>
+                    <span class="md-subhead">{{dataset.data["http://schema.org/description"]}}</span>
+                </md-card-title-text>
+                <md-card-title-media>
+                    <div class="md-media-sm card-media"></div>
+                </md-card-title-media>
+            </md-card-title>
+            <md-card-content>
+                <ul>
+                    <li ng-repeat="trace in dataset.traces">{{trace.experiment.get_label()}}</li>
+                </ul>
+            </md-card-content>
+            <md-card-actions layout="row" layout-align="end center">
+            </md-card-actions>
+        </md-card>
+
+</md-content>

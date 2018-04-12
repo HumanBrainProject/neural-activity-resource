@@ -15,3 +15,7 @@ md-list .md-button.selected {
 .even {
   background-color: f8f8f8;
 }
+
+.coming-soon {
+  color: gray;
+}

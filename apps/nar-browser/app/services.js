@@ -96,6 +96,8 @@ angular.module('nar')
                     label = instance.data.name;
                 } else if (instance.data.hasOwnProperty('schema:name')) {
                     label = instance.data['schema:name'];
+                } else if (instance.data.hasOwnProperty('http://schema.org/name')) {
+                    label = instance.data['http://schema.org/name'];
                 } else if (instance.data.hasOwnProperty('familyName')) {
                     label = instance.data.givenName + " " + instance.data.familyName;
                 } else if (instance.data.hasOwnProperty('label')) {
@@ -162,10 +164,57 @@ angular.module('nar')
                     return instances_promise;
                 },
                 error);
-        }
+        };
+
+        Resource.get = function(id) {
+
+            return $http.get(id, config).then(
+                function(response) {
+                    return Instance(response);
+                },
+                error
+            );
+        };
+
         return Resource;
     };
 })
+
+.factory("KGResourceCount", function($http, bbpOidcSession) {
+    var error = function(response) {
+        console.log(response);
+    };
+
+    return function (collection_uri) {
+        console.log("Constructing a resource count for " + collection_uri);
+
+        // a constructor for new resources
+        var ResourceCount = function (data) {
+            angular.extend(this, data);
+        };
+
+        var config = {
+            Authorization: "Bearer " + bbpOidcSession.token()
+        };
+        collection_uri += "?deprecated=False";
+
+        ResourceCount.count = function(filter) {
+            var resource_uri = collection_uri;
+            if (filter) {
+                resource_uri += "&filter=" + encodeURIComponent(JSON.stringify(filter.filter)) + "&context=" + encodeURIComponent(JSON.stringify(filter['@context']));
+                console.log(resource_uri);
+            }
+
+            return $http.get(resource_uri, config).then(
+                    function(response) {
+                        return response.data.total;
+                    },
+                    error);
+        }
+        return ResourceCount;
+    };
+})
+
 .service("KGIndex", function($http, PathHandler, bbpOidcSession) {
 
     var error = function(response) {

@@ -25,7 +25,7 @@ angular.module('nar')
 
 
 //.controller('DefaultController', function($location, $rootScope, bbpOidcSession, $http) {
-.controller('DefaultController', function($location, $rootScope, KGResource, bbpOidcSession, $http) {
+.controller('PatchClampController', function($location, $rootScope, KGResource, bbpOidcSession, $http) {
     var vm = this;
     var base_url = "https://nexus-int.humanbrainproject.org/v0/";
 
@@ -277,4 +277,9 @@ angular.module('nar')
             error
         );
     }
+})
+
+
+.controller('HelloWorldController', function() {
+
 });
