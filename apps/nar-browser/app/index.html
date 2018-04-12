@@ -5,7 +5,7 @@
   <meta name="author" content="">
   <meta name="viewport" content="initial-scale=1" />
 
-  <base href="/">
+  <base href="/app/">
 
   <title>Neural Activity Resource Browser</title>
 
@@ -22,7 +22,7 @@
   <script src="/node_modules/angular-messages/angular-messages.js"></script>
   <script src="/node_modules/angular-material/angular-material.js"></script>
   <script src="/node_modules/angular-sanitize/angular-sanitize.js"></script>
-  <script src="/node_modules/angular-ui-router/release/angular-ui-router.js"></script>
+  <script src="/node_modules/@uirouter/angularjs/release/angular-ui-router.js"></script>
   
   <!-- authentication/authorization -->
   <script src="/lib/angular-bbp-config/angular-bbp-config.js"></script>
@@ -56,7 +56,7 @@
               <md-button ui-sref="home">Home</md-button>
           </md-menu-item>
           <md-menu-item>
-              <md-button ui-sref="patch-clamp">Patch clamp recording</md-button>
+              <md-button ui-sref="patch-clamp-list">Patch clamp recording</md-button>
           </md-menu-item>
           <md-menu-item>
               <md-button ui-sref="sharp-electrode">Intracellular sharp-electrode recording</md-button>

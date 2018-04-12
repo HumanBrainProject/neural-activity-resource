@@ -28,10 +28,14 @@ angular.module('nar')
     var get_instance_type_and_id = function(parts) {
         var type_id = "/" + parts.slice(0, 3).join("/");
         var instance_id = null;
+        var uuid = null;
         if (parts.length > 3) {
             instance_id = parts.join("/");
         }
-        return {type: type_id, id: instance_id};
+        if (parts.length > 4) {
+            uuid = parts[4];
+        };
+        return {type: type_id, id: instance_id, uuid: uuid};
     };
 
     var PathHandler = {
@@ -63,7 +67,6 @@ angular.module('nar')
         var config = {
             Authorization: "Bearer " + bbpOidcSession.token()
         };
-        collection_uri += "?deprecated=False";
 
         var Instance = function(response) {
             var instance = {
@@ -122,7 +125,7 @@ angular.module('nar')
         };
 
         Resource.query = function(filter) {
-            var resource_uri = collection_uri;
+            var resource_uri = collection_uri + "?deprecated=False";
             if (filter) {
                 resource_uri += "&filter=" + encodeURIComponent(JSON.stringify(filter.filter)) + "&context=" + encodeURIComponent(JSON.stringify(filter['@context']));
                 console.log(resource_uri);
@@ -176,6 +179,16 @@ angular.module('nar')
             );
         };
 
+        Resource.get_by_uuid = function(uuid) {
+
+            return $http.get(collection_uri + "/" + uuid, config).then(
+                function(response) {
+                    return Instance(response);
+                },
+                error
+            );
+        };
+
         return Resource;
     };
 })
@@ -196,10 +209,9 @@ angular.module('nar')
         var config = {
             Authorization: "Bearer " + bbpOidcSession.token()
         };
-        collection_uri += "?deprecated=False";
 
         ResourceCount.count = function(filter) {
-            var resource_uri = collection_uri;
+            var resource_uri = collection_uri + "?deprecated=False";
             if (filter) {
                 resource_uri += "&filter=" + encodeURIComponent(JSON.stringify(filter.filter)) + "&context=" + encodeURIComponent(JSON.stringify(filter['@context']));
                 console.log(resource_uri);

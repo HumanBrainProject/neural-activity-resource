@@ -23,20 +23,40 @@ Author: Andrew P. Davison, UNIC, CNRS
 
 angular.module('nar')
 
-
-//.controller('DefaultController', function($location, $rootScope, bbpOidcSession, $http) {
-.controller('PatchClampController', function($location, $rootScope, KGResource, bbpOidcSession, $http) {
+.controller('PatchClampListController', function(KGResource, bbpOidcSession, $http) {      
     var vm = this;
     var base_url = "https://nexus-int.humanbrainproject.org/v0/";
-
-    vm.hello = "World"; 
 
     var error = function(response) {
         console.log("ERROR: ", response);
     };
 
+    // controller actions to login and logout
+    vm.handleLogin = function() {bbpOidcSession.login();}
+    vm.handleLogout = function() {bbpOidcSession.logout();}
 
-    console.log("LOCATION: " + $location.url());
+    var config = {
+        Authorization: "Bearer " + bbpOidcSession.token()
+    };
+
+    var Experiments = KGResource(base_url + "data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/");
+    Experiments.query().then(
+        function(experiments) {
+            vm.experiments = experiments;
+            console.log(experiments[0]);
+        },
+        error
+    );
+})
+
+.controller('PatchClampController', function(KGResource, bbpOidcSession, $http, $stateParams) {
+        
+    var vm = this;
+    var base_url = "https://nexus-int.humanbrainproject.org/v0/";
+
+    var error = function(response) {
+        console.log("ERROR: ", response);
+    };
 
     // controller actions to login and logout
     vm.handleLogin = function() {bbpOidcSession.login();}
@@ -55,9 +75,7 @@ angular.module('nar')
         Authorization: "Bearer " + bbpOidcSession.token()
     };
 
-    vm.selected = null;
-
-    vm.selectExperiment = function(experiment) {
+    var selectExperiment = function(experiment) {
         vm.stimulus_experiment = null;  // trying to blank fields
         vm.patched_cell = null;
         vm.patching_activity = null;
@@ -66,10 +84,7 @@ angular.module('nar')
         vm.subject = null;
         vm.traces = [];
         vm.data_files = [];
-        vm.selected = experiment;
-        console.log(vm.selected);
         build_metadata(experiment);
-        //$location.url(experiment.path.id);
     };
 
     vm.validURL = function(url) {
@@ -90,20 +105,6 @@ angular.module('nar')
             return url;
         }
     };
-
-    var Experiments = KGResource(base_url + "data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/");
-    Experiments.query().then(
-        function(experiments) {
-            vm.experiments = experiments;
-            vm.selectExperiment(experiments[0]);
-        },
-        error
-    );
-
-    // get the stimulus experiment
-    //$http.get('https://nexus-int.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/7ccced68-37a7-4fb6-8180-53e9ea985753', config).then(
-    //    function(response) {
-    //        vm.stimulus_experiment = response.data;
 
     var build_metadata = function(stimulus_experiment) {
         var name = stimulus_experiment.get_label();
@@ -277,9 +278,24 @@ angular.module('nar')
             error
         );
     }
+
+    console.log($stateParams.instanceId);
+    var Experiments = KGResource(base_url + "data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0");
+    Experiments.get_by_uuid($stateParams.instanceId).then(
+        function(expt) {
+            selectExperiment(expt);
+        },
+        error
+    )
 })
 
-
-.controller('HelloWorldController', function() {
-
+.component('patchclamplistcomponent', {
+    templateUrl: '/app/templates/patch-clamp-list.tpl.html',
+    controller: 'PatchClampListController',
+    controllerAs: 'app',
+})
+.component('patchclampcomponent', {
+    templateUrl: '/app/templates/patch-clamp.tpl.html',
+    controller: 'PatchClampController',
+    controllerAs: 'app',
 });

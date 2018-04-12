@@ -1,21 +1,15 @@
-<!-- Container for sidebar and main content -->
 <div flex layout="row">
-
-    <!-- Sidebar -->
-    <md-sidenav md-is-locked-open="true" class="md-whiteframe-4dp">
-      <md-list>
-        <md-list-item ng-repeat="experiment in app.experiments | orderBy:'get_label()'">
-          <md-button ng-click="app.selectExperiment(experiment)" ng-class="{'selected' : experiment === app.selected }" md-truncate>
-            <small>{{experiment.get_label()}}</small>
-          </md-button>
-        </md-list-item>
-      </md-list>
-    </md-sidenav>
 
     <!-- Main content -->
     <md-content flex id="content">
 
-      <h2 class="md-display-1">Patch clamp experiment: {{app.stimulus_experiment.name}}</h2>
+      <div layout="row">
+        <div layout="column" flex=90>
+          <h2 class="md-headline">Patch clamp experiment</h2>
+          <h3 class="md-display-1">{{app.stimulus_experiment.name}}</h3>
+        </div>
+        <div layout-align="end"><img src="/app/images/patch-clamp.png"></div>
+      </div>  
 
       <md-list>
         <md-list-item layout="row" class="odd">

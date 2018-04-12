@@ -46,10 +46,13 @@ Author: Andrew P. Davison, UNIC, CNRS
         templateUrl: '/app/templates/home.tpl.html',
         controller: 'HomeController as app'
       })
-      .state('patch-clamp', {
+      .state('patch-clamp-list', {
         url: '/patch-clamp',
-        templateUrl: '/app/templates/patch-clamp.tpl.html',
-        controller: 'PatchClampController as app'
+        component: 'patchclamplistcomponent'
+      })
+      .state('patch-clamp-instance', {
+        url: '/patch-clamp/{instanceId}',
+        component: 'patchclampcomponent'
       })
       .state('sharp-electrode', {
         url: '/sharp-electrode',
