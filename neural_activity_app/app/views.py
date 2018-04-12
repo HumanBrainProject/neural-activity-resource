@@ -3,27 +3,25 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.views import APIView
-
-# from neo import io
-# import quantities as pq
-# import numpy as np
 from neo.io import get_io
-# import jsonpickle
-# import jsonpickle.ext.numpy as jsonpickle_numpy
-# import json
+# from neo import io
+from rest_framework.response import Response
+from rest_framework import status
 
-# r = io.AlphaOmegaIO(filename='File_AlphaOmega_2.map')
+# r = io.AlphaOmegaIO(filename='File_AlphaOmega_1.map')
 # block = r.read_block(lazy=False, cascade=True)
-block = get_io('File_AlphaOmega_1.map').read_block()
+# block = get_io('File_AlphaOmega_1.map').read_block()
 
 
 class Block(APIView): 
    
     def get(self, request, format=None, **kwargs):
-       
-        # filename = request.get('url')  ##url from collab and file name can be given from js. need to see if the url
-        # is temporary or not. if not, directly get url in backend and not in front.
-        # TO FILL
+        na_file = request.session['na_file']
+        try:
+            block = get_io(na_file).read_block()
+        except IOError:
+            return Response({'error': 'incorrect file type'}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+
         # read neo file from hd
         block_data = {'block': [{
             'annotations': block.annotations,
@@ -33,7 +31,6 @@ class Block(APIView):
             'file_origin': block.file_origin or "",
             # 'index': block.index,
             'name': block.name or "",
-            # 'name': block.name,
             'rec_datetime': block.rec_datetime,
             'segments': [
                 {
@@ -43,7 +40,7 @@ class Block(APIView):
                     # 'epochs': s.epochs,
                     # 'events': s.events,
                     # 'spiketrains': s.spiketrains,
-                    'spiketrains': [],
+                    # 'spiketrains': [],
                     'rec_datetime': s.rec_datetime,
                     # 'irregularlysampledsignals': s.irregularlysampledsignals,
                     # 'index': s.index,
@@ -61,7 +58,8 @@ class Block(APIView):
 class Segment(APIView): 
    
     def get(self, request, format=None, **kwargs):
-
+        na_file = request.session['na_file']
+        block = get_io(na_file).read_block()
         id_segment = int(request.GET['segment_id'])
         segment = block.segments[id_segment]
 
@@ -78,7 +76,7 @@ class Segment(APIView):
                     'description': segment.description or "",
                     'file_origin': segment.file_origin or "",
                     'annotations': segment.annotations,
-                    'spiketrains': segment.spiketrains,
+                    # 'spiketrains': segment.spiketrains,
                     'analogsignals': [{} for a in segment.analogsignals],
                     'as_prop': [{'size': e.size, 'name': e.name.decode('cp1252')} for e in segment.analogsignals]
                     }
@@ -89,7 +87,8 @@ class Segment(APIView):
 class AnalogSignal(APIView): 
    
     def get(self, request, format=None, **kwargs):
-        print(request.GET)
+        na_file = request.session['na_file']
+        block = get_io(na_file).read_block()
         id_segment = int(request.GET['segment_id'])
         id_analog_signal = int(request.GET['analog_signal_id'])
         segment = block.segments[id_segment]
@@ -109,7 +108,7 @@ class AnalogSignal(APIView):
         print("duration",analogsignal.duration)
         print("name", analogsignal.name)
         print("size", analogsignal.size)
-   
+
         # print('analogsignal', analogsignal[0], analogsignal[0].sampling_rate)
         # analog_signal = block.segments[id_segment].analogsignals[id_analog_signal]
         # print(analog_signal)
@@ -134,13 +133,11 @@ class AnalogSignal(APIView):
         return JsonResponse(graph_data)
 
 
-# def browse(request):
-#     """
-
 def home(request):
     """
     home page
     """
+    request.session['na_file'] = 'File_AlphaOmega_1.map'
     return render(request, 'home.html', {})
 
 
