@@ -96,6 +96,8 @@ angular.module('nar')
                     label = instance.data.name;
                 } else if (instance.data.hasOwnProperty('schema:name')) {
                     label = instance.data['schema:name'];
+                } else if (instance.data.hasOwnProperty('http://schema.org/name')) {
+                    label = instance.data['http://schema.org/name'];
                 } else if (instance.data.hasOwnProperty('familyName')) {
                     label = instance.data.givenName + " " + instance.data.familyName;
                 } else if (instance.data.hasOwnProperty('label')) {
@@ -162,7 +164,18 @@ angular.module('nar')
                     return instances_promise;
                 },
                 error);
-        }
+        };
+
+        Resource.get = function(id) {
+
+            return $http.get(id, config).then(
+                function(response) {
+                    return Instance(response);
+                },
+                error
+            );
+        };
+
         return Resource;
     };
 })

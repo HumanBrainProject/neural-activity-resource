@@ -76,6 +76,11 @@ Author: Andrew P. Davison, UNIC, CNRS
         templateUrl: '/app/templates/fMRI.tpl.html',
         controller: 'FMRIController as app'
       })
+      .state('datasets', {
+        url: '/datasets',
+        templateUrl: '/app/templates/datasets.tpl.html',
+        controller: 'DatasetController as app'
+      })
     $urlRouterProvider.otherwise("/");
   })
   .config(function(bbpOidcSessionProvider) {
