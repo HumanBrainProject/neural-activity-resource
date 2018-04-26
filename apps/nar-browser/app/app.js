@@ -92,4 +92,9 @@ Author: Andrew P. Davison, UNIC, CNRS
     // set to true if the app should ensure a valid token is present before displaying the page.
     bbpOidcSessionProvider.ensureToken(true)
   })
+  .config(function($mdThemingProvider) {
+    $mdThemingProvider.theme('default')
+      .primaryPalette('teal')
+      .accentPalette('orange');
+  })
 })();
