@@ -32,6 +32,22 @@ angular.module('nar')
         console.log("ERROR: ", response);
     };
 
+    // controller actions to login and logout
+    vm.handleLogin = function() {bbpOidcSession.login();}
+    vm.handleLogout = function() {bbpOidcSession.logout();}
+
+    // check that we have a valid token, otherwise log in.
+    $http.get("https://services.humanbrainproject.eu/idm/v1/api/user/me",
+              {"Authorization": "Bearer " + bbpOidcSession.token()}).then(
+        function(response) {
+            console.log(response.data.displayName);
+        },
+        function(err) {
+            console.log(err);
+            console.log("Logging in");
+            bbpOidcSession.login();
+        });
+
     var Experiments = KGResourceCount(base_url + "data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/");
     Experiments.count().then(
         function(count) {

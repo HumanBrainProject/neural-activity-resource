@@ -7,7 +7,11 @@
                     <span class="md-subhead">{{dataset.data["http://schema.org/description"]}}</span>
                 </md-card-title-text>
                 <md-card-title-media>
-                    <div class="md-media-sm card-media"></div>
+                    <div class="md-media-sm card-media">
+                        <a rel="license" href="{{dataset.license.link}}}">
+                            <img alt="{{dataset.license.name}}" style="border-width:0" src="{{dataset.license.icon}}" />
+                        </a>
+                    </div>
                 </md-card-title-media>
             </md-card-title>
             <md-card-content>
