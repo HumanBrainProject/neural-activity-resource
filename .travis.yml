@@ -1,0 +1,16 @@
+language: python
+python:
+  - "2.7"
+  - "3.6"
+# command to install dependencies
+install:
+  - wget https://github.com/HumanBrainProject/pyxus/archive/v0.3.2.zip
+  - unzip v0.3.2.zip
+  - ls pyxus-0.3.2/pyxus
+  - pip install -r pyxus-0.3.2/pyxus/requirements.txt
+  - pip install pyxus-0.3.2/pyxus
+  - pip install ./client
+  - pip install nose coverage
+# command to run tests
+script:
+  - nosetests --with-coverage --cover-package=nar --cover-html ./client
