@@ -29,11 +29,9 @@
         <md-list-item layout="row">
           <span flex="20">Patching performed by:</span>
           <div flex>
-            <ul>
-              <li ng-repeat="person in app.patching_activity.people">
-                {{person.givenName}} {{person.familyName}}
-              </li>
-            </ul>
+              <span ng-repeat="person in app.patching_activity.people">
+                {{person.givenName}} {{person.familyName}}   
+              </span>
           </div>
         </md-list-item>
         <md-list-item layout="row" class="even">
@@ -43,11 +41,9 @@
         <md-list-item layout="row">
           <span flex="20">Slicing performed by:</span>
           <div flex>
-              <ul>
-                <li ng-repeat="person in app.slicing_activity.people">
-                  {{person.givenName}} {{person.familyName}}
-                </li>
-              </ul>
+                <span ng-repeat="person in app.slicing_activity.people">
+                  {{person.givenName}} {{person.familyName}}   
+                </span>
             </div>
         </md-list-item>
         <md-list-item layout="row" class="even">
@@ -95,10 +91,16 @@
           <div flex><a href="{{app.subject.species['@id']}}" target="_blank">{{app.subject.species.label}}</a></div>
         </md-list-item>
         <md-list-item layout="row">
-            <span flex="20">Number of traces:</span>
+          <span flex="20">Holding potential</span>
+          <div flex>{{app.traces[0].tracegen.targetHoldingPotential.value}} {{app.traces[0].tracegen.targetHoldingPotential.label}}</div>
+        </md-list-item>
+        <!--
+        <md-list-item layout="row">
+            <span flex="20">Number of datafiles:</span>
             <div flex>{{app.traces.length}}</div>
           </md-list-item>
-          <md-list-item layout="row"  class="even">
+        -->
+        <md-list-item layout="row"  class="even">
               <span flex="20">Data files:</span>
               <div flex>
                 <ul>
@@ -108,7 +110,7 @@
                   </li>
                 </ul>
               </div>
-            </md-list-item>
+        </md-list-item>
       </md-list>
 
     </md-content>

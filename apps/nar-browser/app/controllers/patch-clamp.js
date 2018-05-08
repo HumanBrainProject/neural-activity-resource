@@ -271,6 +271,12 @@ angular.module('nar')
                 var data_files = new Set();
                 for (let trace of vm.traces) {
                     data_files.add(trace.data.distribution[0].downloadURL);
+                    $http.get(trace.data.qualifiedGeneration["@id"]).then(
+                        function(response) {
+                            trace.tracegen = response.data;
+                        },
+                        error
+                    )
                 }
                 vm.data_files = Array.from(data_files);
                 console.log(vm.data_files);
