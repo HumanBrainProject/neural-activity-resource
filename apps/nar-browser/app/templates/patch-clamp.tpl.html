@@ -94,13 +94,17 @@
           <span flex="20">Holding potential</span>
           <div flex>{{app.traces[0].tracegen.targetHoldingPotential.value}} {{app.traces[0].tracegen.targetHoldingPotential.label}}</div>
         </md-list-item>
+        <md-list-item layout="row" class="even">
+          <span flex="20">Chloride reversal potential:</span>
+          <div flex>{{app.patched_cell["nsg:chlorideReversalPotential"].value}} {{app.patched_cell["nsg:chlorideReversalPotential"].label}}</div>
+        </md-list-item>
         <!--
         <md-list-item layout="row">
             <span flex="20">Number of datafiles:</span>
             <div flex>{{app.traces.length}}</div>
           </md-list-item>
         -->
-        <md-list-item layout="row"  class="even">
+        <md-list-item layout="row">
               <span flex="20">Data files:</span>
               <div flex>
                 <ul>
