@@ -98,14 +98,36 @@ angular.module('nar')
             for (let dataset of datasets) {
                 dataset.traces = [];
                 getTraces(dataset);
-                $http.get(dataset.data["http://hbp.eu/minds#license"]["@id"]).then(
-                    function(response) {
-                        var license_name = response.data["http://schema.org/name"];
-                        dataset.license = license_map[license_name];
-                        dataset.license.name = license_name;
-                    },
-                    error
-                );
+                if (dataset.data["http://hbp.eu/minds#license"]) {
+                    $http.get(dataset.data["http://hbp.eu/minds#license"]["@id"]).then(
+                        function(response) {
+                            var license_name = response.data["http://schema.org/name"];
+                            dataset.license = license_map[license_name];
+                            dataset.license.name = license_name;
+                        },
+                        error
+                    );
+                };
+                if (dataset.data["http://hbp.eu/minds#owners"]) {
+                    if (Array.isArray(dataset.data["http://hbp.eu/minds#owners"])) {
+                        dataset.custodians = [];
+                        for (let owner of dataset.data["http://hbp.eu/minds#owners"]) {
+                            $http.get(owner["@id"]).then(
+                                function(response) {
+                                    dataset.custodians.push(response.data["http://schema.org/name"]);
+                                },
+                                error
+                        );
+                        }
+                    } else {
+                        $http.get(dataset.data["http://hbp.eu/minds#owners"]["@id"]).then(
+                            function(response) {
+                                dataset.custodians = response.data["http://schema.org/name"];
+                            },
+                            error
+                        );
+                    }   
+                }
             }
             vm.datasets = datasets;
             console.log(datasets);
