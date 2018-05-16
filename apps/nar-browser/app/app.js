@@ -59,8 +59,13 @@ Author: Andrew P. Davison, UNIC, CNRS
         url: '/patch-clamp/{instanceId}',
         component: 'patchclampcomponent'
       })
-      .state('sharp-electrode', {
+      .state('sharp-electrode-list', {
         url: '/sharp-electrode',
+        templateUrl: '/app/templates/sharp-electrode-list.tpl.html',
+        controller: 'SharpElectrodeController as app'
+      })
+      .state('sharp-electrode-instance', {
+        url: '/sharp-electrode/{instanceId}',
         templateUrl: '/app/templates/sharp-electrode.tpl.html',
         controller: 'SharpElectrodeController as app'
       })

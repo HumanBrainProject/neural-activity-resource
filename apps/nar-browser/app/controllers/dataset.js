@@ -59,17 +59,25 @@ angular.module('nar')
             }
         }).then(
             function(traces) {
-                //console.log(traces);
+                var patch_electrode_traces = [];
+                var sharp_electrode_traces = [];
                 for (let trace of traces) {
                     Experiments.get(trace.data.wasGeneratedBy["@id"]).then(
                         // todo: add caching to KGResource
                         function(expt) {
                             trace.experiment = expt;
+                            trace.method = expt.data["prov:used"]["@type"];
+                            if (trace.method.includes("nsg:PatchedCell")) {
+                                patch_electrode_traces.push(trace);
+                            } else {
+                                sharp_electrode_traces.push(trace);
+                            }
                         },
                         error
                     );
                 }
-                dataset.traces = traces;
+                dataset.patch_electrode_traces = patch_electrode_traces;
+                dataset.sharp_electrode_traces = sharp_electrode_traces;
             },
             error
         );

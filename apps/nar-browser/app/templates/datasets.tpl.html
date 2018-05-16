@@ -16,14 +16,23 @@
                 </md-card-title-media>
             </md-card-title>
             <md-card-content>
-                <md-list>
+                <md-list ng-show="dataset.patch_electrode_traces.length">
                     <md-subheader class="md-no-sticky">Patch clamp experiments</md-subheader>
-                    <md-list-item ng-repeat="trace in dataset.traces" 
+                    <md-list-item ng-repeat="trace in dataset.patch_electrode_traces | orderBy:'data.name'" 
                                     ui-sref="patch-clamp-instance({ instanceId: trace.experiment.path.uuid })" 
                                     ng-click="null">
                         {{trace.experiment.get_label()}}
                     </md-list-item>
                 </md-list>
+
+                <md-list ng-show="dataset.sharp_electrode_traces.length">
+                    <md-subheader class="md-no-sticky">Sharp electrode experiments</md-subheader>
+                    <md-list-item ng-repeat="trace in dataset.sharp_electrode_traces | orderBy:'data.name'" 
+                                    ui-sref="sharp-electrode-instance({ instanceId: trace.experiment.path.uuid })" 
+                                    ng-click="null">
+                        {{trace.experiment.get_label()}}
+                    </md-list-item>
+                    </md-list>
             </md-card-content>
             <md-card-actions layout="row" layout-align="end center">
             </md-card-actions>
