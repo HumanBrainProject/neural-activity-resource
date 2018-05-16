@@ -24,12 +24,16 @@ Author: Andrew P. Davison, UNIC, CNRS
   window.bbpConfig =  {
       api: {
           user: {
-              v0: "https://services.humanbrainproject.eu/oidc/v0/api"
+              v0: "https://services.humanbrainproject.eu/oidc/v0/api",
+              v1: "https://services.humanbrainproject.eu/idm/v1/api"
           }
       },
       auth: {
           url: "https://services.humanbrainproject.eu/oidc",
           clientId: "395947a2-16b5-4e04-9180-93088459a7f2"
+      },
+      oidc: {
+        debug: false
       }
   }
 
@@ -37,9 +41,9 @@ Author: Andrew P. Davison, UNIC, CNRS
     'bbpOidcClient',
     'ui.router',
     'ngMaterial',
-    'ngSanitize'
+    'ngSanitize',
+    'clb-identity'
   ])
-  .value('nexusBaseUrl', 'https://nexus.humanbrainproject.org/v0/')
   .config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
     .state('home', {

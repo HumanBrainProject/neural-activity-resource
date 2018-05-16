@@ -24,30 +24,32 @@ Author: Andrew P. Davison, UNIC, CNRS
 angular.module('nar')
 
 
-.controller('HomeController', function($location, $rootScope, KGResourceCount, bbpOidcSession, $http, nexusBaseUrl) {
+.controller('HomeController', function($location, $rootScope, KGResourceCount, 
+                                       $http, bbpOidcSession, NexusURL, clbUser) {
     var vm = this;
 
     var error = function(response) {
         console.log("ERROR: ", response);
     };
 
+    var nexusBaseUrl = NexusURL.get();
     console.log(nexusBaseUrl);
+    // console.log(bbpOidcSession.token());
 
-    // controller actions to login and logout
-    vm.handleLogin = function() {bbpOidcSession.login();}
-    vm.handleLogout = function() {bbpOidcSession.logout();}
+    // // controller actions to login and logout
+    // vm.handleLogin = function() {bbpOidcSession.login();}
+    // vm.handleLogout = function() {bbpOidcSession.logout();}
 
-    // check that we have a valid token, otherwise log in.
-    $http.get("https://services.humanbrainproject.eu/idm/v1/api/user/me",
-              {"Authorization": "Bearer " + bbpOidcSession.token()}).then(
-        function(response) {
-            console.log(response.data.displayName);
-        },
-        function(err) {
-            console.log(err);
-            console.log("Logging in");
-            bbpOidcSession.login();
-        });
+    // // check that we have a valid token, otherwise log in.
+    // clbUser.getCurrentUser().then(
+    //     function(user) {
+    //         console.log(user);
+    //     },
+    //     function(err) {
+    //         console.log(err);
+    //         console.log("Logging in");
+    //         bbpOidcSession.login();
+    //     });
 
     var Experiments = KGResourceCount(nexusBaseUrl + "data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/");
     Experiments.count().then(

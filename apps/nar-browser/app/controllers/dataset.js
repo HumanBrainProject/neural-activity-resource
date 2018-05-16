@@ -25,8 +25,9 @@ angular.module('nar')
 
 
 .controller('DatasetController', function($location, $rootScope, KGResource, 
-                                          bbpOidcSession, $http, nexusBaseUrl) {
+                                          bbpOidcSession, $http, NexusURL) {
     var vm = this;
+    var nexusBaseUrl = NexusURL.get();
     var Datasets = KGResource(nexusBaseUrl + "data/minds/core/dataset/v0.0.4");
     var Traces = KGResource(nexusBaseUrl + "data/neuralactivity/electrophysiology/trace/v0.1.0");
     var Experiments = KGResource(nexusBaseUrl + "data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0");

@@ -26,4 +26,6 @@ angular.module('nar')
 
 .controller('EEGController', function($location, $rootScope, KGResource, bbpOidcSession, $http, nexusBaseUrl) {
     var vm = this;
+    var nexusBaseUrl = NexusURL.get();
+
 });

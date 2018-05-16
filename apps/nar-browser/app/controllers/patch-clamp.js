@@ -23,16 +23,17 @@ Author: Andrew P. Davison, UNIC, CNRS
 
 angular.module('nar')
 
-.controller('PatchClampListController', function(KGResource, bbpOidcSession, $http, nexusBaseUrl) {      
+.controller('PatchClampListController', function(KGResource, bbpOidcSession, $http, NexusURL) {      
     var vm = this;
+    var nexusBaseUrl = NexusURL.get();
 
     var error = function(response) {
         console.log("ERROR: ", response);
     };
 
-    // controller actions to login and logout
-    vm.handleLogin = function() {bbpOidcSession.login();}
-    vm.handleLogout = function() {bbpOidcSession.logout();}
+    // // controller actions to login and logout
+    // vm.handleLogin = function() {bbpOidcSession.login();}
+    // vm.handleLogout = function() {bbpOidcSession.logout();}
 
     var config = {
         Authorization: "Bearer " + bbpOidcSession.token()
@@ -48,17 +49,18 @@ angular.module('nar')
     );
 })
 
-.controller('PatchClampController', function(KGResource, bbpOidcSession, $http, $stateParams) {
+.controller('PatchClampController', function(KGResource, bbpOidcSession, $http, $stateParams, NexusURL) {
         
     var vm = this;
+    var nexusBaseUrl = NexusURL.get();
 
     var error = function(response) {
         console.log("ERROR: ", response);
     };
 
-    // controller actions to login and logout
-    vm.handleLogin = function() {bbpOidcSession.login();}
-    vm.handleLogout = function() {bbpOidcSession.logout();}
+    // // controller actions to login and logout
+    // vm.handleLogin = function() {bbpOidcSession.login();}
+    // vm.handleLogout = function() {bbpOidcSession.logout();}
 
     //console.log(bbpOidcSession.token());
 

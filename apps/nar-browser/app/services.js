@@ -125,7 +125,7 @@ angular.module('nar')
         };
 
         Resource.query = function(filter) {
-            var resource_uri = collection_uri + "?deprecated=False";
+            var resource_uri = collection_uri + "?deprecated=False&size=50";
             if (filter) {
                 resource_uri += "&filter=" + encodeURIComponent(JSON.stringify(filter.filter)) + "&context=" + encodeURIComponent(JSON.stringify(filter['@context']));
                 console.log(resource_uri);
@@ -227,7 +227,9 @@ angular.module('nar')
     };
 })
 
-.service("KGIndex", function($http, PathHandler, bbpOidcSession, nexusBaseUrl) {
+.service("KGIndex", function($http, PathHandler, bbpOidcSession, NexusURL) {
+
+    var nexusBaseUrl = NexusURL.get();
 
     var error = function(response) {
         console.log(response);
@@ -300,5 +302,18 @@ angular.module('nar')
     };
 
     return KGIndex;
+})
+
+.service("NexusURL", function() {
+    var base_url = "https://nexus.humanbrainproject.org/v0/";
+    var NexusURL = {
+        set: function(url) {
+            base_url = url;
+        },
+        get: function() {
+            return base_url;
+        }
+    }
+    return NexusURL;
 })
 ;

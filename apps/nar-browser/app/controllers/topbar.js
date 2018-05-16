@@ -24,8 +24,26 @@ Author: Andrew P. Davison, UNIC, CNRS
 angular.module('nar')
 
 
-.controller('MEAController', function($location, $rootScope, KGResource, bbpOidcSession, $http, NexusURL) {
+.controller('TopBarController', function($state, bbpOidcSession, clbUser, NexusURL) {
     var vm = this;
-    var nexusBaseUrl = NexusURL.get();
+    vm.showIntegration = false;
+    vm.canAccessIntegration = false;
 
+    clbUser.isGroupMember("nexus-neuralactivity").then(
+        function(response) {
+            vm.canAccessIntegration = response;
+        },
+        function(err) {
+            bbpOidcSession.login();
+        });
+
+    vm.switch = function() {
+        if (vm.showIntegration) {
+            NexusURL.set('https://nexus-int.humanbrainproject.org/v0/');
+        } else {
+            NexusURL.set('https://nexus.humanbrainproject.org/v0/');
+        }
+        $state.reload();
+        console.log("switching");
+    }
 });

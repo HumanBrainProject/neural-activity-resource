@@ -24,6 +24,8 @@ Author: Andrew P. Davison, UNIC, CNRS
 angular.module('nar')
 
 
-.controller('SharpElectrodeController', function($location, $rootScope, KGResource, bbpOidcSession, $http, nexusBaseUrl) {
+.controller('SharpElectrodeController', function($location, $rootScope, KGResource, bbpOidcSession, $http, NexusURL) {
     var vm = this;
+    var nexusBaseUrl = NexusURL.get();
+
 });
