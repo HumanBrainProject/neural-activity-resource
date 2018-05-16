@@ -27,6 +27,7 @@ angular.module('nar')
 .controller('DatasetController', function($location, $rootScope, KGResource, 
                                           bbpOidcSession, $http, NexusURL) {
     var vm = this;
+
     var nexusBaseUrl = NexusURL.get();
     var Datasets = KGResource(nexusBaseUrl + "data/minds/core/dataset/v0.0.4");
     var Traces = KGResource(nexusBaseUrl + "data/neuralactivity/electrophysiology/trace/v0.1.0");
@@ -59,8 +60,6 @@ angular.module('nar')
             }
         }).then(
             function(traces) {
-                var patch_electrode_traces = [];
-                var sharp_electrode_traces = [];
                 for (let trace of traces) {
                     Experiments.get(trace.data.wasGeneratedBy["@id"]).then(
                         // todo: add caching to KGResource
@@ -68,24 +67,19 @@ angular.module('nar')
                             trace.experiment = expt;
                             trace.method = expt.data["prov:used"]["@type"];
                             if (trace.method.includes("nsg:PatchedCell")) {
-                                patch_electrode_traces.push(trace);
+                                dataset.patch_electrode_traces.push(trace);
                             } else {
-                                sharp_electrode_traces.push(trace);
+                                dataset.sharp_electrode_traces.push(trace);
                             }
                         },
                         error
                     );
                 }
-                dataset.patch_electrode_traces = patch_electrode_traces;
-                dataset.sharp_electrode_traces = sharp_electrode_traces;
+                dataset.dataLoaded = true;
             },
             error
         );
     };
-
-    vm.hello = function() {
-        return "Hello";
-    }
 
     Datasets.query(
         {
@@ -105,8 +99,6 @@ angular.module('nar')
     ).then(
         function(datasets) {
             for (let dataset of datasets) {
-                dataset.traces = [];
-                getTraces(dataset);
                 if (dataset.data["http://hbp.eu/minds#license"]) {
                     $http.get(dataset.data["http://hbp.eu/minds#license"]["@id"]).then(
                         function(response) {
@@ -137,11 +129,36 @@ angular.module('nar')
                         );
                     }   
                 }
+                dataset.patch_electrode_traces = [];
+                dataset.sharp_electrode_traces = [];
+                dataset.dataLoaded = false;
+                if (dataset.data["http://schema.org/description"]) {
+                    dataset.hasLongDescription = (dataset.data["http://schema.org/description"].length > 500);
+                } else {
+                    dataset.hasLongDescription = false;
+                }
+                vm.collapseDescription(dataset);
             }
             vm.datasets = datasets;
             console.log(datasets);
         },
         error
     );
+
+    vm.expandDescription = function(dataset) {
+        dataset.descriptionLimit = undefined;
+    }
+    vm.collapseDescription = function(dataset) {
+        dataset.descriptionLimit = 500;
+    }
+    vm.expandData = function(dataset) {
+        if (!dataset.dataLoaded) {
+            getTraces(dataset);
+        }
+        dataset.dataExpanded = true;
+    }
+    vm.collapseData = function(dataset) {
+        dataset.dataExpanded = false;
+    }
 
 });
