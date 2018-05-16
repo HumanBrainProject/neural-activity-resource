@@ -24,7 +24,6 @@ Author: Andrew P. Davison, UNIC, CNRS
 angular.module('nar')
 
 
-.controller('MEAController', function($location, $rootScope, KGResource, bbpOidcSession, $http) {
+.controller('MEAController', function($location, $rootScope, KGResource, bbpOidcSession, $http, nexusBaseUrl) {
     var vm = this;
-    var base_url = "https://nexus-int.humanbrainproject.org/v0/";
 });

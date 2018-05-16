@@ -24,12 +24,12 @@ Author: Andrew P. Davison, UNIC, CNRS
 angular.module('nar')
 
 
-.controller('DatasetController', function($location, $rootScope, KGResource, bbpOidcSession, $http) {
+.controller('DatasetController', function($location, $rootScope, KGResource, 
+                                          bbpOidcSession, $http, nexusBaseUrl) {
     var vm = this;
-    var base_url = "https://nexus-int.humanbrainproject.org/v0/";
-    var Datasets = KGResource(base_url + "data/minds/core/dataset/v0.0.4");
-    var Traces = KGResource(base_url + "data/neuralactivity/electrophysiology/trace/v0.1.0");
-    var Experiments = KGResource(base_url + "data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0");
+    var Datasets = KGResource(nexusBaseUrl + "data/minds/core/dataset/v0.0.4");
+    var Traces = KGResource(nexusBaseUrl + "data/neuralactivity/electrophysiology/trace/v0.1.0");
+    var Experiments = KGResource(nexusBaseUrl + "data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0");
 
     var error = function(response) {
         console.log("ERROR: ", response);

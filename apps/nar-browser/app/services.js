@@ -227,7 +227,7 @@ angular.module('nar')
     };
 })
 
-.service("KGIndex", function($http, PathHandler, bbpOidcSession) {
+.service("KGIndex", function($http, PathHandler, bbpOidcSession, nexusBaseUrl) {
 
     var error = function(response) {
         console.log(response);
@@ -239,7 +239,7 @@ angular.module('nar')
 
     var KGIndex = {
         organizations: function() {
-            return $http.get('https://nexus-int.humanbrainproject.org/v0/organizations/', config).then(
+            return $http.get(nexusBaseUrl + 'organizations/', config).then(
                 function(response) {
                     var orgs = [];
                     for (let result of response.data.results) {
@@ -250,7 +250,7 @@ angular.module('nar')
                 error);
         },
         domains: function() {  // todo: allow to restrict to a specific organization
-            return $http.get('https://nexus-int.humanbrainproject.org/v0/domains/', config).then(
+            return $http.get(nexusBaseUrl + 'domains/', config).then(
                 function(response) {
                     var domains = [];
                     for (let result of response.data.results) {
@@ -281,7 +281,7 @@ angular.module('nar')
                     error);
             };
 
-            return get_next('https://nexus-int.humanbrainproject.org/v0/schemas/?from=0&size=50', []);
+            return get_next(nexusBaseUrl + 'schemas/?from=0&size=50', []);
         },
         paths: function() {
             var extract_paths = function(schema_uris) {

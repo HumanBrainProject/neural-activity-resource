@@ -24,13 +24,14 @@ Author: Andrew P. Davison, UNIC, CNRS
 angular.module('nar')
 
 
-.controller('HomeController', function($location, $rootScope, KGResourceCount, bbpOidcSession, $http) {
+.controller('HomeController', function($location, $rootScope, KGResourceCount, bbpOidcSession, $http, nexusBaseUrl) {
     var vm = this;
-    var base_url = "https://nexus-int.humanbrainproject.org/v0/";
 
     var error = function(response) {
         console.log("ERROR: ", response);
     };
+
+    console.log(nexusBaseUrl);
 
     // controller actions to login and logout
     vm.handleLogin = function() {bbpOidcSession.login();}
@@ -48,7 +49,7 @@ angular.module('nar')
             bbpOidcSession.login();
         });
 
-    var Experiments = KGResourceCount(base_url + "data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/");
+    var Experiments = KGResourceCount(nexusBaseUrl + "data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/");
     Experiments.count().then(
         function(count) {
             //console.log(count);

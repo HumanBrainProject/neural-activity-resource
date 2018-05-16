@@ -39,6 +39,7 @@ Author: Andrew P. Davison, UNIC, CNRS
     'ngMaterial',
     'ngSanitize'
   ])
+  .value('nexusBaseUrl', 'https://nexus.humanbrainproject.org/v0/')
   .config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
     .state('home', {
