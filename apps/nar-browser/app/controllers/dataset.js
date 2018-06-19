@@ -111,6 +111,6 @@ angular.module('nar')
             console.log(datasets);
         },
         error
-    );
+    ).catch(console.error);
 
 });
