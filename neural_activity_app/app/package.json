@@ -1,8 +1,24 @@
 {
   "name": "neural-activity-visualizer",
   "version": "0.0.1",
-  "description": "",
   "license": "Apache License version 2.0",
-  "dependencies": {
-  }
+  "dependencies": {},
+  "main": "app.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aopy/neural-activity-visualizer.git"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/aopy/neural-activity-visualizer/issues"
+  },
+  "homepage": "https://github.com/aopy/neural-activity-visualizer#readme",
+  "description": ""
 }
