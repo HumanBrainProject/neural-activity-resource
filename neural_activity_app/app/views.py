@@ -7,6 +7,7 @@ from neo.io import get_io
 # from neo import io
 from rest_framework.response import Response
 from rest_framework import status
+import urllib
 
 # r = io.AlphaOmegaIO(filename='File_AlphaOmega_1.map')
 # block = r.read_block(lazy=False, cascade=True)
@@ -115,7 +116,10 @@ class AnalogSignal(APIView):
   
         analog_signal_values = []
         for item in analogsignal:
-            analog_signal_values.append(item.item())
+            try:  # TODO find a better solution
+                analog_signal_values.append(item.item())
+            except ValueError:
+                analog_signal_values.append(item[1].item())
 
         analog_signal_times= []
         for item in analogsignal.times:
@@ -137,7 +141,18 @@ def home(request):
     """
     home page
     """
-    request.session['na_file'] = 'File_AlphaOmega_1.map'
+    url = request.GET.get('url')
+    print("URL " + url)
+
+    if url:
+        # get url of neo file
+        url = url.rsplit('.', 1)[0] + '.h5'  # TODO update for other file extensions
+        filename = 'neo_file.h5'
+        urllib.urlretrieve(url, filename)
+        request.session['na_file'] = filename
+    else:
+        request.session['na_file'] = 'File_AlphaOmega_1.map'
+
     return render(request, 'home.html', {})
 
 
