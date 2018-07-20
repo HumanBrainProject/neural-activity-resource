@@ -1,0 +1,161 @@
+// Colors
+//
+// This is the list of existing color variable as well
+// as what they should be used for. If you add a new variable
+// you should add an entry in this form. Variable containing
+// color information should be prefixed with '''bbp-color-'''.
+//
+// Styleguide 1.1
+
+
+// Naming
+//
+// When namming the colors try to use semantic name rather than colors,
+// for example '''warning''' instead of '''yellow'''
+// because a restyling might change the color completly.
+//
+// You can however use relative color informations like '''light''' or
+// '''darker''' to indicate various version of the same style. If the color
+// targets a specific usage you can use the postfix '''-bg''' for background,
+// '''-border''' for border or '''-text''' for text.
+//
+// Styleguide 1.1.1
+
+// Variables
+//
+// <table class="table table-striped">
+//     <thead>
+//         <th>Variable Name</th>
+//         <th>Usage</th>
+//     </thead>
+//     <tbody>
+//         <tr>
+//             <td>`$hbp-common-asset-path`</td>
+//             <td>Set this path to point to the angular-hbp-common/dist/assets folder.</td>
+//         </tr>
+//         <tr>
+//             <td>`$hbp-brand-height`</td>
+//             <td>Set the line-height of the brand and derive the diamond space from this.</td>
+//         </tr>
+//         <tr>
+//             <td>`$hbp-common-navbar-height`</td>
+//             <td>Defines the height of the navbar.</td>
+//         </tr>
+//     </tbody>
+//  </table>
+//
+// Styleguide 1.2
+$hbp-common-asset-path: './assets' !default;
+$hbp-brand-height: 100px;
+
+$hbp-common-navbar-height: 50px;
+$hbp-common-navbar-gray-text: #AAA;
+$hbp-common-navbar-gray-text-highlight: #CCC;
+
+// Color List
+//
+// <table class="table table-striped">
+//     <thead>
+//         <th>Variable Name</th>
+//         <th>Color</th>
+//         <th>Usage</th>
+//     </thead>
+//     <tbody>
+//         <tr>
+//             <td>$hbp-header-bg</td>
+//             <td><span class="colorbox" style="background: #CCC"></span> #CCC</td>
+//             <td>It's the background color for the portal's header.</td>
+//         </tr>
+//         <tr>
+//             <td>$hbp-color-toolbar-bg</td>
+//             <td><span class="colorbox" style="background: #DDD"></span> #DDD</td>
+//             <td>Background color for the toolbars.</td>
+//         </tr>
+//         <tr>
+//             <td>$hbp-color-toolbar-border</td>
+//             <td><span class="colorbox" style="background: #AAA"></span> #AAA</td>
+//             <td>Border color for the toolbars</td>
+//         </tr>
+//         <tr>
+//             <td>$hbp-color-border</td>
+//             <td><span class="colorbox" style="background: #CCC"></span> #CCC</td>
+//             <td>Generic border color for element that are not toolbars, typically with a background set to $body-bg</td>
+//         </tr>
+//         <tr>
+//             <td>$hbp-color-border-dark:</td>
+//             <td><span class="colorbox" style="background: #888"></span> #888</td>
+//             <td>Generic darker border when more contrast is needed.</td>
+//         </tr>
+//         <tr>
+//             <td>$hbp-color-grey-text</td>
+//             <td><span class="colorbox" style="background: #888"></span> #888</td>
+//             <td>Some lighter text, for example when corresponding content is disabled.</td>
+//         </tr>
+//         <tr>
+//             <td>$hpb-color-transparent-white:</td>
+//             <td><span class="colorbox" style="background: rgba(255, 255, 255, 0.7)"></span> rgba(255, 255, 255, 0.7)</td>
+//             <td>A slightly transparent white.</td>
+//         </tr>
+//         <tr>
+//             <td>$hbp-color-highlight:</td>
+//             <td><span class="colorbox" style="background: #FFE"></span> #FFE</td>
+//             <td>An highlight color, typically for background that are set to $body-bg when not highlighted.</td>
+//         </tr>
+//         <tr>
+//             <td>$hbp-color-highlight-light</td>
+//             <td><span class="colorbox" style="background: #F5F5F5"></span> #F5F5F5</td>
+//             <td>A more subtle highlight color when even less contrast is needed.</td>
+//         </tr>
+//         <tr>
+//             <td>$hbp-color-highlight-glow</td>
+//             <td><span class="colorbox" style="background: rgba(102, 175, 233, 0.6)"></span> rgba(102, 175, 233, 0.6)</td>
+//             <td>A glow color for highlight.</td>
+//         </tr>
+//         <tr>
+//             <td>$hbp-color-shadow-dark:</td>
+//             <td><span class="colorbox" style="background: rgba(0,0,0,0.6)"></span> rgba(0,0,0,0.6)</td>
+//             <td>A very contrasted shadow.</td>
+//         </tr>
+//         <tr>
+//             <td>$hbp-color-shadow</td>
+//             <td><span class="colorbox" style="background: rgba(0,0,0,0.2)"></span> rgba(0,0,0,0.2)</td>
+//             <td>Generic shadow.</td>
+//         </tr>
+//         <tr>
+//             <td>$hbp-color-shadow-light</td>
+//             <td><span class="colorbox" style="background: rgba(0,0,0,0.1)"></span> rgba(0,0,0,0.1)</td>
+//             <td>A light shadow.</td>
+//         </tr>
+//         <tr>
+//             <td>$hbp-color-shadow-lighter</td>
+//             <td><span class="colorbox" style="background: rgba(0, 0, 0, 0.075)"></span> rgba(0, 0, 0, 0.075)</td>
+//             <td>A very sublte shadow.</td>
+//         </tr>
+//     </tbody>
+// </table>
+//
+// Styleguide 1.2.2
+$hbp-header-bg:             #CCC;
+
+$hbp-color-grey-text:       #888;
+$hbp-color-grey-light-text: #BBB;
+
+$hbp-color-toolbar-bg:      #DDD;
+$hbp-color-toolbar-border:  #AAA;
+$hbp-color-border:          #CCC;
+$hbp-color-border-dark:     #888;
+
+$hpb-color-transparent-white: rgba(255, 255, 255, 0.7);
+$hbp-color-highlight:         #FFE;
+$hbp-color-highlight-light:   #F5F5F5;
+$hbp-color-highlight-glow:    rgba(102, 175, 233, 0.6);
+$hbp-color-shadow-dark:       rgba(0,0,0,0.6);
+$hbp-color-shadow:            rgba(0,0,0,0.2);
+$hbp-color-shadow-light:      rgba(0,0,0,0.1);
+$hbp-color-shadow-lighter:    rgba(0, 0, 0, 0.075);
+
+$white: #FFFFFF;
+$hbp-color-pms185: #004a97;  // blue: PMS 2945 rgb(0,74,151)
+$hbp-color-pms3265: #00c4b3; // cyan: PMS 3265 rgb(0,196,179)
+$hbp-color-pms7548: #ffc700; // yellow: PMS 7548 rgb(255,199,0)
+$hbp-color-pms2945: #eb0029; // red: PMS 185 rgb(235,0,41)

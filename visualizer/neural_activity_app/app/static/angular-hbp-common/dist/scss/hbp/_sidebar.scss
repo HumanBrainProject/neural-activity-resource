@@ -1,0 +1,109 @@
+// Sidebar
+//
+// A full height side bar with nested panels. The sidebar doesn't have a default width so you have to specify one, possibly with bootstrap grid system.
+// Each panel's content will by default have a max.height of 215px.
+//
+// Markup: <div class="example-box">
+//   <div class="hbp-sidebar {$modifiers}">
+//     <div class="hbp-sidebar-panel">
+//         <div class="hbp-sidebar-title">A title</div>
+//         <div class="hbp-sidebar-panel-content"><p>Some content for the panel in a paragraph</p></div>
+//     </div>
+//     <div class="hbp-sidebar-panel">
+//         <div class="hbp-sidebar-title">Button group are allowed
+//            <div class="btn-group"><div class="btn btn-default btn-xs">but only xs</div></div>
+//         </div>
+//         <div class="hbp-sidebar-panel-content"><p>Or some content in a div</p></div>
+//     </div>
+//     <div class="hbp-sidebar-panel">
+//         <div class="hbp-sidebar-title">Another title</div>
+//         <div class="hbp-sidebar-panel-content">
+//            <ul><li>you</li><li>can have</li><li>list too</li></ul>
+//         </div>
+//     </div>
+//     <div class="hbp-sidebar-panel">
+//         <div class="hbp-sidebar-title">Another title</div>
+//         <div class="hbp-sidebar-panel-content">
+//            <dl class="dl-horizontal"><dt>As are</dt><dd>desciption list</dd></dl>
+//            <dl class="dl-horizontal"><dt>and table list</dt><dd>too</dd></dl>
+//         </div>
+//     </div>
+//   </div>
+// </div>
+//
+// .hbp-sidebar-yscroll - Full height with a y-scroller if necessary.
+//
+// Styleguide 2.5
+
+$hbp-color-sidebar-lightest-gray: #fcfcfc;
+
+.hbp-sidebar {
+    padding: 0;
+
+    // modifier to make the sidebar 100% height
+    // and add scrolling when necessary.
+    &.hbp-sidebar-yscroll {
+        height: 100%;
+        overflow-y: auto;
+    }
+
+    .hbp-sidebar-panel {
+        border-bottom: 1px solid $hbp-color-border;
+
+        .hbp-sidebar-title {
+            border-bottom: 1px solid $hbp-color-border;
+            display: block;
+            padding: 0 $padding-base-horizontal;
+            height: $hbp-toolbar-height;
+            line-height: $hbp-toolbar-height;
+            cursor: default;
+
+            font-weight: bold;
+            background-color: $hbp-color-sidebar-lightest-gray;
+
+            & > .btn-group,
+            & > .btn {
+                margin-top: $input-height-small - $hbp-toolbar-height / 2;
+                float: right;
+            }
+        }
+
+        .hbp-sidebar-panel-content {
+            & > ul,
+            & > dl {
+                padding-top:  $padding-base-vertical;
+                overflow: hidden;
+            }
+            & > .hbp-list-tableview {
+                padding-top: 0;
+            }
+
+            & > div,
+            & > p {
+                padding: $padding-base-vertical $padding-base-horizontal;
+            }
+
+            // We explicitly support 1 level of nesting
+            .hbp-sidebar-panel {
+
+                padding: 0;
+
+                &:last-child {
+                    border-bottom: none;
+                }
+
+                .hbp-sidebar-title {
+                    height: $line-height-computed + 10;
+                    line-height: $line-height-computed + 10;
+                    background-color:  white;
+                    font-weight: normal;
+                    padding-left: 2*$padding-base-horizontal;
+                }
+
+                .hbp-sidebar-panel-content li {
+                    padding-left: 3*$padding-base-horizontal;
+                }
+            }
+        }
+    }
+}

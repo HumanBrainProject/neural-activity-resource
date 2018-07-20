@@ -1,0 +1,309 @@
+// HBP Navbar /!\ Deprecated
+//
+// This is a custom bootstrap navbar to use at the top of the site. It is made of three parts:
+//
+// 1. The common site selector with class `.hbp-site-selector`
+// 2. The current site's menu with class `.hbp-secondary-navbar`
+// 3. The user widget with class `.hbp-user-widget`
+//
+// The following example is missing Twitter bootstrap javascript lib or
+// angular code to work properly.
+//
+// Markup: <nav class="navbar navbar-fixed-top navbar-hbp" role="navigation">
+//        <div class="container-fluid">
+//            <div class="navbar-header">
+//                <button type="button" class="navbar-toggle">
+//                    <span class="sr-only">Toggle navigation</span>
+//                    <span class="icon-bar"></span>
+//                    <span class="icon-bar"></span>
+//                    <span class="icon-bar"></span>
+//                </button>
+//                <a class="navbar-brand hbp-site-current" href="#">
+//                  Styleguide
+//                </a>
+//            </div>
+//            <div class="collapse navbar-collapse" style="height: 0px;">
+//                <ul class="hbp-site-selector nav navbar-nav hidden-xs">
+//                    <li class="dropdown">
+//                        <a href class="dropdown-toggle">
+//                            <span class="visible-xs-inline">Websites</span>
+//                            <i class="glyphicon glyphicon-chevron-down"></i>
+//                        </a>
+//                        <ul class="dropdown-menu">
+//                            <li ng-repeat="site in sites" ng-class="{ active: isActiveSite(site) }"><a href="{{site.url}}">{{site.name}}</a></li>
+//                        </ul>
+//                    </li>
+//                </ul>
+//                <ul class="hbp-secondary-navbar nav navbar-nav">
+//                    <li><a href="#">Actions</a></li>
+//                    <li><a ui-sref="browse" ui-sref-active="active" href="#/projects">Browser</a></li>
+//                    <li><a href="#">Tools</a></li>
+//                    <li><a ui-sref="job-manager" ui-sref-active="active" href="#/job-manager">Jobs <bbp-job-badge><span class="badge badge-hbp badge-hbp-done">0</span></bbp-job-badge></a></li>
+//                </ul>
+//                <ul class="hbp-user-widget nav navbar-nav navbar-right">
+//                    <li>
+//                        <a href class="dropdown-toggle">
+//                            User Name <i class="glyphicon glyphicon-cog"></i>
+//                        </a>
+//                        <div class="dropdown-menu">
+//                            <ul>
+//                                <li><a href>Logout</a></li>
+//                            </ul>
+//                        </div>
+//                    </li>
+//                </ul>
+//            </div>
+//        </div>
+//    </nav>
+//
+// Styleguide 2.2
+
+// Style common to both views, normal and mini
+.navbar-hbp {
+    color: $gray-lighter;
+    //background-color: $gray-darker;
+    background: url($hbp-common-asset-path + '/hbp_rainbow_black.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+
+    height: $hbp-common-navbar-height;
+    min-height: $hbp-common-navbar-height;
+    line-height: $hbp-common-navbar-height;
+    margin-bottom: 0;
+    border: 0;
+
+    text-transform: uppercase;
+    font-size: 0.9em;
+
+    z-index: 2;
+
+    &::before {
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 4px;
+        background: url($hbp-common-asset-path + '/hbp_rainbow.png');
+        background-size: 100% auto;
+        background-repeat: repeat-y no-repeat;
+    }
+
+    &::after {
+        display: block;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 5px;
+        background: $brand-success;
+
+        border-bottom: 1px solid $hbp-color-toolbar-border;
+    }
+
+    a {
+        color: $hbp-common-navbar-gray-text;
+        &:hover {
+            color: $hbp-common-navbar-gray-text-highlight;
+        }
+    }
+
+    .icon-bar {
+        background-color: $gray-light;
+    }
+
+    .navbar-header {
+        /* Degrade the logo behind the scene
+           on screen where (width < 490px) */
+        overflow: hidden;
+        height: $hbp-common-navbar-height;
+        /*---~---*/
+    }
+
+    .navbar-brand {
+        font-size: inherit;
+        font-weight: bold;
+        color: $gray-lighter;
+    }
+
+    .navbar-nav > li > a:hover,
+    .navbar-nav > li > a:focus {
+        background: none;
+        color: $hbp-common-navbar-gray-text-highlight;
+    }
+
+    .navbar-nav > .open > a {
+        background: none;
+        color: $hbp-common-navbar-gray-text;
+    }
+
+    .navbar-nav > li > a.active {
+        background: none;
+        font-weight: bold;
+        color: $gray-lighter;
+    }
+
+    &.navbar-fixed-top {
+        border-width: 0px 0px 0px;
+    }
+
+
+    .hbp-site-current {
+        font-weight: bold;
+        color: $gray-lighter;
+        margin-right: 12px;
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
+
+    .dropdown-menu {
+        background: transparentize($gray-darker, 0.1);
+        font-size: 1em;
+
+        > .dropdown-header {
+            padding: $nav-link-padding;
+        }
+
+        > li > a {
+            color: $hbp-common-navbar-gray-text;
+            padding: $nav-link-padding;
+        }
+
+        > li > a:hover {
+            color: $hbp-common-navbar-gray-text-highlight;
+            background: transparentize($gray-light, 0.5);
+        }
+
+        > li.active > a {
+            color: $gray-lighter;
+        }
+
+        > li.active > a:hover {
+            background: $brand-primary;
+        }
+    }
+}
+
+
+// Normal view
+@media (min-width: $screen-sm-min) {
+    .navbar-hbp {
+        .navbar-collapse {
+            line-height: $line-height-base;
+        }
+
+        li .dropdown-menu {
+            margin-top: -5px;
+            border-top: 5px solid darken($brand-success, 20);
+        }
+
+        .navbar-nav > li > a,
+        .navbar-nav > li > div {
+            padding-top: 0;
+            padding-bottom: 0;
+            line-height: $hbp-common-navbar-height;
+            vertical-align: middle;
+        }
+
+        .hbp-site-selector {
+            line-height:  $hbp-common-navbar-height;
+            margin-right: 36px;
+
+            .dropdown-toggle i{
+                padding: 5px;
+                padding-left: 4px;
+                transition: border 200ms;
+                border: 1px solid rgba(0,0,0,0);
+                border-radius: $border-radius-base;
+                margin-left: -(2*$padding-base-horizontal);
+            }
+
+            &:hover .dropdown-toggle i,
+            .open .dropdown-toggle i {
+                border: 1px solid $gray-light;
+            }
+
+            .dropdown-menu {
+                margin-left: -15px; //from $nav-link-padding
+            }
+
+            & > li > a {
+                padding-left: 0px;
+            }
+
+            & > .dropdown > a {
+                min-width: 0;
+            }
+        }
+
+        li.dropdown > .dropdown-toggle {
+            margin-top: 0;
+            line-height: $hbp-common-navbar-height;
+        }
+
+        .navbar-brand.hbp-logo {
+            margin-left: -10px;
+        }
+
+        .glyphicon-chevron-down {
+            vertical-align: -1px;
+        }
+    }
+}
+
+// mini view
+@media (max-width: $screen-xs-max) {
+    .navbar-hbp {
+        .hbp-logo {
+            background-image: url($hbp-common-asset-path + '/hbp_logo_horizontal.png');
+            width: 383px;
+        }
+
+        .navbar-collapse {
+            background: transparentize($gray-darker, 0.05);
+            max-height: none;
+        }
+
+        .navbar-toggle {
+            margin-top: 10px;
+            height: $hbp-common-navbar-height - 20px;
+            border-color: darken($gray-light, 15%);
+            padding: 0 6px;
+        }
+        .navbar-toggle:hover,
+        .navbar-toggle:focus {
+            background-color: $gray-dark;
+        }
+
+        .navbar-nav > li > a:hover,
+        .navbar-nav > li > a:focus {
+            background: transparentize($gray-light, 0.8);
+        }
+
+        .hbp-site-selector,
+        .hbp-secondary-navbar {
+            border-bottom: 1px solid darken($gray-light, 15%);
+        }
+
+        .hbp-site-selector {
+            line-height: $line-height-base;
+
+            .dropdown-toggle i {
+                border: 0;
+                padding: 5px;
+                border-radius: $border-radius-base;
+            }
+
+            &:hover {
+                background: transparentize($gray-light, 0.8);
+            }
+
+            li > a:hover,
+            li > a:focus {
+                background: none;
+            }
+        }
+    }
+}

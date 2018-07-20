@@ -1,0 +1,59 @@
+@import 'hbp/_variables';
+@import 'hbp/_bootstrap_variables';
+
+$icon-font-path: $hbp-common-asset-path+'/' !default;
+@import 'theme';
+
+.hbp-logo {
+    background-image: url($hbp-common-asset-path+'/hbp_logo_vertical.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.hbp-generated-icon {
+  display: inline-block;
+}
+
+// SASS Variables
+//
+// The variable described here are defined in _variable.scss.
+// All variable are global and should be created in this file.
+// Please try to factor out existing code to not duplicate
+// variable content.
+//
+// To avoid any conflict with third parties SASS variable our
+// variables should be prefixed with ```bbp-```.
+// Before creating a new variable please check that there are not a
+// corresponding Bootstrap variable covering the same useage that
+// exists, most on them will be reproduce in this document but you
+// can look at the
+// [official documentation](http://getbootstrap.com/customize)
+// if some are missing.
+//
+// Styleguide 1.
+
+// Standard Components
+//
+// Styleguide 2.
+@import 'hbp/common_navbar';
+@import 'hbp/toolbar';
+@import 'hbp/sidebar';
+@import 'hbp/list_tableview';
+@import 'hbp/brand';
+@import 'hbp/card';
+
+// Typography
+//
+// 'Didot' is used for titles and 'Gotham' for regular texts.
+//
+// Styleguide 3.
+@import 'hbp/type';
+
+// Forms
+//
+// Forms are using Bootstrap form as a default.
+// http://getbootstrap.com/css/#forms
+//
+// Styleguide 4.
+@import 'hbp/form';

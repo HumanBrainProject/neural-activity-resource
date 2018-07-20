@@ -1,0 +1,59 @@
+<div ng-controller="BlockViewCtrl">
+
+    <body>
+        <h1 align=center>Block </h1>
+
+        <panel class=description-panel>
+
+            <table class="table-create">
+                <thead>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>name: </td>
+                        <td>{{data_block.name}}</td>
+                    </tr>
+                    <tr>
+                        <td>description: </td>
+                        <td>{{data_block.description}}</td>
+                    </tr>
+                    <tr>
+                        <td>file origin: </td>
+                        <td>{{data_block.file_origin}}</td>
+                    </tr>
+                    <tr>
+                        <td>name: </td>
+                        <td>{{data_block.name}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </panel>
+        <br>
+        <h4>Annotations</h4>
+        <table class="table">
+            <tbody>
+                <tr ng-repeat="(key,value) in data_block.annotations">
+                    <th scope="row">{{key}}</th><td>{{value}}</td>
+            </tbody>
+        </table>
+        <br>
+        <br>
+        <h2>Segments Array</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="width: 15%">Id</th><td>Name</td>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr class=tr-clickable ng-repeat="(s_key,segment) in data_block.segments" ng-click="showSegment(s_key)" ui-sref="file_view.segment({segment_id:{{s_key}}})" ui-sref-active="active">
+                    <th style="width: 15%">{{s_key}}</th><td>{{segment.name}}</td>
+                    <td style="width: 15%">
+
+                    </td>
+            </tbody>
+        </table>
+
+    </body>
+</div>

@@ -1,0 +1,42 @@
+$usercard-padding: $grid-gutter-width/2 !default;
+
+.hbp-usercard {
+  min-height: 80px;
+  position: relative;
+
+  .hbp-usercard-pix {
+    height: 100%;
+    left: 0;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+
+    .hbp-generated-icon {
+      display: inline-block;
+      height: 80px;
+      width: 80px;
+    }
+
+    > img {
+      border: 0;
+      height: auto;
+      vertical-align: middle;
+      width: 80px;
+    }
+  }
+
+  .hbp-usercard-name {
+    margin-bottom: $padding-base-vertical;
+    margin-top: $usercard-padding;
+  }
+
+  .hbp-usercard-name,
+  .hbp-usercard-institution,
+  .hbp-usercard-contact {
+    margin-left: 80 + $usercard-padding;
+  }
+
+  .hbp-usercard-contact-item {
+    padding-right: $usercard-padding;
+  }
+}

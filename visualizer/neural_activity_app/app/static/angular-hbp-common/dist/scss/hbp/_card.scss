@@ -1,0 +1,25 @@
+.hbp-card {
+  border-radius: 2px;
+  margin-bottom: $line-height-computed;
+}
+
+.hbp-card-default {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  padding: $padding-base-vertical $padding-base-horizontal;
+  background: rgb(255, 255, 255);
+}
+
+.hbp-card-heading {
+  padding: 10px 0;
+}
+
+.hbp-card-title {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: ceil(($font-size-base * 1.5));
+  color: inherit;
+}
+
+.hbp-card-body {
+    overflow: hidden;
+}

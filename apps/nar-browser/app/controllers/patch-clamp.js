@@ -49,7 +49,7 @@ angular.module('nar')
     );
 })
 
-.controller('PatchClampController', function(KGResource, bbpOidcSession, $http, $stateParams) {
+.controller('PatchClampController', function(KGResource, bbpOidcSession, $http, $stateParams, $scope) {
         
     var vm = this;
     var base_url = "https://nexus-int.humanbrainproject.org/v0/";
@@ -93,7 +93,12 @@ angular.module('nar')
         } else {
             return false;
         }
-    }
+    };
+
+    $scope.openVisualizer = function(url) {
+        // update url for deployment
+        window.open("https://127.0.0.1:8000/?url="+ url, "_blank");
+    };
 
     vm.relativePath = function(url) {
         if (url.startsWith('http')) {

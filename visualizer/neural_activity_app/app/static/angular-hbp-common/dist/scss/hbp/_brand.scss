@@ -1,0 +1,53 @@
+// Brand
+//
+// The HBP brand should always be displayed with the Diamond and associated text.
+// It is preferred to use real text for the title instead of an image regrouping
+// the diamond and the text. This way, it can be selected and copy pasted as
+// a real title in browser.
+//
+// Markup: <h1 class="hbp-brand {$modifiers}"><span class="hbp-brand-logo"></span>Human Brain Project</h1>
+//
+// .hbp-brand-inline-block - The brand is an inline-block instead of a block
+// .hbp-brand-vertical - Display the text below the diamond
+// .hbp-brand-vertical.hbp-brand-inline-block - The brand is vertically displayed as an inline-block
+//
+// Styleguide 2.1
+.hbp-brand {
+    font-family: "Didot", serif;
+    font-weight: normal;
+    line-height: $hbp-brand-height;
+    font-size: $hbp-brand-height * 0.42;
+    white-space: nowrap;
+
+    &.hbp-brand-inline-block {
+        display: inline-block;
+    }
+
+    &.hbp-brand-vertical {
+
+        font-size: $hbp-brand-height * 0.18;
+        text-align: center;
+        line-height: $hbp-brand-height * 0.20;
+
+        .hbp-brand-logo {
+            display: block;
+            width: 100%;
+            margin-bottom: $hbp-brand-height * 0.1;
+            background-position: top center;
+            background-size: contain;
+        }
+    }
+
+    .hbp-brand-logo {
+        display: inline-block;
+        width: $hbp-brand-height;
+        height: $hbp-brand-height;
+        vertical-align: middle;
+        margin-right: $hbp-brand-height * 0.1;
+
+        background-image: url($hbp-common-asset-path+'/hbp_diamond.png');
+        background-size: 90%;
+        background-repeat: no-repeat;
+        background-position: top left;
+    }
+}

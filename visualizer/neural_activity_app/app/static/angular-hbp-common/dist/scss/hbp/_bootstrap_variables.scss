@@ -1,0 +1,150 @@
+// Important Bootstrap Variables
+//
+// Those variables from Bootstrap should be used every possible time.
+//
+// Styleguide 1.3
+
+// Components
+//
+// Define common padding and border radius sizes and more.
+// Values based on 14px text and 1.428 line-height (~20px to start).
+//
+// ```
+// $padding-base-vertical:     6px;
+// $padding-base-horizontal:   12px;
+//
+// $padding-large-vertical:    10px;
+// $padding-large-horizontal:  16px;
+//
+// $padding-small-vertical:    5px;
+// $padding-small-horizontal:  10px;
+//
+// $padding-xs-vertical:       1px;
+// $padding-xs-horizontal:     5px;
+//
+// $line-height-large:         1.33;
+// $line-height-small:         1.5;
+//
+// $border-radius-base:        4px;
+// $border-radius-large:       6px;
+// $border-radius-small:       3px;
+// ```
+//
+// Styleguide 1.3.1
+
+// Grid
+//
+// Padding between columns. Gets divided in half for the left and right.
+// ```
+// $grid-gutter-width:         30px;
+// ```
+//
+// Styleguide 1.3.2
+
+
+$navbar-default-link-hover-bg: $hbp-color-highlight-light !default;
+
+$nav-link-padding: 6px 15px 3px 15px !default;
+
+$brand-primary: $hbp-color-pms185 !default; // PMS 185 rgb(0,74,151)
+$brand-success: $hbp-color-pms3265 !default; // PMS 3265 rgb(0,196,179)
+$brand-info: lighten($hbp-color-pms185, 15%) !default;
+$brand-warning: $hbp-color-pms7548 !default; // PMS 7548 rgb(255,199,0)
+$brand-danger: $hbp-color-pms2945 !default; // PMS 2945 rgb(235,0,41)
+
+// Bootstrap Color Variables
+//
+// Since we use sass bootstrap we inherit from thier variables. Amongst them are a few that define color. Here is a list of them followed by their custom value if we modifed them (see: <a href="http://getbootstrap.com/customize/#colors">Bootstrap's documentation</a>).</p>
+//
+// <table class="table table-striped">
+//     <thead>
+//         <th>Variable Name</th>
+//         <th>Color</th>
+//         <th>Usage</th>
+//         <th>Customized Value</th>
+//     </thead>
+//     <tbody>
+//         <tr>
+//             <td>$gray-darker</td>
+//             <td>lighten(#000, 13.5%)</td>
+//             <td></td>
+//             <td></td>
+//         </tr>
+//         <tr>
+//             <td>$gray-dark</td>
+//             <td>lighten(#000, 20%)</td>
+//             <td>$text-color</td>
+//             <td></td>
+//         </tr>
+//         <tr>
+//             <td>$gray</td>
+//             <td>lighten(#000, 33.5%)</td>
+//             <td></td>
+//             <td></td>
+//         </tr>
+//         <tr>
+//             <td>$gray-light</td>
+//             <td>lighten(#000, 60%)</td>
+//             <td></td>
+//             <td></td>
+//         </tr>
+//         <tr>
+//             <td>$gray-lighter</td>
+//             <td>lighten(#000, 93.5%)</td>
+//             <td></td>
+//             <td></td>
+//         </tr>
+//         <tr>
+//             <td>$brand-primary</td>
+//             <td><span class="colorbox" style="background: #428bca"></span> #428bca</td>
+//             <td>$link-color</td>
+//             <td></td>
+//         </tr>
+//         <tr>
+//             <td>$brand-success</td>
+//             <td><span class="colorbox" style="background: #5cb85c"></span> #5cb85c</td>
+//             <td></td>
+//             <td></td>
+//         </tr>
+//         <tr>
+//             <td>$brand-info</td>
+//             <td><span class="colorbox" style="background: #5bc0de"></span> #5bc0de</td>
+//             <td></td>
+//             <td></td>
+//         </tr>
+//         <tr>
+//             <td>$brand-warning</td>
+//             <td><span class="colorbox" style="background: #f0ad4e"></span> #f0ad4e</td>
+//             <td></td>
+//             <td></td>
+//         </tr>
+//         <tr>
+//             <td>$brand-danger</td>
+//             <td><span class="colorbox" style="background: #d9534f"></span> #d9534f</td>
+//             <td></td>
+//             <td></td>
+//         </tr>
+//         <tr>
+//             <td>$body-bg</td>
+//             <td><span class="colorbox" style="background: #fff"></span> #fff</td>
+//             <td></td>
+//             <td></td>
+//         </tr>
+//         <tr>
+//             <td>$link-hover-color</td>
+//             <td>darken($link-color, 15%)</td>
+//             <td></td>
+//             <td></td>
+//         </tr>
+//     </tbody>
+// </table>
+//
+// Styleguide 1.3.3
+
+$font-size-base: 14px !default;
+$font-size-h1: floor(($font-size-base * 2.6)) !default;
+$font-size-h2: floor(($font-size-base * 2.2)) !default;
+$font-size-h3: ceil(($font-size-base * 1.8)) !default;
+$font-size-h4: ceil(($font-size-base * 1.5)) !default;
+$font-size-h5: ceil(($font-size-base * 1.15)) !default;
+$font-size-h6: $font-size-base !default;

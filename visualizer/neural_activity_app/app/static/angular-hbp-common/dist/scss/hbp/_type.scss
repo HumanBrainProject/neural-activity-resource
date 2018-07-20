@@ -1,0 +1,270 @@
+@font-face {
+  font-family: 'Didot';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Didot Regular'), local('Didot Regular'), url($hbp-common-asset-path+'/Didot.otf') format('opentype');
+}
+
+// Thin -> 100
+@font-face {
+  font-family: 'Gotham';
+  font-style: normal;
+  font-weight: 100;
+  src: local('Gotham Thin'), local('Gotham Thin'), url($hbp-common-asset-path+'/Gotham-Thin.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Gotham';
+  font-style: italic;
+  font-weight: 100;
+  src: local('Gotham Thin Italic'), local('Gotham Thin Italic'), url($hbp-common-asset-path+'/Gotham-ThinItalic.otf') format('opentype');
+}
+
+// XLight -> 200
+@font-face {
+  font-family: 'Gotham';
+  font-style: normal;
+  font-weight: 200;
+  src: local('Gotham Extra Light'), local('Gotham Extra Light'), url($hbp-common-asset-path+'/Gotham-XLight.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Gotham';
+  font-style: italic;
+  font-weight: 200;
+  src: local('Gotham Extra Light Italic'), local('Gotham Extra Light Italic'), url($hbp-common-asset-path+'/Gotham-XLightItalic.otf') format('opentype');
+}
+
+// Light -> 300
+@font-face {
+  font-family: 'Gotham';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Gotham Light'), local('Gotham Light'), url($hbp-common-asset-path+'/Gotham-Light.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Gotham';
+  font-style: italic;
+  font-weight: 300;
+  src: local('Gotham Light Italic'), local('Gotham Light Italic'), url($hbp-common-asset-path+'/Gotham-LightItalic.otf') format('opentype');
+}
+
+// Book -> 400
+@font-face {
+  font-family: 'Gotham';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Gotham Book'), local('Gotham Book'), url($hbp-common-asset-path+'/Gotham-Book.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Gotham';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Gotham Book Italic'), local('Gotham Book Italic'), url($hbp-common-asset-path+'/Gotham-BookItalic.otf') format('opentype');
+}
+
+// Medium -> 600
+@font-face {
+  font-family: 'Gotham';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Gotham Medium'), local('Gotham Medium'), url($hbp-common-asset-path+'/Gotham-Medium.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Gotham';
+  font-style: italic;
+  font-weight: 600;
+  src: local('Gotham Medium Italic'), local('Gotham Medium Italic'), url($hbp-common-asset-path+'/Gotham-MediumItalic.otf') format('opentype');
+}
+
+// Bold -> 700
+@font-face {
+  font-family: 'Gotham';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Gotham Bold'), local('Gotham Bold'), url($hbp-common-asset-path+'/Gotham-Bold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Gotham';
+  font-style: italic;
+  font-weight: 700;
+  src: local('Gotham Bold Italic'), local('Gotham Bold Italic'), url($hbp-common-asset-path+'/Gotham-BoldItalic.otf') format('opentype');
+}
+
+// Black -> 800
+@font-face {
+  font-family: 'Gotham';
+  font-style: normal;
+  font-weight: 800;
+  src: local('Gotham Black'), local('Gotham Black'), url($hbp-common-asset-path+'/Gotham-Black.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Gotham';
+  font-style: italic;
+  font-weight: 800;
+  src: local('Gotham Black Italic'), local('Gotham Black Italic'), url($hbp-common-asset-path+'/Gotham-BlackItalic.otf') format('opentype');
+}
+
+// Ultra -> 900
+@font-face {
+  font-family: 'Gotham';
+  font-style: normal;
+  font-weight: 900;
+  src: local('Gotham Ultra'), local('Gotham Ultra'), url($hbp-common-asset-path+'/Gotham-Ultra.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Gotham';
+  font-style: italic;
+  font-weight: 900;
+  src: local('Gotham Ultra Italic'), local('Gotham Ultra Italic'), url($hbp-common-asset-path+'/Gotham-UltraItalic.otf') format('opentype');
+}
+
+
+// Standard DOM Element
+//
+// The following section presents the standard HTML elements and how they
+// are styled by default.
+//
+// Styleguide 3.1
+
+// Text effects and Paragraphs
+//
+// Markup: <strong>Lorem ipsum dolor sit amet</strong>, consectetur adipiscing elit. <em>Nunc consequat imperdiet</em> sem sed vulputate. Cras a erat ut sapien aliquet volutpat volutpat sit amet lectus. Fusce nec euismod diam. Nulla adipiscing aliquam aliquet. Sed dapibus faucibus ipsum, vitae scelerisque quam mollis a. In in eleifend enim. Etiam pretium hendrerit imperdiet. Fusce tincidunt mauris tortor, dictum gravida quam dignissim id. Suspendisse fringilla volutpat risus, et vulputate mi tempor et. Vivamus et rhoncus massa, sed adipiscing dui. Quisque porta velit non sapien interdum, sed blandit est mattis.
+// <p>Donec euismod sapien ut nibh blandit, sed egestas purus porttitor. Nam sit amet justo id dolor tempor mollis fringilla vel lacus. Vestibulum vulputate congue viverra. Praesent nibh dui, cursus ac nisi sed, commodo interdum tellus. Donec pellentesque augue ac placerat vulputate. Sed sagittis eu erat quis varius. Donec at pharetra dolor. Donec ultricies mauris vitae feugiat pulvinar. Nullam eget viverra nisi. Donec semper lobortis nunc, non tempus leo rhoncus nec. Duis ut lacinia nisi. Integer semper lorem id mollis vehicula.</p>
+// <p>Vivamus ut tellus a elit dignissim pulvinar. Morbi hendrerit massa felis, cursus egestas nulla porta non. Nulla facilisi. Donec lobortis eu metus nec blandit. Donec dignissim eget orci et porttitor. Aenean et lorem orci. Aenean blandit metus nunc, at viverra nisi scelerisque et. Phasellus eu risus vel nisl pellentesque varius. Etiam in diam dolor.</p>
+// <p>Cras ac ligula magna. Donec vitae porttitor mi. Proin laoreet tristique libero, in ultricies leo. Maecenas eleifend, erat ut suscipit egestas, ligula purus ultrices eros, nec venenatis arcu ipsum non nisi. Integer et nunc nec nisl semper fringilla eu non dolor. Curabitur enim justo, vestibulum ac nulla at, tempus ultrices libero. Cras suscipit ipsum ac faucibus varius. Proin eleifend eu diam at aliquam. Phasellus cursus lacus ac nibh lacinia, eget ornare velit fermentum.</p>
+// <p>Quisque feugiat, enim ac ultricies interdum, lacus lectus pulvinar elit, ut tempus mi diam eu justo. Vivamus faucibus ornare arcu, non suscipit arcu sollicitudin non. Cras lacinia nec metus id egestas. Nunc blandit eros eget ligula lacinia imperdiet. Duis condimentum tellus nec tortor mollis rhoncus vitae vel sem. Sed libero nisi, luctus at mattis non, varius at ipsum. Mauris aliquet erat in nisl pulvinar, in varius est egestas. In id ultricies nibh. Maecenas sed purus mauris. Aenean massa lacus, bibendum ac risus et, dignissim pharetra nisi. Maecenas ullamcorper gravida rhoncus. Suspendisse egestas libero eget imperdiet malesuada.</p>
+//
+// Styleguide 3.1.1
+body {
+    font-family: 'Gotham', sans-serif;
+}
+
+// Headings
+//
+// Markup: <h1>Heading 1</h1>
+// <h2>Heading 2</h2>
+// <h3>Heading 3</h3>
+// <h4>Heading 4</h4>
+// <h5>Heading 5</h5>
+// <h6>Heading 6</h6>
+// <p>Body text</p>
+//
+// Styleguide 3.1.2
+h1, h2 {
+    font-family: 'Didot', serif;
+
+    .btn,
+    .btn-group {
+        font-family: 'Gotham', sans-serif;
+    }
+}
+
+h3, h4, h5, h6 {
+    font-family: 'Gotham', sans-serif;
+}
+
+h3 {
+    font-size: 23px;
+}
+
+h4 {
+    font-size: 18px;
+}
+
+h5 {
+    font-size: 16px;
+}
+
+// Lists
+//
+// Styleguide 3.1.3
+
+// Unordered List
+//
+// Markup:<ul>
+//   <li>Lorem Ipsum</li>
+//   <li>Dolor Sit Amet</li>
+//   <ul>What will happen now?
+//     <li>Sub-item A</li>
+//     <li>Sub-item B</li>
+//   </ul>
+//   <li>Vivamus ut tellus a elit dignissim pulvinar. Morbi hendrerit massa felis, cursus egestas nulla porta non.</li>
+// </ul>
+//
+// Styleguide 3.1.3.1
+
+// Ordered List
+//
+// Markup:<ol>
+//   <li>Lorem Ipsum</li>
+//   <li>Dolor Sit Amet</li>
+//   <ol>What will happen now?
+//     <li>Sub-item A</li>
+//     <li>Sub-item B</li>
+//   </ol>
+//   <li>Vivamus ut tellus a elit dignissim pulvinar. Morbi hendrerit massa felis, cursus egestas nulla porta non.</li>
+// </ol>
+//
+// Styleguide 3.1.3.2
+
+// Definition List
+//
+// Some modifiers on top of the Bootstrap naked &lt;dl>.
+//
+// Markup: <dl class="{$modifiers}">
+//   <dt>Task</dt>
+//   <dd>Some task</dd>
+//   <dt>Author</dt>
+//   <dd>John Doe</dd>
+//   <dt>Created At</dt>
+//   <dd>2014-07-16 16:00:00</dd>
+// </dl>
+//
+// .dl-inline - inline definitions
+// .dl-horizontal - horizontal dl (from Bootstrap)
+//
+// Styleguide 3.1.3.3
+.dl-inline {
+    dt {
+        // This has to be inline rather than inline block for the
+        // line-break hack to work.
+        display: inline;
+
+        &:after {
+            content: ': ';
+        }
+        &:first-child:before {
+            content: none;
+        }
+        &:before {
+            content: '\A';
+            white-space: pre;
+        }
+    }
+
+    dd {
+        display: inline-block;
+    }
+}
+
+// Font Weight
+//
+// For the text body the whole range of font weight from 100 to 900 can be used, except for 500.
+//
+// Markup: <p style="font-weight: 100">font weight = 100</p>
+// <p style="font-weight: 200">font weight = 200</p>
+// <p style="font-weight: 300">font weight = 300</p>
+// <p style="font-weight: 400">font weight = 400</p>
+// <p style="font-weight: 600">font weight = 600</p>
+// <p style="font-weight: 700">font weight = 700</p>
+// <p style="font-weight: 800">font weight = 800</p>
+// <p style="font-weight: 900">font weight = 900</p>
+//
+// Styleguide 3.1.4

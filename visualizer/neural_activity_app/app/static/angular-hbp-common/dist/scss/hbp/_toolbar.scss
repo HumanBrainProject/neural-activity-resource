@@ -1,0 +1,180 @@
+// Toolbar
+//
+// A toolbar can hold two kind of elements:
+//
+// 1. at most one `.hbp-toolbar-label` that will typically contain some
+//    description of the content bellow the toolbar. If the content of the
+//    label is too long an ellipsis will be added.
+// 2. some `.hbp-toolbar-action` that will be clickable button.
+//    By default 5 buttons are allowed before the label and 5 after but
+//    this can be changed with the variables `$hbp-toolbar-button-count`.
+//    It can apply to a `<a>` or to any element with `<a>` as a child.
+//
+// ### Usage Examples
+//
+// <div class="hbp-toolbar">
+//      <div class="hbp-toolbar-label">Sed facilisis, arcu at tempus condimentum, dui mi dignissim velit, at aliquam enim velit in sapien. Nunc consequat placerat enim sit amet dignissim.</div>
+// </div>
+// <br>
+//
+// <div class="hbp-toolbar">
+//      <div class="hbp-toolbar-action"><i class="glyphicon glyphicon-music"></i></div>
+//      <div class="hbp-toolbar-label">Sed facilisis, arcu at tempus condimentum, dui mi dignissim velit, at aliquam enim velit in sapien. Nunc consequat placerat enim sit amet dignissim.</div>
+// </div>
+// <br>
+//
+// <div class="hbp-toolbar">
+//      <div class="hbp-toolbar-action"><i class="glyphicon glyphicon-music"></i></div>
+//      <div class="hbp-toolbar-label">Sed facilisis, arcu at tempus condimentum, dui mi dignissim velit, at aliquam enim velit in sapien. Nunc consequat placerat enim sit amet dignissim.</div>
+//      <div class="hbp-toolbar-action"><i class="glyphicon glyphicon-heart"></i></div>
+// </div>
+// <br>
+//
+// <div class="hbp-toolbar">
+//      <div class="hbp-toolbar-action"><i class="glyphicon glyphicon-music"></i></div>
+//      <div class="hbp-toolbar-action"><i class="glyphicon glyphicon-heart"></i></div>
+//      <div class="hbp-toolbar-action"><i class="glyphicon glyphicon-envelope"></i></div>
+//      <div class="hbp-toolbar-action"><i class="glyphicon glyphicon-glass"></i></div>
+//      <div class="hbp-toolbar-action"><i class="glyphicon glyphicon-star"></i></div>
+//      <div class="hbp-toolbar-label">Sed facilisis, arcu at tempus condimentum, dui mi dignissim velit, at aliquam enim velit in sapien. Nunc consequat placerat enim sit amet dignissim.</div>
+// </div>
+// <br>
+//
+// <div class="hbp-toolbar">
+//      <div class="hbp-toolbar-label">Sed facilisis, arcu at tempus condimentum, dui mi dignissim velit, at aliquam enim velit in sapien. Nunc consequat placerat enim sit amet dignissim.</div>
+//      <div class="hbp-toolbar-action"><i class="glyphicon glyphicon-music"></i></div>
+//      <div class="hbp-toolbar-action"><i class="glyphicon glyphicon-heart"></i></div>
+//      <div class="hbp-toolbar-action"><i class="glyphicon glyphicon-envelope"></i></div>
+//      <div class="hbp-toolbar-action"><i class="glyphicon glyphicon-glass"></i></div>
+//      <div class="hbp-toolbar-action"><i class="glyphicon glyphicon-star"></i></div>
+// </div>
+// <br>
+//
+// Markup: <div class="hbp-toolbar">
+//      <div class="hbp-toolbar-action"><i class="glyphicon glyphicon-music"></i></div>
+//      <div class="hbp-toolbar-action"><i class="glyphicon glyphicon-heart"></i></div>
+//      <div class="hbp-toolbar-action"><i class="glyphicon glyphicon-envelope"></i></div>
+//      <div class="hbp-toolbar-label">Sed facilisis, arcu at tempus condimentum, dui mi dignissim velit, at aliquam enim velit in sapien. Nunc consequat placerat enim sit amet dignissim.</div>
+//      <div class="hbp-toolbar-action"><i class="glyphicon glyphicon-music"></i></div>
+//      <div class="hbp-toolbar-action"><i class="glyphicon glyphicon-heart"></i></div>
+//      <div class="hbp-toolbar-action"><i class="glyphicon glyphicon-envelope"></i></div>
+//      <div class="hbp-toolbar-action"><i class="glyphicon glyphicon-glass"></i></div>
+//      <div class="hbp-toolbar-action"><i class="glyphicon glyphicon-star"></i></div>
+// </div>
+// <br>
+//
+// Styleguide 2.3
+
+$hbp-toolbar-height: $line-height-computed + ($padding-large-vertical * 2) + 2;
+$hbp-toolbar-button-count: 5;
+
+.hbp-toolbar {
+    height: $hbp-toolbar-height;
+    line-height: $hbp-toolbar-height;
+    border-bottom: 1px solid $hbp-color-toolbar-border;
+    background: $hbp-color-toolbar-bg;
+    overflow: visible;
+}
+
+// Toolbar (expanded in bootstrap column)
+//
+// If you load a toolbar inside a column, you might want to expand it over the
+// column gutters. You can use `.hbp-toolbar-expand` class decorator.
+//
+// Markup: <div class="container-fluid">
+//   <div class="row">
+//     <div class="col-sm-6">
+//       <div class="hbp-toolbar hbp-toolbar-expand">
+//         <div class="hbp-toolbar-action"><i class="glyphicon glyphicon-music"></i></div>
+//         <div class="hbp-toolbar-label">Sed facilisis, arcu at tempus condimentum, dui mi dignissim velit, at aliquam enim velit in sapien. Nunc consequat placerat enim sit amet dignissim.</div>
+//         <div class="hbp-toolbar-action"><i class="glyphicon glyphicon-heart"></i></div>
+//       </div>
+//       <h2>Some content</h2>
+//       <p>blah blah blah.</p>
+//     </div>
+//     <div class="col-sm-6">
+//       <div class="hbp-toolbar hbp-toolbar-expand">
+//         <div class="hbp-toolbar-action"><i class="glyphicon glyphicon-music"></i></div>
+//         <div class="hbp-toolbar-label">Sed facilisis, arcu at tempus condimentum, dui mi dignissim velit, at aliquam enim velit in sapien. Nunc consequat placerat enim sit amet dignissim.</div>
+//         <div class="hbp-toolbar-action"><i class="glyphicon glyphicon-heart"></i></div>
+//       </div>
+//       <h2>Some content</h2>
+//       <p>blah blah blah.</p>
+//     </div>
+//   </div>
+// </div>
+//
+// Styleguide 2.3.1
+.hbp-toolbar-expand {
+    margin-left: -$grid-gutter-width/2;
+    margin-right: -$grid-gutter-width/2;
+}
+
+.hbp-toolbar-action {
+    float: left;
+
+    height: $hbp-toolbar-height;
+    width: $hbp-toolbar-height;
+
+    padding: 0;
+
+    line-height: $hbp-toolbar-height;
+    text-align: center;
+    cursor: pointer;
+
+    border-right: 1px solid $hbp-color-toolbar-border;
+
+    &:hover {
+        box-shadow: inset 0 0 20px $hbp-color-shadow;
+    }
+}
+.hbp-toolbar-action a {
+    display: block;
+    cursor: pointer;
+}
+.hbp-toolbar-action li {
+    text-align: left;
+}
+.hbp-toolbar-label ~ .hbp-toolbar-action {
+    border-right: 0;
+    border-left: 1px solid $hbp-color-toolbar-border;
+}
+
+.hbp-toolbar-label {
+    float: left;
+    padding-left: $padding-base-horizontal;
+    padding-right: $padding-base-horizontal/2;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &:nth-child(1) {
+        /* If label is the first child, use half column gutter padding */
+        padding-left: $grid-gutter-width/2;
+    }
+
+    @for $i from 1 through $hbp-toolbar-button-count + 1 {
+        @for $j from 1 through $hbp-toolbar-button-count + 1 {
+            &:nth-child(#{$i}):nth-last-child(#{$j}) {
+                width: calc(100% - #{($i + $j - 2) * $hbp-toolbar-height});
+            }
+        }
+    }
+}
+
+.hbp-toolbar-label .breadcrumb {
+    float: left;
+    padding: 0;
+    margin: 0;
+
+    height: 100%;
+
+    border-radius: 0;
+    background: none;
+
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

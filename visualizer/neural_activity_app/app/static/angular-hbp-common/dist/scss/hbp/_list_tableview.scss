@@ -1,0 +1,262 @@
+// Lists
+//
+// Styleguide 2.4
+
+$hbp-list-tableview-cell-height: $line-height-computed + 2*$table-cell-padding;
+$hbp-list-tableview-entry-background: $hpb-color-transparent-white;
+
+
+// Table View
+//
+// Styleguide 2.4.1
+
+// Simple Tableview
+//
+// The lower limit of the table view is a fixed height constrained unstyled list.
+//
+// Markup: <ul class="hbp-list-tableview {$modifiers}">
+//     <li class="hbp-list-tableview-entry">First Item</li>
+//     <li class="hbp-list-tableview-entry">Second Item</li>
+//     <li class="hbp-list-tableview-entry">Third Item</li>
+//     <li class="hbp-list-tableview-entry hbp-list-tableview-entry-selected">Fourth Item</li>
+// </ul>
+//
+// .hbp-list-tableview-selectable - Selectable Table View
+//
+// Styleguide 2.4.1.1
+
+// Tableview with heading
+//
+// Markup: <ul class="hbp-list-tableview {$modifiers}">
+//     <li>
+//        <div class="hbp-list-tableview-heading">Title</div>
+//        <div class="hbp-list-tableview-entry">First Item</div>
+//        <div class="hbp-list-tableview-entry">Second Item</div>
+//     </li>
+//     <li class="hbp-list-tableview-heading">Title</li>
+//     <li class="hbp-list-tableview-entry">Third Item</li>
+//     <li class="hbp-list-tableview-entry hbp-list-tableview-entry-selected">Fourth Item</li>
+// </ul>
+//
+// .hbp-list-tableview-selectable - Selectable Table View
+//
+// Styleguide 2.4.1.2
+
+ul.hbp-list-tableview {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+    .hbp-list-tableview-heading {
+        margin: 0;
+        padding-left: $padding-base-horizontal;
+        padding-right: $padding-base-horizontal;
+        font-weight: bold;
+    }
+
+    .hbp-list-tableview-entry {
+        margin: 0;
+        padding-left: $padding-base-horizontal;
+        padding-right: $padding-base-horizontal;
+    }
+}
+
+// Multi Column Table View
+//
+// Render a table view with over and active state.
+//
+// Markup: <div class="container-fluid hbp-list-tableview {$modifiers}">
+//   <div class="row hbp-list-tableview-header">
+//       <!-- Sorted Column -->
+//       <div class="col-xs-8 hbp-list-tableview-th">Name <span class="glyphicon glyphicon-sort-by-attributes"></span></div>
+//       <div class="col-xs-2 hbp-list-tableview-th">Created At</div>
+//       <div class="col-xs-2 hbp-list-tableview-th">Created By</div>
+//   </div>
+//   <div class="row hbp-list-tableview-body">
+//       <div class="hbp-list-tableview-entry">
+//           <div class="col-xs-8 hbp-list-tableview-td">README.md</div>
+//           <div class="col-xs-2 hbp-list-tableview-td">2012-08-23 10:32</div>
+//           <div class="col-xs-2 hbp-list-tableview-td">John Doe</div>
+//       </div>
+//       <!-- Selected Item -->
+//       <div class="hbp-list-tableview-entry hbp-list-tableview-entry-selected">
+//           <div class="col-xs-8 hbp-list-tableview-td">index.html</div>
+//           <div class="col-xs-2 hbp-list-tableview-td">2012-08-22 9:43</div>
+//           <div class="col-xs-2 hbp-list-tableview-td">John Doe</div>
+//       </div>
+//       <div class="hbp-list-tableview-entry">
+//           <div class="col-xs-8 hbp-list-tableview-td">index.html</div>
+//           <div class="col-xs-2 hbp-list-tableview-td">2012-08-22 9:43</div>
+//           <div class="col-xs-2 hbp-list-tableview-td">John Doe</div>
+//       </div>
+//   </div>
+// </div>
+//
+// .hbp-list-tableview-selectable - Selectable Table View.
+// .hbp-list-tableview-orderable - Orderable Table View
+//
+// Styleguide 2.4.1.3
+
+
+.hbp-list-tableview {
+    .dropdown-menu {
+        text-align: left;
+    }
+    position: relative;
+}
+.dropdown > .hbp-list-tableview {
+    position: absolute;
+}
+
+.hbp-list-tableview-header {
+
+    border-bottom: 1px solid $hbp-color-toolbar-border;
+    background-color: $hbp-color-toolbar-bg;
+    text-shadow: $body-bg 1px 1px 1px;
+    padding: $table-cell-padding 0;
+
+    position: absolute;
+    top: 0;
+    left: $grid-gutter-width/2;
+    right: $grid-gutter-width/2;
+
+    height: $hbp-list-tableview-cell-height;
+
+    line-height: $line-height-base;
+
+    .hbp-list-tableview-th {
+        overflow: hidden;
+        height: $hbp-list-tableview-cell-height;
+    }
+
+    .glyphicon-sort-by-attributes, .glyphicon-sort-by-attributes-alt {
+        display: none;
+    }
+
+    z-index: 2;
+}
+.hbp-list-tableview-body {
+    padding-top: $hbp-list-tableview-cell-height;
+    z-index: 1;
+
+    .hbp-list-tableview-entry, .hbp-list-tableview-heading {
+        border-bottom: 1px solid $hbp-color-toolbar-bg;
+    }
+}
+.hbp-list-tableview-entry, .hbp-list-tableview-heading {
+    padding: $padding-base-vertical 0;
+
+    background-color: $hbp-list-tableview-entry-background;
+
+    cursor: default;
+
+    &::before,
+    &::after {
+        content: " ";
+        display: table;
+    }
+    &::after {
+        clear: both;
+    }
+}
+
+.hbp-list-tableview-heading {
+    border-top: 1px solid $hbp-color-toolbar-bg;
+
+    &:first-of-type {
+        border-top: none;
+    }
+    &:last-of-type {
+        border-top: none;
+    }
+}
+
+.hbp-list-tableview-entry-actions {
+    margin-top: 10px;
+    margin-left: 26px;
+}
+.hbp-list-tableview-description {
+    text-align: left;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.hbp-list-tableview-loadmore {
+    text-align: center;
+    color: $hbp-color-grey-text;
+    cursor: pointer;
+    padding-top: 10px;
+    padding-bottom: 30px;
+    background-color: $hbp-list-tableview-entry-background;
+}
+.hbp-list-tableview-empty {
+    text-align: center;
+    color: $hbp-color-grey-text;
+    padding: 10px 0;
+    cursor: default;
+}
+.bbp-browser-detail-clipboard-actions {
+    background-color: $hbp-color-shadow-dark;
+    height: calc(100% + 60px);
+    position: absolute;
+    top: -60px;
+    left: 0;
+    width: 100%;
+    padding: 50px;
+    padding-left: 350px;
+    padding-top: 150px;
+    z-index: 1000;
+}
+.bbp-browser-detail-move-dialog {
+    box-shadow: 0px 5px 10px 0px $hbp-color-shadow-dark;
+    background-color: $body-bg;
+    border-radius: 10px;
+}
+
+// Selectable Table View
+.hbp-list-tableview-selectable {
+    .hbp-list-tableview-entry {
+        cursor: pointer;
+    }
+    li{
+        &.hbp-list-tableview-entry {
+            border-bottom: thin solid transparent;
+            border-top: thin solid transparent;
+
+
+            &:first-of-type {
+                border-top: none;
+            }
+
+            &:last-of-type {
+                border-bottom: none;
+            }
+        }
+    }
+    .hbp-list-tableview-entry:hover,
+    .hbp-list-tableview-entry.hbp-list-tableview-entry-selected {
+        background: $hbp-color-highlight;
+        border-bottom-color: $hbp-color-toolbar-bg;
+        border-top-color: $hbp-color-toolbar-bg;
+    }
+
+    .hbp-list-tableview-heading + .hbp-list-tableview-entry {
+        border-top: none;
+    }
+
+    .hbp-list-tableview-entry:hover + .hbp-list-tableview-heading,
+    .hbp-list-tableview-entry-selected + .hbp-list-tableview-heading {
+        border-top: none;
+    }
+}
+
+// Orderable Table View
+.hbp-list-tableview-orderable {
+    .hbp-list-tableview-header {
+        .glyphicon-sort-by-attributes, .glyphicon-sort-by-attributes-alt {
+            display: inline-block;
+        }
+        >div {
+            cursor: pointer;
+        }
+    }
+}
