@@ -4,17 +4,13 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from neo.io import get_io
-# from neo import io
 from rest_framework.response import Response
 from rest_framework import status
 import urllib
-
-# r = io.AlphaOmegaIO(filename='File_AlphaOmega_1.map')
-# block = r.read_block(lazy=False, cascade=True)
-# block = get_io('File_AlphaOmega_1.map').read_block()
+from django.views.decorators.clickjacking import xframe_options_exempt
 
 
-class Block(APIView): 
+class Block(APIView):
    
     def get(self, request, format=None, **kwargs):
         na_file = request.session['na_file']
@@ -56,7 +52,7 @@ class Block(APIView):
         return JsonResponse(block_data)
 
 
-class Segment(APIView): 
+class Segment(APIView):
    
     def get(self, request, format=None, **kwargs):
         na_file = request.session['na_file']
@@ -85,7 +81,7 @@ class Segment(APIView):
         return JsonResponse(seg_data, safe=False)
 
 
-class AnalogSignal(APIView): 
+class AnalogSignal(APIView):
    
     def get(self, request, format=None, **kwargs):
         na_file = request.session['na_file']
@@ -94,25 +90,6 @@ class AnalogSignal(APIView):
         id_analog_signal = int(request.GET['analog_signal_id'])
         segment = block.segments[id_segment]
         analogsignal = segment.analogsignals[id_analog_signal]
-
-        # unit = analogsignal.units 
-        # t_start = analogsignal.t_start
-        # sampling_rate = analogsignal.sampling_rate
-        # time_laps = 1/sampling_rate
-
-        print("anaolgsignals", analogsignal, len(analogsignal))
-        print( "units",analogsignal.units)
-        print( "t_start",analogsignal.t_start)
-        print("sampling_rate", analogsignal.sampling_rate)
-        print( "t_stop",analogsignal.t_stop)
-        print( "times",analogsignal.times)
-        print("duration",analogsignal.duration)
-        print("name", analogsignal.name)
-        print("size", analogsignal.size)
-
-        # print('analogsignal', analogsignal[0], analogsignal[0].sampling_rate)
-        # analog_signal = block.segments[id_segment].analogsignals[id_analog_signal]
-        # print(analog_signal)
   
         analog_signal_values = []
         for item in analogsignal:
@@ -121,28 +98,27 @@ class AnalogSignal(APIView):
             except ValueError:
                 analog_signal_values.append(item[1].item())
 
-        analog_signal_times= []
+        analog_signal_times = []
         for item in analogsignal.times:
             analog_signal_times.append(item.item())
     
-        graph_data = {"values": analog_signal_values, 
-                        "values_units": str(analogsignal.units.dimensionality), 
-                        "times": analog_signal_times,
-                        "times_dimensionality":str(analogsignal.t_start.units.dimensionality), 
-                        "t_start" : analogsignal.t_start.item(), 
-                        "t_stop" : analogsignal.t_stop.item()
-                        }
+        graph_data = {"values": analog_signal_values,
+                      "values_units": str(analogsignal.units.dimensionality),
+                      "times": analog_signal_times,
+                      "times_dimensionality": str(analogsignal.t_start.units.dimensionality),
+                      "t_start": analogsignal.t_start.item(),
+                      "t_stop": analogsignal.t_stop.item()
+                      }
 
-        # data = JSON.dumps(graph_data)
         return JsonResponse(graph_data)
 
 
+@xframe_options_exempt
 def home(request):
     """
     home page
     """
     url = request.GET.get('url')
-    print("URL " + url)
 
     if url:
         # get url of neo file

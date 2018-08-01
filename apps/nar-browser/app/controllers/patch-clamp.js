@@ -49,7 +49,7 @@ angular.module('nar')
     );
 })
 
-.controller('PatchClampController', function(KGResource, bbpOidcSession, $http, $stateParams, $scope) {
+.controller('PatchClampController', function(KGResource, bbpOidcSession, $http, $stateParams, $scope, URLService) {
         
     var vm = this;
     var base_url = "https://nexus-int.humanbrainproject.org/v0/";
@@ -96,8 +96,13 @@ angular.module('nar')
     };
 
     $scope.openVisualizer = function(url) {
-        // update url for deployment
-        window.open("https://127.0.0.1:8000/?url="+ url, "_blank");
+        var element = document.createElement("object");
+        element.setAttribute('type', "text/html");
+        element.setAttribute('width', "1200px");
+        element.setAttribute('height', "500px");
+        element.setAttribute('scrolling', "yes");
+        element.setAttribute('data', URLService.src.$$state.value + '?url=' + url);
+        document.getElementById('visDiv').appendChild(element);
     };
 
     vm.relativePath = function(url) {

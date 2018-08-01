@@ -301,4 +301,11 @@ angular.module('nar')
 
     return KGIndex;
 })
-;
+
+.factory('URLService', function($http) {
+    return {
+        src: $http.get('/config.json').then(function (response) {
+        return response.data.devUrl;
+        })
+    };
+});
