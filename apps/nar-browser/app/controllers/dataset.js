@@ -39,6 +39,13 @@ angular.module('nar')
         Authorization: "Bearer " + bbpOidcSession.token()
     };
     
+    var license_map = {
+        "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International": {
+            icon: "https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png",
+            link: "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+        }
+    }
+
     var getTraces = function(dataset) {
         var traces = Traces.query({
             "@context": {
@@ -51,7 +58,7 @@ angular.module('nar')
             }
         }).then(
             function(traces) {
-                console.log(traces);
+                //console.log(traces);
                 for (let trace of traces) {
                     Experiments.get(trace.data.wasGeneratedBy["@id"]).then(
                         // todo: add caching to KGResource
@@ -91,11 +98,19 @@ angular.module('nar')
             for (let dataset of datasets) {
                 dataset.traces = [];
                 getTraces(dataset);
+                $http.get(dataset.data["http://hbp.eu/minds#license"]["@id"]).then(
+                    function(response) {
+                        var license_name = response.data["http://schema.org/name"];
+                        dataset.license = license_map[license_name];
+                        dataset.license.name = license_name;
+                    },
+                    error
+                );
             }
             vm.datasets = datasets;
             console.log(datasets);
         },
         error
-    );
+    ).catch(console.error);
 
 });
