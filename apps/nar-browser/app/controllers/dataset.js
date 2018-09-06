@@ -24,12 +24,14 @@ Author: Andrew P. Davison, UNIC, CNRS
 angular.module('nar')
 
 
-.controller('DatasetController', function($location, $rootScope, KGResource, bbpOidcSession, $http) {
+.controller('DatasetController', function($location, $rootScope, KGResource, 
+                                          bbpOidcSession, $http, NexusURL) {
     var vm = this;
-    var base_url = "https://nexus-int.humanbrainproject.org/v0/";
-    var Datasets = KGResource(base_url + "data/minds/core/dataset/v0.0.4");
-    var Traces = KGResource(base_url + "data/neuralactivity/electrophysiology/trace/v0.1.0");
-    var Experiments = KGResource(base_url + "data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0");
+
+    var nexusBaseUrl = NexusURL.get();
+    var Datasets = KGResource(nexusBaseUrl + "data/minds/core/dataset/v0.0.4");
+    var Traces = KGResource(nexusBaseUrl + "data/neuralactivity/electrophysiology/trace/v0.1.0");
+    var Experiments = KGResource(nexusBaseUrl + "data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0");
 
     var error = function(response) {
         console.log("ERROR: ", response);
@@ -58,25 +60,26 @@ angular.module('nar')
             }
         }).then(
             function(traces) {
-                //console.log(traces);
                 for (let trace of traces) {
                     Experiments.get(trace.data.wasGeneratedBy["@id"]).then(
                         // todo: add caching to KGResource
                         function(expt) {
                             trace.experiment = expt;
+                            trace.method = expt.data["prov:used"]["@type"];
+                            if (trace.method.includes("nsg:PatchedCell")) {
+                                dataset.patch_electrode_traces.push(trace);
+                            } else {
+                                dataset.sharp_electrode_traces.push(trace);
+                            }
                         },
                         error
                     );
                 }
-                dataset.traces = traces;
+                dataset.dataLoaded = true;
             },
             error
         );
     };
-
-    vm.hello = function() {
-        return "Hello";
-    }
 
     Datasets.query(
         {
@@ -96,21 +99,66 @@ angular.module('nar')
     ).then(
         function(datasets) {
             for (let dataset of datasets) {
-                dataset.traces = [];
-                getTraces(dataset);
-                $http.get(dataset.data["http://hbp.eu/minds#license"]["@id"]).then(
-                    function(response) {
-                        var license_name = response.data["http://schema.org/name"];
-                        dataset.license = license_map[license_name];
-                        dataset.license.name = license_name;
-                    },
-                    error
-                );
+                if (dataset.data["http://hbp.eu/minds#license"]) {
+                    $http.get(dataset.data["http://hbp.eu/minds#license"]["@id"]).then(
+                        function(response) {
+                            var license_name = response.data["http://schema.org/name"];
+                            dataset.license = license_map[license_name];
+                            dataset.license.name = license_name;
+                        },
+                        error
+                    );
+                };
+                if (dataset.data["http://hbp.eu/minds#owners"]) {
+                    if (Array.isArray(dataset.data["http://hbp.eu/minds#owners"])) {
+                        dataset.custodians = [];
+                        for (let owner of dataset.data["http://hbp.eu/minds#owners"]) {
+                            $http.get(owner["@id"]).then(
+                                function(response) {
+                                    dataset.custodians.push(response.data["http://schema.org/name"]);
+                                },
+                                error
+                        );
+                        }
+                    } else {
+                        $http.get(dataset.data["http://hbp.eu/minds#owners"]["@id"]).then(
+                            function(response) {
+                                dataset.custodians = response.data["http://schema.org/name"];
+                            },
+                            error
+                        );
+                    }   
+                }
+                dataset.patch_electrode_traces = [];
+                dataset.sharp_electrode_traces = [];
+                dataset.dataLoaded = false;
+                if (dataset.data["http://schema.org/description"]) {
+                    dataset.hasLongDescription = (dataset.data["http://schema.org/description"].length > 500);
+                } else {
+                    dataset.hasLongDescription = false;
+                }
+                vm.collapseDescription(dataset);
             }
             vm.datasets = datasets;
             console.log(datasets);
         },
         error
     ).catch(console.error);
+
+    vm.expandDescription = function(dataset) {
+        dataset.descriptionLimit = undefined;
+    }
+    vm.collapseDescription = function(dataset) {
+        dataset.descriptionLimit = 500;
+    }
+    vm.expandData = function(dataset) {
+        if (!dataset.dataLoaded) {
+            getTraces(dataset);
+        }
+        dataset.dataExpanded = true;
+    }
+    vm.collapseData = function(dataset) {
+        dataset.dataExpanded = false;
+    }
 
 });

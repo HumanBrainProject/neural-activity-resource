@@ -23,14 +23,18 @@
   <script src="/node_modules/angular-material/angular-material.js"></script>
   <script src="/node_modules/angular-sanitize/angular-sanitize.js"></script>
   <script src="/node_modules/@uirouter/angularjs/release/angular-ui-router.js"></script>
-  
+
   <!-- authentication/authorization -->
   <script src="/lib/angular-bbp-config/angular-bbp-config.js"></script>
   <script src="/lib/bbp-oidc-client/angular-bbp-oidc-client.js"></script>
+  <script src="/node_modules/hellojs/dist/hello.min.js"></script>
+  <script src="/node_modules/lodash/lodash.min.js"></script>
+  <script src="/lib/angular-hbp-collaboratory/angular-hbp-collaboratory.js"></script>
 
   <!-- our angular app -->
   <script src="/app/app.js"></script>
   <script src="/app/services.js"></script>
+  <script src="/app/controllers/topbar.js"></script>
   <script src="/app/controllers/home.js"></script>
   <script src="/app/controllers/eeg.js"></script>
   <script src="/app/controllers/fMRI.js"></script>
@@ -46,40 +50,50 @@
 
       <!-- Toolbar -->
     <md-toolbar layout="row" class="md-toolbar-tools">
+      <div class="md-toolbar-tools">
+      
+        <md-menu md-offset="0 40">
+            <md-button class="md-icon-button" aria-label="Menu" ng-click="$mdMenu.open($event);">
+            <md-icon md-menu-origin>menu</md-icon>
+            </md-button>
+            <md-menu-content width="6">
+            <md-menu-item>
+                <md-button ui-sref="home">Home</md-button>
+            </md-menu-item>
+            <md-menu-item>
+                <md-button ui-sref="patch-clamp-list">Patch clamp recording</md-button>
+            </md-menu-item>
+            <md-menu-item>
+                <md-button ui-sref="sharp-electrode-list">Intracellular sharp-electrode recording</md-button>
+            </md-menu-item>
+            <md-menu-item>
+                <md-button ui-sref="mea">Multi-electrode array recording</md-button>
+            </md-menu-item>
+            <md-menu-item>
+                <md-button ui-sref="two-photon">Two-photon calcium imaging</md-button>
+            </md-menu-item>
+            <md-menu-item>
+                <md-button ui-sref="EEG">EEG</md-button>
+            </md-menu-item>
+            <md-menu-item>
+                <md-button ui-sref="fMRI">fMRI</md-button>
+            </md-menu-item>
+            <md-menu-item>
+                <md-button ui-sref="datasets">All datasets</md-button>
+            </md-menu-item>
+            </md-menu-content>
+        </md-menu>
 
-      <md-menu md-offset="0 40">
-        <md-button class="md-icon-button" aria-label="Menu" ng-click="$mdMenu.open($event);">
-          <md-icon md-menu-origin>menu</md-icon>
-        </md-button>
-        <md-menu-content width="6">
-          <md-menu-item>
-              <md-button ui-sref="home">Home</md-button>
-          </md-menu-item>
-          <md-menu-item>
-              <md-button ui-sref="patch-clamp-list">Patch clamp recording</md-button>
-          </md-menu-item>
-          <md-menu-item>
-              <md-button ui-sref="sharp-electrode">Intracellular sharp-electrode recording</md-button>
-          </md-menu-item>
-          <md-menu-item>
-              <md-button ui-sref="mea">Multi-electrode array recording</md-button>
-          </md-menu-item>
-          <md-menu-item>
-              <md-button ui-sref="two-photon">Two-photon calcium imaging</md-button>
-          </md-menu-item>
-          <md-menu-item>
-              <md-button ui-sref="EEG">EEG</md-button>
-          </md-menu-item>
-          <md-menu-item>
-              <md-button ui-sref="fMRI">fMRI</md-button>
-          </md-menu-item>
-          <md-menu-item>
-              <md-button ui-sref="datasets">All datasets</md-button>
-          </md-menu-item>
-        </md-menu-content>
-      </md-menu>
+        <h1 flex md-truncate><a ui-sref="home">Neural Activity Resource (alpha)</a></h1>
 
-      <h1 flex><a href="/app">Neural Activity Resource (alpha)</a></h1>
+        <div ng-controller="TopBarController as tb">
+            <md-input-container ng-show="tb.canAccessIntegration">
+                <md-switch ng-model="tb.showIntegration" ng-change="tb.switch()">
+                    <small>{{tb.showIntegration ? "Integration" : "Production"}}</small>
+                </md-switch>
+            </md-input-container>
+        </div>
+      </div>
     </md-toolbar>
 
     

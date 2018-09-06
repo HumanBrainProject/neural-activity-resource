@@ -24,12 +24,16 @@ Author: Andrew P. Davison, UNIC, CNRS
   window.bbpConfig =  {
       api: {
           user: {
-              v0: "https://services.humanbrainproject.eu/oidc/v0/api"
+              v0: "https://services.humanbrainproject.eu/oidc/v0/api",
+              v1: "https://services.humanbrainproject.eu/idm/v1/api"
           }
       },
       auth: {
           url: "https://services.humanbrainproject.eu/oidc",
           clientId: "395947a2-16b5-4e04-9180-93088459a7f2"
+      },
+      oidc: {
+        debug: false
       }
   }
 
@@ -37,7 +41,8 @@ Author: Andrew P. Davison, UNIC, CNRS
     'bbpOidcClient',
     'ui.router',
     'ngMaterial',
-    'ngSanitize'
+    'ngSanitize',
+    'clb-identity'
   ])
   .config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
@@ -54,8 +59,13 @@ Author: Andrew P. Davison, UNIC, CNRS
         url: '/patch-clamp/{instanceId}',
         component: 'patchclampcomponent'
       })
-      .state('sharp-electrode', {
+      .state('sharp-electrode-list', {
         url: '/sharp-electrode',
+        templateUrl: '/app/templates/sharp-electrode-list.tpl.html',
+        controller: 'SharpElectrodeController as app'
+      })
+      .state('sharp-electrode-instance', {
+        url: '/sharp-electrode/{instanceId}',
         templateUrl: '/app/templates/sharp-electrode.tpl.html',
         controller: 'SharpElectrodeController as app'
       })

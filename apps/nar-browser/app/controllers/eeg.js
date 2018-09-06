@@ -24,7 +24,8 @@ Author: Andrew P. Davison, UNIC, CNRS
 angular.module('nar')
 
 
-.controller('EEGController', function($location, $rootScope, KGResource, bbpOidcSession, $http) {
+.controller('EEGController', function($location, $rootScope, KGResource, bbpOidcSession, $http, nexusBaseUrl) {
     var vm = this;
-    var base_url = "https://nexus-int.humanbrainproject.org/v0/";
+    var nexusBaseUrl = NexusURL.get();
+
 });

@@ -4,7 +4,16 @@
             <md-card-title>
                 <md-card-title-text>
                     <span class="md-headline">{{dataset.get_label()}}</span>
-                    <span class="md-subhead">{{dataset.data["http://schema.org/description"]}}</span>
+                    <span class="md-subhead">
+                        {{dataset.data["http://schema.org/description"] | limitTo: dataset.descriptionLimit}}
+                            <md-button class="md-icon-button" aria-label="More" ng-show="dataset.hasLongDescription && dataset.descriptionLimit" ng-click="app.expandDescription(dataset)">
+                                <md-icon>more_horiz</md-icon>
+                            </md-button>
+                            <md-button class="md-icon-button" aria-label="Less" ng-show="!dataset.descriptionLimit" ng-click="app.collapseDescription(dataset)">
+                                <md-icon>expand_less</md-icon>
+                            </md-button>
+                    </span>
+                    <span class="md-subhead">Custodian: {{dataset.custodians}}</span>
                 </md-card-title-text>
                 <md-card-title-media>
                     <div class="md-media-sm card-media">
@@ -15,16 +24,36 @@
                 </md-card-title-media>
             </md-card-title>
             <md-card-content>
-                <md-list>
-                    <md-subheader class="md-no-sticky">Patch clamp experiments</md-subheader>
-                    <md-list-item ng-repeat="trace in dataset.traces" 
-                                    ui-sref="patch-clamp-instance({ instanceId: trace.experiment.path.uuid })" 
-                                    ng-click="null">
-                        {{trace.experiment.get_label()}}
-                    </md-list-item>
-                </md-list>
+                <div ng-show="dataset.dataExpanded && !dataset.dataLoaded" layout="row" layout-sm="column" layout-align="space-around">
+                    <md-progress-circular md-mode="indeterminate" class="md-accent"></md-progress-circular>
+                </div>
+                <div ng-show="dataset.dataLoaded && dataset.dataExpanded">
+                    <md-list ng-show="dataset.patch_electrode_traces.length">
+                        <md-subheader class="md-no-sticky">Patch clamp experiments</md-subheader>
+                        <md-list-item ng-repeat="trace in dataset.patch_electrode_traces | orderBy:'data.name'" 
+                                        ui-sref="patch-clamp-instance({ instanceId: trace.experiment.path.uuid })" 
+                                        ng-click="null">
+                            {{trace.experiment.get_label()}}
+                        </md-list-item>
+                    </md-list>
+
+                    <md-list ng-show="dataset.sharp_electrode_traces.length">
+                        <md-subheader class="md-no-sticky">Sharp electrode experiments</md-subheader>
+                        <md-list-item ng-repeat="trace in dataset.sharp_electrode_traces | orderBy:'data.name'" 
+                                        ui-sref="sharp-electrode-instance({ instanceId: trace.experiment.path.uuid })" 
+                                        ng-click="null">
+                            {{trace.experiment.get_label()}}
+                        </md-list-item>
+                    </md-list>
+                </div>
             </md-card-content>
-            <md-card-actions layout="row" layout-align="end center">
+            <md-card-actions layout="row" layout-align="start start">
+                <md-button class="md-icon-button" aria-label="Show data" ng-hide="dataset.dataExpanded" ng-click="app.expandData(dataset)">
+                    <md-icon>expand_more</md-icon>
+                </md-button>
+                <md-button class="md-icon-button" aria-label="Show data" ng-show="dataset.dataLoaded && dataset.dataExpanded" ng-click="app.collapseData(dataset)">
+                    <md-icon>expand_less</md-icon>
+                </md-button>
             </md-card-actions>
         </md-card>
 

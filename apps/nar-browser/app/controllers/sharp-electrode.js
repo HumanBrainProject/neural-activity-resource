@@ -24,7 +24,8 @@ Author: Andrew P. Davison, UNIC, CNRS
 angular.module('nar')
 
 
-.controller('SharpElectrodeController', function($location, $rootScope, KGResource, bbpOidcSession, $http) {
+.controller('SharpElectrodeController', function($location, $rootScope, KGResource, bbpOidcSession, $http, NexusURL) {
     var vm = this;
-    var base_url = "https://nexus-int.humanbrainproject.org/v0/";
+    var nexusBaseUrl = NexusURL.get();
+
 });

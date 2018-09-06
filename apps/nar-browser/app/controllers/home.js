@@ -24,31 +24,34 @@ Author: Andrew P. Davison, UNIC, CNRS
 angular.module('nar')
 
 
-.controller('HomeController', function($location, $rootScope, KGResourceCount, bbpOidcSession, $http) {
+.controller('HomeController', function($location, $rootScope, KGResourceCount, 
+                                       $http, bbpOidcSession, NexusURL, clbUser) {
     var vm = this;
-    var base_url = "https://nexus-int.humanbrainproject.org/v0/";
 
     var error = function(response) {
         console.log("ERROR: ", response);
     };
 
-    // controller actions to login and logout
-    vm.handleLogin = function() {bbpOidcSession.login();}
-    vm.handleLogout = function() {bbpOidcSession.logout();}
+    var nexusBaseUrl = NexusURL.get();
+    console.log(nexusBaseUrl);
+    // console.log(bbpOidcSession.token());
 
-    // check that we have a valid token, otherwise log in.
-    $http.get("https://services.humanbrainproject.eu/idm/v1/api/user/me",
-              {"Authorization": "Bearer " + bbpOidcSession.token()}).then(
-        function(response) {
-            console.log(response.data.displayName);
-        },
-        function(err) {
-            console.log(err);
-            console.log("Logging in");
-            bbpOidcSession.login();
-        });
+    // // controller actions to login and logout
+    // vm.handleLogin = function() {bbpOidcSession.login();}
+    // vm.handleLogout = function() {bbpOidcSession.logout();}
 
-    var Experiments = KGResourceCount(base_url + "data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/");
+    // // check that we have a valid token, otherwise log in.
+    // clbUser.getCurrentUser().then(
+    //     function(user) {
+    //         console.log(user);
+    //     },
+    //     function(err) {
+    //         console.log(err);
+    //         console.log("Logging in");
+    //         bbpOidcSession.login();
+    //     });
+
+    var Experiments = KGResourceCount(nexusBaseUrl + "data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/");
     Experiments.count().then(
         function(count) {
             //console.log(count);
