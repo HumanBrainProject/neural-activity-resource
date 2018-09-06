@@ -143,7 +143,7 @@ angular.module('nar')
             console.log(datasets);
         },
         error
-    );
+    ).catch(console.error);
 
     vm.expandDescription = function(dataset) {
         dataset.descriptionLimit = undefined;
