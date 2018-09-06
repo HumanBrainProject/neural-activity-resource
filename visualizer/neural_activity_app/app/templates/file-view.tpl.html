@@ -1,0 +1,102 @@
+<div ng-controller="FileViewCtrl">
+
+    <nav>
+        <div>
+            <button ui-sref='home' ui-sref-active="active"> Home </button>
+            <!--<h1 style="font-size:1em" align=center> File_AlphaOmega_2.map </h1>-->
+        </div>
+    </nav>
+    <div class="content">
+        <nav id=menu-panel class="menu" ng-controller=MenuCtrl>
+
+            <ul id="menu-block" class="nav-item-1">
+                <li>
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <a id=item-block ui-sref="file_view.block" ui-sref-active="active" active="true" class="btn btn-link"> Block </a>
+                        </div>
+
+                        <ul id=menu-block class="nav-item-2" ng-repeat="(s_key,segment) in $parent.data.block[0].segments">
+                            <li>
+                                <div class="card">
+                                    <div class="card-header" id="headingOne">
+                                        <a id=item-segment-{{s_key}} ng-click="showSegment(s_key)" ui-sref="file_view.segment({segment_id:{{s_key}}})" ui-sref-active="active" class="btn btn-link"> Segment #{{s_key}}<i id="arrow-segment-{{s_key}}"  class="glyphicon glyphicon-menu-down"></i></a>
+                                    </div>
+
+                                    <div class="card card-body" ng-show="isInArray(s_key,menu_segments_to_show)">
+                                        <ul id=menu-segment-{{s_key}} class="menu-signal" ng-repeat="(as_key,analog_signal) in segment.analogsignals">
+                                            <li><a ui-sref="file_view.analog_signal({segment_id:{{s_key}},analog_signal_id:{{as_key}}})" ui-sref-active="active">AnalogSignal #{{as_key}}</a></li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </li>
+                        </ul>
+
+
+                    </div>
+                </li>
+
+            </ul>
+        </nav>
+
+        <!--<h1 class="menu-h1" style="font-size:1em" align=center>File: File_AlphaOmega_2.map</h1>
+                                        <ul id="menu-block" class="nav-item-1 dropdown">
+                                            <li ng-repeat="(b_key,block) in $parent.data.block">
+                                                <a id=item-block-{{b_key}} class="btn item-1 dropdown-toggle" ui-sref="file_view.block({block_id:{{b_key}}})" ui-sref-active="active">Block #{{b_key}}<i class="glyphicon glyphicon-menu-down"></i></a>
+                                                <ul id=menu-block-{{b_key}} class="nav-item-2" ng-repeat="(s_key,segment) in block.segments">
+                                                    <li>
+                                                        <a id=item-segment-{{s_key}} class="item-2" ui-sref="file_view.segment({block_id:{{b_key}},segment_id:{{s_key}}})" ui-sref-active="active">Segment #{{s_key}}<i class="glyphicon glyphicon-menu-down"></i></a>
+                                                        <ul id=menu-segment-{{s_key}} class="menu-signal submenu" ng-repeat="(as_key,analog_signal) in segment.analogsignals">
+                                                            <li><a ui-sref="file_view.analog_signal({block_id:{{b_key}},segment_id:{{s_key}},analog_signal_id:{{as_key}}})">AnalogSignal #{{as_key}}</a></li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>-->
+        </nav>
+
+        <!-- nested ui-view -->
+        <div id=detail-panel align=rigth ui-view="detail"></div>
+    </div>
+
+</div>
+
+<!--<h1>Menu Despegable <a href="http://creaticode.com/blog">creaticode.com</a></h1>
+
+	<ul id="accordion" class="accordion">
+		<li>
+			<div class="link"><i class="fa fa-paint-brush"></i>Diseño web<i class="fa fa-chevron-down"></i></div>
+			<ul class="submenu">
+				<li><a href="#">Photoshop</a></li>
+				<li><a href="#">HTML</a></li>
+				<li><a href="#">CSS</a></li>
+				<li><a href="#">Maquetacion web</a></li>
+			</ul>
+		</li>
+		<li class="default open">
+			<div class="link"><i class="fa fa-code"></i>Desarrollo front-end<i class="fa fa-chevron-down"></i></div>
+			<ul class="submenu">
+				<li><a href="#">Javascript</a></li>
+				<li><a href="#">jQuery</a></li>
+				<li><a href="#">Frameworks javascript</a></li>
+			</ul>
+		</li>
+		<li>
+			<div class="link"><i class="fa fa-mobile"></i>Diseño responsive<i class="fa fa-chevron-down"></i></div>
+			<ul class="submenu">
+				<li><a href="#">Tablets</a></li>
+				<li><a href="#">Dispositivos mobiles</a></li>
+				<li><a href="#">Medios de escritorio</a></li>
+				<li><a href="#">Otros dispositivos</a></li>
+			</ul>
+		</li>
+		<li><div class="link"><i class="fa fa-globe"></i>Posicionamiento web<i class="fa fa-chevron-down"></i></div>
+			<ul class="submenu">
+				<li><a href="#">Google</a></li>
+				<li><a href="#">Bing</a></li>
+				<li><a href="#">Yahoo</a></li>
+				<li><a href="#">Otros buscadores</a></li>
+			</ul>
+		</li>
+	</ul>-->

@@ -304,6 +304,14 @@ angular.module('nar')
     return KGIndex;
 })
 
+.factory('URLService', function($http) {
+    return {
+        src: $http.get('/config.json').then(function (response) {
+        return response.data.devUrl;
+        })
+    };
+});
+
 .service("NexusURL", function() {
     var base_url = "https://nexus.humanbrainproject.org/v0/";
     var NexusURL = {
@@ -317,3 +325,4 @@ angular.module('nar')
     return NexusURL;
 })
 ;
+

@@ -49,8 +49,8 @@ angular.module('nar')
     );
 })
 
-.controller('PatchClampController', function(KGResource, bbpOidcSession, $http, $stateParams, NexusURL) {
-        
+
+.controller('PatchClampController', function(KGResource, bbpOidcSession, $http, $stateParams, NexusURL, $scope, URLService) {     
     var vm = this;
     var nexusBaseUrl = NexusURL.get();
 
@@ -93,7 +93,17 @@ angular.module('nar')
         } else {
             return false;
         }
-    }
+    };
+
+    $scope.openVisualizer = function(url) {
+        var element = document.createElement("object");
+        element.setAttribute('type', "text/html");
+        element.setAttribute('width', "1200px");
+        element.setAttribute('height', "500px");
+        element.setAttribute('scrolling', "yes");
+        element.setAttribute('data', URLService.src.$$state.value + '?url=' + url);
+        document.getElementById('visDiv').appendChild(element);
+    };
 
     vm.relativePath = function(url) {
         if (url.startsWith('http')) {

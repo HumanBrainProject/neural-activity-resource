@@ -109,12 +109,16 @@
               <div flex>
                 <ul>
                   <li ng-repeat="file_url in app.data_files">
-                    <a ng-if="app.validURL(file_url)" href="{{file_url}}" target="_blank">{{app.relativePath(file_url)}}</a>
+                    <div ng-if="app.validURL(file_url)" >
+                      <a href="{{file_url}}" target="_blank">{{app.relativePath(file_url)}}</a>
+                      <p ng-click="openVisualizer(file_url)"> <button>Open file in Neural Activity Visualizer</button></p>
+                    </div>
                     <span ng-if="!app.validURL(file_url)">{{file_url}}</span>
                   </li>
                 </ul>
               </div>
         </md-list-item>
+          <div id="visDiv"></div>
       </md-list>
 
     </md-content>
