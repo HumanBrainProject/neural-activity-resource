@@ -31,7 +31,7 @@ angular.bootstrap().invoke(function($http, $log, $location) {
 var NeuralActivityApp = angular.module('NeuralActivityApp', [
     'ui.router',
     'ng',
-    'ngResource', ,
+    'ngResource',
     'ApiCommunicationServices',
     'FileServices',
 
@@ -45,9 +45,9 @@ NeuralActivityApp.config(
     function($cookiesProvider, $httpProvider, $stateProvider, $locationProvider, $rootScopeProvider, $resourceProvider, $urlRouterProvider) {
         $resourceProvider.defaults.stripTrailingSlashes = false;
         $stateProvider
-            .state('home', {
+            .state('search', {
                 url: '/home',
-                templateUrl: '/static/templates/home.tpl.html',
+                templateUrl: '/static/templates/search.tpl.html',
                 controller: 'HomeCtrl'
             })
             .state('help', {
@@ -61,8 +61,7 @@ NeuralActivityApp.config(
                 controller: 'FileViewCtrl'
             })
             .state('file_view.block', {
-                parent: 'file_view',
-
+                //parent: 'file_view',
                 url: '/block',
 
                 views: {

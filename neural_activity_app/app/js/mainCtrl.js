@@ -11,9 +11,9 @@ NeuralActivityApp.controller('HomeCtrl', ['$scope', '$rootScope', '$http', '$loc
 
         //functions
         $scope.goToFileView = function() {
-            var file_name = "File_AlphaOmega_2.map"
+            var file_name = "File_AlphaOmega_1.map";
             FileService.setService(file_name).then(function() {
-                console.log("location changed")
+                console.log("location changed");
                 $location.path("/home/file-view/{file_name:" + file_name + "}");
                 $scope.$apply();
             })

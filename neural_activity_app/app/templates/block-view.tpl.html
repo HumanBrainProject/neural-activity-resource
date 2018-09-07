@@ -42,13 +42,13 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th style="width: 15%">Id</th>
+                    <th style="width: 15%">Id</th><td>Name</td>
 
                 </tr>
             </thead>
             <tbody>
                 <tr class=tr-clickable ng-repeat="(s_key,segment) in data_block.segments" ng-click="showSegment(s_key)" ui-sref="file_view.segment({segment_id:{{s_key}}})" ui-sref-active="active">
-                    <td style="width: 15%">{{ s_key }}</td>
+                    <th style="width: 15%">{{s_key}}</th><td>{{segment.name}}</td>
                     <td style="width: 15%">
 
                     </td>
