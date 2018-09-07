@@ -7,6 +7,10 @@
 # apps
 apps/nar-browser/node_modules
 apps/nar-browser/lib
+visualizer/node_modules
+visualizer/neural_activity_app/app/node_modules
+visualizer/neural_activity_app/app/static
+visualizer/neural_activity_app/app/static_old
 
 # Python stuff
 *.egg-info
@@ -15,3 +19,4 @@ __pycache__
 
 # other
 *.log
+*.DS_Store

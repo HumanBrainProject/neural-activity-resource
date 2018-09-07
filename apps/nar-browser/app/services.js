@@ -310,7 +310,7 @@ angular.module('nar')
         return response.data.devUrl;
         })
     };
-});
+})
 
 .service("NexusURL", function() {
     var base_url = "https://nexus.humanbrainproject.org/v0/";

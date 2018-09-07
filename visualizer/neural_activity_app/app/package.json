@@ -19,7 +19,7 @@
     "moment": "^2.19.2",
     "nvd3": "^1.8.5-dev",
     "google-palette": "^1.0.0",
-    "angular-cookies": "^1.4.12",
+    "angular-cookies": "^1.4.12"
   },
   "main": "app.js",
   "directories": {
