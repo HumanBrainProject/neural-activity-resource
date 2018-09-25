@@ -1,19 +1,25 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import hashlib
+import os.path
 from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from neo.io import get_io
 from rest_framework.response import Response
 from rest_framework import status
-import urllib
-from django.views.decorators.clickjacking import xframe_options_exempt
+try:
+    from urllib import urlretrieve
+except ImportError:
+    from urllib.request import urlretrieve
+
 
 
 class Block(APIView):
-   
+
     def get(self, request, format=None, **kwargs):
-        na_file = request.session['na_file']
+        url = request.GET.get('url')
+        na_file = get_local_path(url)
         try:
             block = get_io(na_file).read_block()
         except IOError:
@@ -53,9 +59,10 @@ class Block(APIView):
 
 
 class Segment(APIView):
-   
+
     def get(self, request, format=None, **kwargs):
-        na_file = request.session['na_file']
+        url = request.GET.get('url')
+        na_file = get_local_path(url)
         block = get_io(na_file).read_block()
         id_segment = int(request.GET['segment_id'])
         segment = block.segments[id_segment]
@@ -75,22 +82,24 @@ class Segment(APIView):
                     'annotations': segment.annotations,
                     # 'spiketrains': segment.spiketrains,
                     'analogsignals': [{} for a in segment.analogsignals],
-                    'as_prop': [{'size': e.size, 'name': e.name.decode('cp1252')} for e in segment.analogsignals]
+                    #'as_prop': [{'size': e.size, 'name': e.name.decode('cp1252')} for e in segment.analogsignals]
+                    'as_prop': [{'size': e.size, 'name': e.name} for e in segment.analogsignals]
                     }
-      
+
         return JsonResponse(seg_data, safe=False)
 
 
 class AnalogSignal(APIView):
-   
+
     def get(self, request, format=None, **kwargs):
-        na_file = request.session['na_file']
+        url = request.GET.get('url')
+        na_file = get_local_path(url)
         block = get_io(na_file).read_block()
         id_segment = int(request.GET['segment_id'])
         id_analog_signal = int(request.GET['analog_signal_id'])
         segment = block.segments[id_segment]
         analogsignal = segment.analogsignals[id_analog_signal]
-  
+
         analog_signal_values = []
         for item in analogsignal:
             try:  # TODO find a better solution
@@ -98,10 +107,10 @@ class AnalogSignal(APIView):
             except ValueError:
                 analog_signal_values.append(item[1].item())
 
-        analog_signal_times = []
+        analog_signal_times= []
         for item in analogsignal.times:
             analog_signal_times.append(item.item())
-    
+
         graph_data = {"values": analog_signal_values,
                       "values_units": str(analogsignal.units.dimensionality),
                       "times": analog_signal_times,
@@ -113,7 +122,15 @@ class AnalogSignal(APIView):
         return JsonResponse(graph_data)
 
 
-@xframe_options_exempt
+def get_local_path(url):
+    extension = url.rsplit('.', 1)[1]
+    filename = "data/" + hashlib.sha1(url.encode()).hexdigest() + '.' + extension
+    if os.path.exists(filename):
+        return filename
+    else:
+        return urlretrieve(url, filename)[0]
+
+
 def home(request):
     """
     home page
@@ -124,7 +141,7 @@ def home(request):
         # get url of neo file
         url = url.rsplit('.', 1)[0] + '.h5'  # TODO update for other file extensions
         filename = 'neo_file.h5'
-        urllib.urlretrieve(url, filename)
+        urlretrieve(url, filename)
         request.session['na_file'] = filename
     else:
         request.session['na_file'] = 'File_AlphaOmega_1.map'
