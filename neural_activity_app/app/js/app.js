@@ -60,7 +60,8 @@ NeuralActivityApp.config(
                 templateUrl: '/static/templates/file-view.tpl.html',
                 controller: 'FileViewCtrl'
             })
-            .state('file_view.block', {
+            /*.
+            state('file_view.block', {
                 //parent: 'file_view',
                 url: '/block',
 
@@ -71,6 +72,7 @@ NeuralActivityApp.config(
                     }
                 }
             })
+            */
             .state('file_view.segment', {
 
                 url: '/segment/{segment_id:[0-9]{1,8}}',
