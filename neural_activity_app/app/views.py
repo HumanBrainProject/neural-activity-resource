@@ -142,7 +142,7 @@ def home(request):
     home page
     """
     url = request.GET.get('url')
-    print("URL " + url)
+    # print("URL " + url)
 
     if url:
         # get url of neo file
