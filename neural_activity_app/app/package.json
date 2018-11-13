@@ -2,7 +2,25 @@
   "name": "neural-activity-visualizer",
   "version": "0.0.1",
   "license": "Apache License version 2.0",
-  "dependencies": {},
+  "dependencies": {
+    "@uirouter/angularjs": "^1.0.15",
+    "angular": "^1.6.7",
+    "angular-bootstrap-multiselect": "^1.1.10",
+    "angular-cookies": "^1.4.12",
+    "angular-deferred-bootstrap": "^0.1.9",
+    "angular-moment": "^1.1.0",
+    "angular-nvd3": "^1.0.8",
+    "angular-resource": "^1.4.12",
+    "angular-ui-bootstrap": "^0.13.4",
+    "angular-uuid4": "^0.3.1",
+    "d3": "^3.5.17",
+    "google-palette": "^1.0.0",
+    "hellojs": "^1.14.0",
+    "jquery": "^1.11.3",
+    "moment": "^2.19.2",
+    "ng-text-truncate": "^1.0.0",
+    "nvd3": "^1.8.5-dev"
+  },
   "main": "app.js",
   "directories": {
     "lib": "lib"
