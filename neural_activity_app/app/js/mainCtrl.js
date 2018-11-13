@@ -50,25 +50,8 @@ NeuralActivityApp.controller('MenuCtrl', ['$scope', '$rootScope', '$http', '$loc
 
     function($scope, $rootScope, $http, $location, $stateParams, $state, FileService) {
         var ctrl = this;
-        // var menu_data = FileService.getData();
-        // $scope.data = undefined;
-        // $scope.menu_blocks_to_show = [];
+
         $scope.menu_segments_to_show = [];
-
-        // $scope.showBlock = function(block_id) {
-
-        //     if (!$scope.isInArray(block_id, $scope.menu_blocks_to_show)) {
-        //         $scope.menu_blocks_to_show.push(block_id);
-        //         document.getElementById("arrow-block-" + block_id).className = "glyphicon glyphicon-menu-up";
-        //     } else {
-        //         var i = $scope.menu_blocks_to_show.indexOf(block_id);
-        //         if (i == 0) {
-        //             $scope.menu_blocks_to_show.splice(0, 1);
-        //         } else { $scope.menu_blocks_to_show.splice(i, i); }
-
-        //         document.getElementById("arrow-block-" + block_id).className = "glyphicon glyphicon-menu-down";
-        //     };
-        // }
 
         $scope.showSegment = function(segment_id) {
             var id = segment_id;
@@ -94,8 +77,6 @@ NeuralActivityApp.controller('MenuCtrl', ['$scope', '$rootScope', '$http', '$loc
             $scope.$apply();
         });
         //code
-
-        // if ($state.current.name = 'file_view' && $state.current.url != "/block") {
         if ($state.current.views == undefined) {
             $scope.data = $scope.$parent.data;
             $state.go('.block')

@@ -40,6 +40,10 @@ var NeuralActivityApp = angular.module('NeuralActivityApp', [
     'nvd3',
     'ngTextTruncate',
 ]);
+// NeuralActivityApp.component("vizualizer",{
+//     template: '/static/templates/file-view.tpl.html',
+//     controller: 'FileViewCtrl'
+// });
 
 NeuralActivityApp.config(
     function($cookiesProvider, $httpProvider, $stateProvider, $locationProvider, $rootScopeProvider, $resourceProvider, $urlRouterProvider) {

@@ -345,60 +345,6 @@ GraphicsServices.factory('Graphics', ['$rootScope',
 
         }
 
-        // var focus = function(list_id_couple, results_data) {
-        //     // var list_data = [];
-        //     // var i = 0;
-        //     // for (i; i < list_id_couple.length; i++) {
-        //     //     data = find_result_in_data(list_id_couple[i], results_data, type);
-        //     //     data.line_id = list_id_couple[i].id_line;
-        //     //     list_data.push(data);
-        //     // }
-        //     // $rootScope.$broadcast('data_focussed:updated', list_data, graph_key);
-        // };
-
-        // var find_result_in_data = function(id_couple, results_data, type) {
-        //     var result_to_return = undefined;
-        //     var id_line = id_couple.id_line;
-        //     var id_result = id_couple.id_result;
-
-        //     if (type == 'model') {
-        //         //find the correct result in datablock
-        //         for (var i in results_data) {
-        //             for (var j in results_data[i]) {
-        //                 if (id_result == results_data[i][j].id) {
-        //                     result_to_return = results_data[i][j];
-        //                 };
-        //             }
-        //         };
-        //         return result_to_return;
-        //     };
-        //     if (type == 'test') {
-        //         for (var i in results_data) {
-        //             for (var j in results_data[i]) {
-        //                 for (var k in results_data[i][j].result) {
-        //                     if (id_result == results_data[i][j].result[k].id) {
-        //                         var result_to_return = results_data[i][j].result[k];
-        //                         result_to_return.additional_data = results_data[i][j].additional_data;
-        //                     };
-        //                 };
-        //             }
-        //         };
-        //         return result_to_return;
-        //     };
-        // };
-
-        // var getUpdatedGraph = function(data, list_ids) {
-        //     var newdata = [];
-        //     for (var i in data) {
-        //         for (var j in list_ids) {
-        //             if (data[i].key == list_ids[j]) {
-        //                 newdata.push(data[i]);
-        //             }
-        //         }
-        //     }
-        //     return newdata;
-        // }
-
         //tests graphs
 
         var initGraph = function(raw_data) {
@@ -485,23 +431,10 @@ GraphicsServices.factory('Graphics', ['$rootScope',
         }
         return {
             getOptions: getOptions,
-            // find_result_in_data: find_result_in_data,
-            // focus: focus,
-            // getUpdatedGraph: getUpdatedGraph,
             _get_min_max_values: _get_min_max_values,
 
             initGraph: initGraph,
-            get_graph_values: get_graph_values,
-            // TestGraph_getRawData: TestGraph_getRawData,
-            // TestGraph_getAbscissaValues: TestGraph_getAbscissaValues,
-            // TestGraph_getLineId: TestGraph_getLineId,
-            // TestGraph_manageDataForTestGraph: TestGraph_manageDataForTestGraph,
-            // TestGraph__manageDataForResultsTab: TestGraph__manageDataForResultsTab,
-            // TestGraph_getLatestVersionModel: TestGraph_getLatestVersionModel,
-            // TestGraph_getLastResultTimestamp: TestGraph_getLastResultTimestamp,
-            // TestGraph_reorganizeRawDataForResultTable: TestGraph_reorganizeRawDataForResultTable,
-            // TestGraph_initTestGraph: TestGraph_initTestGraph,
-
+            get_graph_values: get_graph_values
         };
 
     }
