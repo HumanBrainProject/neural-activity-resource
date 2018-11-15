@@ -1,4 +1,4 @@
-<div ng-controller="SegmentViewCtrl">
+<div ng-transclude>
 
     <body>
         <h1 align=center> Segment #{{segment_id}} </h1>
@@ -30,7 +30,8 @@
         <table class="table">
             <tbody>
                 <tr ng-repeat="(key,value) in data_segment.annotations">
-                    <th style="width: 15%" scope="row">{{key}}</th><td>{{value}}</td>
+                    <th style="width: 15%" scope="row">{{key}}</th>
+                    <td>{{value}}</td>
             </tbody>
         </table>
         <br>
@@ -39,12 +40,16 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th style="width: 15%">Id</th><td>Name</td><td>Size</td>
+                    <th style="width: 15%">Id</th>
+                    <td>Name</td>
+                    <td>Size</td>
                 </tr>
             </thead>
             <tbody>
                 <tr class=tr-clickable ng-repeat="(as_key,analogSignal) in data_segment.as_prop">
-                    <th style="width: 15%">{{as_key}}</th><td>{{analogSignal.name}}</td><td>{{analogSignal.size}}</td>
+                    <th style="width: 15%">{{as_key}}</th>
+                    <td>{{analogSignal.name}}</td>
+                    <td>{{analogSignal.size}}</td>
                     <td style="width: 15%">
 
                     </td>
