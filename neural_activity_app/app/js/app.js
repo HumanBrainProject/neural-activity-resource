@@ -29,6 +29,7 @@ angular.bootstrap().invoke(function($http, $log, $location) {
 
 
 var NeuralActivityApp = angular.module('NeuralActivityApp', [
+    'Visualizer',
     'ui.router',
     'ng',
     'ngResource',
@@ -40,67 +41,16 @@ var NeuralActivityApp = angular.module('NeuralActivityApp', [
     'nvd3',
     'ngTextTruncate',
 ]);
-// NeuralActivityApp.component("vizualizer",{
-//     template: '/static/templates/file-view.tpl.html',
-//     controller: 'FileViewCtrl'
-// });
 
 NeuralActivityApp.config(
     function($cookiesProvider, $httpProvider, $stateProvider, $locationProvider, $rootScopeProvider, $resourceProvider, $urlRouterProvider) {
         $resourceProvider.defaults.stripTrailingSlashes = false;
         $stateProvider
-            .state('search', {
+            .state('home', {
                 url: '/home',
                 templateUrl: '/static/templates/search.tpl.html',
                 controller: 'HomeCtrl'
             })
-            .state('help', {
-                url: '/help',
-                templateUrl: '/static/templates/help.tpl.html',
-                controller: 'HelpCtrl'
-            })
-            .state('file_view', {
-                url: '/home/file-view/:file_name',
-                templateUrl: '/static/templates/file-view.tpl.html',
-                controller: 'FileViewCtrl'
-            })
-            /*.
-            state('file_view.block', {
-                //parent: 'file_view',
-                url: '/block',
-
-                views: {
-                    'detail@file_view': {
-                        templateUrl: '/static/templates/block-view.tpl.html',
-                        controller: 'BlockViewCtrl'
-                    }
-                }
-            })
-            */
-            .state('file_view.segment', {
-
-                url: '/segment/{segment_id:[0-9]{1,8}}',
-
-                views: {
-                    'detail': {
-                        templateUrl: '/static/templates/segment-view.tpl.html',
-                        controller: 'SegmentViewCtrl'
-                    }
-                }
-            })
-            .state('file_view.analog_signal', {
-
-                url: '/analog_signal/{segment_id:[0-9]{1,8}}?{analog_signal_id:[0-9]{1,8}}',
-
-                views: {
-                    'detail': {
-                        templateUrl: '/static/templates/analog-signal-view.tpl.html',
-                        controller: 'AnalogSignalViewCtrl'
-                    }
-                }
-            })
-
-
         $urlRouterProvider.otherwise('/home');
 
     });

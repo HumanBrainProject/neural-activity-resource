@@ -1,6 +1,7 @@
 {% load staticfiles %}
 
 <html>
+
 <head>
     <title>{% block title %} Neural Activity Service{% endblock %}</title>
     <meta charset="utf-8">
@@ -10,6 +11,7 @@
     <link rel="stylesheet" href="{% static 'css/menu.css' %}">
     <link rel="stylesheet" href="{% static 'node_modules/nvd3/build/nv.d3.css' %}">
 </head>
+
 <body>
     <script type="text/javascript" src="{% static 'node_modules/hellojs/dist/hello.js' %}"></script>
     <script type="text/javascript" src="{% static 'node_modules/hellojs/dist/hello.all.js' %}"></script>
@@ -48,10 +50,12 @@
     <script type="text/javascript" src="{% static 'js/blockCtrl.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/segmentCtrl.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/analogSignalCtrl.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/spikeTrainCtrl.js' %}"></script>
+    <!--<script type="text/javascript" src="{% static 'js/spikeTrainCtrl.js' %}"></script>-->
 
-    <script type="text/javascript" src="{% static 'js/block-list.component.js' %}"></script>
-
+    <script type="text/javascript" src="{% static 'js/visualizer.component.js'%}"></script>
+    <script type="text/javascript" src="{% static 'js/block.component.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/segment.component.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/analogsignal.component.js' %}"></script>
     <div class="app container-fluid">
         <div class="row">
             <main class="page">
@@ -60,4 +64,5 @@
         </div>
     </div>
 </body>
+
 </html>

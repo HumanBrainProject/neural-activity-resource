@@ -47,7 +47,7 @@
                                                 <ul id=menu-block-{{b_key}} class="nav-item-2" ng-repeat="(s_key,segment) in block.segments">
                                                     <li>
                                                         <a id=item-segment-{{s_key}} class="item-2" ui-sref="file_view.segment({block_id:{{b_key}},segment_id:{{s_key}}})" ui-sref-active="active">Segment #{{s_key}}<i class="glyphicon glyphicon-menu-down"></i></a>
-                                                        <ul id=menu-segment-{{s_key}} class="menu-signal submenu" ng-repeat="(as_key,analog_signal) in segment.analogsignals">
+                                        …bmenu" ng-repeat="(as_key,analog_signal) in segment.analogsignals">
                                                             <li><a ui-sref="file_view.analog_signal({block_id:{{b_key}},segment_id:{{s_key}},analog_signal_id:{{as_key}}})">AnalogSignal #{{as_key}}</a></li>
                                                         </ul>
                                                     </li>
