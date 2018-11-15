@@ -30,27 +30,17 @@ angular.bootstrap().invoke(function($http, $log, $location) {
 
 var NeuralActivityApp = angular.module('NeuralActivityApp', [
     'Visualizer',
-    'ui.router',
-    'ng',
-    'ngResource',
-    'ApiCommunicationServices',
-    'FileServices',
-
-    'GraphicsServices',
-    'ngCookies',
-    'nvd3',
-    'ngTextTruncate',
 ]);
 
-NeuralActivityApp.config(
-    function($cookiesProvider, $httpProvider, $stateProvider, $locationProvider, $rootScopeProvider, $resourceProvider, $urlRouterProvider) {
-        $resourceProvider.defaults.stripTrailingSlashes = false;
-        $stateProvider
-            .state('home', {
-                url: '/home',
-                templateUrl: '/static/templates/search.tpl.html',
-                controller: 'HomeCtrl'
-            })
-        $urlRouterProvider.otherwise('/home');
+// NeuralActivityApp.config(
+//     function($cookiesProvider, $httpProvider, $stateProvider, $locationProvider, $rootScopeProvider, $resourceProvider, $urlRouterProvider) {
+//         $resourceProvider.defaults.stripTrailingSlashes = false;
+//         $stateProvider
+//             .state('home', {
+//                 url: '/home',
+//                 templateUrl: '/static/templates/search.tpl.html',
+//                 controller: 'HomeCtrl'
+//             })
+//         $urlRouterProvider.otherwise('/home');
 
-    });
+//     });

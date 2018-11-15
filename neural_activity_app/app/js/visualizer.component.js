@@ -18,36 +18,23 @@ Visualizer.config(
         $stateProvider
 
             .state('visualizer', {
-                parent: 'home',
+                // parent: 'home',
                 abstract: true
             })
             .state('visualizer.block', {
                 url: '/block',
-                views: {
-                    'detail@home': {
-                        component: 'blockView'
-                    }
-                }
+                component: 'blockView'
             })
 
         .state('visualizer.segment', {
 
                 url: '/segment/{segment_id:[0-9]{1,8}}',
-                views: {
-                    'detail@home': {
-                        component: 'segmentView'
-                    }
-                }
+                component: 'segmentView'
             })
             .state('visualizer.analog_signal', {
 
                 url: '/analog_signal/{segment_id:[0-9]{1,8}}?{analog_signal_id:[0-9]{1,8}}',
-
-                views: {
-                    'detail@home': {
-                        component: 'analogsignalView'
-                    }
-                }
+                component: 'analogsignalView'
             })
             // .state('visualizer.spiketrain', {
 
