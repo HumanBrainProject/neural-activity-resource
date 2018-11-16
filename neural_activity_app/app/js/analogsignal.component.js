@@ -1,5 +1,5 @@
 angular.module('Visualizer').
-directive("analogsignalView", ['FileService', '$stateParams', function(FileService, $stateParams) {
+directive("analogsignalView", ['FileService', '$stateParams', 'Graphics', function(FileService, $stateParams, Graphics) {
     return {
         restrict: 'EA',
         replace: true,
