@@ -1,44 +1,38 @@
 <div ng-transclude>
 
     <body>
-        <h1 align=center>Block </h1>
-
-        <panel class=description-panel>
-            <table class="table-create">
+        <h2 align=center>Block </h2>
+        </br>
+        </br>
+        <panel class=description-create>
+            <table class="table-detail">
                 <thead>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>name: </td>
-                        <td>{{data_block.name}}</td>
+                    <tr ng-if="data_block.name">
+                        <td><b> Name: </b> {{data_block.name}} </td>
                     </tr>
-                    <tr>
-                        <td>description: </td>
-                        <td>{{data_block.description}}</td>
+                    <tr ng-if="data_block.description">
+                        <td><b> Description: </b> {{data_block.description}} </td>
                     </tr>
-                    <tr>
-                        <td>file origin: </td>
-                        <td>{{data_block.file_origin}}</td>
-                    </tr>
-                    <tr>
-                        <td>name: </td>
-                        <td>{{data_block.name}}</td>
+                    <tr ng-if="data_block.file_origin">
+                        <td><b> File origin: </b> {{data_block.file_origin}} </td>
                     </tr>
                 </tbody>
             </table>
         </panel>
-        <br>
-        <h4>Annotations</h4>
-        <table class="table">
+        </br>
+        <table class="table-detail" ng-if="data_block.annotations">
             <tbody>
-                <tr ng-repeat="(key,value) in data_block.annotations">
-                    <th scope="row">{{key}}</th>
-                    <td>{{value}}</td>
+                <th><b> Annotations: </b></th>
+                <tr class="indented" ng-repeat="(key,value) in data_block.annotations">
+                    <td><b>
+                    {{key}}: </b> {{value}}</td>
             </tbody>
         </table>
-        <br>
-        <br>
-        <h2>Segments Array</h2>
+        </br>
+        </br>
+        <h3 align=center>Segments Array</h3>
         <table class="table">
             <thead>
                 <tr>
@@ -56,6 +50,7 @@
                     </td>
             </tbody>
         </table>
-
+        </br>
+        </br>
     </body>
 </div>

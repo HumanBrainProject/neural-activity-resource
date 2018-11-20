@@ -101,11 +101,11 @@ FileServices.service('FileService', ['$rootScope', '$timeout', 'BlockDataRest', 
         var fileUrl = undefined;
         var data = undefined;
 
-        var setService = function(filename) {
+        var setService = function(url) {
             ////set the service if a filename is given /// TODO: check if necessary to add promises in each function 
             return new Promise(function(resolve, reject) {
-                setFileName(filename);
-                var url = getUrlFromCollab();
+                // setFileName(url);
+                // var url = getUrlFromCollab();
                 setFileUrl(url);
 
                 if (data == undefined) {

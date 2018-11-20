@@ -36,28 +36,21 @@ Visualizer.config(
                 url: '/analog_signal/{segment_id:[0-9]{1,8}}?{analog_signal_id:[0-9]{1,8}}',
                 component: 'analogsignalView'
             })
-            // .state('visualizer.spiketrain', {
+            .state('visualizer.spiketrain', {
 
-        //     url: '/spiketrain/{segment_id:[0-9]{1,8}}?{spiketrain_id:[0-9]{1,8}}',
-
-        //     views: {
-        //         'detail@home': {
-        //             component: 'spiketrainView'
-        //         }
-        //     }
-        // })
+                url: '/spiketrain/{segment_id:[0-9]{1,8}}?{spiketrain_id:[0-9]{1,8}}',
+                component: 'spiketrainView'
+            })
     });
 
 Visualizer.controller('MenuCtrl', ['$scope', '$rootScope', '$http', '$location', '$stateParams', '$state', 'FileService',
 
     function($scope, $rootScope, $http, $location, $stateParams, $state, FileService) {
         var ctrl = this;
-        $scope.detailTemplate = "<block-view></block-view>";
-        $scope.menu_segments_to_show = [];
 
-        $scope.showBlock = function() {
-            $scope.detailTemplate = "<block-view></block-view>";
-        }
+        $scope.menu_segments_to_show = [];
+        $scope.menu_analogsignals_to_show = [];
+        $scope.menu_spiketrains_to_show = [];
 
         $scope.showSegment = function(segment_id) {
             var id = segment_id;
@@ -73,6 +66,33 @@ Visualizer.controller('MenuCtrl', ['$scope', '$rootScope', '$http', '$location',
             };
         }
 
+        $scope.showAnalogSignals = function(segment_id) {
+            var id = segment_id;
+            if (!$scope.isInArray(id, $scope.menu_analogsignals_to_show)) {
+                $scope.menu_analogsignals_to_show.push(id);
+                document.getElementById("arrow-analogsignal-" + id).className = "glyphicon glyphicon-menu-up";
+            } else {
+                var i = $scope.menu_analogsignals_to_show.indexOf(id);
+                if (i == 0) {
+                    $scope.menu_analogsignals_to_show.splice(0, 1);
+                } else { $scope.menu_analogsignals_to_show.splice(i, i); }
+                document.getElementById("arrow-analogsignal-" + id).className = "glyphicon glyphicon-menu-down";
+            };
+        }
+
+        $scope.showSpiketrains = function(segment_id) {
+            var id = segment_id;
+            if (!$scope.isInArray(id, $scope.menu_spiketrains_to_show)) {
+                $scope.menu_spiketrains_to_show.push(id);
+                document.getElementById("arrow-spiketrain-" + id).className = "glyphicon glyphicon-menu-up";
+            } else {
+                var i = $scope.menu_spiketrains_to_show.indexOf(id);
+                if (i == 0) {
+                    $scope.menu_spiketrains_to_show.splice(0, 1);
+                } else { $scope.menu_spiketrains_to_show.splice(i, i); }
+                document.getElementById("arrow-spiketrain-" + id).className = "glyphicon glyphicon-menu-down";
+            };
+        }
 
         $scope.isInArray = function(value, array) {
             return array.indexOf(value) > -1;

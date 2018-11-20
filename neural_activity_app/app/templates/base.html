@@ -10,6 +10,12 @@
     <link rel="stylesheet" href="{% static 'css/app.css' %}">
     <link rel="stylesheet" href="{% static 'css/menu.css' %}">
     <link rel="stylesheet" href="{% static 'node_modules/nvd3/build/nv.d3.css' %}">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -46,24 +52,21 @@
     <script type="text/javascript" src="{% static 'js/app.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/model.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/service.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/mainCtrl.js' %}"></script>
+    <!--<script type="text/javascript" src="{% static 'js/mainCtrl.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/blockCtrl.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/segmentCtrl.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/analogSignalCtrl.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/segmentCtrl.js' %}"></script>-->
+    <!--<script type="text/javascript" src="{% static 'js/analogSignalCtrl.js' %}"></script>-->
     <!--<script type="text/javascript" src="{% static 'js/spikeTrainCtrl.js' %}"></script>-->
 
     <script type="text/javascript" src="{% static 'js/visualizer.component.js'%}"></script>
     <script type="text/javascript" src="{% static 'js/block.component.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/segment.component.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/analogsignal.component.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/spiketrain.component.js' %}"></script>
     <div class="app container-fluid">
         <div class="row">
             <main class="page">
                 {% block content %} {% endblock %}
-                <!--<nav>
-                    <h1> Visualizer </h1>
-                    <visualizer-view src=""> </visualizer-view>
-                </nav>-->
             </main>
         </div>
     </div>
