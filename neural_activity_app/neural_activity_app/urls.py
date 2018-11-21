@@ -32,10 +32,10 @@ urlpatterns = [
 
     #general 
     url(r'^blockdata/$', Block.as_view()),
-     url(r'^segmentdata/$', Segment.as_view()),
+    url(r'^segmentdata/$', Segment.as_view()),
     url(r'^analogsignaldata/$', AnalogSignal.as_view()),
   
     # url(r'^', include(router.urls)),
     url(r'^admin/', admin.site.urls),
-    url(r'^', home, name='home')
+    url(r'^$', home, name='home')
 ]

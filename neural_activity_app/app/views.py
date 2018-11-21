@@ -2,22 +2,39 @@
 from __future__ import unicode_literals
 from django.shortcuts import render
 from django.http import JsonResponse
+
 from rest_framework.views import APIView
 from neo.io import get_io
 # from neo import io
 from rest_framework.response import Response
 from rest_framework import status
 import urllib
-
+import requests
 # r = io.AlphaOmegaIO(filename='File_AlphaOmega_1.map')
 # block = r.read_block(lazy=False, cascade=True)
 # block = get_io('File_AlphaOmega_1.map').read_block()
 
+def _get_file_from_url(request, url):
+    if url:
+        # get url of neo file
+        url = url.rsplit('.', 1)[0] + '.h5'  # TODO update for other file extensions
+        ##TODO need to change here so it gets the good file
+        filename = 'neo_file.h5'
+        urllib.urlretrieve(url, filename)
+        request.session['na_file']= filename
+    else:
+        request.session['na_file']= 'File_AlphaOmega_1.map'
+    return request
 
 class Block(APIView): 
    
     def get(self, request, format=None, **kwargs):
+        
+        if not request.session['na_file']:
+            url= request.GET.get('url')
+            request = _get_file_from_url(request, url)
         na_file = request.session['na_file']
+
         try:
             block = get_io(na_file).read_block()
         except IOError:
@@ -59,6 +76,11 @@ class Block(APIView):
 class Segment(APIView): 
    
     def get(self, request, format=None, **kwargs):
+
+        if not request.session['na_file']:
+            url= request.GET.get('url')
+            request = _get_file_from_url(request, url)
+
         na_file = request.session['na_file']
         block = get_io(na_file).read_block()
         id_segment = int(request.GET['segment_id'])
@@ -88,6 +110,9 @@ class Segment(APIView):
 class AnalogSignal(APIView): 
    
     def get(self, request, format=None, **kwargs):
+        if not request.session['na_file']:
+            url= request.GET.get('url')
+            request = _get_file_from_url(request, url)
         na_file = request.session['na_file']
         block = get_io(na_file).read_block()
         id_segment = int(request.GET['segment_id'])
@@ -136,23 +161,25 @@ class AnalogSignal(APIView):
         # data = JSON.dumps(graph_data)
         return JsonResponse(graph_data)
 
-
-def home(request):
+def home(request, **kwargs):
     """
     home page
     """
-    url = request.GET.get('url')
-    # print("URL " + url)
+    print(request.path)
+    print(request.content_params)
+    print(request.GET)
+    url = request.GET.getlist('url')
+    print("URL ",url)
 
-    if url:
-        # get url of neo file
-        url = url.rsplit('.', 1)[0] + '.h5'  # TODO update for other file extensions
-        filename = 'neo_file.h5'
-        urllib.urlretrieve(url, filename)
-        request.session['na_file'] = filename
-    else:
-        request.session['na_file'] = 'File_AlphaOmega_1.map'
-
+    # if url:
+    #     # get url of neo file
+    #     url = url.rsplit('.', 1)[0] + '.h5'  # TODO update for other file extensions
+    #     filename = 'neo_file.h5'
+    #     urllib.urlretrieve(url, filename)
+    #     request.session['na_file'] = filename
+    # else:
+    #     request.session['na_file'] = 'File_AlphaOmega_1.map'
+    #     #request.session['na_file'] = 'file_spiketrains.pickle'
     return render(request, 'home.html', {})
 
 
