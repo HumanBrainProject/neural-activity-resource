@@ -3,53 +3,56 @@
     <head> </head>
 
     <body>
-        <h1 align=center> Visualizer component</h1>
+        <div class="component">
+            <div class="content">
+                <nav id=menu-panel class="menu" ng-controller=MenuCtrl>
 
-        <uiview class="top"></uiview>
+                    <ul id="menu-block" class="nav-item-1">
+                        <li>
+                            <div class="card">
+                                <div>
+                                    <a id=item-block type="button" ui-sref="visualizer.block" ui-sref-active="active" active="true" class="btn btn-block button-block"> Block </a>
+                                </div>
 
-        <div class="bottom">
-            <uiview class="left"></uiview>
-            <uiview class="right"></uiview>
-        </div>
+                                <ul id=menu-block ng-repeat="(s_key,segment) in $parent.data.block[0].segments">
+                                    <li>
+                                        <div class="card">
+                                            <div>
+                                                <a id=item-segment-{{s_key}} ng-click="showSegment(s_key)" ui-sref="visualizer.segment({segment_id:{{s_key}}})" ui-sref-active="active" class="btn btn-block button-segment"> Segment #{{s_key}}<i id="arrow-segment-{{s_key}}"  class="glyphicon glyphicon-menu-down"></i></a>
+                                            </div>
+                                            <div class="card card-body" ng-show="isInArray(s_key,menu_segments_to_show)">
+                                                <ul id=menu-segment-{{s_key}} class="menu-signal">
+                                                    <li><a ng-click="showAnalogSignals(s_key)" class="btn btn-block button-element">AnalogSignals <i id="arrow-analogsignal-{{s_key}}"  class="glyphicon glyphicon-menu-down"></i></a></li>
 
-        <div class="content">
-            <nav id=menu-panel class="menu" ng-controller=MenuCtrl>
+                                                    <div class="card card-body" ng-show="isInArray(s_key,menu_analogsignals_to_show)">
+                                                        <ul id=menu-segment-detail-{{s_key}} ng-repeat="(as_key,analog_signal) in segment.analogsignals">
+                                                            <li><a class="btn btn-block button-element-detail" ui-sref="visualizer.analog_signal({segment_id:{{s_key}},analog_signal_id:{{as_key}}})" ui-sref-active="active">AnalogSignal #{{as_key}}</a></li>
+                                                        </ul>
+                                                    </div>
+                                                    <li><a ng-click="showSpiketrains(s_key)" class="btn btn-block button-element">Spiketrains <i id="arrow-spiketrain-{{s_key}}"  class="glyphicon glyphicon-menu-down"></i></a></li>
+                                                    <div class="card card-body" ng-show="isInArray(s_key,menu_spiketrains_to_show)">
+                                                        <ul id=menu-segment-detail-{{s_key}} ng-repeat="(st_key,spiketrain) in segment.spiketrains">
+                                                            <li><a ui-sref="visualizer.spiketrain({segment_id:{{s_key}},spiketrain_id:{{as_key}}})" class="btn btn-block button-element-detail" ui-sref-active="active">Spiketrain #{{st_key}}</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </ul>
+                                            </div>
 
-                <ul id="menu-block" class="nav-item-1">
-                    <li>
-                        <div class="card">
-                            <div class="card-header" id="headingOne">
-                                <a id=item-block ui-sref="visualizer.block" ui-sref-active="active" active="true" class="btn btn-link"> Block </a>
+                                        </div>
+                                    </li>
+                                </ul>
+
+
                             </div>
+                        </li>
 
-                            <ul id=menu-block class="nav-item-2" ng-repeat="(s_key,segment) in $parent.data.block[0].segments">
-                                <li>
-                                    <div class="card">
-                                        <div class="card-header" id="headingOne">
-                                            <a id=item-segment-{{s_key}} ng-click="showSegment(s_key)" ui-sref="visualizer.segment({segment_id:{{s_key}}})" ui-sref-active="active" class="btn btn-link"> Segment #{{s_key}}<i id="arrow-segment-{{s_key}}"  class="glyphicon glyphicon-menu-down"></i></a>
-                                        </div>
+                    </ul>
+                </nav>
 
-                                        <div class="card card-body" ng-show="isInArray(s_key,menu_segments_to_show)">
-                                            <ul id=menu-segment-{{s_key}} class="menu-signal" ng-repeat="(as_key,analog_signal) in segment.analogsignals">
-                                                <li><a ui-sref="visualizer.analog_signal({segment_id:{{s_key}},analog_signal_id:{{as_key}}})" ui-sref-active="active">AnalogSignal #{{as_key}}</a></li>
-                                            </ul>
-                                        </div>
-
-                                    </div>
-                                </li>
-                            </ul>
-
-
-                        </div>
-                    </li>
-
-                </ul>
-            </nav>
-
-            <!-- nested ui-view -->
-            <div id=detail-panel align=rigth ui-view=''></div>
-            <!-- nested ui-view -->
+                <!-- nested ui-view -->
+                <div id=detail-panel align=rigth ui-view=''></div>
+                <!-- nested ui-view -->
+            </div>
         </div>
-
     </body>
 </div>
