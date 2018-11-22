@@ -165,11 +165,11 @@ def home(request, **kwargs):
     """
     home page
     """
-    print(request.path)
-    print(request.content_params)
-    print(request.GET)
-    url = request.GET.getlist('url')
-    print("URL ",url)
+    # print(request.path)
+    # print(request.content_params)
+    # print(request.GET)
+    # url = request.GET.getlist('url')
+    # print("URL ",url)
 
     # if url:
     #     # get url of neo file
