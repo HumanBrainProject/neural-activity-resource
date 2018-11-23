@@ -9,29 +9,28 @@ from neo.io import get_io
 from rest_framework.response import Response
 from rest_framework import status
 import urllib
-import requests
+# import requests
 # r = io.AlphaOmegaIO(filename='File_AlphaOmega_1.map')
 # block = r.read_block(lazy=False, cascade=True)
 # block = get_io('File_AlphaOmega_1.map').read_block()
 
+
 def _get_file_from_url(request, url):
     if url:
-        # get url of neo file
-        url = url.rsplit('.', 1)[0] + '.h5'  # TODO update for other file extensions
-        ##TODO need to change here so it gets the good file
-        filename = 'neo_file.h5'
+        filename = url[url.rfind("/") + 1:]
         urllib.urlretrieve(url, filename)
-        request.session['na_file']= filename
+        request.session['na_file'] = filename
     else:
-        request.session['na_file']= 'File_AlphaOmega_1.map'
+        request.session['na_file'] = 'File_AlphaOmega_1.map'
     return request
+
 
 class Block(APIView): 
    
     def get(self, request, format=None, **kwargs):
-        
-        if not request.session['na_file']:
-            url= request.GET.get('url')
+
+        if 'na_file' not in request.session:
+            url = request.GET.get('url')
             request = _get_file_from_url(request, url)
         na_file = request.session['na_file']
 
@@ -158,8 +157,8 @@ class AnalogSignal(APIView):
                         "t_stop" : analogsignal.t_stop.item()
                         }
 
-        # data = JSON.dumps(graph_data)
         return JsonResponse(graph_data)
+
 
 def home(request, **kwargs):
     """
