@@ -8,7 +8,10 @@ from neo.io import get_io
 # from neo import io
 from rest_framework.response import Response
 from rest_framework import status
-import urllib
+try:
+    from urllib import urlretrieve
+except ImportError:
+    from urllib.request import urlretrieve
 # import requests
 # r = io.AlphaOmegaIO(filename='File_AlphaOmega_1.map')
 # block = r.read_block(lazy=False, cascade=True)
@@ -18,7 +21,7 @@ import urllib
 def _get_file_from_url(request, url):
     if url:
         filename = url[url.rfind("/") + 1:]
-        urllib.urlretrieve(url, filename)
+        urlretrieve(url, filename)
         request.session['na_file'] = filename
     else:
         request.session['na_file'] = 'File_AlphaOmega_1.map'
@@ -174,7 +177,7 @@ def home(request, **kwargs):
     #     # get url of neo file
     #     url = url.rsplit('.', 1)[0] + '.h5'  # TODO update for other file extensions
     #     filename = 'neo_file.h5'
-    #     urllib.urlretrieve(url, filename)
+    #     urlretrieve(url, filename)
     #     request.session['na_file'] = filename
     # else:
     #     request.session['na_file'] = 'File_AlphaOmega_1.map'
