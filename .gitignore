@@ -72,8 +72,8 @@ Thumbs.db
 static
 app/static/
 packages/*
-!packages/.keep 
-
+!packages/.keep
+node_modules
 
 
 # Migrations #
