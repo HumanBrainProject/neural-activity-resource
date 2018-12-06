@@ -79,7 +79,7 @@ class Segment(APIView):
    
     def get(self, request, format=None, **kwargs):
 
-        if not request.session['na_file']:
+        if 'na_file' not in request.session:
             url= request.GET.get('url')
             request = _get_file_from_url(request, url)
 
@@ -112,7 +112,7 @@ class Segment(APIView):
 class AnalogSignal(APIView): 
    
     def get(self, request, format=None, **kwargs):
-        if not request.session['na_file']:
+        if 'na_file' not in request.session:
             url= request.GET.get('url')
             request = _get_file_from_url(request, url)
         na_file = request.session['na_file']
