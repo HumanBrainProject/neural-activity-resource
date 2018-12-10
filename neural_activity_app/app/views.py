@@ -160,7 +160,7 @@ class AnalogSignal(APIView):
             "times_dimensionality": str(analogsignal.t_start.units.dimensionality),
             "t_start": analogsignal.t_start.item(),
             "t_stop": analogsignal.t_stop.item(),
-            "sampling_rate": analogsignal.sampling_rate.magnitude,
+            "sampling_rate": float(analogsignal.sampling_rate.magnitude),
             "sampling_rate_units": str(analogsignal.sampling_rate.units.dimensionality)
         }
 
