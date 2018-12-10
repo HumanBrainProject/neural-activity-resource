@@ -151,14 +151,18 @@ class AnalogSignal(APIView):
         analog_signal_times= []
         for item in analogsignal.times:
             analog_signal_times.append(item.item())
-    
-        graph_data = {"values": analog_signal_values, 
-                        "values_units": str(analogsignal.units.dimensionality), 
-                        "times": analog_signal_times,
-                        "times_dimensionality":str(analogsignal.t_start.units.dimensionality), 
-                        "t_start" : analogsignal.t_start.item(), 
-                        "t_stop" : analogsignal.t_stop.item()
-                        }
+
+        graph_data = {
+            "name": analogsignal.name,
+            "values": analog_signal_values,
+            "values_units": str(analogsignal.units.dimensionality),
+            "times": analog_signal_times,
+            "times_dimensionality": str(analogsignal.t_start.units.dimensionality),
+            "t_start": analogsignal.t_start.item(),
+            "t_stop": analogsignal.t_stop.item(),
+            "sampling_rate": analogsignal.sampling_rate.magnitude,
+            "sampling_rate_units": str(analogsignal.analogsignal.sampling_rate.units.dimensionality)
+        }
 
         return JsonResponse(graph_data)
 
