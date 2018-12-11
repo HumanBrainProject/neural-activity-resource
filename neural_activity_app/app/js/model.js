@@ -1,6 +1,7 @@
 var ApiCommunicationServices = angular.module('ApiCommunicationServices', ['ngResource', 'ngCookies']);
 
-ApiCommunicationServices.value('baseURL', 'https://localhost:8000/');
+//ApiCommunicationServices.value('baseURL', 'https://localhost:8000/');
+ApiCommunicationServices.value('baseURL', 'https://neo-viewer.brainsimulation.eu/');
 
 ApiCommunicationServices.factory('BlockDataRest', ['$resource', 'baseURL',
     function($resource, baseURL) {
