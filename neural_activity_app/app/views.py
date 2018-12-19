@@ -8,7 +8,10 @@ from neo.io import get_io
 # from neo import io
 from rest_framework.response import Response
 from rest_framework import status
-import urllib
+try:
+    from urllib import urlretrieve
+except ImportError:
+    from urllib.request import urlretrieve
 # import requests
 # r = io.AlphaOmegaIO(filename='File_AlphaOmega_1.map')
 # block = r.read_block(lazy=False, cascade=True)
@@ -18,7 +21,7 @@ import urllib
 def _get_file_from_url(request, url):
     if url:
         filename = url[url.rfind("/") + 1:]
-        urllib.urlretrieve(url, filename)
+        urlretrieve(url, filename)
         request.session['na_file'] = filename
     else:
         request.session['na_file'] = 'File_AlphaOmega_1.map'
@@ -76,7 +79,7 @@ class Segment(APIView):
    
     def get(self, request, format=None, **kwargs):
 
-        if not request.session['na_file']:
+        if 'na_file' not in request.session:
             url= request.GET.get('url')
             request = _get_file_from_url(request, url)
 
@@ -100,7 +103,7 @@ class Segment(APIView):
                     'annotations': segment.annotations,
                     # 'spiketrains': segment.spiketrains,
                     'analogsignals': [{} for a in segment.analogsignals],
-                    'as_prop': [{'size': e.size, 'name': e.name.decode('cp1252')} for e in segment.analogsignals]
+                    'as_prop': [{'size': e.size, 'name': e.name} for e in segment.analogsignals]
                     }
       
         return JsonResponse(seg_data, safe=False)
@@ -109,7 +112,7 @@ class Segment(APIView):
 class AnalogSignal(APIView): 
    
     def get(self, request, format=None, **kwargs):
-        if not request.session['na_file']:
+        if 'na_file' not in request.session:
             url= request.GET.get('url')
             request = _get_file_from_url(request, url)
         na_file = request.session['na_file']
@@ -148,14 +151,18 @@ class AnalogSignal(APIView):
         analog_signal_times= []
         for item in analogsignal.times:
             analog_signal_times.append(item.item())
-    
-        graph_data = {"values": analog_signal_values, 
-                        "values_units": str(analogsignal.units.dimensionality), 
-                        "times": analog_signal_times,
-                        "times_dimensionality":str(analogsignal.t_start.units.dimensionality), 
-                        "t_start" : analogsignal.t_start.item(), 
-                        "t_stop" : analogsignal.t_stop.item()
-                        }
+
+        graph_data = {
+            "name": analogsignal.name,
+            "values": analog_signal_values,
+            "values_units": str(analogsignal.units.dimensionality),
+            "times": analog_signal_times,
+            "times_dimensionality": str(analogsignal.t_start.units.dimensionality),
+            "t_start": analogsignal.t_start.item(),
+            "t_stop": analogsignal.t_stop.item(),
+            "sampling_rate": float(analogsignal.sampling_rate.magnitude),
+            "sampling_rate_units": str(analogsignal.sampling_rate.units.dimensionality)
+        }
 
         return JsonResponse(graph_data)
 
@@ -174,7 +181,7 @@ def home(request, **kwargs):
     #     # get url of neo file
     #     url = url.rsplit('.', 1)[0] + '.h5'  # TODO update for other file extensions
     #     filename = 'neo_file.h5'
-    #     urllib.urlretrieve(url, filename)
+    #     urlretrieve(url, filename)
     #     request.session['na_file'] = filename
     # else:
     #     request.session['na_file'] = 'File_AlphaOmega_1.map'
