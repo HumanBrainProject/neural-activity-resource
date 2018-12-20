@@ -12,24 +12,22 @@ try:
     from urllib import urlretrieve
 except ImportError:
     from urllib.request import urlretrieve
-# import requests
-# r = io.AlphaOmegaIO(filename='File_AlphaOmega_1.map')
-# block = r.read_block(lazy=False, cascade=True)
-# block = get_io('File_AlphaOmega_1.map').read_block()
 
 
 def _get_file_from_url(request, url):
     if url:
         filename = url[url.rfind("/") + 1:]
         urlretrieve(url, filename)
+        # todo: wrap previous line in try..except so we can return a 404 if the file is not found
+        #       or a 500 if the local disk is full
         request.session['na_file'] = filename
     else:
         request.session['na_file'] = 'File_AlphaOmega_1.map'
     return request
 
 
-class Block(APIView): 
-   
+class Block(APIView):
+
     def get(self, request, format=None, **kwargs):
 
         if 'na_file' not in request.session:
@@ -40,6 +38,8 @@ class Block(APIView):
         try:
             block = get_io(na_file).read_block()
         except IOError:
+            # todo: need to be more fine grained. There could be other reasons
+            #       for an IOError
             return Response({'error': 'incorrect file type'}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
         # read neo file from hd
@@ -75,8 +75,8 @@ class Block(APIView):
         return JsonResponse(block_data)
 
 
-class Segment(APIView): 
-   
+class Segment(APIView):
+
     def get(self, request, format=None, **kwargs):
 
         if 'na_file' not in request.session:
@@ -86,7 +86,9 @@ class Segment(APIView):
         na_file = request.session['na_file']
         block = get_io(na_file).read_block()
         id_segment = int(request.GET['segment_id'])
+        # todo, catch MultiValueDictKeyError in case segment_id isn't given, and return a 400 Bad Request response
         segment = block.segments[id_segment]
+        # todo, catch IndexError, and return a 404 response
 
         seg_data_test = {
                     'name': "segment 1",
@@ -105,12 +107,12 @@ class Segment(APIView):
                     'analogsignals': [{} for a in segment.analogsignals],
                     'as_prop': [{'size': e.size, 'name': e.name} for e in segment.analogsignals]
                     }
-      
+
         return JsonResponse(seg_data, safe=False)
 
 
-class AnalogSignal(APIView): 
-   
+class AnalogSignal(APIView):
+
     def get(self, request, format=None, **kwargs):
         if 'na_file' not in request.session:
             url= request.GET.get('url')
@@ -119,10 +121,12 @@ class AnalogSignal(APIView):
         block = get_io(na_file).read_block()
         id_segment = int(request.GET['segment_id'])
         id_analog_signal = int(request.GET['analog_signal_id'])
+        # todo, catch MultiValueDictKeyError in case segment_id or analog_signal_id aren't given, and return a 400 Bad Request response
         segment = block.segments[id_segment]
         analogsignal = segment.analogsignals[id_analog_signal]
+        # todo, catch any IndexErrors, and return a 404 response
 
-        # unit = analogsignal.units 
+        # unit = analogsignal.units
         # t_start = analogsignal.t_start
         # sampling_rate = analogsignal.sampling_rate
         # time_laps = 1/sampling_rate
@@ -140,7 +144,7 @@ class AnalogSignal(APIView):
         # print('analogsignal', analogsignal[0], analogsignal[0].sampling_rate)
         # analog_signal = block.segments[id_segment].analogsignals[id_analog_signal]
         # print(analog_signal)
-  
+
         analog_signal_values = []
         for item in analogsignal:
             try:  # TODO find a better solution
@@ -165,27 +169,3 @@ class AnalogSignal(APIView):
         }
 
         return JsonResponse(graph_data)
-
-
-def home(request, **kwargs):
-    """
-    home page
-    """
-    # print(request.path)
-    # print(request.content_params)
-    # print(request.GET)
-    # url = request.GET.getlist('url')
-    # print("URL ",url)
-
-    # if url:
-    #     # get url of neo file
-    #     url = url.rsplit('.', 1)[0] + '.h5'  # TODO update for other file extensions
-    #     filename = 'neo_file.h5'
-    #     urlretrieve(url, filename)
-    #     request.session['na_file'] = filename
-    # else:
-    #     request.session['na_file'] = 'File_AlphaOmega_1.map'
-    #     #request.session['na_file'] = 'file_spiketrains.pickle'
-    return render(request, 'home.html', {})
-
-

@@ -1,5 +1,5 @@
 #
-# Build an image for deploying the Neuromorphic Platform job manager
+# Build an image for deploying the Neo web viewer REST API
 #
 # To build the image, from the parent directory:
 #   docker build -t neo-viewer -f deployment/Dockerfile .
@@ -24,10 +24,9 @@ COPY requirements.txt $BASEDIR/requirements.txt
 RUN pip3 install -r $BASEDIR/requirements.txt
 ENV PYTHONPATH  /home/docker:/home/docker/site:/usr/local/lib/python3.6/dist-packages:/usr/lib/python3.6/dist-packages
 
-COPY neural_activity_app $SITEDIR
-
-WORKDIR $SITEDIR/app
-RUN npm install
+COPY neural_activity_app $SITEDIR/neural_activity_app
+COPY neoview $SITEDIR/neoview
+COPY manage.py $SITEDIR/manage.py
 
 WORKDIR $SITEDIR
 RUN if [ -f $SITEDIR/db.sqlite3 ]; then rm $SITEDIR/db.sqlite3; fi

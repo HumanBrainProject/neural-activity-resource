@@ -14,7 +14,7 @@ import os
 import sys
 import json
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ENV = 'dev'
 
 # Quick-start development settings - unsuitable for production
@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'app',
+    'neoview',
 ]
 
 if ENV == "dev":
