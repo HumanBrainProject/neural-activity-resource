@@ -37,10 +37,12 @@ class Block(APIView):
 
         try:
             block = get_io(na_file).read_block()
-        except IOError:
+        except IOError as err:
             # todo: need to be more fine grained. There could be other reasons
             #       for an IOError
-            return Response({'error': 'incorrect file type'}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+            return Response(
+                {'error': 'incorrect file type', 'message': str(err)},
+                status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
         # read neo file from hd
         block_data = {'block': [{
