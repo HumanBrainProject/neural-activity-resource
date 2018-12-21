@@ -2,4 +2,4 @@ Django==1.11.11
 django-sslserver==0.19
 djangorestframework==3.6.3
 django-cors-headers
-neo==0.5.2
+neo==0.7.1
