@@ -103,7 +103,7 @@ Visualizer.controller('MenuCtrl', ['$scope', '$rootScope', '$http', '$location',
             $scope.$apply();
         });
         //code
-        FileService.setService($scope.source).then(function() {
+        FileService.setService($scope.source, $scope.iotype).then(function() {
             $scope.data = FileService.getData();
             console.log("data", $scope.data)
             $scope.$apply();
@@ -118,7 +118,7 @@ Visualizer.directive("visualizerView", ['FileService', '$stateParams', function(
         replace: true,
         transclude: true,
         templateUrl: '/static/templates/visualizer.tpl.html',
-        scope: { source: '@' },
+        scope: { source: '@', iotype: '@' },
         controller: 'MenuCtrl'
     }
 

@@ -1,56 +1,64 @@
 <div ng-transclude>
-
     <body>
-        <h2 align=center>Block </h2>
-        </br>
-        </br>
-        <panel class=description-create>
-            <table class="table-detail">
-                <thead>
-                </thead>
+        <div ng-if="data_block.error">
+            <tr>
+            <td><b> Error: </b> {{data_block.error}} </td>
+            </tr>
+        </div>
+
+        <div ng-if="!data_block.error">
+
+            <h2 align=center>Block </h2>
+            </br>
+            </br>
+            <panel class=description-create>
+                <table class="table-detail">
+                    <thead>
+                    </thead>
+                    <tbody>
+                        <tr ng-if="data_block.name">
+                            <td><b> Name: </b> {{data_block.name}} </td>
+                        </tr>
+                        <tr ng-if="data_block.description">
+                            <td><b> Description: </b> {{data_block.description}} </td>
+                        </tr>
+                        <tr ng-if="data_block.file_origin">
+                            <td><b> File origin: </b> {{data_block.file_origin}} </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </panel>
+            </br>
+            <table class="table-detail" ng-if="data_block.annotations">
                 <tbody>
-                    <tr ng-if="data_block.name">
-                        <td><b> Name: </b> {{data_block.name}} </td>
-                    </tr>
-                    <tr ng-if="data_block.description">
-                        <td><b> Description: </b> {{data_block.description}} </td>
-                    </tr>
-                    <tr ng-if="data_block.file_origin">
-                        <td><b> File origin: </b> {{data_block.file_origin}} </td>
-                    </tr>
+                    <th><b> Annotations: </b></th>
+                    <tr class="indented" ng-repeat="(key,value) in data_block.annotations">
+                        <td><b>
+                        {{key}}: </b> {{value}}</td>
                 </tbody>
             </table>
-        </panel>
-        </br>
-        <table class="table-detail" ng-if="data_block.annotations">
-            <tbody>
-                <th><b> Annotations: </b></th>
-                <tr class="indented" ng-repeat="(key,value) in data_block.annotations">
-                    <td><b>
-                    {{key}}: </b> {{value}}</td>
-            </tbody>
-        </table>
-        </br>
-        </br>
-        <h3 align=center>Segments Array</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th style="width: 15%">Id</th>
-                    <td>Name</td>
+            </br>
+            </br>
+            <h3 align=center>Segments Array</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width: 15%">Id</th>
+                        <td>Name</td>
 
-                </tr>
-            </thead>
-            <tbody>
-                <tr class=tr-clickable ng-repeat="(s_key,segment) in data_block.segments" ng-click="showSegment(s_key)" ui-sref="file_view.segment({segment_id:{{s_key}}})" ui-sref-active="active">
-                    <th style="width: 15%">{{s_key}}</th>
-                    <td>{{segment.name}}</td>
-                    <td style="width: 15%">
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class=tr-clickable ng-repeat="(s_key,segment) in data_block.segments" ng-click="showSegment(s_key)" ui-sref="file_view.segment({segment_id:{{s_key}}})" ui-sref-active="active">
+                        <th style="width: 15%">{{s_key}}</th>
+                        <td>{{segment.name}}</td>
+                        <td style="width: 15%">
 
-                    </td>
-            </tbody>
-        </table>
-        </br>
-        </br>
+                        </td>
+                </tbody>
+            </table>
+            </br>
+            </br>
+        </div>
     </body>
 </div>

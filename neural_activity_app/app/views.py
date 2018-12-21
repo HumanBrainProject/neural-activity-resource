@@ -5,9 +5,7 @@ from django.http import JsonResponse
 
 from rest_framework.views import APIView
 from neo.io import get_io
-# from neo import io
-from rest_framework.response import Response
-from rest_framework import status
+from neo import io
 try:
     from urllib import urlretrieve
 except ImportError:
@@ -28,8 +26,12 @@ def _get_file_from_url(request, url):
     return request
 
 
-class Block(APIView): 
-   
+def _handle_dict(ob):
+    return {k: unicode(v) for k, v in ob.items()}
+
+
+class Block(APIView):
+
     def get(self, request, format=None, **kwargs):
 
         if 'na_file' not in request.session:
@@ -37,14 +39,19 @@ class Block(APIView):
             request = _get_file_from_url(request, url)
         na_file = request.session['na_file']
 
-        try:
-            block = get_io(na_file).read_block()
-        except IOError:
-            return Response({'error': 'incorrect file type'}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+        if 'type' in request.GET and request.GET.get('type'):
+            iotype = request.GET.get('type')
+            method = getattr(io, iotype)
+            r = method(filename=na_file)
+            block = r.read_block()
+        else:
+            try:
+                block = get_io(na_file).read_block()
+            except IOError:
+                return JsonResponse({'block': [{'error': 'incorrect file type'}]})
 
-        # read neo file from hd
         block_data = {'block': [{
-            'annotations': block.annotations,
+            'annotations': _handle_dict(block.annotations),
             # 'channel_indexes': block.channel_indexes,
             'description': block.description or "",
             # 'file_datetime': block.file_datetime,
@@ -55,7 +62,7 @@ class Block(APIView):
             'segments': [
                 {
                     'name': s.name or "",
-                    'annotations': s.annotations,
+                    'annotations': _handle_dict(s.annotations),
                     'description': s.description or "",
                     # 'epochs': s.epochs,
                     # 'events': s.events,
@@ -100,7 +107,7 @@ class Segment(APIView):
                     'name': segment.name or "",
                     'description': segment.description or "",
                     'file_origin': segment.file_origin or "",
-                    'annotations': segment.annotations,
+                    'annotations': _handle_dict(segment.annotations),
                     # 'spiketrains': segment.spiketrains,
                     'analogsignals': [{} for a in segment.analogsignals],
                     'as_prop': [{'size': e.size, 'name': e.name} for e in segment.analogsignals]
@@ -171,21 +178,6 @@ def home(request, **kwargs):
     """
     home page
     """
-    # print(request.path)
-    # print(request.content_params)
-    # print(request.GET)
-    # url = request.GET.getlist('url')
-    # print("URL ",url)
-
-    # if url:
-    #     # get url of neo file
-    #     url = url.rsplit('.', 1)[0] + '.h5'  # TODO update for other file extensions
-    #     filename = 'neo_file.h5'
-    #     urlretrieve(url, filename)
-    #     request.session['na_file'] = filename
-    # else:
-    #     request.session['na_file'] = 'File_AlphaOmega_1.map'
-    #     #request.session['na_file'] = 'file_spiketrains.pickle'
     return render(request, 'home.html', {})
 
 

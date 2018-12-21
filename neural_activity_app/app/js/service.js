@@ -99,14 +99,16 @@ FileServices.service('FileService', ['$rootScope', '$timeout', 'BlockDataRest', 
         ]
         var fileName = undefined;
         var fileUrl = undefined;
+        var fileType = undefined;
         var data = undefined;
 
-        var setService = function(url) {
+        var setService = function(url, type) {
             ////set the service if a filename is given /// TODO: check if necessary to add promises in each function 
             return new Promise(function(resolve, reject) {
                 // setFileName(url);
                 // var url = getUrlFromCollab();
                 setFileUrl(url);
+                setFileType(type);
 
                 if (data == undefined) {
                     getBlockData().then(function(temp_data) {
@@ -159,7 +161,7 @@ FileServices.service('FileService', ['$rootScope', '$timeout', 'BlockDataRest', 
         var getBlockData = function() {
             ///get block information from the api 
             return new Promise(function(resolve, reject) {
-                var temp_data = BlockDataRest.get({ url: fileUrl });
+                var temp_data = BlockDataRest.get({ url: fileUrl, type: fileType });
                 temp_data.$promise.then(function(data) {
 
                     // resolve(fake_data); //resolve(data);
@@ -195,6 +197,9 @@ FileServices.service('FileService', ['$rootScope', '$timeout', 'BlockDataRest', 
 
         var setFileUrl = function(url) {
             fileUrl = url;
+        }
+        var setFileType = function(type) {
+            fileType = type;
         }
         var setData = function(data) {
                 data = data;
