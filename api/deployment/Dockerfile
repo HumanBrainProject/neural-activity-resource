@@ -22,6 +22,7 @@ ENV SITEDIR $BASEDIR/site
 
 COPY requirements.txt $BASEDIR/requirements.txt
 RUN pip3 install -r $BASEDIR/requirements.txt
+RUN pip3 install axographio  # setup.py requires numpy, so have to install separately
 ENV PYTHONPATH  /home/docker:/home/docker/site:/usr/local/lib/python3.6/dist-packages:/usr/lib/python3.6/dist-packages
 
 COPY neural_activity_app $SITEDIR/neural_activity_app
