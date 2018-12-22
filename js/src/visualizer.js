@@ -12,8 +12,9 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
     $scope.label = $scope.source.substring($scope.source.lastIndexOf('/') + 1);
     console.log($scope.label);
 
-    BlockData.get({url: $scope.source}).$promise.then(
+    BlockData.get({url: $scope.source, type: $scope.iotype }).$promise.then(
         function(data) {
+            $scope.error = null;
             $scope.block = data.block[0];
             console.log(data.block[0]);
             $scope.currentSegmentId = "0";
@@ -21,6 +22,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
         },
         function(err) {
             console.log("Error in getting block");
+            $scope.error = err;
         }
     );
 
@@ -28,7 +30,10 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
         $scope.signal = null;
         if ($scope.block.segments[$scope.currentSegmentId].analogsignals[0] == undefined) {
             console.log("Fetching data for segment #" + $scope.currentSegmentId);
-            SegmentData.get({url: $scope.source, segment_id: $scope.currentSegmentId}).$promise.then(
+            SegmentData.get({url: $scope.source,
+                             segment_id: $scope.currentSegmentId,
+                             type: $scope.iotype
+                            }).$promise.then(
                 function(data) {
                     $scope.segment = data;
                     $scope.block.segments[$scope.currentSegmentId] = $scope.segment;
@@ -53,7 +58,8 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
             console.log("Fetching data for analog signal #" + $scope.currentAnalogSignalId + " in segment #" + $scope.currentSegmentId);
             AnalogSignalData.get({url: $scope.source,
                                   segment_id: $scope.currentSegmentId,
-                                  analog_signal_id: $scope.currentAnalogSignalId
+                                  analog_signal_id: $scope.currentAnalogSignalId,
+                                  type: $scope.iotype
                                  }).$promise.then(
                 function(data) {
                     $scope.signal = data;
@@ -296,7 +302,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
         replace: true,
         transclude: true,
         templateUrl: '/visualizer.tpl.html',
-        scope: { source: '@', height: '@' },
+        scope: { source: '@', height: '@', iotype: '@' },
         controller: 'MainCtrl'
     }
 });
