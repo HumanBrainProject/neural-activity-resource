@@ -301,7 +301,57 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
         restrict: 'EA',
         replace: true,
         transclude: true,
-        templateUrl: '/src/visualizer.tpl.html',
+        //templateUrl: '/src/visualizer.tpl.html',
+        template: `
+            <div>
+            <div ng-show="!error" class="panel panel-default">
+                <div class="panel-heading">
+                    <p>
+                    <button type="button" class="btn btn-link" ng-click="showAnnotations = !showAnnotations"><span class="glyphicon glyphicon-info-sign"></span></button>
+                    {{label}}
+                    <a type="button" class="btn" href="{{source}}"><span class="glyphicon glyphicon-download-alt"></span></a>
+                    </p>
+                    <div ng-show="showAnnotations">
+                        <small>
+                        <table class="table table-striped table-condensed">
+                            <tr><td>Source:</td><td>{{source}}</td></tr>
+                            <tr><td>Name:</td><td>{{block.name}}</td></tr>
+                            <tr><td>File origin:</td><td>{{block.file_origin}}</td></tr>
+                            <tr><td>Recording date:</td><td>{{block.rec_datetime}}</td></tr>
+                            <tr><td>Segments:</td><td>{{block.segments.length}}</td></tr>
+                        </table>
+                        </small>
+                    </div>
+                    <form class="form-inline">
+                    <select class="form-control" ng-change="switchSegment()" ng-model="currentSegmentId">
+                        <option ng-repeat="segment in block.segments" value="{{$index}}">
+                            Segment #{{$index}}
+                        </option>
+                    </select>
+                    <!--<p>{{segment.name}}</p>
+                    <p>Contains {{segment.analogsignals.length}} analog signals</p>-->
+                    <select class="form-control" ng-show="segment" ng-change="switchAnalogSignal()" ng-model="currentAnalogSignalId">
+                        <option value="">--- Please select signal ---</option> <!-- not selected / blank option -->
+                        <option ng-repeat="signal in segment.analogsignals" value="{{$index}}">
+                            Signal #{{$index}} <span ng-show="signal.name">({{signal.name}})</span>
+                        </option>
+                    </select>
+                    </form>
+                </div>
+                <div class="panel-body" ng-show="signal">
+                    <nvd3 options="options" data=graph_data.values id=''></nvd3>
+                </div>
+            </div>
+            <div ng-show="error" class="panel panel-error">
+                <div class="panel-heading">
+                    <p>Error</p>
+                </div>
+                <div class="panel-body">
+                    {{error}}
+                </div>
+            </div>
+            </div>
+        `,
         scope: { source: '@', height: '@', iotype: '@' },
         controller: 'MainCtrl'
     }
