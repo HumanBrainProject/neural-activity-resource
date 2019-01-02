@@ -12,6 +12,10 @@ try:
     from urllib import urlretrieve
 except ImportError:
     from urllib.request import urlretrieve
+try:
+    unicode
+except NameError:
+    unicode = str
 
 
 def _get_file_from_url(request, url):
