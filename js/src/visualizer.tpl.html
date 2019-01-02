@@ -1,4 +1,5 @@
-<div ng-if=!error" class="panel panel-default">
+<div>
+<div ng-show="!error" class="panel panel-default">
     <div class="panel-heading">
         <p>
            <button type="button" class="btn btn-link" ng-click="showAnnotations = !showAnnotations"><span class="glyphicon glyphicon-info-sign"></span></button>
@@ -36,11 +37,12 @@
         <nvd3 options="options" data=graph_data.values id=''></nvd3>
     </div>
 </div>
-<div ng-if=error" class="panel panel-error">
+<div ng-show="error" class="panel panel-error">
     <div class="panel-heading">
         <p>Error</p>
     </div>
     <div class="panel-body">
         {{error}}
     </div>
+</div>
 </div>

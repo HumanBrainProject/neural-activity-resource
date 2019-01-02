@@ -301,7 +301,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
         restrict: 'EA',
         replace: true,
         transclude: true,
-        templateUrl: '/visualizer.tpl.html',
+        templateUrl: '/src/visualizer.tpl.html',
         scope: { source: '@', height: '@', iotype: '@' },
         controller: 'MainCtrl'
     }
