@@ -1,0 +1,13 @@
+Django==1.11.11
+django-sslserver==0.19
+djangorestframework==3.6.3
+django-cors-headers
+neo==0.7.1
+numpy
+h5py
+nixio
+igor
+scipy
+klusta
+#stfio
+
