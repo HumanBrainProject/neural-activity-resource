@@ -52,9 +52,9 @@ Coming soon!
 By default, the visualizer uses the Neo file server at https://neo-viewer.brainsimulation.eu/. This is fine for testing and light use, but for better performance you may
 wish to deploy your own server on a more powerful machine.
 
-Instructions for doing this are [here](https://github.com/NeuralEnsemble/neo-viewer/api/README.md).
+Instructions for doing this are [here](https://github.com/NeuralEnsemble/neo-viewer/blob/master/api/README.md#deployment).
 
 
 ## Reference: the file server REST API
 
-See [here](https://github.com/NeuralEnsemble/neo-viewer/api/README.md).
+See [here](https://github.com/NeuralEnsemble/neo-viewer/blob/master/api/README.mdhttps://github.com/NeuralEnsemble/neo-viewer/blob/master/api/README.md#api-documentation).
