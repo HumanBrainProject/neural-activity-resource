@@ -13,24 +13,48 @@ the [Neo](http://neuralensemble.org/neo) library.
 </div>
 ```
 
+For an example of the visualizer in action, see https://neo-viewer.brainsimulation.eu
 
 ## Using the visualizer component
 
-headers
+Within the `<head>` block of your HTML page, put the following lines:
 
-visualizer tag
+```
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.6/nv.d3.min.css">
 
-configuring the app to use a different file server
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.7/angular.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.7/angular-resource.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.6/nv.d3.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-nvd3/1.0.8/angular-nvd3.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/apdavison/neural-activity-visualizer@reorg/js/src/visualizer.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/apdavison/neural-activity-visualizer@reorg/js/src/services.js"></script>
+```
 
+In the `<body>` block, add `<div ng-app="neo-visualizer">...</div` around the part of the page where the visualizer should appear.
+
+You can have multiple visualizers on a single page. Wherever you want to have a visualizer, include
+```
+<visualizer-view 
+    source="https://example.com/my_data_file.abf" 
+    height=300>
+</visualizer-view>
+```
+where `source` should be the URL of a publicly available data file you want to visualize.
+
+### Configuring the app to use a different file server
+
+Coming soon!
 
 ## Deploying the file server
 
 By default, the visualizer uses the Neo file server at https://neo-viewer.brainsimulation.eu/. This is fine for testing and light use, but for better performance you may
 wish to deploy your own server on a more powerful machine.
 
-docker container
+Instructions for doing this are [here](https://github.com/NeuralEnsemble/neo-viewer/api/README.md).
 
 
 ## Reference: the file server REST API
 
-
+See [here](https://github.com/NeuralEnsemble/neo-viewer/api/README.md).
