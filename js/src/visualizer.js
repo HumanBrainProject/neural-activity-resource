@@ -9,22 +9,28 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
     }
     $scope.block = null;
     $scope.showAnnotations = false;
-    $scope.label = $scope.source.substring($scope.source.lastIndexOf('/') + 1);
-    console.log($scope.label);
 
-    BlockData.get({url: $scope.source, type: $scope.iotype }).$promise.then(
-        function(data) {
-            $scope.error = null;
-            $scope.block = data.block[0];
-            console.log(data.block[0]);
-            $scope.currentSegmentId = "0";
-            $scope.switchSegment();
-        },
-        function(err) {
-            console.log("Error in getting block");
-            $scope.error = err;
-        }
-    );
+    var init = function() {
+        $scope.label = $scope.source.substring($scope.source.lastIndexOf('/') + 1);
+        console.log($scope.label);
+        BlockData.get({url: $scope.source, type: $scope.iotype }).$promise.then(
+            function(data) {
+                $scope.error = null;
+                $scope.block = data.block[0];
+                console.log(data.block[0]);
+                $scope.currentSegmentId = "0";
+                $scope.switchSegment();
+            },
+            function(err) {
+                console.log("Error in getting block");
+                $scope.error = err;
+            }
+        );
+    }
+    
+    $scope.$watch("source", function() {
+        init();
+    });
 
     $scope.switchSegment = function() {
         $scope.signal = null;
@@ -235,7 +241,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
         }
 
 
-        //utilitary functions
+        //utility functions
         var _get_color_array = function(data_row) {
             list_ids = [];
             for (var i in data_row) {
@@ -355,4 +361,8 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
         scope: { source: '@', height: '@', iotype: '@' },
         controller: 'MainCtrl'
     }
+})
+
+.controller("URLFormController", function($scope) {
+    $scope.dataFileURL = "";
 });
