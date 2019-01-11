@@ -12,6 +12,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
 
     var init = function() {
         console.log("Loading data from " + $scope.source);
+        $scope.block = null;
         $scope.label = $scope.source.substring($scope.source.lastIndexOf('/') + 1);
         BlockData.get({url: $scope.source, type: $scope.iotype }).$promise.then(
             function(data) {
