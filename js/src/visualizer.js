@@ -11,8 +11,8 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
     $scope.showAnnotations = false;
 
     var init = function() {
+        console.log("Loading data from " + $scope.source);
         $scope.label = $scope.source.substring($scope.source.lastIndexOf('/') + 1);
-        console.log($scope.label);
         BlockData.get({url: $scope.source, type: $scope.iotype }).$promise.then(
             function(data) {
                 $scope.error = null;
@@ -35,7 +35,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
     $scope.switchSegment = function() {
         $scope.signal = null;
         if ($scope.block.segments[$scope.currentSegmentId].analogsignals[0] == undefined) {
-            console.log("Fetching data for segment #" + $scope.currentSegmentId);
+            console.log("Fetching data for segment #" + $scope.currentSegmentId + " in file " + $scope.source);
             SegmentData.get({url: $scope.source,
                              segment_id: $scope.currentSegmentId,
                              type: $scope.iotype
@@ -61,7 +61,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
 
     $scope.switchAnalogSignal = function() {
         if ($scope.segment.analogsignals[$scope.currentAnalogSignalId].values == undefined) {
-            console.log("Fetching data for analog signal #" + $scope.currentAnalogSignalId + " in segment #" + $scope.currentSegmentId);
+            console.log("Fetching data for analog signal #" + $scope.currentAnalogSignalId + " in segment #" + $scope.currentSegmentId + " in file " + $scope.source);
             AnalogSignalData.get({url: $scope.source,
                                   segment_id: $scope.currentSegmentId,
                                   analog_signal_id: $scope.currentAnalogSignalId,
