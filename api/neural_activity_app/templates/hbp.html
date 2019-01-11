@@ -85,6 +85,36 @@
                 source="https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/Migliore_2018_CA1/exp_data/abf-int-bAC/Ivy_960711AHP3/96711008.abf"
                 height=300>
             </visualizer-view>
+
+            <h2>Example with dynamic source</h2>
+            <pre>
+&lt;div ng-controller="URLFormController"&gt;
+    &lt;form class="form-inline"&gt;
+        &lt;div class="form-group"&gt;
+            &lt;label for="dataFileURL"&gt;URL of data file:&lt;/label&gt;
+            &lt;input type="text" class="form-control" ng-model="dataFileURL" id="dataFileURL" placeholder="enter data file URL here" style="width: 600px;"&gt;
+        &lt;/div&gt;
+        &lt;/form&gt;
+        
+    &lt;visualizer-view ng-if="dataFileURL"
+        source="{{dataFileURL}}"
+        height=300&gt;
+    &lt;/visualizer-view&gt;
+&lt;/div&gt;
+            </pre>
+            <div ng-controller="URLFormController">
+                <form class="form-inline">
+                    <div class="form-group">
+                      <label for="dataFileURL">URL of data file:</label>
+                      <input type="text" class="form-control" ng-model="dataFileURL" id="dataFileURL" placeholder="enter data file URL here" style="width: 600px;">
+                    </div>
+                  </form>
+                  
+                <visualizer-view ng-if="dataFileURL"
+                    source="{{dataFileURL}}"
+                    height=300>
+                </visualizer-view>
+            </div>
         </div>
 
         <div class="row">
