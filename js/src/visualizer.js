@@ -10,27 +10,28 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
     $scope.block = null;
     $scope.showAnnotations = false;
 
-    var init = function() {
-        console.log("Loading data from " + $scope.source);
-        $scope.block = null;
-        $scope.label = $scope.source.substring($scope.source.lastIndexOf('/') + 1);
-        BlockData.get({url: $scope.source, type: $scope.iotype }).$promise.then(
+    var init = function(scope) {
+        console.log("Loading data from " + scope.source);
+        scope.block = null;
+        scope.segment = null;
+        scope.label = scope.source.substring(scope.source.lastIndexOf('/') + 1);
+        BlockData.get({url: scope.source, type: scope.iotype }).$promise.then(
             function(data) {
-                $scope.error = null;
-                $scope.block = data.block[0];
+                scope.error = null;
+                scope.block = data.block[0];
                 console.log(data.block[0]);
-                $scope.currentSegmentId = "0";
-                $scope.switchSegment();
+                scope.currentSegmentId = "0";
+                scope.switchSegment();
             },
             function(err) {
                 console.log("Error in getting block");
-                $scope.error = err;
+                scope.error = err;
             }
         );
     }
     
-    $scope.$watch("source", function() {
-        init();
+    $scope.$watch("source", function($scope) {
+        init($scope);
     });
 
     $scope.switchSegment = function() {
@@ -86,6 +87,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
             );
         } else {
             console.log("Switching to cached signal #" + $scope.currentAnalogSignalId + " in segment #" + $scope.currentSegmentId);
+            // this doesn't work. Need to update graph data
             $scope.signal = $scope.block.segments[$scope.currentSegmentId].analogsignals[$scope.currentAnalogSignalId];
         }
     }
