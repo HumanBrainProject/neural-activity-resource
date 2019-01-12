@@ -24,10 +24,10 @@ def _get_file_from_url(request, url):
         urlretrieve(url, filename)
         # todo: wrap previous line in try..except so we can return a 404 if the file is not found
         #       or a 500 if the local disk is full
-        request.session['na_file'] = filename
+        return filename
     else:
-        request.session['na_file'] = 'File_AlphaOmega_1.map'
-    return request
+        return JsonResponse({'error': 'incorrect file type', 'message': str(err)},
+                             status=status.HTTP_400_BAD_REQUEST)
 
 
 def _handle_dict(ob):
@@ -38,10 +38,7 @@ class Block(APIView):
 
     def get(self, request, format=None, **kwargs):
 
-        if 'na_file' not in request.session:
-            url = request.GET.get('url')
-            request = _get_file_from_url(request, url)
-        na_file = request.session['na_file']
+        na_file = _get_file_from_url(request, url)
 
         if 'type' in request.GET and request.GET.get('type'):
             iotype = request.GET.get('type')
@@ -93,11 +90,8 @@ class Segment(APIView):
 
     def get(self, request, format=None, **kwargs):
 
-        if 'na_file' not in request.session:
-            url= request.GET.get('url')
-            request = _get_file_from_url(request, url)
+        na_file = _get_file_from_url(request, url)
 
-        na_file = request.session['na_file']
         block = get_io(na_file).read_block()
         id_segment = int(request.GET['segment_id'])
         # todo, catch MultiValueDictKeyError in case segment_id isn't given, and return a 400 Bad Request response
@@ -128,10 +122,8 @@ class Segment(APIView):
 class AnalogSignal(APIView):
 
     def get(self, request, format=None, **kwargs):
-        if 'na_file' not in request.session:
-            url= request.GET.get('url')
-            request = _get_file_from_url(request, url)
-        na_file = request.session['na_file']
+        na_file = _get_file_from_url(request, url)
+
         block = get_io(na_file).read_block()
         id_segment = int(request.GET['segment_id'])
         id_analog_signal = int(request.GET['analog_signal_id'])
