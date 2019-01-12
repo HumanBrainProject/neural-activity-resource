@@ -18,7 +18,8 @@ except NameError:
     unicode = str
 
 
-def _get_file_from_url(request, url):
+def _get_file_from_url(request):
+    url = request.GET.get('url')
     if url:
         filename = url[url.rfind("/") + 1:]
         urlretrieve(url, filename)
@@ -26,7 +27,7 @@ def _get_file_from_url(request, url):
         #       or a 500 if the local disk is full
         return filename
     else:
-        return JsonResponse({'error': 'incorrect file type', 'message': str(err)},
+        return JsonResponse({'error': 'URL parameter is missing', 'message': ''},
                              status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -38,7 +39,7 @@ class Block(APIView):
 
     def get(self, request, format=None, **kwargs):
 
-        na_file = _get_file_from_url(request, url)
+        na_file = _get_file_from_url(request)
 
         if 'type' in request.GET and request.GET.get('type'):
             iotype = request.GET.get('type')
@@ -90,7 +91,7 @@ class Segment(APIView):
 
     def get(self, request, format=None, **kwargs):
 
-        na_file = _get_file_from_url(request, url)
+        na_file = _get_file_from_url(request)
 
         block = get_io(na_file).read_block()
         id_segment = int(request.GET['segment_id'])
@@ -122,7 +123,7 @@ class Segment(APIView):
 class AnalogSignal(APIView):
 
     def get(self, request, format=None, **kwargs):
-        na_file = _get_file_from_url(request, url)
+        na_file = _get_file_from_url(request)
 
         block = get_io(na_file).read_block()
         id_segment = int(request.GET['segment_id'])
