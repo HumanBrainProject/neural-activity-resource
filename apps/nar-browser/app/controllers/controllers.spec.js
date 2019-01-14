@@ -224,11 +224,11 @@ describe('PatchClampController', function() {
     });
 
     it('should check if url is valid', function() {
-        expect(controller.validURL('https://nexus-int.humanbrainproject.org/v0/schemas/shape/core/activity/v0.0.4')).toBe(true);
+        expect(controller.validURL('https://nexus.humanbrainproject.org/v0/schemas/shape/core/activity/v0.0.4')).toBe(true);
     });
 
     it('should return relative path of url', function() {
-        expect(controller.relativePath('https://nexus-int.humanbrainproject.org/v0/schemas/shape/core/activity/v0.0.4')).toBe('shape/core/activity/v0.0.4');
+        expect(controller.relativePath('https://nexus.humanbrainproject.org/v0/schemas/shape/core/activity/v0.0.4')).toBe('shape/core/activity/v0.0.4');
     });
 
 });

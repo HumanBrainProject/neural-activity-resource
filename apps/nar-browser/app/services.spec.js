@@ -12,8 +12,14 @@ describe('PathHandler service', function() {
                 return "footoken"
             }
         };
+        mockClbUser = {
+            isGroupMember: function(group_name) {
+                return true;  // should probably be a promise
+            }
+        }
         module(function ($provide) {
             $provide.value('bbpOidcSession', mockbbpOidcSession);
+            $provide.value('clbUser', mockClbUser);
         });
     });
 
@@ -30,7 +36,7 @@ describe('PathHandler service', function() {
             expect(PathHandler.extract_path_from_uri).toBeDefined();
         });
         it('should parse out type and instance parts', function() {
-            expect(PathHandler.extract_path_from_uri('https://nexus-int.humanbrainproject.org/v0/data/bbp/experiment/patchedcellcollection/v0.1.0/3ce21161-7c08-44eb-b367-f01ed1e891be'))
+            expect(PathHandler.extract_path_from_uri('https://nexus.humanbrainproject.org/v0/data/bbp/experiment/patchedcellcollection/v0.1.0/3ce21161-7c08-44eb-b367-f01ed1e891be'))
             .toEqual({
                 type: '/bbp/experiment/patchedcellcollection',
                 id: 'bbp/experiment/patchedcellcollection/v0.1.0/3ce21161-7c08-44eb-b367-f01ed1e891be',
@@ -92,20 +98,20 @@ describe('KGResource Spec', function () {
         it("should return a list of instances", inject(function () {
 
             var k = {
-                "@context": "https://nexus-int.humanbrainproject.org/v0/contexts/nexus/core/search/v0.1.0",
+                "@context": "https://nexus.humanbrainproject.org/v0/contexts/nexus/core/search/v0.1.0",
                 "total": 0,
                 "maxScore": 0,
                 "results": [],
                 "links": {
-                    "@context": "https://nexus-int.humanbrainproject.org/v0/contexts/nexus/core/links/v0.2.0",
-                    "self": "https://nexus-int.humanbrainproject.org/v0/data/neurosciencegraph/atlas/atlasconstruction/v0.1.0"
+                    "@context": "https://nexus.humanbrainproject.org/v0/contexts/nexus/core/links/v0.2.0",
+                    "self": "https://nexus.humanbrainproject.org/v0/data/neurosciencegraph/atlas/atlasconstruction/v0.1.0"
                     }
                 };
 
 
-            $httpBackend.expectGET('https://nexus-int.humanbrainproject.org/v0/data/neurosciencegraph/atlas/atlasconstruction/v0.1.0?deprecated=False').respond(k);
+            $httpBackend.expectGET('https://nexus.humanbrainproject.org/v0/data/neurosciencegraph/atlas/atlasconstruction/v0.1.0?deprecated=False&size=50').respond(k);
 
-            var Instances = KGResource('https://nexus-int.humanbrainproject.org/v0/data/neurosciencegraph/atlas/atlasconstruction/v0.1.0');
+            var Instances = KGResource('https://nexus.humanbrainproject.org/v0/data/neurosciencegraph/atlas/atlasconstruction/v0.1.0');
 
             Instances.query().then(
                 function(instances) {
@@ -125,9 +131,9 @@ describe('KGResource Spec', function () {
                         "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
                         "schema": "http://schema.org/"
                     },
-                    "https://nexus-int.humanbrainproject.org/v0/contexts/nexus/core/resource/v0.3.0"
+                    "https://nexus.humanbrainproject.org/v0/contexts/nexus/core/resource/v0.3.0"
                 ],
-                "@id": "https://nexus-int.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/515473f3-889d-4807-8391-c36a4685f593",
+                "@id": "https://nexus.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/515473f3-889d-4807-8391-c36a4685f593",
                 "@type": [
                     "nsg:StimulusExperiment",
                     "prov:Activity"
@@ -141,7 +147,7 @@ describe('KGResource Spec', function () {
                     "schema:description": "No stimulus (spontaneous activity)"
                 },
                 "prov:used": {
-                    "@id": "https://nexus-int.humanbrainproject.org/v0/data/neuralactivity/experiment/patchedcell/v0.1.0/e617c15f-bf24-4f5d-b824-a413c0b34f50",
+                    "@id": "https://nexus.humanbrainproject.org/v0/data/neuralactivity/experiment/patchedcell/v0.1.0/e617c15f-bf24-4f5d-b824-a413c0b34f50",
                     "@type": [
                         "nsg:PatchedCell",
                         "prov:Entity"
@@ -150,17 +156,17 @@ describe('KGResource Spec', function () {
                 "nxv:rev": 1,
                 "nxv:deprecated": false,
                 "links": {
-                    "@context": "https://nexus-int.humanbrainproject.org/v0/contexts/nexus/core/links/v0.2.0",
-                    "incoming": "https://nexus-int.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/515473f3-889d-4807-8391-c36a4685f593/incoming",
-                    "outgoing": "https://nexus-int.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/515473f3-889d-4807-8391-c36a4685f593/outgoing",
-                    "schema": "https://nexus-int.humanbrainproject.org/v0/schemas/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0",
-                    "self": "https://nexus-int.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/515473f3-889d-4807-8391-c36a4685f593"
+                    "@context": "https://nexus.humanbrainproject.org/v0/contexts/nexus/core/links/v0.2.0",
+                    "incoming": "https://nexus.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/515473f3-889d-4807-8391-c36a4685f593/incoming",
+                    "outgoing": "https://nexus.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/515473f3-889d-4807-8391-c36a4685f593/outgoing",
+                    "schema": "https://nexus.humanbrainproject.org/v0/schemas/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0",
+                    "self": "https://nexus.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/515473f3-889d-4807-8391-c36a4685f593"
                 }
             };
 
-            $httpBackend.expectGET('https://nexus-int.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/515473f3-889d-4807-8391-c36a4685f593').respond(x);
+            $httpBackend.expectGET('https://nexus.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/515473f3-889d-4807-8391-c36a4685f593').respond(x);
 
-            var base_url = "https://nexus-int.humanbrainproject.org/v0/";
+            var base_url = "https://nexus.humanbrainproject.org/v0/";
             var Experiments = KGResource(base_url + "data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0");
 
             Experiments.get_by_uuid('515473f3-889d-4807-8391-c36a4685f593').then(
@@ -181,9 +187,9 @@ describe('KGResource Spec', function () {
                         "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
                         "schema": "http://schema.org/"
                     },
-                    "https://nexus-int.humanbrainproject.org/v0/contexts/nexus/core/resource/v0.3.0"
+                    "https://nexus.humanbrainproject.org/v0/contexts/nexus/core/resource/v0.3.0"
                 ],
-                "@id": "https://nexus-int.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/515473f3-889d-4807-8391-c36a4685f593",
+                "@id": "https://nexus.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/515473f3-889d-4807-8391-c36a4685f593",
                 "@type": [
                     "nsg:StimulusExperiment",
                     "prov:Activity"
@@ -197,7 +203,7 @@ describe('KGResource Spec', function () {
                     "schema:description": "No stimulus (spontaneous activity)"
                 },
                 "prov:used": {
-                    "@id": "https://nexus-int.humanbrainproject.org/v0/data/neuralactivity/experiment/patchedcell/v0.1.0/e617c15f-bf24-4f5d-b824-a413c0b34f50",
+                    "@id": "https://nexus.humanbrainproject.org/v0/data/neuralactivity/experiment/patchedcell/v0.1.0/e617c15f-bf24-4f5d-b824-a413c0b34f50",
                     "@type": [
                         "nsg:PatchedCell",
                         "prov:Entity"
@@ -206,20 +212,20 @@ describe('KGResource Spec', function () {
                 "nxv:rev": 1,
                 "nxv:deprecated": false,
                 "links": {
-                    "@context": "https://nexus-int.humanbrainproject.org/v0/contexts/nexus/core/links/v0.2.0",
-                    "incoming": "https://nexus-int.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/515473f3-889d-4807-8391-c36a4685f593/incoming",
-                    "outgoing": "https://nexus-int.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/515473f3-889d-4807-8391-c36a4685f593/outgoing",
-                    "schema": "https://nexus-int.humanbrainproject.org/v0/schemas/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0",
-                    "self": "https://nexus-int.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/515473f3-889d-4807-8391-c36a4685f593"
+                    "@context": "https://nexus.humanbrainproject.org/v0/contexts/nexus/core/links/v0.2.0",
+                    "incoming": "https://nexus.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/515473f3-889d-4807-8391-c36a4685f593/incoming",
+                    "outgoing": "https://nexus.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/515473f3-889d-4807-8391-c36a4685f593/outgoing",
+                    "schema": "https://nexus.humanbrainproject.org/v0/schemas/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0",
+                    "self": "https://nexus.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/515473f3-889d-4807-8391-c36a4685f593"
                 }
             };
 
-            $httpBackend.expectGET('https://nexus-int.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/515473f3-889d-4807-8391-c36a4685f593').respond(r);
+            $httpBackend.expectGET('https://nexus.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/515473f3-889d-4807-8391-c36a4685f593').respond(r);
 
-            var base_url = "https://nexus-int.humanbrainproject.org/v0/";
+            var base_url = "https://nexus.humanbrainproject.org/v0/";
             var Experiments = KGResource(base_url + "data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0");
 
-            Experiments.get('https://nexus-int.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/515473f3-889d-4807-8391-c36a4685f593').then(
+            Experiments.get('https://nexus.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/515473f3-889d-4807-8391-c36a4685f593').then(
                 function(response) {
                     expect(response.data.name).toEqual('Spontaneous activity recording in hbp00011_Sub1_Samp1__ExpE1');
                 });
@@ -264,9 +270,9 @@ describe('KGResourceCount Spec', function () {
             };
 
             var k = {'total':224};
-            var base_url = "https://nexus-int.humanbrainproject.org/v0/";
+            var base_url = "https://nexus.humanbrainproject.org/v0/";
 
-            $httpBackend.expectGET('https://nexus-int.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/?deprecated=False').respond(k);
+            $httpBackend.expectGET('https://nexus.humanbrainproject.org/v0/data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/?deprecated=False').respond(k);
 
             var Experiments = KGResourceCount(base_url + "data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/");
 
@@ -322,20 +328,20 @@ describe('KGIndex service', function() {
             var r = {
                 "total":1,
                 "results":[{
-                    "resultId":"https://nexus-int.humanbrainproject.org/v0/schemas/shape/core/activity/v0.0.4",
-                    "source":{"@id":"https://nexus-int.humanbrainproject.org/v0/schemas/shape/core/activity/v0.0.4",
+                    "resultId":"https://nexus.humanbrainproject.org/v0/schemas/shape/core/activity/v0.0.4",
+                    "source":{"@id":"https://nexus.humanbrainproject.org/v0/schemas/shape/core/activity/v0.0.4",
                         "links":[{
                             "rel":"self",
-                            "href":"https://nexus-int.humanbrainproject.org/v0/schemas/shape/core/activity/v0.0.4"
+                            "href":"https://nexus.humanbrainproject.org/v0/schemas/shape/core/activity/v0.0.4"
                             }]
                         }}],
                 "links":[{
                     "rel":"self",
-                    "href":"https://nexus-int.humanbrainproject.org/v0/data/bbp/experiment/brainslicing"
+                    "href":"https://nexus.humanbrainproject.org/v0/data/bbp/experiment/brainslicing"
                     }]
                 };
 
-            $httpBackend.whenGET('https://nexus-int.humanbrainproject.org/v0/schemas/?from=0&size=50').respond(r);
+            $httpBackend.whenGET('https://nexus.humanbrainproject.org/v0/schemas/?from=0&size=50').respond(r);
 
             KGIndex.paths().then(function(response) {
                 expect(response).toEqual(['/shape/core/activity']);
@@ -354,24 +360,24 @@ describe('KGIndex service', function() {
             var r = {
                 "total":1,
                 "results":[{
-                    "resultId":"https://nexus-int.humanbrainproject.org/v0/organizations/shape",
+                    "resultId":"https://nexus.humanbrainproject.org/v0/organizations/shape",
                     "source":{
-                        "@id":"https://nexus-int.humanbrainproject.org/v0/organizations/shape",
+                        "@id":"https://nexus.humanbrainproject.org/v0/organizations/shape",
                         "links":[{
                             "rel":"self",
-                            "href":"https://nexus-int.humanbrainproject.org/v0/organizations/shape"
+                            "href":"https://nexus.humanbrainproject.org/v0/organizations/shape"
                             }]
                         }}],
                 "links":[{
                     "rel":"self",
-                    "href":"https://nexus-int.humanbrainproject.org/v0/organizations/"
+                    "href":"https://nexus.humanbrainproject.org/v0/organizations/"
                     }]
                 };
 
-            $httpBackend.whenGET('https://nexus-int.humanbrainproject.org/v0/organizations/').respond(r);
+            $httpBackend.whenGET('https://nexus.humanbrainproject.org/v0/organizations/').respond(r);
 
             KGIndex.organizations().then(function(response) {
-                expect(response).toEqual(['https://nexus-int.humanbrainproject.org/v0/organizations/shape']);
+                expect(response).toEqual(['https://nexus.humanbrainproject.org/v0/organizations/shape']);
             });
             $httpBackend.flush();
         });
@@ -387,20 +393,20 @@ describe('KGIndex service', function() {
             var r = {
                 "total":1,
                 "results":[{
-                    "resultId":"https://nexus-int.humanbrainproject.org/v0/domains/shape/core",
+                    "resultId":"https://nexus.humanbrainproject.org/v0/domains/shape/core",
                     "source":{
-                        "@id":"https://nexus-int.humanbrainproject.org/v0/domains/shape/core",
+                        "@id":"https://nexus.humanbrainproject.org/v0/domains/shape/core",
                         "links":[{
                             "rel":"self",
-                            "href":"https://nexus-int.humanbrainproject.org/v0/domains/shape/core"
+                            "href":"https://nexus.humanbrainproject.org/v0/domains/shape/core"
                             }]
                         }}]
                 };
 
-            $httpBackend.whenGET('https://nexus-int.humanbrainproject.org/v0/domains/').respond(r);
+            $httpBackend.whenGET('https://nexus.humanbrainproject.org/v0/domains/').respond(r);
 
             KGIndex.domains().then(function(response) {
-                expect(response).toEqual(['https://nexus-int.humanbrainproject.org/v0/domains/shape/core']);
+                expect(response).toEqual(['https://nexus.humanbrainproject.org/v0/domains/shape/core']);
             });
             $httpBackend.flush();
         });

@@ -26,5 +26,5 @@ angular.module('nar')
 
 .controller('TwoPhotonController', function($location, $rootScope, KGResource, bbpOidcSession, $http) {
     var vm = this;
-    var base_url = "https://nexus-int.humanbrainproject.org/v0/";
+    var base_url = "https://nexus.humanbrainproject.org/v0/";
 });

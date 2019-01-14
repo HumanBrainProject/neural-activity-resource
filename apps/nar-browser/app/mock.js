@@ -1,6 +1,8 @@
 (function() {
     'use strict';
   
+    angular.module('clb-identity', []);
+
     angular.module('bbpOidcClient', [])
     
     .provider('bbpOidcSession', function() {

@@ -24,7 +24,7 @@ Author: Andrew P. Davison, UNIC, CNRS
 angular.module('nar')
 
 
-.controller('FMRIController', function($location, $rootScope, KGResource, bbpOidcSession, $http, nexusBaseUrl) {
+.controller('FMRIController', function($location, $rootScope, KGResource, bbpOidcSession, $http, NexusURL) {
     var vm = this;
     var nexusBaseUrl = NexusURL.get();
 
