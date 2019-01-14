@@ -19,6 +19,8 @@ matrix:
       node_js:
         - "node"
         - "9"
+      addons:
+        chrome: stable
       # before_script:
       before_install:
         - export DISPLAY=:99.0
@@ -27,5 +29,5 @@ matrix:
         - cd apps/nar-browser
         - npm install
       script:
-        - ./node_modules/.bin/karma start --browsers Firefox --single-run 
+        - ./node_modules/.bin/karma start --browsers Chrome_travis_ci --single-run 
     
