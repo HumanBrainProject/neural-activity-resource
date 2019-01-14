@@ -85,7 +85,7 @@ angular.module('nar')
         {
             "@context": {
                 "schema": "http://schema.org/",
-                "minds": "https://schema.hbp.eu/"
+                "minds": "https://schema.hbp.eu/minds/"
             },
             "filter": {
                 "path": "minds:specimen_group / minds:subjects / minds:samples / minds:methods / schema:name",
@@ -99,9 +99,9 @@ angular.module('nar')
     ).then(
         function(datasets) {
             for (let dataset of datasets) {
-                if (dataset.data["https://schema.hbp.eu/license"]) {
-                    if (dataset.data["https://schema.hbp.eu/license"]["@id"].startsWith("http")) {
-                        $http.get(dataset.data["https://schema.hbp.eu/license"]["@id"]).then(
+                if (dataset.data["https://schema.hbp.eu/minds/license"]) {
+                    if (dataset.data["https://schema.hbp.eu/minds/license"]["@id"].startsWith("http")) {
+                        $http.get(dataset.data["https://schema.hbp.eu/minds/license"]["@id"]).then(
                             function(response) {
                                 var license_name = response.data["http://schema.org/name"];
                                 dataset.license = license_map[license_name];
@@ -111,10 +111,10 @@ angular.module('nar')
                         );
                     }
                 };
-                if (dataset.data["https://schema.hbp.eu/owners"]) {
-                    if (Array.isArray(dataset.data["https://schema.hbp.eu/owners"])) {
+                if (dataset.data["https://schema.hbp.eu/minds/owners"]) {
+                    if (Array.isArray(dataset.data["https://schema.hbp.eu/minds/owners"])) {
                         dataset.custodians = [];
-                        for (let owner of dataset.data["https://schema.hbp.eu/owners"]) {
+                        for (let owner of dataset.data["https://schema.hbp.eu/minds/owners"]) {
                             $http.get(owner["@id"]).then(
                                 function(response) {
                                     dataset.custodians.push(response.data["http://schema.org/name"]);
@@ -122,9 +122,9 @@ angular.module('nar')
                                 error
                             );
                         }
-                    } else if (dataset.data["https://schema.hbp.eu/owners"].hasOwnProperty("@list")) {
+                    } else if (dataset.data["https://schema.hbp.eu/minds/owners"].hasOwnProperty("@list")) {
                         dataset.custodians = [];
-                        for (let owner of dataset.data["https://schema.hbp.eu/owners"]["@list"]) {
+                        for (let owner of dataset.data["https://schema.hbp.eu/minds/owners"]["@list"]) {
                             $http.get(owner["@id"]).then(
                                 function(response) {
                                     dataset.custodians.push(response.data["http://schema.org/name"]);
@@ -133,7 +133,7 @@ angular.module('nar')
                             );
                         }
                     } else {
-                        $http.get(dataset.data["https://schema.hbp.eu/owners"]["@id"]).then(
+                        $http.get(dataset.data["https://schema.hbp.eu/minds/owners"]["@id"]).then(
                             function(response) {
                                 dataset.custodians = response.data["http://schema.org/name"];
                             },
