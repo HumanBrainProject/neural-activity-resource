@@ -6,7 +6,7 @@ angular.module('neo-visualizer')
 
 .factory('BlockData', ['$resource', 'baseURL',
     function($resource, baseURL) {
-        return $resource(baseURL + 'blockdata/', { id: '@eUuid' }, {
+        return $resource(baseURL + 'blockdata/', {}, {
             get: { method: 'GET', params: { format: 'json' }, isArray: false },
         })
     }
@@ -14,7 +14,7 @@ angular.module('neo-visualizer')
 
 .factory('SegmentData', ['$resource', 'baseURL',
     function($resource, baseURL) {
-        return $resource(baseURL + 'segmentdata/', { id: '@eUuid' }, {
+        return $resource(baseURL + 'segmentdata/', {}, {
             get: { method: 'GET', params: { format: 'json' }, isArray: false },
         })
     }
@@ -22,8 +22,12 @@ angular.module('neo-visualizer')
 
 .factory('AnalogSignalData', ['$resource', 'baseURL',
     function($resource, baseURL) {
-        return $resource(baseURL + 'analogsignaldata/', { id: '@eUuid' }, {
+        return $resource(baseURL + 'analogsignaldata/', {}, {
             get: { method: 'GET', params: { format: 'json' }, isArray: false },
         })
     }
 ])
+
+.config(function($resourceProvider) {
+    $resourceProvider.defaults.stripTrailingSlashes = false;
+});
