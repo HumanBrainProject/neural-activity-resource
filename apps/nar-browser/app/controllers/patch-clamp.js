@@ -277,7 +277,8 @@ angular.module('nar')
                 vm.traces = traces;
 
                 if (traces.length > 0) {
-                    console.log(vm.traces[0].data.distribution[0].downloadURL);
+                    console.log(vm.traces[0].data);
+                    //console.log(vm.traces[0].data.distribution[0].downloadURL);
                 } else {
                     console.log("Found no traces associated with " + vm.stimulus_experiment["@id"]);
                 }
