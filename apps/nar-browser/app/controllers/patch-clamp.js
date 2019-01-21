@@ -124,7 +124,8 @@ angular.module('nar')
         //console.log(vm.stimulus_experiment['schema:name']);
 
         vm.stimulus_experiment.stimulus = {
-            name: vm.stimulus_experiment["nsg:stimulus"]["nsg:stimulusType"]["rdfs:label"]
+            //name: vm.stimulus_experiment["nsg:stimulus"]["nsg:stimulusType"]["rdfs:label"]
+            name: vm.stimulus_experiment["nsg:stimulus"]["nsg:stimulusType"]["label"]
         };
 
         // get the patched cell
