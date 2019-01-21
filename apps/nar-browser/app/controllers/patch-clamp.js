@@ -285,7 +285,11 @@ angular.module('nar')
                 // get a list of the data file(s) containing the traces
                 var data_files = new Set();
                 for (let trace of vm.traces) {
-                    data_files.add(trace.data.distribution[0].downloadURL);
+                    if (Array.isArray(trace.data.distribution)) {
+                        data_files.add(trace.data.distribution[0].downloadURL);
+                    } else {
+                        data_files.add(trace.data.distribution.downloadURL);
+                    }
                     $http.get(trace.data.qualifiedGeneration["@id"]).then(
                         function(response) {
                             trace.tracegen = response.data;
