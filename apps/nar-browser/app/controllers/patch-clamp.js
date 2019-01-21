@@ -276,7 +276,11 @@ angular.module('nar')
             function(traces) {
                 vm.traces = traces;
 
-                console.log(vm.traces[0].data.distribution[0].downloadURL);
+                if (traces.length > 0) {
+                    console.log(vm.traces[0].data.distribution[0].downloadURL);
+                } else {
+                    console.log("Found no traces associated with " + vm.stimulus_experiment["@id"]);
+                }
                 // get a list of the data file(s) containing the traces
                 var data_files = new Set();
                 for (let trace of vm.traces) {
