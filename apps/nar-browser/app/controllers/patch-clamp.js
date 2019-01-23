@@ -124,7 +124,8 @@ angular.module('nar')
         //console.log(vm.stimulus_experiment['schema:name']);
 
         vm.stimulus_experiment.stimulus = {
-            name: vm.stimulus_experiment["nsg:stimulus"]["nsg:stimulusType"]["rdfs:label"]
+            //name: vm.stimulus_experiment["nsg:stimulus"]["nsg:stimulusType"]["rdfs:label"]
+            name: vm.stimulus_experiment["nsg:stimulus"]["nsg:stimulusType"]["label"]
         };
 
         // get the patched cell
@@ -276,11 +277,20 @@ angular.module('nar')
             function(traces) {
                 vm.traces = traces;
 
-                console.log(vm.traces[0].data.distribution[0].downloadURL);
+                if (traces.length > 0) {
+                    console.log(vm.traces[0].data);
+                    //console.log(vm.traces[0].data.distribution[0].downloadURL);
+                } else {
+                    console.log("Found no traces associated with " + vm.stimulus_experiment["@id"]);
+                }
                 // get a list of the data file(s) containing the traces
                 var data_files = new Set();
                 for (let trace of vm.traces) {
-                    data_files.add(trace.data.distribution[0].downloadURL);
+                    if (Array.isArray(trace.data.distribution)) {
+                        data_files.add(trace.data.distribution[0].downloadURL);
+                    } else {
+                        data_files.add(trace.data.distribution.downloadURL);
+                    }
                     $http.get(trace.data.qualifiedGeneration["@id"]).then(
                         function(response) {
                             trace.tracegen = response.data;
