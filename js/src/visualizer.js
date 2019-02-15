@@ -3,6 +3,7 @@
 angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
 
 .controller('MainCtrl', function($scope, BlockData, SegmentData, AnalogSignalData, Graphics) {
+    var cache = [];
     console.log($scope.source);
     if (!$scope.height) {
         $scope.height = 600;
@@ -29,7 +30,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
             }
         );
     }
-    
+
     $scope.$watch("source", function() {
         init();
     });
@@ -38,6 +39,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
         $scope.signal = null;
         if ($scope.block.segments[$scope.currentSegmentId].analogsignals[0] == undefined) {
             console.log("Fetching data for segment #" + $scope.currentSegmentId + " in file " + $scope.source);
+            cache[$scope.currentSegmentId] = [];
             SegmentData.get({url: $scope.source,
                              segment_id: $scope.currentSegmentId,
                              type: $scope.iotype
@@ -64,6 +66,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
     $scope.switchAnalogSignal = function() {
         if ($scope.segment.analogsignals[$scope.currentAnalogSignalId].values == undefined) {
             console.log("Fetching data for analog signal #" + $scope.currentAnalogSignalId + " in segment #" + $scope.currentSegmentId + " in file " + $scope.source);
+            cache[$scope.currentSegmentId][$scope.currentAnalogSignalId] = [];
             AnalogSignalData.get({url: $scope.source,
                                   segment_id: $scope.currentSegmentId,
                                   analog_signal_id: $scope.currentAnalogSignalId,
@@ -78,6 +81,8 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                         $scope.graph_data = graph_data;
                         $scope.options = Graphics.getOptions("View of analogsignal", "", "", graph_data.values, $scope.signal, $scope.height)
                         $scope.$apply();
+                        cache[$scope.currentSegmentId][$scope.currentAnalogSignalId]['graph'] = graph_data;
+                        cache[$scope.currentSegmentId][$scope.currentAnalogSignalId]['options'] = $scope.options;
                     });
                 },
                 function(err) {
@@ -87,8 +92,9 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
             );
         } else {
             console.log("Switching to cached signal #" + $scope.currentAnalogSignalId + " in segment #" + $scope.currentSegmentId);
-            // this doesn't work. Need to update graph data
             $scope.signal = $scope.block.segments[$scope.currentSegmentId].analogsignals[$scope.currentAnalogSignalId];
+            $scope.graph_data = cache[$scope.currentSegmentId][$scope.currentAnalogSignalId]['graph'];
+            $scope.options = cache[$scope.currentSegmentId][$scope.currentAnalogSignalId]['options'];
         }
     }
 
