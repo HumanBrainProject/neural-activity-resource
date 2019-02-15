@@ -66,6 +66,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
     $scope.switchAnalogSignal = function() {
         if ($scope.segment.analogsignals[$scope.currentAnalogSignalId].values == undefined) {
             console.log("Fetching data for analog signal #" + $scope.currentAnalogSignalId + " in segment #" + $scope.currentSegmentId + " in file " + $scope.source);
+            cache[$scope.currentSegmentId][$scope.currentAnalogSignalId] = [];
             AnalogSignalData.get({url: $scope.source,
                                   segment_id: $scope.currentSegmentId,
                                   analog_signal_id: $scope.currentAnalogSignalId,
@@ -80,7 +81,8 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                         $scope.graph_data = graph_data;
                         $scope.options = Graphics.getOptions("View of analogsignal", "", "", graph_data.values, $scope.signal, $scope.height)
                         $scope.$apply();
-                        cache[$scope.currentSegmentId][$scope.currentAnalogSignalId] = graph_data;
+                        cache[$scope.currentSegmentId][$scope.currentAnalogSignalId]['graph'] = graph_data;
+                        cache[$scope.currentSegmentId][$scope.currentAnalogSignalId]['options'] = $scope.options;
                     });
                 },
                 function(err) {
@@ -91,7 +93,8 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
         } else {
             console.log("Switching to cached signal #" + $scope.currentAnalogSignalId + " in segment #" + $scope.currentSegmentId);
             $scope.signal = $scope.block.segments[$scope.currentSegmentId].analogsignals[$scope.currentAnalogSignalId];
-            $scope.graph_data = cache[$scope.currentSegmentId][$scope.currentAnalogSignalId];
+            $scope.graph_data = cache[$scope.currentSegmentId][$scope.currentAnalogSignalId]['graph'];
+            $scope.options = cache[$scope.currentSegmentId][$scope.currentAnalogSignalId]['options'];
         }
     }
 
