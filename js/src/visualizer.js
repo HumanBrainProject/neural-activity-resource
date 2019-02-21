@@ -338,6 +338,14 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                         </small>
                     </div>
                     <form class="form-inline">
+                    <div ng-if="block.consistency" style="background-color: #0000FF;padding: 5px;color: white;margin-bottom: 5px;">
+                        <span style="margin-left: 15px;color: white;float: right;cursor: pointer;font-size: 22px;line-height: 20px;font-weight: bold;" onclick="this.parentElement.style.display='none';">&times;</span>
+                        <strong>Info!</strong> {{block.consistency}}
+                    </div>
+                    <div ng-if="segment.consistency" style="background-color: #2196F3;padding: 5px;color: white;margin-bottom: 5px;">
+                        <span style="margin-left: 15px;color: white;float: right;cursor: pointer;font-size: 22px;line-height: 20px;font-weight: bold;" onclick="this.parentElement.style.display='none';">&times;</span>
+                        <strong>Info!</strong> {{segment.consistency}}
+                    </div>
                     <select class="form-control" ng-change="switchSegment()" ng-model="currentSegmentId">
                         <option ng-repeat="segment in block.segments" value="{{$index}}">
                             Segment #{{$index}}

@@ -84,6 +84,15 @@ class Block(APIView):
                 for s in block.segments],
             }]}
 
+        # check for multiple Segments with 'matching' (same count) AnalogSignals in each
+        signal_count = len(block.segments[0].analogsignals)
+        for seg in block.segments[1:]:
+            if len(seg.analogsignals) == signal_count:
+                continue
+            else:
+                block_data['block'][0]['consistency'] = 'Segments have inconsistent signal counts.'
+                break
+
         return JsonResponse(block_data)
 
 
@@ -116,6 +125,15 @@ class Segment(APIView):
                     'analogsignals': [{} for a in segment.analogsignals],
                     'as_prop': [{'size': e.size, 'name': e.name} for e in segment.analogsignals]
                     }
+
+        # check for multiple 'matching' (same units/sampling rates) AnalogSignals in a single Segment
+        for signal in segment.analogsignals[1:]:
+            if (str(signal.units.dimensionality) == str(segment.analogsignals[0].units.dimensionality)) \
+                    and (float(signal.sampling_rate.magnitude) == float(segment.analogsignals[0].sampling_rate.magnitude)):
+                continue
+            else:
+                seg_data['consistency'] = 'Segment has inconsistent units/sampling rates.'
+                break
 
         return JsonResponse(seg_data, safe=False)
 
