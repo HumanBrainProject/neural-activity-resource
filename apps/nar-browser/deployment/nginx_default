@@ -22,8 +22,8 @@ log_format anonymized '$ip_anonymized - $remote_user [$time_local] '
 '"$request" $status $body_bytes_sent '
 '"$http_referer" "$http_user_agent"';
 
-access_log /var/log/nginx/access.log anonymized;
-
+access_log off;
+error_log off;
 
 server {
     root /usr/share/nginx/html;
@@ -34,6 +34,9 @@ server {
     server_name         nar-browser-app.brainsimulation.eu;
     ssl_certificate     /etc/letsencrypt/live/nar-browser-app.brainsimulation.eu/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/nar-browser-app.brainsimulation.eu/privkey.pem;
+
+    access_log /var/log/nginx/access.log anonymized;
+    error_log /var/log/nginx/error.log crit;
 
     location / {
     }
