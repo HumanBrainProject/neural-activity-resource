@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import os.path
 from django.shortcuts import render
 from django.http import JsonResponse
 
@@ -9,9 +10,9 @@ from neo import io
 from rest_framework.response import Response
 from rest_framework import status
 try:
-    from urllib import urlretrieve
+    from urllib import urlretrieve, HTTPError
 except ImportError:
-    from urllib.request import urlretrieve
+    from urllib.request import urlretrieve,HTTPError
 try:
     unicode
 except NameError:
@@ -25,6 +26,17 @@ def _get_file_from_url(request):
         urlretrieve(url, filename)
         # todo: wrap previous line in try..except so we can return a 404 if the file is not found
         #       or a 500 if the local disk is full
+
+        # if we have a text file, try to download the accompanying json file
+        name, ext = os.path.splitext(filename)
+        if ext[1:] in io.AsciiSignalIO.extensions:  # ext has a leading '.'
+            metadata_filename = filename.replace(ext, "_about.json")
+            metadata_url = url.replace(ext, "_about.json")
+            try:
+                urlretrieve(metadata_url, metadata_filename)
+            except HTTPError:
+                pass
+
         return filename
     else:
         return JsonResponse({'error': 'URL parameter is missing', 'message': ''},
