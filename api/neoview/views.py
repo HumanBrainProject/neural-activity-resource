@@ -76,6 +76,7 @@ class Block(APIView):
             # 'index': block.index,
             'name': block.name or "",
             'rec_datetime': block.rec_datetime,
+            'consistency': 'consistent',
             'segments': [
                 {
                     'name': s.name or "",
@@ -102,7 +103,7 @@ class Block(APIView):
             if len(seg.analogsignals) == signal_count:
                 continue
             else:
-                block_data['block'][0]['consistency'] = 'Segments have inconsistent signal counts.'
+                del block_data['block'][0]['consistency']
                 break
 
         return JsonResponse(block_data)
@@ -135,7 +136,8 @@ class Segment(APIView):
                     'annotations': _handle_dict(segment.annotations),
                     # 'spiketrains': segment.spiketrains,
                     'analogsignals': [{} for a in segment.analogsignals],
-                    'as_prop': [{'size': e.size, 'name': e.name} for e in segment.analogsignals]
+                    'as_prop': [{'size': e.size, 'name': e.name} for e in segment.analogsignals],
+                    'consistency': 'consistent'
                     }
 
         # check for multiple 'matching' (same units/sampling rates) AnalogSignals in a single Segment
@@ -144,7 +146,7 @@ class Segment(APIView):
                     and (float(signal.sampling_rate.magnitude) == float(segment.analogsignals[0].sampling_rate.magnitude)):
                 continue
             else:
-                seg_data['consistency'] = 'Segment has inconsistent units/sampling rates.'
+                del seg_data['consistency']
                 break
 
         return JsonResponse(seg_data, safe=False)

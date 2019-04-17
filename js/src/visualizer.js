@@ -2,8 +2,160 @@
 
 angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
 
-.controller('MainCtrl', function($scope, BlockData, SegmentData, AnalogSignalData, Graphics) {
+.controller('MainCtrl', function($scope, BlockData, SegmentData, AnalogSignalData, Graphics, $q) {
     var cache = [];
+    $scope.segmentCheck = false;
+    $scope.blockCheck = false;
+    $scope.segmentSignals = null;
+    $scope.blockSignals = null;
+
+    var getMultiSignalOptions = function() {
+        options = {
+                    chart: {
+                        type: 'lineWithFocusChart',
+                        useVoronoi: false,
+                        height: 450,
+                        margin : {
+                            top: 20,
+                            right: 20,
+                            bottom: 60,
+                            left: 40
+                        },
+                        duration: 50,
+                        xAxis: {
+                            axisLabel: 'X Axis',
+                            tickFormat: function(d){
+                                return d3.format(',.f')(d);
+                            }
+                        },
+                        x2Axis: {
+                            tickFormat: function(d){
+                                return d3.format(',.f')(d);
+                            }
+                        },
+                        yAxis: {
+                            axisLabel: 'Y Axis',
+                            tickFormat: function(d){
+                                return d3.format(',.f')(d);
+                            },
+                            rotateYLabel: false
+                        },
+                        y2Axis: {
+                            tickFormat: function(d){
+                                return d3.format(',.f')(d);
+                            }
+                        }
+                    }
+                };
+        return options;
+    }
+
+    $scope.showSelectedSignals = function(id)
+    {
+        console.log("Signal id: " + id);
+        $scope.block_options = getMultiSignalOptions();
+
+            var sig_promises = [];
+
+            $scope.block.segments.forEach(
+                function(seg, i) {
+                    var sigdata = AnalogSignalData.get({url: $scope.source,
+                                    segment_id: i,
+                                    analog_signal_id: id,
+                                    type: $scope.iotype
+                                    });
+                    sigdata.id = id;
+                    sig_promises.push(sigdata.$promise);
+                    }
+                );
+
+            $q.all(sig_promises).then(
+                function(signals) {
+                    console.log("* SIGNALS count " + signals.length);
+                    var graph_data = [];
+                    signals.forEach(
+                        function(signal, j) {
+                            var t_start = signal.times[0];
+                            var xy_data = signal.values.map(
+                                function(val, i){
+                                    return {x: 1000 * (signal.times[i] - t_start), y: val};
+                                }
+                            );
+                            graph_data.push({
+                                key: "Segment " + j,
+                                values: xy_data
+                            });
+                        }
+                    );
+                    $scope.block_data = graph_data;
+                },
+                function(error) {
+                    console.log(error);
+                }
+            );
+    }
+
+    $scope.showBlockSignals = function(name)
+    {
+        if (name == true) {
+            $scope.blockSignals = true;
+            }
+        else {
+            $scope.blockSignals = null;
+        }
+    };
+
+    $scope.showSegmentSignals = function(name)
+    {
+        if (name == true) {
+            $scope.segmentSignals = true;
+            $scope.segment_options = getMultiSignalOptions();
+            var promises = [];
+
+            $scope.segment.analogsignals.forEach(
+                function(sig, i) {
+                    var sigdata = AnalogSignalData.get({url: $scope.source,
+                                    segment_id: $scope.currentSegmentId,
+                                    analog_signal_id: i,
+                                    type: $scope.iotype
+                                    });
+                    sigdata.id = i;
+                    promises.push(sigdata.$promise);
+                    }
+                );
+
+            $q.all(promises).then(
+                function(signals) {
+                    console.log("SIGNALS count " + signals.length);
+                    var graph_data = [];
+                    signals.forEach(
+                        function(signal, j) {
+                            var t_start = signal.times[0];
+                            var xy_data = signal.values.map(
+                                function(val, i){
+                                    return {x: 1000 * (signal.times[i] - t_start), y: val};
+                                }
+                            );
+                            graph_data.push({
+                                key: "Signal " + j,
+                                values: xy_data
+                            });
+                        }
+                    );
+                    $scope.segment_data = graph_data;
+                },
+                function(error) {
+                    console.log(error);
+                }
+            );
+        }
+
+        else {
+            $scope.segmentSignals = null;
+        }
+
+    };
+
     console.log($scope.source);
     if (!$scope.height) {
         $scope.height = 600;
@@ -319,6 +471,19 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
         //templateUrl: '/src/visualizer.tpl.html',
         template: `
             <div>
+            <style>
+                input[type="checkbox"] {
+                  -webkit-appearance: none;
+                  -moz-appearance: none;
+                  appearance: none;
+                  width: 15px;
+                  height: 15px;
+                  background-color: grey;
+                }
+                input[type="checkbox"]:checked {
+                  background-color: blue;
+                }
+            </style>
             <div ng-show="!error" class="panel panel-default">
                 <div class="panel-heading">
                     <p>
@@ -338,31 +503,47 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                         </small>
                     </div>
                     <form class="form-inline">
-                    <div ng-if="block.consistency" style="background-color: #0000FF;padding: 5px;color: white;margin-bottom: 5px;">
-                        <span style="margin-left: 15px;color: white;float: right;cursor: pointer;font-size: 22px;line-height: 20px;font-weight: bold;" onclick="this.parentElement.style.display='none';">&times;</span>
-                        <strong>Info!</strong> {{block.consistency}}
+                    <div ng-show="segment.consistency" >Segment is consistent<br/>
+                        <label>Show all signals on the same axes:
+                            <input type="checkbox" ng-model="segmentCheck" ng-change="showSegmentSignals(segmentCheck)" >
+                        </label>
                     </div>
-                    <div ng-if="segment.consistency" style="background-color: #2196F3;padding: 5px;color: white;margin-bottom: 5px;">
-                        <span style="margin-left: 15px;color: white;float: right;cursor: pointer;font-size: 22px;line-height: 20px;font-weight: bold;" onclick="this.parentElement.style.display='none';">&times;</span>
-                        <strong>Info!</strong> {{segment.consistency}}
+                    <div ng-show="block.consistency">Block is consistent<br/>
+                        <label>Show signals from all segments on the same axes:
+                            <input type="checkbox" ng-model="blockCheck" ng-change="showBlockSignals(blockCheck)">
+                        </label>
                     </div>
-                    <select class="form-control" ng-change="switchSegment()" ng-model="currentSegmentId">
-                        <option ng-repeat="segment in block.segments" value="{{$index}}">
-                            Segment #{{$index}}
-                        </option>
-                    </select>
-                    <!--<p>{{segment.name}}</p>
-                    <p>Contains {{segment.analogsignals.length}} analog signals</p>-->
-                    <select class="form-control" ng-show="segment" ng-change="switchAnalogSignal()" ng-model="currentAnalogSignalId">
-                        <option value="">--- Please select signal ---</option> <!-- not selected / blank option -->
-                        <option ng-repeat="signal in segment.analogsignals" value="{{$index}}">
-                            Signal #{{$index}} <span ng-show="signal.name">({{signal.name}})</span>
-                        </option>
-                    </select>
+                    <div ng-show="!blockSignals">
+                        <select class="form-control" ng-change="switchSegment()" ng-model="currentSegmentId">
+                            <option ng-repeat="segment in block.segments" value="{{$index}}">
+                                Segment #{{$index}}
+                            </option>
+                        </select>
+                        <!--<p>{{segment.name}}</p>
+                        <p>Contains {{segment.analogsignals.length}} analog signals</p>-->
+                        <select class="form-control" ng-show="segment" ng-change="switchAnalogSignal()" ng-model="currentAnalogSignalId">
+                            <option value="">--- Please select signal ---</option> <!-- not selected / blank option -->
+                            <option ng-repeat="signal in segment.analogsignals" value="{{$index}}">
+                                Signal #{{$index}} <span ng-show="signal.name">({{signal.name}})</span>
+                            </option>
+                        </select>
+                    </div>
+                    <div ng-show="blockSignals">
+                        <select class="form-control" ng-show="segment" ng-change="showSelectedSignals(SignalId)" ng-model="SignalId">
+                            <option value="">--- Please select signal ---</option> <!-- not selected / blank option -->
+                            <option ng-repeat="signal in segment.analogsignals" value="{{$index}}">Signal #{{$index}}</option>
+                        </select>
+                    </div>
                     </form>
                 </div>
                 <div class="panel-body" ng-show="signal">
                     <nvd3 options="options" data=graph_data.values id=''></nvd3>
+                </div>
+                <div ng-show="segmentSignals">
+                    <nvd3 options="segment_options" data="segment_data"></nvd3>
+                </div>
+                <div ng-show="blockSignals">
+                    <nvd3 options="block_options" data="block_data"></nvd3>
                 </div>
             </div>
             <div ng-show="error" class="panel panel-error">
