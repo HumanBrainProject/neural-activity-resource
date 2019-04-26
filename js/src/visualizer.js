@@ -8,8 +8,9 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
     $scope.blockCheck = false;
     $scope.segmentSignals = null;
     $scope.blockSignals = null;
+    $scope.channelSignals = null;
 
-    var getMultiSignalOptions = function() {
+    var getMultiLineOptions = function() {
         options = {
                     chart: {
                         type: 'lineWithFocusChart',
@@ -48,12 +49,46 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                     }
                 };
         return options;
-    }
+    };
+
+    $scope.showMultiChannelSignal = function()
+    {
+        $scope.channelSignals = true;
+        $scope.channel_options = getMultiLineOptions();
+        AnalogSignalData.get({url: $scope.source,
+                                      segment_id: $scope.currentSegmentId,
+                                      analog_signal_id: $scope.currentAnalogSignalId,
+                                      type: $scope.iotype
+                                     }).$promise.then(
+            function(data) {
+                $scope.signal = data;
+                $scope.signal.id = $scope.currentAnalogSignalId;
+                $scope.block.segments[$scope.currentSegmentId].analogsignals[$scope.currentAnalogSignalId] = $scope.signal;
+                console.log("** channel size " + data.values.length);
+                var graph_data = [];
+                data.values.forEach(
+                    function(value, j) {
+                        var t_start = data.times[0];
+                        var xy_data = value.map(
+                            function(val, i){
+                                return {x: 1000 * (data.times[i] - t_start), y: val};
+                            }
+                        );
+                        graph_data.push({
+                            key: "Channel " + j,
+                            values: xy_data
+                        });
+                    }
+                );
+                $scope.channel_data = graph_data;
+            }
+        )
+    };
 
     $scope.showSelectedSignals = function(id)
     {
         console.log("Signal id: " + id);
-        $scope.block_options = getMultiSignalOptions();
+        $scope.block_options = getMultiLineOptions();
 
             var sig_promises = [];
 
@@ -109,7 +144,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
     {
         if (name == true) {
             $scope.segmentSignals = true;
-            $scope.segment_options = getMultiSignalOptions();
+            $scope.segment_options = getMultiLineOptions();
             var promises = [];
 
             $scope.segment.analogsignals.forEach(
@@ -219,29 +254,37 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
         if ($scope.segment.analogsignals[$scope.currentAnalogSignalId].values == undefined) {
             console.log("Fetching data for analog signal #" + $scope.currentAnalogSignalId + " in segment #" + $scope.currentSegmentId + " in file " + $scope.source);
             cache[$scope.currentSegmentId][$scope.currentAnalogSignalId] = [];
-            AnalogSignalData.get({url: $scope.source,
-                                  segment_id: $scope.currentSegmentId,
-                                  analog_signal_id: $scope.currentAnalogSignalId,
-                                  type: $scope.iotype
-                                 }).$promise.then(
-                function(data) {
-                    $scope.signal = data;
-                    $scope.signal.id = $scope.currentAnalogSignalId;
-                    $scope.block.segments[$scope.currentSegmentId].analogsignals[$scope.currentAnalogSignalId] = $scope.signal;
-                    console.log(data);
-                    Graphics.initGraph($scope.signal).then(function(graph_data) {
-                        $scope.graph_data = graph_data;
-                        $scope.options = Graphics.getOptions("View of analogsignal", "", "", graph_data.values, $scope.signal, $scope.height)
-                        $scope.$apply();
-                        cache[$scope.currentSegmentId][$scope.currentAnalogSignalId]['graph'] = graph_data;
-                        cache[$scope.currentSegmentId][$scope.currentAnalogSignalId]['options'] = $scope.options;
-                    });
-                },
-                function(err) {
-                    console.log("Error in getting signal");
-                    console.log(err);
-                }
-            );
+            if ($scope.block.channels == 'multi'){
+                console.log("Signal has multiple channels");
+                $scope.showMultiChannelSignal();
+            }
+            else {
+                AnalogSignalData.get({url: $scope.source,
+                                      segment_id: $scope.currentSegmentId,
+                                      analog_signal_id: $scope.currentAnalogSignalId,
+                                      type: $scope.iotype
+                                     }).$promise.then(
+                    function(data) {
+                        $scope.signal = data;
+                        $scope.signal.id = $scope.currentAnalogSignalId;
+                        $scope.block.segments[$scope.currentSegmentId].analogsignals[$scope.currentAnalogSignalId] = $scope.signal;
+                        console.log(data);
+                        Graphics.initGraph($scope.signal).then(function(graph_data) {
+                            $scope.graph_data = graph_data;
+                            $scope.options = Graphics.getOptions("View of analogsignal", "", "", graph_data.values, $scope.signal, $scope.height)
+                            $scope.$apply();
+                            cache[$scope.currentSegmentId][$scope.currentAnalogSignalId]['graph'] = graph_data;
+                            cache[$scope.currentSegmentId][$scope.currentAnalogSignalId]['options'] = $scope.options;
+                        });
+                    },
+                    function(err) {
+                        console.log("Error in getting signal");
+                        console.log(err);
+                    }
+                );
+
+            }
+
         } else {
             console.log("Switching to cached signal #" + $scope.currentAnalogSignalId + " in segment #" + $scope.currentSegmentId);
             $scope.signal = $scope.block.segments[$scope.currentSegmentId].analogsignals[$scope.currentAnalogSignalId];
@@ -544,6 +587,9 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                 </div>
                 <div ng-show="blockSignals">
                     <nvd3 options="block_options" data="block_data"></nvd3>
+                </div>
+                <div ng-show="channelSignals">
+                    <nvd3 options="channel_options" data="channel_data"></nvd3>
                 </div>
             </div>
             <div ng-show="error" class="panel panel-error">

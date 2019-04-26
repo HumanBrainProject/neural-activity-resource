@@ -12,7 +12,7 @@ from rest_framework import status
 try:
     from urllib import urlretrieve, HTTPError
 except ImportError:
-    from urllib.request import urlretrieve,HTTPError
+    from urllib.request import urlretrieve, HTTPError
 try:
     unicode
 except NameError:
@@ -98,13 +98,20 @@ class Block(APIView):
             }]}
 
         # check for multiple Segments with 'matching' (same count) AnalogSignals in each
-        signal_count = len(block.segments[0].analogsignals)
-        for seg in block.segments[1:]:
-            if len(seg.analogsignals) == signal_count:
-                continue
-            else:
-                del block_data['block'][0]['consistency']
-                break
+        if len(block.segments) < 2:
+            del block_data['block'][0]['consistency']
+        else:
+            signal_count = len(block.segments[0].analogsignals)
+            for seg in block.segments[1:]:
+                if len(seg.analogsignals) == signal_count:
+                    continue
+                else:
+                    del block_data['block'][0]['consistency']
+                    break
+
+        # check for channels
+        if len(block.segments[0].analogsignals[0][0]) > 1:
+            block_data['block'][0]['channels'] = 'multi'
 
         return JsonResponse(block_data)
 
@@ -141,13 +148,16 @@ class Segment(APIView):
                     }
 
         # check for multiple 'matching' (same units/sampling rates) AnalogSignals in a single Segment
-        for signal in segment.analogsignals[1:]:
-            if (str(signal.units.dimensionality) == str(segment.analogsignals[0].units.dimensionality)) \
-                    and (float(signal.sampling_rate.magnitude) == float(segment.analogsignals[0].sampling_rate.magnitude)):
-                continue
-            else:
-                del seg_data['consistency']
-                break
+        if len(segment.analogsignals) < 2:
+            del seg_data['consistency']
+        else:
+            for signal in segment.analogsignals[1:]:
+                if (str(signal.units.dimensionality) == str(segment.analogsignals[0].units.dimensionality)) \
+                        and (float(signal.sampling_rate.magnitude) == float(segment.analogsignals[0].sampling_rate.magnitude)):
+                    continue
+                else:
+                    del seg_data['consistency']
+                    break
 
         return JsonResponse(seg_data, safe=False)
 
@@ -185,13 +195,20 @@ class AnalogSignal(APIView):
         # print(analog_signal)
 
         analog_signal_values = []
-        for item in analogsignal:
-            try:  # TODO find a better solution
-                analog_signal_values.append(item.item())
-            except ValueError:
-                analog_signal_values.append(item[1].item())
 
-        analog_signal_times= []
+        if len(analogsignal[0]) > 1:
+            # multiple channels
+            for i in range(0, len(analogsignal[0])):
+                channel = []
+                for item in analogsignal:
+                    channel.append(item[i].item())
+                analog_signal_values.append(channel)
+        else:
+            # single channel
+            for item in analogsignal:
+                analog_signal_values.append(item.item())
+
+        analog_signal_times = []
         for item in analogsignal.times:
             analog_signal_times.append(item.item())
 
