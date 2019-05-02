@@ -82,11 +82,14 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                 );
                 $scope.channel_data = graph_data;
             }
-        )
+        ).finally(function () {
+            $scope.dataLoading = false;
+          });
     };
 
     $scope.showSelectedSignals = function(id)
     {
+        $scope.dataLoading = true;
         console.log("Signal id: " + id);
         $scope.block_options = getMultiLineOptions();
 
@@ -127,7 +130,9 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                 function(error) {
                     console.log(error);
                 }
-            );
+            ).finally(function () {
+                $scope.dataLoading = false;
+                });
     }
 
     $scope.showBlockSignals = function(name)
@@ -137,12 +142,14 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
             }
         else {
             $scope.blockSignals = null;
+            $scope.dataLoading = false;
         }
     };
 
     $scope.showSegmentSignals = function(name)
     {
         if (name == true) {
+            $scope.dataLoading = true;
             $scope.segmentSignals = true;
             $scope.segment_options = getMultiLineOptions();
             var promises = [];
@@ -182,10 +189,13 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                 function(error) {
                     console.log(error);
                 }
-            );
+            ).finally(function () {
+                $scope.dataLoading = false;
+              });
         }
 
         else {
+            $scope.dataLoading = false;
             $scope.segmentSignals = null;
         }
 
@@ -251,6 +261,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
     }
 
     $scope.switchAnalogSignal = function() {
+        $scope.dataLoading = true;
         if ($scope.segment.analogsignals[$scope.currentAnalogSignalId].values == undefined) {
             console.log("Fetching data for analog signal #" + $scope.currentAnalogSignalId + " in segment #" + $scope.currentSegmentId + " in file " + $scope.source);
             cache[$scope.currentSegmentId][$scope.currentAnalogSignalId] = [];
@@ -281,8 +292,9 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                         console.log("Error in getting signal");
                         console.log(err);
                     }
-                );
-
+                ).finally(function () {
+                     $scope.dataLoading = false;
+                    });
             }
 
         } else {
@@ -290,6 +302,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
             $scope.signal = $scope.block.segments[$scope.currentSegmentId].analogsignals[$scope.currentAnalogSignalId];
             $scope.graph_data = cache[$scope.currentSegmentId][$scope.currentAnalogSignalId]['graph'];
             $scope.options = cache[$scope.currentSegmentId][$scope.currentAnalogSignalId]['options'];
+            $scope.dataLoading = false;
         }
     }
 
@@ -515,16 +528,23 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
         template: `
             <div>
             <style>
-                input[type="checkbox"] {
-                  -webkit-appearance: none;
-                  -moz-appearance: none;
-                  appearance: none;
-                  width: 15px;
-                  height: 15px;
-                  background-color: grey;
+                .loader {
+                  border: 16px solid #f3f3f3;
+                  border-radius: 50%;
+                  border-top: 16px solid #3498db;
+                  width: 50px;
+                  height: 50px;
+                  -webkit-animation: spin 2s linear infinite; /* Safari */
+                  animation: spin 2s linear infinite;
                 }
-                input[type="checkbox"]:checked {
-                  background-color: blue;
+                /* Safari */
+                @-webkit-keyframes spin {
+                  0% { -webkit-transform: rotate(0deg); }
+                  100% { -webkit-transform: rotate(360deg); }
+                }
+                @keyframes spin {
+                  0% { transform: rotate(0deg); }
+                  100% { transform: rotate(360deg); }
                 }
             </style>
             <div ng-show="!error" class="panel panel-default">
@@ -579,7 +599,8 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                     </div>
                     </form>
                 </div>
-                <div class="panel-body" ng-show="signal">
+                <div ng-if="dataLoading" class="loader"></div>
+                <div class="panel-body" ng-show="signal && !dataLoading">
                     <nvd3 options="options" data=graph_data.values id=''></nvd3>
                 </div>
                 <div ng-show="segmentSignals">
