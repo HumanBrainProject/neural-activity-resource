@@ -139,16 +139,21 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
     {
         if (name == true) {
             $scope.blockSignals = true;
+            $scope.signal = null;
+            $scope.segmentSignals = null;
             }
         else {
             $scope.blockSignals = null;
             $scope.dataLoading = false;
         }
+        $scope.currentAnalogSignalId = null
     };
 
     $scope.showSegmentSignals = function(name)
     {
         if (name == true) {
+            $scope.signal = null;
+            $scope.blockSignals = null;
             $scope.dataLoading = true;
             $scope.segmentSignals = true;
             $scope.segment_options = getMultiLineOptions();
@@ -198,6 +203,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
             $scope.dataLoading = false;
             $scope.segmentSignals = null;
         }
+        $scope.currentAnalogSignalId = null
 
     };
 
@@ -234,6 +240,8 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
 
     $scope.switchSegment = function() {
         $scope.signal = null;
+        $scope.segmentSignals = null;
+        $scope.segmentCheck = false;
         if ($scope.block.segments[$scope.currentSegmentId].analogsignals[0] == undefined) {
             console.log("Fetching data for segment #" + $scope.currentSegmentId + " in file " + $scope.source);
             cache[$scope.currentSegmentId] = [];
@@ -262,6 +270,8 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
 
     $scope.switchAnalogSignal = function() {
         $scope.dataLoading = true;
+        $scope.segmentSignals = null;
+        $scope.segmentCheck = false;
         if ($scope.segment.analogsignals[$scope.currentAnalogSignalId].values == undefined) {
             console.log("Fetching data for analog signal #" + $scope.currentAnalogSignalId + " in segment #" + $scope.currentSegmentId + " in file " + $scope.source);
             cache[$scope.currentSegmentId][$scope.currentAnalogSignalId] = [];
@@ -566,7 +576,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                         </small>
                     </div>
                     <form class="form-inline">
-                    <div ng-show="segment.consistency" >Segment is consistent<br/>
+                    <div ng-show="segment.consistency" >Segment <b>#{{currentSegmentId}}</b> is consistent<br/>
                         <label>Show all signals on the same axes:
                             <input type="checkbox" ng-model="segmentCheck" ng-change="showSegmentSignals(segmentCheck)" >
                         </label>
