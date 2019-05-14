@@ -63,7 +63,12 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
             function(data) {
                 $scope.signal = data;
                 $scope.signal.id = $scope.currentAnalogSignalId;
-                $scope.block.segments[$scope.currentSegmentId].analogsignals[$scope.currentAnalogSignalId] = $scope.signal;
+                if ($scope.segment.analogsignals.length > 0) {
+                    $scope.block.segments[$scope.currentSegmentId].analogsignals[$scope.currentAnalogSignalId] = $scope.signal;
+                    }
+                else if ($scope.segment.irregularlysampledsignals.length > 0) {
+                    $scope.block.segments[$scope.currentSegmentId].irregularlysampledsignals[$scope.currentAnalogSignalId] = $scope.signal;
+                }
                 console.log("** channel size " + data.values.length);
                 var graph_data = [];
                 data.values.forEach(
@@ -272,7 +277,8 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
         $scope.dataLoading = true;
         $scope.segmentSignals = null;
         $scope.segmentCheck = false;
-        if ($scope.segment.analogsignals[$scope.currentAnalogSignalId].values == undefined) {
+        if (($scope.segment.analogsignals.length > 0 && $scope.segment.analogsignals[$scope.currentAnalogSignalId].values == undefined) ||
+            ($scope.segment.irregularlysampledsignals.length > 0 && $scope.segment.irregularlysampledsignals[$scope.currentAnalogSignalId].values == undefined)) {
             console.log("Fetching data for analog signal #" + $scope.currentAnalogSignalId + " in segment #" + $scope.currentSegmentId + " in file " + $scope.source);
             cache[$scope.currentSegmentId][$scope.currentAnalogSignalId] = [];
             if ($scope.block.channels == 'multi'){
@@ -288,7 +294,12 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                     function(data) {
                         $scope.signal = data;
                         $scope.signal.id = $scope.currentAnalogSignalId;
-                        $scope.block.segments[$scope.currentSegmentId].analogsignals[$scope.currentAnalogSignalId] = $scope.signal;
+                        if ($scope.segment.analogsignals.length > 0) {
+                            $scope.block.segments[$scope.currentSegmentId].analogsignals[$scope.currentAnalogSignalId] = $scope.signal;
+                            }
+                        else if ($scope.segment.irregularlysampledsignals.length > 0) {
+                            $scope.block.segments[$scope.currentSegmentId].irregularlysampledsignals[$scope.currentAnalogSignalId] = $scope.signal;
+                        }
                         console.log(data);
                         Graphics.initGraph($scope.signal).then(function(graph_data) {
                             $scope.graph_data = graph_data;
@@ -309,7 +320,12 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
 
         } else {
             console.log("Switching to cached signal #" + $scope.currentAnalogSignalId + " in segment #" + $scope.currentSegmentId);
-            $scope.signal = $scope.block.segments[$scope.currentSegmentId].analogsignals[$scope.currentAnalogSignalId];
+            if ($scope.segment.analogsignals.length > 0) {
+                $scope.signal = $scope.block.segments[$scope.currentSegmentId].analogsignals[$scope.currentAnalogSignalId];
+                }
+            else if ($scope.segment.irregularlysampledsignals.length > 0) {
+                $scope.signal = $scope.block.segments[$scope.currentSegmentId].irregularlysampledsignals[$scope.currentAnalogSignalId];
+            }
             $scope.graph_data = cache[$scope.currentSegmentId][$scope.currentAnalogSignalId]['graph'];
             $scope.options = cache[$scope.currentSegmentId][$scope.currentAnalogSignalId]['options'];
             $scope.dataLoading = false;
@@ -596,7 +612,10 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                         <p>Contains {{segment.analogsignals.length}} analog signals</p>-->
                         <select class="form-control" ng-show="segment" ng-change="switchAnalogSignal()" ng-model="currentAnalogSignalId">
                             <option value="">--- Please select signal ---</option> <!-- not selected / blank option -->
-                            <option ng-repeat="signal in segment.analogsignals" value="{{$index}}">
+                            <option ng-show="segment.analogsignals" ng-repeat="signal in segment.analogsignals" value="{{$index}}">
+                                Signal #{{$index}} <span ng-show="signal.name">({{signal.name}})</span>
+                            </option>
+                            <option ng-show="segment.irregularlysampledsignals" ng-repeat="signal in segment.irregularlysampledsignals" value="{{$index}}">
                                 Signal #{{$index}} <span ng-show="signal.name">({{signal.name}})</span>
                             </option>
                         </select>
