@@ -196,11 +196,19 @@ class AnalogSignal(APIView):
         # todo, catch MultiValueDictKeyError in case segment_id or analog_signal_id aren't given, and return a 400 Bad Request response
         segment = block.segments[id_segment]
 
+        graph_data = {}
         analogsignal = None
         if len(segment.analogsignals) > 0:
             analogsignal = segment.analogsignals[id_analog_signal]
+            graph_data["t_start"] = analogsignal.t_start.item()
+            graph_data["t_stop"] = analogsignal.t_stop.item()
+            graph_data["sampling_period"] = analogsignal.sampling_period.item()
         elif len(segment.irregularlysampledsignals) > 0:
             analogsignal = segment.irregularlysampledsignals[id_analog_signal]
+            analog_signal_times = []
+            for item in analogsignal.times:
+                analog_signal_times.append(item.item())
+            graph_data["times"] = analog_signal_times
 
         # todo, catch any IndexErrors, and return a 404 response
 
@@ -218,18 +226,9 @@ class AnalogSignal(APIView):
             for item in analogsignal:
                 analog_signal_values.append(item.item())
 
-        analog_signal_times = []
-        for item in analogsignal.times:
-            analog_signal_times.append(item.item())
-
-        graph_data = {
-            "name": analogsignal.name,
-            "values": analog_signal_values,
-            "values_units": str(analogsignal.units.dimensionality),
-            "times": analog_signal_times,
-            "times_dimensionality": str(analogsignal.t_start.units.dimensionality),
-            "t_start": analogsignal.t_start.item(),
-            "t_stop": analogsignal.t_stop.item(),
-        }
+        graph_data["values"] = analog_signal_values
+        graph_data["name"] = analogsignal.name
+        graph_data["times_dimensionality"] = str(analogsignal.t_start.units.dimensionality)
+        graph_data["values_units"] = str(analogsignal.units.dimensionality)
 
         return JsonResponse(graph_data)

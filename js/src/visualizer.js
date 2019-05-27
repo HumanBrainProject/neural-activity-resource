@@ -4,6 +4,8 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
 
 .controller('MainCtrl', function($scope, BlockData, SegmentData, AnalogSignalData, Graphics, $q) {
     var cache = [];
+    var cache_seg = [];
+    var cache_block = [];
     $scope.segmentCheck = false;
     $scope.blockCheck = false;
     $scope.segmentSignals = null;
@@ -71,6 +73,9 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                 }
                 console.log("** channel size " + data.values.length);
                 var graph_data = [];
+                if (typeof data.times === "undefined") {
+                    data.times = Graphics.get_graph_times(data);
+                }
                 data.values.forEach(
                     function(value, j) {
                         var t_start = data.times[0];
@@ -86,6 +91,8 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                     }
                 );
                 $scope.channel_data = graph_data;
+                cache[$scope.currentSegmentId][$scope.currentAnalogSignalId]['graph'] = graph_data;
+                cache[$scope.currentSegmentId][$scope.currentAnalogSignalId]['options'] = $scope.channel_options;
             }
         ).finally(function () {
             $scope.dataLoading = false;
@@ -94,12 +101,14 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
 
     $scope.showSelectedSignals = function(id)
     {
-        $scope.dataLoading = true;
-        console.log("Signal id: " + id);
-        $scope.block_options = getMultiLineOptions();
-
+        if (cache_block[id] == undefined)  {
+            cache_block[id] = [];
+        }
+        if (cache_block[id]['graph'] == undefined)  {
+            $scope.dataLoading = true;
+            console.log("Signal id: " + id);
+            $scope.block_options = getMultiLineOptions();
             var sig_promises = [];
-
             $scope.block.segments.forEach(
                 function(seg, i) {
                     var sigdata = AnalogSignalData.get({url: $scope.source,
@@ -118,6 +127,9 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                     var graph_data = [];
                     signals.forEach(
                         function(signal, j) {
+                            if (typeof signal.times === "undefined") {
+                                signal.times = Graphics.get_graph_times(signal);
+                            }
                             var t_start = signal.times[0];
                             var xy_data = signal.values.map(
                                 function(val, i){
@@ -131,6 +143,8 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                         }
                     );
                     $scope.block_data = graph_data;
+                    cache_block[id]["graph"] = graph_data;
+                    cache_block[id]["options"] = $scope.block_options;
                 },
                 function(error) {
                     console.log(error);
@@ -138,7 +152,15 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
             ).finally(function () {
                 $scope.dataLoading = false;
                 });
-    }
+            }
+            else
+            {
+                console.log("Switching to cached block signals of signal #" + id);
+                $scope.block_data = cache_block[id]['graph'];
+                $scope.block_options = cache_block[id]['options'];
+                $scope.dataLoading = false;
+            }
+    };
 
     $scope.showBlockSignals = function(name)
     {
@@ -157,59 +179,76 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
     $scope.showSegmentSignals = function(name)
     {
         if (name == true) {
-            $scope.signal = null;
-            $scope.blockSignals = null;
-            $scope.dataLoading = true;
-            $scope.segmentSignals = true;
-            $scope.segment_options = getMultiLineOptions();
-            var promises = [];
+            if (cache_seg[$scope.currentSegmentId] == undefined)  {
+                cache_seg[$scope.currentSegmentId] = [];
+            }
+            if (cache_seg[$scope.currentSegmentId]['graph'] == undefined)  {
+                $scope.signal = null;
+                $scope.blockSignals = null;
+                $scope.dataLoading = true;
+                $scope.segmentSignals = true;
+                $scope.segment_options = getMultiLineOptions();
+                var promises = [];
 
-            $scope.segment.analogsignals.forEach(
-                function(sig, i) {
-                    var sigdata = AnalogSignalData.get({url: $scope.source,
-                                    segment_id: $scope.currentSegmentId,
-                                    analog_signal_id: i,
-                                    type: $scope.iotype
-                                    });
-                    sigdata.id = i;
-                    promises.push(sigdata.$promise);
-                    }
-                );
-
-            $q.all(promises).then(
-                function(signals) {
-                    console.log("SIGNALS count " + signals.length);
-                    var graph_data = [];
-                    signals.forEach(
-                        function(signal, j) {
-                            var t_start = signal.times[0];
-                            var xy_data = signal.values.map(
-                                function(val, i){
-                                    return {x: 1000 * (signal.times[i] - t_start), y: val};
-                                }
-                            );
-                            graph_data.push({
-                                key: "Signal " + j,
-                                values: xy_data
-                            });
+                $scope.segment.analogsignals.forEach(
+                    function(sig, i) {
+                        var sigdata = AnalogSignalData.get({url: $scope.source,
+                                        segment_id: $scope.currentSegmentId,
+                                        analog_signal_id: i,
+                                        type: $scope.iotype
+                                        });
+                        sigdata.id = i;
+                        promises.push(sigdata.$promise);
                         }
                     );
-                    $scope.segment_data = graph_data;
-                },
-                function(error) {
-                    console.log(error);
-                }
-            ).finally(function () {
-                $scope.dataLoading = false;
-              });
-        }
 
+                $q.all(promises).then(
+                    function(signals) {
+                        console.log("SIGNALS count " + signals.length);
+                        var graph_data = [];
+                        signals.forEach(
+                            function(signal, j) {
+                                if (typeof signal.times === "undefined") {
+                                    signal.times = Graphics.get_graph_times(signal);
+                                }
+                                var t_start = signal.times[0];
+                                var xy_data = signal.values.map(
+                                    function(val, i){
+                                        return {x: 1000 * (signal.times[i] - t_start), y: val};
+                                    }
+                                );
+                                graph_data.push({
+                                    key: "Signal " + j,
+                                    values: xy_data
+                                });
+                            }
+                        );
+                        $scope.segment_data = graph_data;
+                        cache_seg[$scope.currentSegmentId]['graph'] = graph_data;
+                        cache_seg[$scope.currentSegmentId]['options'] = $scope.segment_options;
+                    },
+                    function(error) {
+                        console.log(error);
+                    }
+                ).finally(function () {
+                    $scope.dataLoading = false;
+                  });
+              }
+              else {
+                    console.log("Switching to cached signals in segment #" + $scope.currentSegmentId);
+                    $scope.segment_data = cache_seg[$scope.currentSegmentId]['graph'];
+                    $scope.segment_options = cache_seg[$scope.currentSegmentId]['options'];
+                    $scope.signal = null;
+                    $scope.blockSignals = null;
+                    $scope.segmentSignals = true;
+                    $scope.dataLoading = false;
+              }
+        }
         else {
             $scope.dataLoading = false;
             $scope.segmentSignals = null;
         }
         $scope.currentAnalogSignalId = null
-
     };
 
     console.log($scope.source);
@@ -347,9 +386,9 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
         //graphs functions
         var getOptions = function(title, subtitle, caption, graph_data, raw_data, height) {
 
-            var yminymax = _get_min_max_values(raw_data.values);
+            // var yminymax = _get_min_max_values(raw_data.values);
 
-            var xminxmax = _get_min_max_values(raw_data.times);
+            // var xminxmax = _get_min_max_values(raw_data.times);
 
             if (!height) {
                 height = 600
@@ -454,7 +493,9 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
         var initGraph = function(raw_data) {
             console.log("initGraph");
             return new Promise(function(resolve, reject) {
-
+                if (typeof raw_data.times === "undefined") {
+                    raw_data.times = get_graph_times(raw_data);
+                }
                 var data = []
                 get_graph_values(raw_data).then(function(data_graph) {
                     data.push(data_graph)
@@ -483,6 +524,20 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
             })
         }
 
+        var get_graph_times = function(raw_data) {
+            var times = [];
+            var t = 0;
+            var x = 0;
+            var start = raw_data.t_start;
+            var end = raw_data.t_stop;
+            var p = raw_data.sampling_period;
+            while (t <= end) {
+                t = start + (x * p);
+                times.push(t);
+                x++;
+            }
+            return times;
+        }
 
         //utility functions
         var _get_color_array = function(data_row) {
@@ -538,7 +593,8 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
             _get_min_max_values: _get_min_max_values,
 
             initGraph: initGraph,
-            get_graph_values: get_graph_values
+            get_graph_values: get_graph_values,
+            get_graph_times: get_graph_times
         };
 
     }
