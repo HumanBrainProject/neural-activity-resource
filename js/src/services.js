@@ -28,6 +28,14 @@ angular.module('neo-visualizer')
     }
 ])
 
+.factory('SpikeTrainData', ['$resource', 'baseURL',
+    function($resource, baseURL) {
+        return $resource(baseURL + 'spiketraindata/', {}, {
+            get: { method: 'GET', params: { format: 'json' }, isArray: false },
+        })
+    }
+])
+
 .config(function($resourceProvider) {
     $resourceProvider.defaults.stripTrailingSlashes = false;
 });
