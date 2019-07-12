@@ -12,7 +12,7 @@ from rest_framework import status
 try:
     from urllib import urlretrieve, HTTPError
 except ImportError:
-    from urllib.request import urlretrieve,HTTPError
+    from urllib.request import urlretrieve, HTTPError
 try:
     unicode
 except NameError:
@@ -83,18 +83,48 @@ class Block(APIView):
                     'description': s.description or "",
                     # 'epochs': s.epochs,
                     # 'events': s.events,
-                    # 'spiketrains': s.spiketrains,
-                    # 'spiketrains': [],
+                    'spiketrains': [],
                     'rec_datetime': s.rec_datetime,
-                    # 'irregularlysampledsignals': s.irregularlysampledsignals,
+                    'irregularlysampledsignals': [],
                     # 'index': s.index,
                     'file_origin': s.file_origin or "",
                     # 'block': s.block,
-                    # 'analogsignals': s.analogsignals,
                     'analogsignals': [],
                 }
                 for s in block.segments],
             }]}
+
+        # check for channels
+        if (block.segments[0].analogsignals and len(block.segments[0].analogsignals[0][0]) > 1) \
+                or (block.segments[0].irregularlysampledsignals and len(block.segments[0].irregularlysampledsignals[0][0]) > 1):
+            block_data['block'][0]['channels'] = 'multi'
+
+        # check for spike trains
+        for s in block.segments:
+            if len(s.spiketrains) > 0:
+                block_data['block'][0]['spike_trains'] = 'exits'
+                break
+
+        # check for multiple Segments with 'matching' (same count) analog signals in each
+        if len(block.segments) < 2:
+            return JsonResponse(block_data)
+        else:
+            if block.segments[0].analogsignals:
+                signal_count = len(block.segments[0].analogsignals)
+                for seg in block.segments[1:]:
+                    if len(seg.analogsignals) == signal_count:
+                        continue
+                    else:
+                        return JsonResponse(block_data)
+                block_data['block'][0]['consistency'] = 'consistent'
+            elif block.segments[0].irregularlysampledsignals:
+                signal_count = len(block.segments[0].irregularlysampledsignals)
+                for seg in block.segments[1:]:
+                    if len(seg.irregularlysampledsignals) == signal_count:
+                        continue
+                    else:
+                        return JsonResponse(block_data)
+                block_data['block'][0]['consistency'] = 'consistent'
 
         return JsonResponse(block_data)
 
@@ -124,10 +154,35 @@ class Segment(APIView):
                     'description': segment.description or "",
                     'file_origin': segment.file_origin or "",
                     'annotations': _handle_dict(segment.annotations),
-                    # 'spiketrains': segment.spiketrains,
+                    'spiketrains': [{} for s in segment.spiketrains],
                     'analogsignals': [{} for a in segment.analogsignals],
-                    'as_prop': [{'size': e.size, 'name': e.name} for e in segment.analogsignals]
+                    'irregularlysampledsignals': [{} for ir in segment.irregularlysampledsignals],
+                    'as_prop': [{'size': e.size, 'name': e.name} for e in segment.analogsignals],
                     }
+
+        # check for multiple 'matching' (same units/sampling rates) analog signals in a single Segment
+        if segment.analogsignals:
+            if len(segment.analogsignals) < 2:
+                return JsonResponse(seg_data, safe=False)
+            else:
+                for signal in segment.analogsignals[1:]:
+                    if (str(signal.units.dimensionality) == str(segment.analogsignals[0].units.dimensionality)) \
+                            and (float(signal.sampling_rate.magnitude) == float(segment.analogsignals[0].sampling_rate.magnitude)):
+                        continue
+                    else:
+                        return JsonResponse(seg_data, safe=False)
+                seg_data['consistency'] = 'consistent'
+        elif segment.irregularlysampledsignals:
+            if len(segment.irregularlysampledsignals) < 2:
+                return JsonResponse(seg_data, safe=False)
+            else:
+                for signal in segment.irregularlysampledsignals[1:]:
+                    if (str(signal.units.dimensionality) == str(segment.irregularlysampledsignals[0].units.dimensionality)) \
+                            and (str(signal.times.dimensionality) == str(segment.irregularlysampledsignals[0].times.dimensionality)):
+                        continue
+                    else:
+                        return JsonResponse(seg_data, safe=False)
+                seg_data['consistency'] = 'consistent'
 
         return JsonResponse(seg_data, safe=False)
 
@@ -142,49 +197,59 @@ class AnalogSignal(APIView):
         id_analog_signal = int(request.GET['analog_signal_id'])
         # todo, catch MultiValueDictKeyError in case segment_id or analog_signal_id aren't given, and return a 400 Bad Request response
         segment = block.segments[id_segment]
-        analogsignal = segment.analogsignals[id_analog_signal]
+
+        graph_data = {}
+        analogsignal = None
+        if len(segment.analogsignals) > 0:
+            analogsignal = segment.analogsignals[id_analog_signal]
+            graph_data["t_start"] = analogsignal.t_start.item()
+            graph_data["t_stop"] = analogsignal.t_stop.item()
+            graph_data["sampling_period"] = analogsignal.sampling_period.item()
+        elif len(segment.irregularlysampledsignals) > 0:
+            analogsignal = segment.irregularlysampledsignals[id_analog_signal]
+            analog_signal_times = []
+            for item in analogsignal.times:
+                analog_signal_times.append(item.item())
+            graph_data["times"] = analog_signal_times
+
         # todo, catch any IndexErrors, and return a 404 response
 
-        # unit = analogsignal.units
-        # t_start = analogsignal.t_start
-        # sampling_rate = analogsignal.sampling_rate
-        # time_laps = 1/sampling_rate
-
-        print("anaolgsignals", analogsignal, len(analogsignal))
-        print( "units",analogsignal.units)
-        print( "t_start",analogsignal.t_start)
-        print("sampling_rate", analogsignal.sampling_rate)
-        print( "t_stop",analogsignal.t_stop)
-        print( "times",analogsignal.times)
-        print("duration",analogsignal.duration)
-        print("name", analogsignal.name)
-        print("size", analogsignal.size)
-
-        # print('analogsignal', analogsignal[0], analogsignal[0].sampling_rate)
-        # analog_signal = block.segments[id_segment].analogsignals[id_analog_signal]
-        # print(analog_signal)
-
         analog_signal_values = []
-        for item in analogsignal:
-            try:  # TODO find a better solution
+
+        if len(analogsignal[0]) > 1:
+            # multiple channels
+            for i in range(0, len(analogsignal[0])):
+                channel = []
+                for item in analogsignal:
+                    channel.append(item[i].item())
+                analog_signal_values.append(channel)
+        else:
+            # single channel
+            for item in analogsignal:
                 analog_signal_values.append(item.item())
-            except ValueError:
-                analog_signal_values.append(item[1].item())
 
-        analog_signal_times= []
-        for item in analogsignal.times:
-            analog_signal_times.append(item.item())
+        graph_data["values"] = analog_signal_values
+        graph_data["name"] = analogsignal.name
+        graph_data["times_dimensionality"] = str(analogsignal.t_start.units.dimensionality)
+        graph_data["values_units"] = str(analogsignal.units.dimensionality)
 
-        graph_data = {
-            "name": analogsignal.name,
-            "values": analog_signal_values,
-            "values_units": str(analogsignal.units.dimensionality),
-            "times": analog_signal_times,
-            "times_dimensionality": str(analogsignal.t_start.units.dimensionality),
-            "t_start": analogsignal.t_start.item(),
-            "t_stop": analogsignal.t_stop.item(),
-            "sampling_rate": float(analogsignal.sampling_rate.magnitude),
-            "sampling_rate_units": str(analogsignal.sampling_rate.units.dimensionality)
-        }
+        return JsonResponse(graph_data)
+
+
+class SpikeTrain(APIView):
+
+    def get(self, request, format=None, **kwargs):
+        na_file = _get_file_from_url(request)
+
+        block = get_io(na_file).read_block()
+        id_segment = int(request.GET['segment_id'])
+        segment = block.segments[id_segment]
+        spiketrains = segment.spiketrains
+        graph_data = {}
+
+        for idx, st in enumerate(spiketrains):
+            graph_data[idx] = {'units': st.units.item(), 't_stop': st.t_stop.item(), 'times': []}
+            for t in st.times:
+                graph_data[idx]['times'].append(t.item())
 
         return JsonResponse(graph_data)
