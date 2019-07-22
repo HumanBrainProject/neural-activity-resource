@@ -393,6 +393,10 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                             $scope.block.segments[$scope.currentSegmentId].irregularlysampledsignals[$scope.currentAnalogSignalId] = $scope.signal;
                         }
                         console.log(data);
+                        if($scope.downsamplefactor && ($scope.downsamplefactor > 0 && Number.isInteger(parseInt($scope.downsamplefactor)))) {
+                            $scope.signal.sampling_period = $scope.signal.sampling_period * $scope.downsamplefactor;
+                            console.log("New sampling period: " + $scope.signal.sampling_period);
+                         }
                         Graphics.initGraph($scope.signal).then(function(graph_data) {
                             $scope.graph_data = graph_data;
                             $scope.options = Graphics.getOptions("View of analogsignal", "", "", graph_data.values, $scope.signal, $scope.height)
@@ -834,7 +838,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
             </div>
             </div>
         `,
-        scope: { source: '@', height: '@', iotype: '@', block: '@' },
+        scope: { source: '@', height: '@', iotype: '@', block: '@', downsamplefactor: '@',},
         controller: 'MainCtrl'
     }
 })
