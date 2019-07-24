@@ -116,6 +116,10 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                 console.log("** channel size " + data.values.length);
                 var graph_data = [];
                 if (typeof data.times === "undefined") {
+                     if($scope.downsamplefactor && ($scope.downsamplefactor > 0 && Number.isInteger(parseInt($scope.downsamplefactor)))) {
+                        data.sampling_period = data.sampling_period * $scope.downsamplefactor;
+                        console.log("New sampling period: " + data.sampling_period);
+                     }
                     data.times = Graphics.get_graph_times(data);
                 }
                 data.values.forEach(
@@ -170,6 +174,10 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                     signals.forEach(
                         function(signal, j) {
                             if (typeof signal.times === "undefined") {
+                                if($scope.downsamplefactor && ($scope.downsamplefactor > 0 && Number.isInteger(parseInt($scope.downsamplefactor)))) {
+                                    signal.sampling_period = signal.sampling_period * $scope.downsamplefactor;
+                                    console.log("New sampling period: " + signal.sampling_period);
+                                 }
                                 signal.times = Graphics.get_graph_times(signal);
                             }
                             var t_start = signal.times[0];
@@ -251,6 +259,10 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                         signals.forEach(
                             function(signal, j) {
                                 if (typeof signal.times === "undefined") {
+                                   if($scope.downsamplefactor && ($scope.downsamplefactor > 0 && Number.isInteger(parseInt($scope.downsamplefactor)))) {
+                                        signal.sampling_period = signal.sampling_period * $scope.downsamplefactor;
+                                        console.log("New sampling period: " + signal.sampling_period);
+                                     }
                                     signal.times = Graphics.get_graph_times(signal);
                                 }
                                 var t_start = signal.times[0];
