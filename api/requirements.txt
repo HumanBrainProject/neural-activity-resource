@@ -9,4 +9,4 @@ igor==0.3
 scipy==1.3.0
 klusta==3.0.16
 #stfio
-+git+https://github.com/NeuralEnsemble/python-neo@master#egg=neo
+git+https://github.com/NeuralEnsemble/python-neo@master#egg=neo
