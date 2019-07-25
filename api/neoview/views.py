@@ -102,7 +102,7 @@ class Block(APIView):
         # check for spike trains
         for s in block.segments:
             if len(s.spiketrains) > 0:
-                block_data['block'][0]['spike_trains'] = 'exits'
+                block_data['block'][0]['spike_trains'] = 'exist'
                 break
 
         # check for multiple Segments with 'matching' (same count) analog signals in each
