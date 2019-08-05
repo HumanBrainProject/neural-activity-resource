@@ -16,6 +16,9 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-nvd3/1.0.9/angular-nvd3.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/apdavison/neural-activity-visualizer@7b789be/js/src/visualizer.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/apdavison/neural-activity-visualizer@7b789be/js/src/services.js"></script>
+    <script>
+        angular.module('neo-visualizer').value('baseURL', 'https://neo-viewer-dev.brainsimulation.eu/')
+    </script>
 </head>
 
 <body>
@@ -98,7 +101,7 @@
             &lt;input type="text" class="form-control" ng-model="dataFileURL" id="dataFileURL" placeholder="enter data file URL here" style="width: 600px;"&gt;
         &lt;/div&gt;
         &lt;/form&gt;
-        
+
     &lt;visualizer-view ng-if="dataFileURL"
         source="{{dataFileURL}}"
         height=300&gt;
@@ -112,7 +115,7 @@
                       <input type="text" class="form-control" ng-model="dataFileURL" id="dataFileURL" placeholder="enter data file URL here" style="width: 600px;">
                     </div>
                   </form>
-                  
+
                 <visualizer-view ng-if="dataFileURL"
                     source="{{dataFileURL}}"
                     height=300>

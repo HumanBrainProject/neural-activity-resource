@@ -26,7 +26,9 @@ SECRET_KEY = '$4zyq@#shcuqmvk!mvt^m_w7intuj^hd)f=(@ykvnympnb=*)i'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['neo-viewer.brainsimulation.eu', '127.0.0.1']
+ALLOWED_HOSTS = ['neo-viewer.brainsimulation.eu',
+                 'neo-viewer-dev.brainsimulation.eu',
+                 '127.0.0.1']
 
 
 # Application definition

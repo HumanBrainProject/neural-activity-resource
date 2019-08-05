@@ -12,7 +12,7 @@ FROM debian:buster-slim
 MAINTAINER Andrew Davison <andrew.davison@unic.cnrs-gif.fr>
 
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update --fix-missing; apt-get -y -q install python3-pip sqlite3 supervisor nginx-extras npm
+RUN apt-get update --fix-missing; apt-get -y -q install python3-pip sqlite3 supervisor nginx-extras npm git
 RUN unset DEBIAN_FRONTEND
 
 RUN pip3 install uwsgi
@@ -24,6 +24,7 @@ COPY requirements.txt $BASEDIR/requirements.txt
 RUN pip3 install -r $BASEDIR/requirements.txt
 RUN pip3 install axographio  # setup.py requires numpy, so have to install separately
 ENV PYTHONPATH  /home/docker:/home/docker/site:/usr/local/lib/python3.6/dist-packages:/usr/lib/python3.6/dist-packages
+RUN pip3 freeze
 
 COPY neural_activity_app $SITEDIR/neural_activity_app
 COPY neoview $SITEDIR/neoview
@@ -47,4 +48,3 @@ RUN ln -sf /dev/stderr /var/log/nginx/error.log
 EXPOSE 443
 #EXPOSE 80
 CMD ["supervisord", "-n", "-c", "/etc/supervisor/conf.d/supervisor-app.conf"]
-

@@ -102,7 +102,7 @@ class Block(APIView):
         # check for spike trains
         for s in block.segments:
             if len(s.spiketrains) > 0:
-                block_data['block'][0]['spike_trains'] = 'exits'
+                block_data['block'][0]['spike_trains'] = 'exist'
                 break
 
         # check for multiple Segments with 'matching' (same count) analog signals in each
@@ -204,7 +204,10 @@ class AnalogSignal(APIView):
             analogsignal = segment.analogsignals[id_analog_signal]
             graph_data["t_start"] = analogsignal.t_start.item()
             graph_data["t_stop"] = analogsignal.t_stop.item()
-            graph_data["sampling_period"] = analogsignal.sampling_period.item()
+            if request.GET['down_sample_factor']:
+                graph_data["sampling_period"] = analogsignal.sampling_period.item() * int(request.GET['down_sample_factor'])
+            else:
+                graph_data["sampling_period"] = analogsignal.sampling_period.item()
         elif len(segment.irregularlysampledsignals) > 0:
             analogsignal = segment.irregularlysampledsignals[id_analog_signal]
             analog_signal_times = []
@@ -218,15 +221,32 @@ class AnalogSignal(APIView):
 
         if len(analogsignal[0]) > 1:
             # multiple channels
-            for i in range(0, len(analogsignal[0])):
-                channel = []
-                for item in analogsignal:
-                    channel.append(item[i].item())
-                analog_signal_values.append(channel)
+            if not len(segment.irregularlysampledsignals) > 0 and request.GET['down_sample_factor']:
+                for i in range(0, len(analogsignal[0])):
+                    channel = []
+                    for j, item in enumerate(analogsignal):
+                        if j % int(request.GET['down_sample_factor']) == 0:
+                            channel.append(item[i].item())
+                        else:
+                            continue
+                    analog_signal_values.append(channel)
+            else:
+                for i in range(0, len(analogsignal[0])):
+                    channel = []
+                    for item in analogsignal:
+                        channel.append(item[i].item())
+                    analog_signal_values.append(channel)
         else:
             # single channel
-            for item in analogsignal:
-                analog_signal_values.append(item.item())
+            if not len(segment.irregularlysampledsignals) > 0 and request.GET['down_sample_factor']:
+                for i, item in enumerate(analogsignal):
+                    if i % int(request.GET['down_sample_factor']) == 0:
+                        analog_signal_values.append(item.item())
+                    else:
+                        continue
+            else:
+                for item in analogsignal:
+                    analog_signal_values.append(item.item())
 
         graph_data["values"] = analog_signal_values
         graph_data["name"] = analogsignal.name

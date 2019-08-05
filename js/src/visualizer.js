@@ -13,6 +13,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
     $scope.blockSignals = null;
     $scope.channelSignals = null;
     $scope.signalCheck = null;
+    $scope.downsamplefactor = '';
 
     var getMultiLineOptions = function() {
         options = {
@@ -102,7 +103,8 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
         AnalogSignalData.get({url: $scope.source,
                                       segment_id: $scope.currentSegmentId,
                                       analog_signal_id: $scope.currentAnalogSignalId,
-                                      type: $scope.iotype
+                                      type: $scope.iotype,
+                                      down_sample_factor: $scope.downsamplefactor
                                      }).$promise.then(
             function(data) {
                 $scope.signal = data;
@@ -156,7 +158,8 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                     var sigdata = AnalogSignalData.get({url: $scope.source,
                                     segment_id: i,
                                     analog_signal_id: id,
-                                    type: $scope.iotype
+                                    type: $scope.iotype,
+                                    down_sample_factor: $scope.downsamplefactor
                                     });
                     sigdata.id = id;
                     sig_promises.push(sigdata.$promise);
@@ -237,7 +240,8 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                         var sigdata = AnalogSignalData.get({url: $scope.source,
                                         segment_id: $scope.currentSegmentId,
                                         analog_signal_id: i,
-                                        type: $scope.iotype
+                                        type: $scope.iotype,
+                                        down_sample_factor: $scope.downsamplefactor
                                         });
                         sigdata.id = i;
                         promises.push(sigdata.$promise);
@@ -380,7 +384,8 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                 AnalogSignalData.get({url: $scope.source,
                                       segment_id: $scope.currentSegmentId,
                                       analog_signal_id: $scope.currentAnalogSignalId,
-                                      type: $scope.iotype
+                                      type: $scope.iotype,
+                                      down_sample_factor: $scope.downsamplefactor
                                      }).$promise.then(
                     function(data) {
                         $scope.signal = data;
@@ -834,7 +839,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
             </div>
             </div>
         `,
-        scope: { source: '@', height: '@', iotype: '@', block: '@' },
+        scope: { source: '@', height: '@', iotype: '@', block: '@', downsamplefactor: '@',},
         controller: 'MainCtrl'
     }
 })
