@@ -18,8 +18,9 @@
           </div>
         </md-list-item>
         <md-list-item layout="row" class="even">
-          <span flex="20">Brain region:</span><!-- todo: support multiple brain regions -->
-          <div flex><a href="{{app.patched_cell.brainLocation.brainRegion['@id']}}" target="_blank">{{app.patched_cell.brainLocation.brainRegion.label}}</a>
+          <span flex="20">Brain region(s):</span>
+          <div ng-repeat="brainRegion in app.asList(app.patched_cell.brainLocation.brainRegion)">
+              <a href="{{brainRegion['@id']}}" target="_blank">{{brainRegion.label}}</a><span ng-if=!$last>&nbsp;</span>
           </div>
         </md-list-item>
         <!--<md-list-item layout="row">
@@ -72,7 +73,8 @@
         </md-list-item>-->
         <md-list-item layout="row">
           <span flex="20">Subject age:</span>
-          <div flex>{{app.subject.age.value.value}} {{app.subject.age.value.label}}</div>
+          <div flex ng-if="app.subject.age.value.value">{{app.subject.age.value.value}} {{app.subject.age.value.label}}</div>
+          <div flex ng-if="app.subject.age.value.minValue">{{app.subject.age.value.minValue}}-{{app.subject.age.value.maxValue}} {{app.subject.age.value.label}}</div>
         </md-list-item>
         <md-list-item layout="row" class="even">
           <span flex="20">Subject name:</span>
