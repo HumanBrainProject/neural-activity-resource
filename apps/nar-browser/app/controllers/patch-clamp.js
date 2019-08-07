@@ -304,6 +304,51 @@ angular.module('nar')
             },
             error
         );
+
+        if (vm.data_files.length == 0) {
+            var MultiTraces = KGResource(nexusBaseUrl + "data/neuralactivity/electrophysiology/multitrace/v0.3.0");
+            MultiTraces.query(
+                {
+                    "@context": {
+                        "prov": "http://www.w3.org/ns/prov#",
+                    },
+                    "filter": {
+                        "path": "prov:wasGeneratedBy",
+                        "op": "eq",
+                        "value": vm.stimulus_experiment["@id"]
+                    }
+                }
+            ).then(
+                function(multitraces) {
+                    vm.multitraces = multitraces;
+
+                    if (multitraces.length > 0) {
+                        console.log(vm.multitraces[0].data);
+                        //console.log(vm.traces[0].data.distribution[0].downloadURL);
+                    } else {
+                        console.log("Found no multitraces associated with " + vm.stimulus_experiment["@id"]);
+                    }
+                    // get a list of the data file(s) containing the traces
+                    var data_files = new Set();
+                    for (let trace of vm.multitraces) {
+                        if (Array.isArray(trace.data.distribution)) {
+                            data_files.add(trace.data.distribution[0].downloadURL);
+                        } else {
+                            data_files.add(trace.data.distribution.downloadURL);
+                        }
+                        $http.get(trace.data.qualifiedGeneration["@id"]).then(
+                            function(response) {
+                                trace.tracegen = response.data;
+                            },
+                            error
+                        )
+                    }
+                    vm.data_files = Array.from(data_files);
+                    console.log(vm.data_files);
+                },
+                error
+            );
+        }
     }
 
     console.log($stateParams.instanceId);
