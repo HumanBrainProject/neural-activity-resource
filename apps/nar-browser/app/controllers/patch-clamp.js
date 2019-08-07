@@ -280,6 +280,14 @@ angular.module('nar')
 
                 if (traces.length > 0) {
                     console.log(vm.traces[0].data);
+                    var minds_dataset_id = vm.traces[0].data.partOf["@id"];
+                    $http.get(minds_dataset_id).then(
+                        function(response) {
+                            vm.minds_dataset = response.data;
+                            console.log(vm.minds_dataset);
+                        },
+                        error
+                    );
                     //console.log(vm.traces[0].data.distribution[0].downloadURL);
                 } else {
                     console.log("Found no traces associated with " + vm.stimulus_experiment["@id"]);
@@ -297,7 +305,7 @@ angular.module('nar')
                             trace.tracegen = response.data;
                         },
                         error
-                    )
+                    );
                 }
                 vm.data_files = Array.from(data_files);
                 console.log(vm.data_files);
@@ -325,11 +333,20 @@ angular.module('nar')
                     if (multitraces.length > 0) {
                         console.log(vm.multitraces[0].data);
                         //console.log(vm.traces[0].data.distribution[0].downloadURL);
+                        var minds_dataset_id = vm.multitraces[0].data.partOf["@id"];
+                        $http.get(minds_dataset_id).then(
+                            function(response) {
+                                vm.minds_dataset = response.data;
+                            },
+                            error
+                        );
                     } else {
                         console.log("Found no multitraces associated with " + vm.stimulus_experiment["@id"]);
                     }
+
                     // get a list of the data file(s) containing the traces
                     var data_files = new Set();
+
                     for (let trace of vm.multitraces) {
                         if (Array.isArray(trace.data.distribution)) {
                             data_files.add(trace.data.distribution[0].downloadURL);
