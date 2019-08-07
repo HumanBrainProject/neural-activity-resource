@@ -97,6 +97,14 @@
           <span flex="20">Subject species:</span>
           <div flex><a href="{{app.subject.species['@id']}}" target="_blank">{{app.subject.species.label}}</a></div>
         </md-list-item>
+        <md-list-item layout="row"  class="even">
+            <span flex="20">Subject strain:</span>
+            <div flex>{{app.subject.strain.label}}</div>
+          </md-list-item>
+        <md-list-item layout="row" class="odd">
+            <span flex="20">Cell type:</span>
+            <div flex><a href="{{app.patched_cell.eType['@id']}}">{{app.patched_cell.eType.label}}</a></div>
+          </md-list-item>
         <md-list-item layout="row" class="even">
           <span flex="20">Holding potential</span>
           <div flex>{{app.traces[0].tracegen.targetHoldingPotential.value}} {{app.traces[0].tracegen.targetHoldingPotential.label}}</div>
