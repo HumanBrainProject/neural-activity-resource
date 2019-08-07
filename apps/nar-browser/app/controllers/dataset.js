@@ -24,13 +24,14 @@ Author: Andrew P. Davison, UNIC, CNRS
 angular.module('nar')
 
 
-.controller('DatasetController', function($location, $rootScope, KGResource, 
+.controller('DatasetController', function($location, $rootScope, KGResource,
                                           bbpOidcSession, $http, NexusURL) {
     var vm = this;
 
     var nexusBaseUrl = NexusURL.get();
     var Datasets = KGResource(nexusBaseUrl + "data/minds/core/dataset/v1.0.0");
     var Traces = KGResource(nexusBaseUrl + "data/neuralactivity/electrophysiology/trace/v0.1.0");
+    var MultiTraces = KGResource(nexusBaseUrl + "data/neuralactivity/electrophysiology/multitrace/v0.1.0");
     var Experiments = KGResource(nexusBaseUrl + "data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0");
 
     var error = function(response) {
@@ -40,7 +41,7 @@ angular.module('nar')
     var config = {
         Authorization: "Bearer " + bbpOidcSession.token()
     };
-    
+
     var license_map = {
         "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International": {
             icon: "https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png",
@@ -48,8 +49,8 @@ angular.module('nar')
         }
     }
 
-    var getTraces = function(dataset) {
-        var traces = Traces.query({
+    var getTraces = function(dataset, trace_cls) {
+        var traces = trace_cls.query({
             "@context": {
                 "nsg": "https://bbp-nexus.epfl.ch/vocabs/bbp/neurosciencegraph/core/v0.1.0/"
             },
@@ -139,7 +140,7 @@ angular.module('nar')
                             },
                             error
                         );
-                    }   
+                    }
                 }
                 dataset.patch_electrode_traces = [];
                 dataset.sharp_electrode_traces = [];
@@ -165,7 +166,8 @@ angular.module('nar')
     }
     vm.expandData = function(dataset) {
         if (!dataset.dataLoaded) {
-            getTraces(dataset);
+            getTraces(dataset, Traces);
+            getTraces(dataset, MultiTraces);
         }
         dataset.dataExpanded = true;
     }
