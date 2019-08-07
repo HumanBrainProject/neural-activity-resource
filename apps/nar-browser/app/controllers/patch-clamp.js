@@ -306,7 +306,7 @@ angular.module('nar')
         );
 
         if (vm.data_files.length == 0) {
-            var MultiTraces = KGResource(nexusBaseUrl + "data/neuralactivity/electrophysiology/multitrace/v0.3.0");
+            var MultiTraces = KGResource(nexusBaseUrl + "data/neuralactivity/electrophysiology/multitrace/v0.1.0");
             MultiTraces.query(
                 {
                     "@context": {
