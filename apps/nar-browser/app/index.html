@@ -13,6 +13,7 @@
   <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:400,700'>
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="/node_modules/angular-material/angular-material.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.6/nv.d3.min.css">
   <link rel="stylesheet" href="/app/app.css">
 
   <!-- angular stuff -->
@@ -22,13 +23,14 @@
   <script src="/node_modules/angular-messages/angular-messages.js"></script>
   <script src="/node_modules/angular-material/angular-material.js"></script>
   <script src="/node_modules/angular-sanitize/angular-sanitize.js"></script>
+  <script src="/node_modules/angular-resource/angular-resource.js"></script>
   <script src="/node_modules/@uirouter/angularjs/release/angular-ui-router.js"></script>
 
   <!-- authentication/authorization -->
   <script src="/lib/angular-bbp-config/angular-bbp-config.js"></script>
   <script src="/lib/bbp-oidc-client/angular-bbp-oidc-client.js"></script>
   <script src="/node_modules/hellojs/dist/hello.min.js"></script>
-  <script src="/node_modules/lodash/lodash.min.js"></script>
+  <script src="/node_modules/lodash/index.js"></script>
   <script src="/lib/angular-hbp-collaboratory/angular-hbp-collaboratory.js"></script>
 
   <!-- our angular app -->
@@ -39,10 +41,17 @@
   <script src="/app/controllers/eeg.js"></script>
   <script src="/app/controllers/fMRI.js"></script>
   <script src="/app/controllers/mea.js"></script>
-  <script src="/app/controllers/patch-clamp.js"></script>	
+  <script src="/app/controllers/patch-clamp.js"></script>
   <script src="/app/controllers/sharp-electrode.js"></script>
   <script src="/app/controllers/two-photon.js"></script>
   <script src="/app/controllers/dataset.js"></script>
+
+  <!-- visualizer -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.6/nv.d3.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-nvd3/1.0.9/angular-nvd3.min.js"></script>
+  <script type="text/javascript" src="/app/visualizer/visualizer.js"></script>
+  <script type="text/javascript" src="/app/visualizer/services.js"></script>
 </head>
 
 
@@ -51,7 +60,7 @@
       <!-- Toolbar -->
     <md-toolbar layout="row" class="md-toolbar-tools">
       <div class="md-toolbar-tools">
-      
+
         <md-menu md-offset="0 40">
             <md-button class="md-icon-button" aria-label="Menu" ng-click="$mdMenu.open($event);">
             <md-icon md-menu-origin>menu</md-icon>
@@ -96,9 +105,13 @@
       </div>
     </md-toolbar>
 
-    
+
     <ui-view></ui-view>
 
+    <div layout="row">
+        <!-- footer -->
+        &nbsp;
+    </div>
 
 </body>
 </html>

@@ -23,7 +23,7 @@ Author: Andrew P. Davison, UNIC, CNRS
 
 angular.module('nar')
 
-.controller('PatchClampListController', function(KGResource, bbpOidcSession, $http, NexusURL) {      
+.controller('PatchClampListController', function(KGResource, bbpOidcSession, $http, NexusURL) {
     var vm = this;
     var nexusBaseUrl = NexusURL.get();
 
@@ -50,7 +50,7 @@ angular.module('nar')
 })
 
 
-.controller('PatchClampController', function(KGResource, bbpOidcSession, $http, $stateParams, NexusURL, $scope, URLService) {     
+.controller('PatchClampController', function(KGResource, bbpOidcSession, $http, $stateParams, NexusURL, $scope, URLService) {
     var vm = this;
     var nexusBaseUrl = NexusURL.get();
 
@@ -95,14 +95,14 @@ angular.module('nar')
         }
     };
 
-    $scope.openVisualizer = function(url) {
-        var element = document.createElement("object");
-        element.setAttribute('type', "text/html");
-        element.setAttribute('width', "1200px");
-        element.setAttribute('height', "500px");
-        element.setAttribute('scrolling', "yes");
-        element.setAttribute('data', URLService.src.$$state.value + '?url=' + url);
-        document.getElementById('visDiv').appendChild(element);
+    vm.showVisualizer = false;
+
+    vm.asList = function(obj) {
+        if (Array.isArray(obj)) {
+            return obj;
+        } else {
+            return [obj];
+        }
     };
 
     vm.relativePath = function(url) {
@@ -254,14 +254,15 @@ angular.module('nar')
                             },
                             error
                         );
-                    }, 
-                    error     
+                    },
+                    error
                 );
             },
             error);
-    
+
         // get the recorded traces
         var Traces = KGResource(nexusBaseUrl + "data/neuralactivity/electrophysiology/trace/v0.1.0");
+
         Traces.query(
             {
                 "@context": {

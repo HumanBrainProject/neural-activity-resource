@@ -9,7 +9,7 @@
           <h3 class="md-display-1">{{app.stimulus_experiment.name}}</h3>
         </div>
         <div layout-align="end"><img src="/app/images/patch-clamp.png"></div>
-      </div>  
+      </div>
 
       <md-list>
         <md-list-item layout="row" class="odd">
@@ -31,7 +31,7 @@
           <span flex="20">Patching performed by:</span>
           <div flex>
               <span ng-repeat="person in app.patching_activity.people">
-                {{person.givenName}} {{person.familyName}}   
+                {{person.givenName}} {{person.familyName}}
               </span>
           </div>
         </md-list-item>
@@ -43,7 +43,7 @@
           <span flex="20">Slicing performed by:</span>
           <div flex>
                 <span ng-repeat="person in app.slicing_activity.people">
-                  {{person.givenName}} {{person.familyName}}   
+                  {{person.givenName}} {{person.familyName}}
                 </span>
             </div>
         </md-list-item>
@@ -106,22 +106,34 @@
             <div flex>{{app.traces.length}}</div>
           </md-list-item>
         -->
-        <md-list-item layout="row">
-              <span flex="20">Data files:</span>
-              <div flex>
-                <ul>
-                  <li ng-repeat="file_url in app.data_files">
-                    <div ng-if="app.validURL(file_url)" >
-                      <a href="{{file_url}}" target="_blank">{{app.relativePath(file_url)}}</a>
-                      <p ng-click="openVisualizer(file_url)"> <button>Open file in Neural Activity Visualizer</button></p>
-                    </div>
-                    <span ng-if="!app.validURL(file_url)">{{file_url}}</span>
-                  </li>
-                </ul>
-              </div>
-        </md-list-item>
-          <div id="visDiv"></div>
       </md-list>
+
+      <div layout="column">
+        <h4 class="md-headline">Data files</h4>
+        <div flex>
+          <md-list>
+            <md-list-item ng-repeat="file_url in app.data_files">
+              <div ng-if="app.validURL(file_url)">
+                  <md-button class="md-fab" aria-label="Open/close data visualizer" ng-click="app.showVisualizer = !app.showVisualizer">
+                      <md-tooltip md-direction="top">View data</md-tooltip>
+                      <md-icon>timeline</md-icon>
+                  </md-button>
+                  <md-button class="md-fab" aria-label="Download data file" ng-href="{{file_url}}" target="_blank" style="padding-top: 12px;">
+                      <md-tooltip md-direction="top">Download</md-tooltip>
+                      <md-icon>save_alt</md-icon>
+                  </md-button>
+                  {{app.relativePath(file_url)}}
+                  <div ng-show="app.showVisualizer">
+                    <visualizer-view
+                      source="{{file_url}}"
+                      height=300>
+                    </visualizer-view>
+                  </div>
+              </div>
+              <span ng-if="!app.validURL(file_url)">{{file_url}}</span>
+            </md-list-item>
+          </md-list>
+        </div>
 
     </md-content>
 </div>

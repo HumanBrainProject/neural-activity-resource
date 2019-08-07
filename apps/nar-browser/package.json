@@ -13,9 +13,10 @@
     "angular": "^1.6.7",
     "angular-animate": "^1.7.5",
     "angular-aria": "^1.7.5",
-    "angular-material": "^1.1.5",
+    "angular-material": "^1.1.19",
     "angular-messages": "^1.7.5",
     "angular-sanitize": "^1.7.5",
+    "angular-resource": "^1.7.5",
     "hellojs": "^1.16.1",
     "lodash": "^3.10.1"
   },

@@ -42,7 +42,8 @@ Author: Andrew P. Davison, UNIC, CNRS
     'ui.router',
     'ngMaterial',
     'ngSanitize',
-    'clb-identity'
+    'clb-identity',
+    'neo-visualizer'
   ])
   .config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
