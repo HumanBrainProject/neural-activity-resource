@@ -50,17 +50,26 @@ def _handle_dict(ob):
 class Block(APIView):
 
     def get(self, request, format=None, **kwargs):
-
+        lazy = False
         na_file = _get_file_from_url(request)
 
         if 'type' in request.GET and request.GET.get('type'):
             iotype = request.GET.get('type')
             method = getattr(io, iotype)
             r = method(filename=na_file)
-            block = r.read_block()
+            if get_io(na_file).support_lazy:
+                block = r.read_block(lazy=True)
+                lazy = True
+            else:
+                block = r.read_block()
         else:
             try:
-                block = get_io(na_file).read_block()
+                if get_io(na_file).support_lazy:
+                    block = get_io(na_file).read_block(lazy=True)
+                    lazy = True
+                else:
+                    block = get_io(na_file).read_block()
+
             except IOError as err:
                 # todo: need to be more fine grained. There could be other reasons
                 #       for an IOError
@@ -95,9 +104,14 @@ class Block(APIView):
             }]}
 
         # check for channels
-        if (block.segments[0].analogsignals and len(block.segments[0].analogsignals[0][0]) > 1) \
-                or (block.segments[0].irregularlysampledsignals and len(block.segments[0].irregularlysampledsignals[0][0]) > 1):
-            block_data['block'][0]['channels'] = 'multi'
+        if lazy:
+            if (block.segments[0].analogsignals and len(block.segments[0].analogsignals[0].load()[0]) > 1) \
+                    or (block.segments[0].irregularlysampledsignals and len(block.segments[0].irregularlysampledsignals[0].load()[0]) > 1):
+                block_data['block'][0]['channels'] = 'multi'
+        else:
+            if (block.segments[0].analogsignals and len(block.segments[0].analogsignals[0][0]) > 1) \
+                    or (block.segments[0].irregularlysampledsignals and len(block.segments[0].irregularlysampledsignals[0][0]) > 1):
+                block_data['block'][0]['channels'] = 'multi'
 
         # check for spike trains
         for s in block.segments:
@@ -132,10 +146,14 @@ class Block(APIView):
 class Segment(APIView):
 
     def get(self, request, format=None, **kwargs):
-
+        lazy = False
         na_file = _get_file_from_url(request)
 
-        block = get_io(na_file).read_block()
+        if get_io(na_file).support_lazy:
+            block = get_io(na_file).read_block(lazy=True)
+            lazy = True
+        else:
+            block = get_io(na_file).read_block()
         id_segment = int(request.GET['segment_id'])
         # todo, catch MultiValueDictKeyError in case segment_id isn't given, and return a 400 Bad Request response
         segment = block.segments[id_segment]
@@ -157,7 +175,7 @@ class Segment(APIView):
                     'spiketrains': [{} for s in segment.spiketrains],
                     'analogsignals': [{} for a in segment.analogsignals],
                     'irregularlysampledsignals': [{} for ir in segment.irregularlysampledsignals],
-                    'as_prop': [{'size': e.size, 'name': e.name} for e in segment.analogsignals],
+                    # 'as_prop': [{'size': e.size, 'name': e.name} for e in segment.analogsignals],
                     }
 
         # check for multiple 'matching' (same units/sampling rates) analog signals in a single Segment
@@ -190,9 +208,14 @@ class Segment(APIView):
 class AnalogSignal(APIView):
 
     def get(self, request, format=None, **kwargs):
+        lazy = False
         na_file = _get_file_from_url(request)
 
-        block = get_io(na_file).read_block()
+        if get_io(na_file).support_lazy:
+            block = get_io(na_file).read_block(lazy=True)
+            lazy = True
+        else:
+            block = get_io(na_file).read_block()
         id_segment = int(request.GET['segment_id'])
         id_analog_signal = int(request.GET['analog_signal_id'])
         # todo, catch MultiValueDictKeyError in case segment_id or analog_signal_id aren't given, and return a 400 Bad Request response
@@ -201,7 +224,10 @@ class AnalogSignal(APIView):
         graph_data = {}
         analogsignal = None
         if len(segment.analogsignals) > 0:
-            analogsignal = segment.analogsignals[id_analog_signal]
+            if lazy:
+                analogsignal = segment.analogsignals[id_analog_signal].load()
+            else:
+                analogsignal = segment.analogsignals[id_analog_signal]
             graph_data["t_start"] = analogsignal.t_start.item()
             graph_data["t_stop"] = analogsignal.t_stop.item()
             if request.GET['down_sample_factor']:
@@ -209,7 +235,10 @@ class AnalogSignal(APIView):
             else:
                 graph_data["sampling_period"] = analogsignal.sampling_period.item()
         elif len(segment.irregularlysampledsignals) > 0:
-            analogsignal = segment.irregularlysampledsignals[id_analog_signal]
+            if lazy:
+                analogsignal = segment.irregularlysampledsignals[id_analog_signal].load()
+            else:
+                analogsignal = segment.irregularlysampledsignals[id_analog_signal]
             analog_signal_times = []
             for item in analogsignal.times:
                 analog_signal_times.append(item.item())
@@ -259,12 +288,22 @@ class AnalogSignal(APIView):
 class SpikeTrain(APIView):
 
     def get(self, request, format=None, **kwargs):
+        lazy = False
         na_file = _get_file_from_url(request)
 
-        block = get_io(na_file).read_block()
+        if get_io(na_file).support_lazy:
+            block = get_io(na_file).read_block(lazy=True)
+            lazy = True
+        else:
+            block = get_io(na_file).read_block()
         id_segment = int(request.GET['segment_id'])
         segment = block.segments[id_segment]
-        spiketrains = segment.spiketrains
+
+        if lazy:
+            spiketrains = segment.spiketrains.load()
+        else:
+            spiketrains = segment.spiketrains
+
         graph_data = {}
 
         for idx, st in enumerate(spiketrains):
