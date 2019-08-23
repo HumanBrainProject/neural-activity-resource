@@ -12,7 +12,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
     $scope.segmentSignals = null;
     $scope.blockSignals = null;
     $scope.channelSignals = null;
-    $scope.signalCheck = null;
+    $scope.graphType = "spiketrains";
     $scope.downsamplefactor = '';
 
     var getMultiLineOptions = function() {
@@ -314,7 +314,13 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                 $scope.error = null;
                 $scope.block = data.block[0];
                 console.log(data.block[0]);
-                $scope.currentSegmentId = "0";
+                if($scope.segmentid){
+                    console.log("segment id: " + $scope.segmentid);
+                    $scope.currentSegmentId = $scope.segmentid;
+                }
+                else {
+                    $scope.currentSegmentId = "0";
+                }
                 $scope.switchSegment();
             },
             function(err) {
@@ -327,6 +333,13 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
     $scope.$watch("source", function() {
         init();
     });
+
+    $scope.changeGraph = function(value) {
+        if($scope.graphType == "spiketrains"){
+            $scope.spiketrains = {};
+            $scope.switchSpikeTrain();
+        }
+    };
 
     $scope.switchSegment = function() {
         $scope.signal = null;
@@ -345,10 +358,15 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                     $scope.segment = data;
                     $scope.block.segments[$scope.currentSegmentId] = $scope.segment;
                     console.log(data);
-                    if($scope.segment.spiketrains.length > 0) {
+                    if($scope.segment.spiketrains.length > 0 && !$scope.signalid || $scope.spiketrainselect) {
                         console.log("length of spike trains " + $scope.segment.spiketrains.length);
                         $scope.spiketrains = {};
                         $scope.switchSpikeTrain();
+                    }
+                    if($scope.signalid){
+                        console.log("signal id: " +  $scope.signalid);
+                        $scope.currentAnalogSignalId = $scope.signalid;
+                        $scope.switchAnalogSignal();
                     }
                 },
                 function(err) {
@@ -371,7 +389,8 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
         $scope.dataLoading = true;
         $scope.segmentSignals = null;
         $scope.segmentCheck = false;
-        $scope.signalCheck = true;
+        $scope.graphType = "analogsignals";
+        $scope.signalid = null;
         if (($scope.segment.analogsignals.length > 0 && $scope.segment.analogsignals[$scope.currentAnalogSignalId].values == undefined) ||
             ($scope.segment.irregularlysampledsignals.length > 0 && $scope.segment.irregularlysampledsignals[$scope.currentAnalogSignalId].values == undefined)) {
             console.log("Fetching data for analog signal #" + $scope.currentAnalogSignalId + " in segment #" + $scope.currentSegmentId + " in file " + $scope.source);
@@ -431,7 +450,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
 
     $scope.switchSpikeTrain = function() {
         $scope.dataLoading = true;
-        $scope.signalCheck = null;
+        $scope.graphType = "spiketrains";
         if ($scope.block.segments[$scope.currentSegmentId].spiketrains[0].times == undefined) {
             console.log("Fetching data for spike trains in segment #" + $scope.currentSegmentId + " in file " + $scope.source);
             cache_spiketrains[$scope.currentSegmentId] = [];
@@ -795,7 +814,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                                 Segment #{{$index}}
                             </option>
                         </select>
-                        <select class="form-control" ng-show="signalCheck" ng-change="switchAnalogSignal()" ng-model="currentAnalogSignalId">
+                        <select class="form-control" ng-show="graphType=='analogsignals'" ng-change="switchAnalogSignal()" ng-model="currentAnalogSignalId">
                             <option value="">--- Please select signal ---</option> <!-- not selected / blank option -->
                             <option ng-show="segment.analogsignals" ng-repeat="signal in segment.analogsignals" value="{{$index}}">
                                 Signal #{{$index}} <span ng-show="signal.name">({{signal.name}})</span>
@@ -805,15 +824,16 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                             </option>
                         </select>
                         <div ng-show="segment.analogsignals.length>0" >
-                            <label>Show analogsignals:
-                                <input type="checkbox" ng-model="signalCheck" >
-                            </label>
+                            <br>
+                            Graph type:
+                            <input type="radio" ng-model="graphType" value="spiketrains" ng-change="changeGraph(value)"><b>Spike trains</b>
+                            <input type="radio" ng-model="graphType" value="analogsignals" ng-change="changeGraph(value)"><b>Analog signals</b>
                         </div>
                     </div>
                     </form>
                 </div>
                 <div ng-if="dataLoading" class="loader"></div>
-                <div class="panel-body" ng-show="signal && !dataLoading && signalCheck">
+                <div class="panel-body" ng-show="signal && !dataLoading && graphType=='analogsignals'">
                     <nvd3 options="options" data=graph_data.values id=''></nvd3>
                 </div>
                 <div ng-show="segmentSignals">
@@ -825,7 +845,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                 <div ng-show="channelSignals">
                     <nvd3 options="channel_options" data="channel_data"></nvd3>
                 </div>
-                 <div ng-show="spiketrains && !dataLoading && !signalCheck">
+                 <div ng-show="spiketrains && !dataLoading && graphType=='spiketrains' || spiketrainselect">
                     <nvd3 options="spiketrains_options" data="spiketrains_data"></nvd3>
                  </div>
             </div>
@@ -839,7 +859,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
             </div>
             </div>
         `,
-        scope: { source: '@', height: '@', iotype: '@', block: '@', downsamplefactor: '@',},
+        scope: { source: '@', height: '@', iotype: '@', block: '@', downsamplefactor: '@', segmentid: '@', signalid: '@', spiketrainselect: '@',},
         controller: 'MainCtrl'
     }
 })
