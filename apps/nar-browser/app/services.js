@@ -1,6 +1,6 @@
 /*
 
-Copyright 2017-2018 CNRS
+Copyright 2017-2019 CNRS
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -52,6 +52,7 @@ angular.module('nar')
 })
 
 .factory("KGResource", function($http, $q, PathHandler, bbpOidcSession) {
+    // for querying Nexus API
     var error = function(response) {
         console.log(response);
     };
@@ -193,6 +194,71 @@ angular.module('nar')
     };
 })
 
+.factory("KGQResource", function($http, $q, PathHandler, bbpOidcSession, KGScope) {
+    // for querying KG Query API
+    var error = function(response) {
+        console.log(response);
+    };
+
+    return function (collection_uri) {
+        console.log("Constructing a resource for " + collection_uri);
+
+        // a constructor for new resources
+        var Resource = function (data) {
+            angular.extend(this, data);
+        };
+
+        var config = {
+            Authorization: "Bearer " + bbpOidcSession.token()
+        };
+
+        var Instance = function(data) {
+            var instance = data;
+            instance.id = data["@id"];
+            instance.path = PathHandler.extract_path_from_uri(instance.id);
+
+            instance.get_label = function() {
+                var label = instance.id;
+                if (instance.hasOwnProperty('name')) {
+                    label = instance.name;
+                } else if (instance.hasOwnProperty('familyName')) {
+                    label = instance.givenName + " " + instance.familyName;
+                } else if (instance.hasOwnProperty('label')) {
+                    label = instance.label;
+                } else {
+                    label = PathHandler.extract_path_from_uri(label).id;
+                }
+                return label;
+            };
+
+            return instance;
+        };
+
+        Resource.query = function(filter) {
+            var resource_uri = collection_uri + "/instances?databaseScope=" + KGScope.get() + "&vocab=https://schema.hbp.eu/NARQuery/&size=1000";
+            if (filter) {
+                // resource_uri += "&filter=" + encodeURIComponent(JSON.stringify(filter.filter)) + "&context=" + encodeURIComponent(JSON.stringify(filter['@context']));
+                // console.log(resource_uri);
+                console.log("filtering not yet implemented")
+            }
+
+            return $http.get(resource_uri, config).then(
+                function(response) {
+                    //console.log(response);
+                    var instances = [];
+                    for (let result of response.data.results) {
+                        instances.push(Instance(result));
+                    }
+                    return instances;
+                },
+                error
+            );
+        };
+
+        return Resource;
+    };
+})
+
 .factory("KGResourceCount", function($http, bbpOidcSession) {
     var error = function(response) {
         console.log(response);
@@ -324,5 +390,16 @@ angular.module('nar')
     }
     return NexusURL;
 })
-;
 
+.service("KGScope", function() {
+    var kgScope = "RELEASED";
+    return {
+        set: function(value) {
+            kgScope = value;
+        },
+        get: function() {
+            return kgScope;
+        }
+    }
+})
+;

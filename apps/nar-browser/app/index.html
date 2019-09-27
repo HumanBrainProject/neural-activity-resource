@@ -96,6 +96,11 @@
         <h1 flex md-truncate><a ui-sref="home">Neural Activity Resource (alpha)</a></h1>
 
         <div ng-controller="TopBarController as tb">
+            <md-input-container ng-show="tb.canAccessUnreleased">
+                <md-switch ng-model="tb.showUnreleased" ng-change="tb.switch()">
+                    <small>{{tb.showUnreleased ? "Curated" : "Public"}}</small>
+                </md-switch>
+            </md-input-container>
             <md-input-container ng-show="tb.canAccessIntegration">
                 <md-switch ng-model="tb.showIntegration" ng-change="tb.switch()">
                     <small>{{tb.showIntegration ? "Integration" : "Production"}}</small>

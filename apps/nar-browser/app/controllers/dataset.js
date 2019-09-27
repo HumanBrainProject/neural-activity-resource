@@ -1,6 +1,6 @@
 /*
 
-Copyright 2018 CNRS
+Copyright 2019 CNRS
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -24,15 +24,13 @@ Author: Andrew P. Davison, UNIC, CNRS
 angular.module('nar')
 
 
-.controller('DatasetController', function($location, $rootScope, KGResource,
-                                          bbpOidcSession, $http, NexusURL) {
+.controller('DatasetController', function($location, $rootScope, KGResource, KGQResource,
+                                           bbpOidcSession, $http, NexusURL, PathHandler) {
     var vm = this;
 
     var nexusBaseUrl = NexusURL.get();
-    var Datasets = KGResource(nexusBaseUrl + "data/minds/core/dataset/v1.0.0");
-    var Traces = KGResource(nexusBaseUrl + "data/neuralactivity/electrophysiology/trace/v0.1.0");
-    var MultiTraces = KGResource(nexusBaseUrl + "data/neuralactivity/electrophysiology/multitrace/v0.1.0");
-    var Experiments = KGResource(nexusBaseUrl + "data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0");
+    var kgQueryBaseUrl = "https://kg.humanbrainproject.org/query/"
+    var Datasets = KGQResource(kgQueryBaseUrl + "minds/core/dataset/v1.0.0/narBrowser");
 
     var error = function(response) {
         console.log("ERROR: ", response);
@@ -46,111 +44,47 @@ angular.module('nar')
         "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International": {
             icon: "https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png",
             link: "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+        },
+        "Creative Commons Attribution-NonCommercial 4.0 International": {
+            icon: "https://i.creativecommons.org/l/by-nc/4.0/88x31.png",
+            link: "https://creativecommons.org/licenses/by-nc/4.0/"
+        },
+        "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International": {
+            icon: "https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png",
+            link: "https://creativecommons.org/licenses/by-nc-nd/4.0/"
+        },
+        "Creative Commons Attribution 4.0 International": {
+            icon: "https://i.creativecommons.org/l/by/4.0/88x31.png",
+            link: "https://creativecommons.org/licenses/by/4.0/"
         }
     }
 
-    var getTraces = function(dataset, trace_cls) {
-        var traces = trace_cls.query({
-            "@context": {
-                "nsg": "https://bbp-nexus.epfl.ch/vocabs/bbp/neurosciencegraph/core/v0.1.0/"
-            },
-            "filter": {
-                "path": "nsg:partOf",
-                "op": "eq",
-                "value": dataset.id
-            }
-        }).then(
-            function(traces) {
-                for (let trace of traces) {
-                    Experiments.get(trace.data.wasGeneratedBy["@id"]).then(
-                        // todo: add caching to KGResource
-                        function(expt) {
-                            trace.experiment = expt;
-                            trace.method = expt.data["prov:used"]["@type"];
-                            if (trace.method.includes("nsg:PatchedCell")) {
-                                dataset.patch_electrode_traces.push(trace);
-                            } else {
-                                dataset.sharp_electrode_traces.push(trace);
-                            }
-                        },
-                        error
-                    );
-                }
-                dataset.dataLoaded = true;
-            },
-            error
-        );
-    };
-
-    Datasets.query(
-        {
-            "@context": {
-                "schema": "http://schema.org/",
-                "minds": "https://schema.hbp.eu/minds/"
-            },
-            "filter": {
-                "path": "minds:specimen_group / minds:subjects / minds:samples / minds:methods / schema:name",
-                "op": "in",
-                "value": ["Electrophysiology recording",
-                          "Voltage clamp recording",
-                          "Single electrode recording",
-                          "functional magnetic resonance imaging"]
-            }
-        }
-    ).then(
+    Datasets.query().then(
         function(datasets) {
             for (let dataset of datasets) {
-                if (dataset.data["https://schema.hbp.eu/minds/license"]) {
-                    if (dataset.data["https://schema.hbp.eu/minds/license"]["@id"].startsWith("http")) {
-                        $http.get(dataset.data["https://schema.hbp.eu/minds/license"]["@id"]).then(
-                            function(response) {
-                                var license_name = response.data["http://schema.org/name"];
-                                dataset.license = license_map[license_name];
-                                dataset.license.name = license_name;
-                            },
-                            error
-                        );
-                    }
+                //console.log(dataset);
+                if (dataset.license) {
+                    var license_name = dataset.license[0];  // assume only  one license
+                    dataset.license = license_map[license_name] || {};
+                    dataset.license.name = license_name;
                 };
-                if (dataset.data["https://schema.hbp.eu/minds/owners"]) {
-                    if (Array.isArray(dataset.data["https://schema.hbp.eu/minds/owners"])) {
-                        dataset.custodians = [];
-                        for (let owner of dataset.data["https://schema.hbp.eu/minds/owners"]) {
-                            $http.get(owner["@id"]).then(
-                                function(response) {
-                                    dataset.custodians.push(response.data["http://schema.org/name"]);
-                                },
-                                error
-                            );
-                        }
-                    } else if (dataset.data["https://schema.hbp.eu/minds/owners"].hasOwnProperty("@list")) {
-                        dataset.custodians = [];
-                        for (let owner of dataset.data["https://schema.hbp.eu/minds/owners"]["@list"]) {
-                            $http.get(owner["@id"]).then(
-                                function(response) {
-                                    dataset.custodians.push(response.data["http://schema.org/name"]);
-                                },
-                                error
-                            );
-                        }
-                    } else {
-                        $http.get(dataset.data["https://schema.hbp.eu/minds/owners"]["@id"]).then(
-                            function(response) {
-                                dataset.custodians = response.data["http://schema.org/name"];
-                            },
-                            error
-                        );
-                    }
-                }
-                dataset.patch_electrode_traces = [];
-                dataset.sharp_electrode_traces = [];
-                dataset.dataLoaded = false;
-                if (dataset.data["http://schema.org/description"]) {
-                    dataset.hasLongDescription = (dataset.data["http://schema.org/description"].length > 500);
+                if (dataset.description) {
+                    dataset.hasLongDescription = (dataset.description.length > 500);
                 } else {
                     dataset.hasLongDescription = false;
                 }
+                if (dataset.wasGeneratedBy) {
+                    for (let expt of dataset.wasGeneratedBy) {
+                        expt.path_info = PathHandler.extract_path_from_uri(expt["@id"]);
+                        expt.uuid = expt.path_info.uuid;
+                        if (!expt.name) {
+                            expt.name = "Experiment #" + expt.uuid;
+                        }
+                        // to do: also extract type (patch or sharp)
+                    }
+                }
                 vm.collapseDescription(dataset);
+                vm.expandData(dataset);
             }
             vm.datasets = datasets;
             console.log(datasets);
@@ -165,10 +99,6 @@ angular.module('nar')
         dataset.descriptionLimit = 500;
     }
     vm.expandData = function(dataset) {
-        if (!dataset.dataLoaded) {
-            getTraces(dataset, Traces);
-            getTraces(dataset, MultiTraces);
-        }
         dataset.dataExpanded = true;
     }
     vm.collapseData = function(dataset) {

@@ -1,61 +1,58 @@
 <md-content class="md-padding" layout="column">
-    
-        <md-card ng-repeat="dataset in app.datasets" md-theme="default">
-            <md-card-title>
-                <md-card-title-text>
-                    <span class="md-headline">{{dataset.get_label()}}</span>
-                    <span class="md-subhead">
-                        {{dataset.data["http://schema.org/description"] | limitTo: dataset.descriptionLimit}}
-                            <md-button class="md-icon-button" aria-label="More" ng-show="dataset.hasLongDescription && dataset.descriptionLimit" ng-click="app.expandDescription(dataset)">
-                                <md-icon>more_horiz</md-icon>
-                            </md-button>
-                            <md-button class="md-icon-button" aria-label="Less" ng-show="!dataset.descriptionLimit" ng-click="app.collapseDescription(dataset)">
-                                <md-icon>expand_less</md-icon>
-                            </md-button>
-                    </span>
-                    <span class="md-subhead">Custodian: {{dataset.custodians}}</span>
-                    <span class="md-subhead"><a href="https://www.humanbrainproject.eu/en/explore-the-brain/search/#Dataset/{{dataset.data['http://schema.org/identifier']}}" target="_blank">KG Search</a></span>
-                </md-card-title-text>
-                <md-card-title-media>
-                    <div class="md-media-sm card-media">
-                        <a rel="license" href="{{dataset.license.link}}">
-                            <img alt="{{dataset.license.name}}" style="border-width:0" src="{{dataset.license.icon}}" />
-                        </a>
-                    </div>
-                </md-card-title-media>
-            </md-card-title>
-            <md-card-content>
-                <div ng-show="dataset.dataExpanded && !dataset.dataLoaded" layout="row" layout-sm="column" layout-align="space-around">
-                    <md-progress-circular md-mode="indeterminate" class="md-accent"></md-progress-circular>
-                </div>
-                <div ng-show="dataset.dataLoaded && dataset.dataExpanded">
-                    <md-list ng-show="dataset.patch_electrode_traces.length">
-                        <md-subheader class="md-no-sticky">Patch clamp experiments</md-subheader>
-                        <md-list-item ng-repeat="trace in dataset.patch_electrode_traces | orderBy:'data.name'" 
-                                        ui-sref="patch-clamp-instance({ instanceId: trace.experiment.path.uuid })" 
-                                        ng-click="null">
-                            {{trace.experiment.get_label()}}
-                        </md-list-item>
-                    </md-list>
 
-                    <md-list ng-show="dataset.sharp_electrode_traces.length">
-                        <md-subheader class="md-no-sticky">Sharp electrode experiments</md-subheader>
-                        <md-list-item ng-repeat="trace in dataset.sharp_electrode_traces | orderBy:'data.name'" 
-                                        ui-sref="sharp-electrode-instance({ instanceId: trace.experiment.path.uuid })" 
-                                        ng-click="null">
-                            {{trace.experiment.get_label()}}
-                        </md-list-item>
-                    </md-list>
+    <md-card ng-repeat="dataset in app.datasets" md-theme="default">
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">{{dataset.get_label()}}</span>
+
+                <span class="md-subhead">
+                        <md-button class="md-fab" aria-label="Open in KG Search app"  style="padding-top: 16px;"
+                        ng-href="https://www.humanbrainproject.eu/en/explore-the-brain/search/#Dataset/{{dataset.identifier}}" target="_blank">
+                        <md-icon>launch</md-icon>
+                    </md-button>
+                    Open in Knowledge Graph Search
+                    <md-chips ng-model="dataset.methods" readonly="true" md-removable="false"></md-chips>
+
+                    {{dataset.description | limitTo: dataset.descriptionLimit}}
+                    <md-button class="md-icon-button" aria-label="More" ng-show="dataset.hasLongDescription && dataset.descriptionLimit" ng-click="app.expandDescription(dataset)">
+                        <md-icon>more_horiz</md-icon>
+                    </md-button>
+                    <md-button class="md-icon-button" aria-label="Less" ng-show="!dataset.descriptionLimit" ng-click="app.collapseDescription(dataset)">
+                        <md-icon>expand_less</md-icon>
+                    </md-button>
+                </span>
+                <span class="md-subhead"><strong>Custodian: {{dataset.custodians.join(", ")}}</strong></span>
+
+            </md-card-title-text>
+            <md-card-title-media>
+                <div class="md-media-sm card-media">
+                    <a rel="license" href="{{dataset.license.link}}">
+                        <img alt="{{dataset.license.name}}" style="border-width:0" src="{{dataset.license.icon}}" />
+                    </a>
                 </div>
-            </md-card-content>
-            <md-card-actions layout="row" layout-align="start start">
-                <md-button class="md-icon-button" aria-label="Show data" ng-hide="dataset.dataExpanded" ng-click="app.expandData(dataset)">
-                    <md-icon>expand_more</md-icon>
-                </md-button>
-                <md-button class="md-icon-button" aria-label="Show data" ng-show="dataset.dataLoaded && dataset.dataExpanded" ng-click="app.collapseData(dataset)">
-                    <md-icon>expand_less</md-icon>
-                </md-button>
-            </md-card-actions>
-        </md-card>
+            </md-card-title-media>
+        </md-card-title>
+
+        <md-card-content>
+            <div ng-show="dataset.dataExpanded">
+                <md-list ng-show="dataset.wasGeneratedBy.length">
+                    <md-subheader class="md-no-sticky">Experiments</md-subheader>
+                    <md-list-item ng-repeat="expt in dataset.wasGeneratedBy | orderBy:'expt.name'"
+                                    ui-sref="patch-clamp-instance({ instanceId: expt.uuid })"
+                                    ng-click="null">  <!-- to fix: could also be sharp electrode -->
+                        {{expt.name}}
+                    </md-list-item>
+                </md-list>
+            </div>
+        </md-card-content>
+        <md-card-actions layout="row" layout-align="start start">
+            <md-button class="md-icon-button" aria-label="Show data" ng-show="dataset.wasGeneratedBy.length" ng-hide="dataset.dataExpanded" ng-click="app.expandData(dataset)">
+                <md-icon>expand_more</md-icon>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="Show data" ng-show="dataset.wasGeneratedBy.length && dataset.dataExpanded" ng-click="app.collapseData(dataset)">
+                <md-icon>expand_less</md-icon>
+            </md-button>
+        </md-card-actions>
+    </md-card>
 
 </md-content>

@@ -1,6 +1,6 @@
 /*
 
-Copyright 2018 CNRS
+Copyright 2018, 2019 CNRS
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -24,14 +24,17 @@ Author: Andrew P. Davison, UNIC, CNRS
 angular.module('nar')
 
 
-.controller('TopBarController', function($state, bbpOidcSession, clbUser, NexusURL) {
+.controller('TopBarController', function($state, bbpOidcSession, clbUser, NexusURL, KGScope) {
     var vm = this;
     vm.showIntegration = false;
     vm.canAccessIntegration = false;
+    vm.showUnreleased = false;
+    vm.canAccessUnreleased = false;
 
     clbUser.isGroupMember("nexus-neuralactivity").then(
         function(response) {
             vm.canAccessIntegration = response;
+            vm.canAccessUnreleased = response;
         },
         function(err) {
             bbpOidcSession.login();
@@ -42,7 +45,12 @@ angular.module('nar')
             NexusURL.set('https://nexus-int.humanbrainproject.org/v0/');
         } else {
             NexusURL.set('https://nexus.humanbrainproject.org/v0/');
-        }
+        };
+        if (vm.showUnreleased) {
+            KGScope.set("INFERRED");
+        } else {
+            kKScope.set("RELEASED");
+        };
         $state.reload();
         console.log("switching");
     }
