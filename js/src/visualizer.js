@@ -308,11 +308,12 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
         console.log("Loading data from " + $scope.source);
         $scope.block = null;
         $scope.segment = null;
-        $scope.label = $scope.source.substring($scope.source.lastIndexOf('/') + 1);
+        //$scope.label = $scope.source.substring($scope.source.lastIndexOf('/') + 1);
         BlockData.get({url: $scope.source, type: $scope.iotype }).$promise.then(
             function(data) {
                 $scope.error = null;
                 $scope.block = data.block[0];
+                $scope.file_name = $scope.block.file_name;
                 console.log(data.block[0]);
                 if($scope.segmentid){
                     console.log("segment id: " + $scope.segmentid);
@@ -759,7 +760,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource', 'nvd3'])
                 <div class="panel-heading">
                     <p>
                     <button type="button" class="btn btn-link" ng-click="showAnnotations = !showAnnotations"><span class="glyphicon glyphicon-info-sign"></span></button>
-                    {{label}}
+                    {{file_name}}
                     <a type="button" class="btn" href="{{source}}"><span class="glyphicon glyphicon-download-alt"></span></a>
                     </p>
                     <div ng-show="showAnnotations">
