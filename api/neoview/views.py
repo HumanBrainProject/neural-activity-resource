@@ -9,10 +9,15 @@ from neo.io import get_io
 from neo import io
 from rest_framework.response import Response
 from rest_framework import status
+from os.path import basename
 try:
     from urllib import urlretrieve, HTTPError
 except ImportError:
     from urllib.request import urlretrieve, HTTPError
+try:
+    from urllib.request import urlopen
+except ImportError:
+    from urllib2 import urlopen
 try:
     unicode
 except NameError:
@@ -22,7 +27,8 @@ except NameError:
 def _get_file_from_url(request):
     url = request.GET.get('url')
     if url:
-        filename = url[url.rfind("/") + 1:]
+        response = urlopen(url)
+        filename = basename(response.url)
         urlretrieve(url, filename)
         # todo: wrap previous line in try..except so we can return a 404 if the file is not found
         #       or a 500 if the local disk is full
@@ -85,6 +91,7 @@ class Block(APIView):
             # 'index': block.index,
             'name': block.name or "",
             'rec_datetime': block.rec_datetime,
+            'file_name': na_file,
             'segments': [
                 {
                     'name': s.name or "",
