@@ -24,7 +24,7 @@ Author: Andrew P. Davison, UNIC, CNRS
 angular.module('nar')
 
 
-.controller('HomeController', function($location, $rootScope, KGResourceCount, 
+.controller('HomeController', function($location, $rootScope, KGResourceCount,
                                        $http, bbpOidcSession, NexusURL, clbUser) {
     var vm = this;
 
@@ -51,11 +51,39 @@ angular.module('nar')
     //         bbpOidcSession.login();
     //     });
 
-    var Experiments = KGResourceCount(nexusBaseUrl + "data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/");
-    Experiments.count().then(
+    vm.experiment_count = {};
+    //var Experiments = KGResourceCount(nexusBaseUrl + "data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/");
+    var Experiments = KGResourceCount(nexusBaseUrl + "data/neuralactivity/electrophysiology/stimulusexperiment/");
+    var context = {
+        "nsg": "https://bbp-nexus.epfl.ch/vocabs/bbp/neurosciencegraph/core/v0.1.0/",
+        "prov": "http://www.w3.org/ns/prov#",
+        "rdf": 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+    };
+    Experiments.count({
+        "filter": {
+            'path': 'prov:used / rdf:type',
+            'op': 'eq',
+            'value': "nsg:PatchedCell"
+        },
+        "@context": context
+    }).then(
         function(count) {
             //console.log(count);
-            vm.experiment_count = count;
+            vm.experiment_count["patchClamp"] = count;
+        },
+        error
+    );
+    Experiments.count({
+        "filter": {
+            'path': 'prov:used / rdf:type',
+            'op': 'eq',
+            'value': "nsg:IntraCellularSharpElectrodeRecordedCell"
+        },
+        "@context": context
+    }).then(
+        function(count) {
+            //console.log(count);
+            vm.experiment_count["intraSharp"] = count;
         },
         error
     );

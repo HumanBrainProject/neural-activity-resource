@@ -49,7 +49,7 @@ angular.module('nar')
         if (vm.showUnreleased) {
             KGScope.set("INFERRED");
         } else {
-            kKScope.set("RELEASED");
+            KGScope.set("RELEASED");
         };
         $state.reload();
         console.log("switching");

@@ -1,3 +1,152 @@
-<div>
-    <h2>Intracellular recording with sharp electrodes: coming soon</h2>
-</div>
+<div flex layout="row">
+
+        <!-- Main content -->
+        <md-content flex id="content">
+
+          <div layout="row">
+            <div layout="column" flex=90>
+              <h2 class="md-headline">Intracellular recording with sharp electrodes</h2>
+              <h3 class="md-display-1">{{app.stimulus_experiment.name}}</h3>
+            </div>
+            <div layout-align="end"><img src="/app/images/sharp-electrode.png"></div>
+          </div>
+
+          <md-list>
+              <md-list-item layout="row" class="odd">
+                  <span flex="20">Part of dataset:</span>
+                  <div flex><a href="https://www.humanbrainproject.eu/en/explore-the-brain/search/#Dataset/{{app.minds_dataset['http://schema.org/identifier']}}" target="_blank">{{app.minds_dataset['http://schema.org/name']}}</a>
+                  </div>
+                </md-list-item>
+            <md-list-item layout="row" class="even">
+              <span flex="20">Stimulus:</span>
+              <div flex>{{app.stimulus_experiment.stimulus.name}}
+              </div>
+            </md-list-item>
+            <md-list-item layout="row" class="odd">
+              <span flex="20">Brain region(s):</span>
+              <div ng-repeat="brainRegion in app.asList(app.recorded_cell.brainLocation.brainRegion)">
+                  <a href="{{brainRegion['@id']}}" target="_blank">{{brainRegion.label}}</a><span ng-if=!$last>&nbsp;</span>
+              </div>
+            </md-list-item>
+            <!--<md-list-item layout="row">
+              <span flex="20">recorded slice id</span>
+              <div flex>{{app.recorded_slice.name}}</div>
+            </md-list-item>-->
+            <md-list-item layout="row" class="even">
+              <span flex="20">Recording performed by:</span>
+              <div flex>
+                  <span ng-repeat="person in app.recording_activity.people">
+                    {{person.givenName}} {{person.familyName}}
+                  </span>
+              </div>
+            </md-list-item>
+            <md-list-item layout="row" class="odd">
+              <span flex="20">Slice id:</span>
+              <div flex>{{app.slice.name}}</div>
+            </md-list-item>
+            <md-list-item layout="row" class="even">
+              <span flex="20">Slicing performed by:</span>
+              <div flex>
+                    <span ng-repeat="person in app.slicing_activity.people">
+                      {{person.givenName}} {{person.familyName}}
+                    </span>
+                </div>
+            </md-list-item>
+            <md-list-item layout="row" class="odd">
+              <span flex="20">Cutting thickness:</span>
+              <div flex>{{app.slicing_activity.cuttingThickness.value}} {{app.slicing_activity.cuttingThickness.label}}</div>
+            </md-list-item>
+            <md-list-item layout="row" class="even">
+              <span flex="20">Slicing angle:</span>
+              <div flex>{{app.slicing_activity.slicingAngle}}</div>
+            </md-list-item>
+            <md-list-item layout="row" class="odd">
+              <span flex="20">Slicing plane:</span>
+              <div flex>{{app.slicing_activity.slicingPlane}}</div>
+            </md-list-item>
+            <md-list-item layout="row" class="even">
+              <span flex="20">Slicing solution:</span>
+              <div flex ng-bind-html="app.slicing_activity.solution"></div>
+            </md-list-item>
+            <md-list-item layout="row" class="odd">
+              <span flex="20">Date/time:</span>
+              <div flex>{{app.slicing_activity.startedAtTime['@value']}}</div>
+            </md-list-item>
+            <!--<md-list-item layout="row">
+              <span flex="20">Subject death date</span>
+              <div flex>{{app.subject.deathDate}}</div>
+            </md-list-item>-->
+            <md-list-item layout="row" class="even">
+              <span flex="20">Subject age:</span>
+              <div flex ng-if="app.subject.age.value.value">{{app.subject.age.value.value}} {{app.subject.age.value.label}}</div>
+              <div flex ng-if="app.subject.age.value.minValue">{{app.subject.age.value.minValue}}-{{app.subject.age.value.maxValue}} {{app.subject.age.value.label}}</div>
+            </md-list-item>
+            <md-list-item layout="row" class="odd">
+              <span flex="20">Subject name:</span>
+              <div flex>{{app.subject.name}}</div>
+            </md-list-item>
+            <!--<md-list-item layout="row">
+              <span flex="20">Subject id</span>
+              <div flex>{{app.subject.providerId}}</div>
+            </md-list-item>-->
+            <md-list-item layout="row" class="even">
+              <span flex="20">Subject sex:</span>
+              <div flex>{{app.subject.sex.label}}</div>
+            </md-list-item>
+            <md-list-item layout="row"  class="odd">
+              <span flex="20">Subject species:</span>
+              <div flex><a href="{{app.subject.species['@id']}}" target="_blank">{{app.subject.species.label}}</a></div>
+            </md-list-item>
+            <md-list-item layout="row"  class="even">
+                <span flex="20">Subject strain:</span>
+                <div flex>{{app.subject.strain.label}}</div>
+              </md-list-item>
+            <md-list-item layout="row" class="odd">
+                <span flex="20">Cell type:</span>
+                <div flex><a href="{{app.recorded_cell.eType['@id']}}">{{app.recorded_cell.eType.label}}</a></div>
+              </md-list-item>
+            <md-list-item layout="row" class="even">
+              <span flex="20">Holding potential</span>
+              <div flex>{{app.traces[0].tracegen.targetHoldingPotential.value}} {{app.traces[0].tracegen.targetHoldingPotential.label}}</div>
+            </md-list-item>
+            <md-list-item layout="row" class="odd">
+              <span flex="20">Chloride reversal potential:</span>
+              <div flex>{{app.recorded_cell["nsg:chlorideReversalPotential"].value}} {{app.recorded_cell["nsg:chlorideReversalPotential"].label}}</div>
+            </md-list-item>
+            <!--
+            <md-list-item layout="row">
+                <span flex="20">Number of datafiles:</span>
+                <div flex>{{app.traces.length}}</div>
+              </md-list-item>
+            -->
+          </md-list>
+
+          <div layout="column">
+            <h4 class="md-headline">Data files</h4>
+            <div flex>
+              <md-list>
+                <md-list-item ng-repeat="file_url in app.data_files">
+                  <div ng-if="app.validURL(file_url)">
+                      <md-button class="md-fab" aria-label="Open/close data visualizer" ng-click="app.showVisualizer = !app.showVisualizer">
+                          <md-tooltip md-direction="top">View data</md-tooltip>
+                          <md-icon>timeline</md-icon>
+                      </md-button>
+                      <md-button class="md-fab" aria-label="Download data file" ng-href="{{file_url}}" target="_blank" style="padding-top: 12px;">
+                          <md-tooltip md-direction="top">Download</md-tooltip>
+                          <md-icon>save_alt</md-icon>
+                      </md-button>
+                      {{app.relativePath(file_url)}}
+                      <div ng-show="app.showVisualizer">
+                        <visualizer-view
+                          source="{{file_url}}"
+                          height=300>
+                        </visualizer-view>
+                      </div>
+                  </div>
+                  <span ng-if="!app.validURL(file_url)">{{file_url}}</span>
+                </md-list-item>
+              </md-list>
+            </div>
+
+        </md-content>
+    </div>

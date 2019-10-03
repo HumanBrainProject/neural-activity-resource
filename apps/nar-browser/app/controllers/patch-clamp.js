@@ -40,7 +40,19 @@ angular.module('nar')
     };
 
     var Experiments = KGResource(nexusBaseUrl + "data/neuralactivity/electrophysiology/stimulusexperiment/v0.1.0/");
-    Experiments.query().then(
+    var filter = {
+        "filter": {
+            'path': 'prov:used / rdf:type',
+            'op': 'eq',
+            'value': "nsg:PatchedCell"
+        },
+        "@context": {
+            "nsg": "https://bbp-nexus.epfl.ch/vocabs/bbp/neurosciencegraph/core/v0.1.0/",
+            "prov": "http://www.w3.org/ns/prov#",
+            "rdf": 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+        }
+    };
+    Experiments.query(filter).then(
         function(experiments) {
             vm.experiments = experiments;
             console.log(experiments[0]);
@@ -133,7 +145,7 @@ angular.module('nar')
         $http.get(vm.stimulus_experiment["prov:used"]["@id"], config).then(
             function(response) {
                 vm.patched_cell = response.data;
-                //console.log(vm.patched_cell);
+                console.log(vm.patched_cell);
 
                 // get the patched cell collection of which the cell is a part
                 var PatchedCellCollection = KGResource(nexusBaseUrl + "data/neuralactivity/experiment/patchedcellcollection/v0.1.0");
@@ -245,6 +257,7 @@ angular.module('nar')
                                         $http.get(vm.slice.wasDerivedFrom["@id"]).then(
                                             function(response) {
                                                 vm.subject = response.data;
+                                                console.log(vm.subject);
                                             },
                                             error
                                         );

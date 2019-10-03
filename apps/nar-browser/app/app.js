@@ -62,13 +62,11 @@ Author: Andrew P. Davison, UNIC, CNRS
       })
       .state('sharp-electrode-list', {
         url: '/sharp-electrode',
-        templateUrl: '/app/templates/sharp-electrode-list.tpl.html',
-        controller: 'SharpElectrodeController as app'
+        component: 'sharpelectrodelistcomponent'
       })
       .state('sharp-electrode-instance', {
         url: '/sharp-electrode/{instanceId}',
-        templateUrl: '/app/templates/sharp-electrode.tpl.html',
-        controller: 'SharpElectrodeController as app'
+        component: 'sharpelectrodecomponent'
       })
       .state('mea', {
         url: '/mea',

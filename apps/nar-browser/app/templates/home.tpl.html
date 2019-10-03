@@ -1,11 +1,11 @@
 
 <md-content class="md-padding" layout="row">
-    
+
     <md-card md-theme="default">
         <md-card-title>
             <md-card-title-text>
                 <span class="md-headline">Patch clamp recording</span>
-                <span class="md-subhead">{{app.experiment_count}}</span>
+                <span class="md-subhead">{{app.experiment_count.patchClamp}}</span>
             </md-card-title-text>
             <md-card-title-media>
                 <div class="md-media-sm card-media">
@@ -24,16 +24,18 @@
     <md-card md-theme="default">
         <md-card-title>
             <md-card-title-text>
-                <span class="md-headline coming-soon">Intracellular sharp-electrode recording</span>
-                <span class="md-subhead"></span>
+                <span class="md-headline">Intracellular sharp-electrode recording</span>
+                <span class="md-subhead">{{app.experiment_count.intraSharp}}</span>
             </md-card-title-text>
             <md-card-title-media>
-                <div class="md-media-sm card-media"></div>
+                <div class="md-media-sm card-media">
+                    <img src="/app/images/sharp-electrode.png">
+                </div>
             </md-card-title-media>
         </md-card-title>
         <md-card-content></md-card-content>
         <md-card-actions layout="row" layout-align="end center">
-            <a ui-sref="sharp-electrode"><md-button class="md-icon-button" aria-label="Intracellular sharp-electrode recording">
+            <a ui-sref="sharp-electrode-list"><md-button class="md-icon-button md-primary" aria-label="Intracellular sharp-electrode recording">
                 <md-icon>subdirectory_arrow_right</md-icon>
             </md-button></a>
         </md-card-actions>
@@ -116,7 +118,7 @@
                 </md-button></a>
         </md-card-actions>
     </md-card>
-        
+
 </md-content>
 
 <md-content class="md-padding" layout="row">
@@ -138,5 +140,5 @@
                 </md-button></a>
         </md-card-actions>
     </md-card>
-        
+
 </md-content>
