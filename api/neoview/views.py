@@ -111,14 +111,9 @@ class Block(APIView):
             }]}
 
         # check for channels
-        if lazy:
-            if (block.segments[0].analogsignals and len(block.segments[0].analogsignals[0].load()[0]) > 1) \
-                    or (block.segments[0].irregularlysampledsignals and len(block.segments[0].irregularlysampledsignals[0].load()[0]) > 1):
-                block_data['block'][0]['channels'] = 'multi'
-        else:
-            if (block.segments[0].analogsignals and len(block.segments[0].analogsignals[0][0]) > 1) \
-                    or (block.segments[0].irregularlysampledsignals and len(block.segments[0].irregularlysampledsignals[0][0]) > 1):
-                block_data['block'][0]['channels'] = 'multi'
+        if (block.segments[0].analogsignals and block.segments[0].analogsignals[0].shape[1] > 1) \
+                or (block.segments[0].irregularlysampledsignals and block.segments[0].irregularlysampledsignals[0].shape[1] > 1):
+            block_data['block'][0]['channels'] = 'multi'
 
         # check for spike trains
         for s in block.segments:
