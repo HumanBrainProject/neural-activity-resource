@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import os.path
-from django.shortcuts import render
 from django.http import JsonResponse
-
 from rest_framework.views import APIView
 from neo.io import get_io
 from neo import io
-from rest_framework.response import Response
 from rest_framework import status
 from os.path import basename
 try:
@@ -241,43 +238,28 @@ class AnalogSignal(APIView):
                 analogsignal = segment.irregularlysampledsignals[id_analog_signal].load()
             else:
                 analogsignal = segment.irregularlysampledsignals[id_analog_signal]
-            analog_signal_times = []
-            for item in analogsignal.times:
-                analog_signal_times.append(item.item())
-            graph_data["times"] = analog_signal_times
+            graph_data["times"] = analogsignal.times.magnitude.tolist()
 
         # todo, catch any IndexErrors, and return a 404 response
 
         analog_signal_values = []
 
-        if len(analogsignal[0]) > 1:
+        if analogsignal.shape[1] > 1:
             # multiple channels
             if not len(segment.irregularlysampledsignals) > 0 and request.GET['down_sample_factor']:
+                dsf = int(request.GET['down_sample_factor'])
                 for i in range(0, len(analogsignal[0])):
-                    channel = []
-                    for j, item in enumerate(analogsignal):
-                        if j % int(request.GET['down_sample_factor']) == 0:
-                            channel.append(item[i].item())
-                        else:
-                            continue
-                    analog_signal_values.append(channel)
+                    analog_signal_values.append(analogsignal[::dsf, i].magnitude[:, 0].tolist())
             else:
                 for i in range(0, len(analogsignal[0])):
-                    channel = []
-                    for item in analogsignal:
-                        channel.append(item[i].item())
-                    analog_signal_values.append(channel)
+                    analog_signal_values.append(analogsignal[::, i].magnitude[:, 0].tolist())
         else:
             # single channel
             if not len(segment.irregularlysampledsignals) > 0 and request.GET['down_sample_factor']:
-                for i, item in enumerate(analogsignal):
-                    if i % int(request.GET['down_sample_factor']) == 0:
-                        analog_signal_values.append(item.item())
-                    else:
-                        continue
+                dsf = int(request.GET['down_sample_factor'])
+                analog_signal_values = analogsignal[::dsf, 0].magnitude[:, 0].tolist()
             else:
-                for item in analogsignal:
-                    analog_signal_values.append(item.item())
+                analog_signal_values = analogsignal.magnitude[:, 0].tolist()
 
         graph_data["values"] = analog_signal_values
         graph_data["name"] = analogsignal.name
@@ -309,8 +291,6 @@ class SpikeTrain(APIView):
         graph_data = {}
 
         for idx, st in enumerate(spiketrains):
-            graph_data[idx] = {'units': st.units.item(), 't_stop': st.t_stop.item(), 'times': []}
-            for t in st.times:
-                graph_data[idx]['times'].append(t.item())
+            graph_data[idx] = {'units': st.units.item(), 't_stop': st.t_stop.item(), 'times': st.times.magnitude.tolist()}
 
         return JsonResponse(graph_data)
