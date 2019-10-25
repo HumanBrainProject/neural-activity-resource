@@ -200,7 +200,7 @@ angular.module('nar')
 
                                         // get list of people involved in performing the patch clamp recording
                                         vm.recording_activity.people = [];
-                                        for (let person_uri of vm.recording_activity.wasAssociatedWith) {
+                                        for (let person_uri of vm.asList(vm.recording_activity.wasAssociatedWith)) {
                                             $http.get(person_uri["@id"]).then(
                                                 function(response) {
                                                     vm.recording_activity.people.push(response.data);
@@ -239,7 +239,7 @@ angular.module('nar')
 
                                                 // get list of people involved in slicing
                                                 vm.slicing_activity.people = [];
-                                                for (let person_uri of vm.slicing_activity.wasAssociatedWith) {
+                                                for (let person_uri of vm.asList(vm.slicing_activity.wasAssociatedWith)) {
                                                     $http.get(person_uri["@id"]).then(
                                                         function(response) {
                                                             vm.slicing_activity.people.push(response.data);
