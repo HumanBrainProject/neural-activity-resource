@@ -27,6 +27,7 @@ SECRET_KEY = '$4zyq@#shcuqmvk!mvt^m_w7intuj^hd)f=(@ykvnympnb=*)i'
 DEBUG = True
 
 ALLOWED_HOSTS = ['neo-viewer.brainsimulation.eu',
+                 'neo-viewer-staging.brainsimulation.eu',
                  'neo-viewer-dev.brainsimulation.eu',
                  '127.0.0.1']
 
