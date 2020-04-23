@@ -29,7 +29,7 @@ angular.module('nar')
     var vm = this;
 
     var nexusBaseUrl = NexusURL.get();
-    var kgQueryBaseUrl = "https://kg.humanbrainproject.org/query/"
+    var kgQueryBaseUrl = "https://kg.humanbrainproject.eu/query/"
     var Datasets = KGQResource(kgQueryBaseUrl + "minds/core/dataset/v1.0.0/narBrowser");
 
     var error = function(response) {
