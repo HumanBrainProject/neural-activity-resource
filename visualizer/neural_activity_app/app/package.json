@@ -16,7 +16,7 @@
     "d3": "^3.5.17",
     "google-palette": "^1.0.0",
     "hellojs": "^1.14.0",
-    "jquery": "^1.11.3",
+    "jquery": "^3.5.0",
     "moment": "^2.19.2",
     "ng-text-truncate": "^1.0.0",
     "nvd3": "^1.8.5-dev"
