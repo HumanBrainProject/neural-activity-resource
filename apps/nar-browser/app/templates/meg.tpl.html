@@ -1,0 +1,122 @@
+<div flex layout="row">
+
+    <!-- Main content -->
+    <md-content flex id="content">
+
+      <div layout="row">
+        <div layout="column" flex=90>
+          <h2 class="md-headline">MEG experiment</h2>
+          <h3 class="md-display-1">{{app.experiment.name}}</h3>
+        </div>
+        <div layout-align="end"><img src="/app/images/meg.png"></div>
+      </div>
+
+      <md-list>
+        <md-list-item layout="row" class="odd">
+          <span flex="20">Stimulus:</span>
+          <div flex>{{app.experiment.stimulus.name}}</div>
+        </md-list-item>
+        <md-list-item layout="row" class="even">
+          <span flex="20">digitizedHeadPoints:</span>
+          <div flex>{{app.experiment.digitizedHeadPoints}}</div>
+        </md-list-item>
+        <md-list-item layout="row" class="even">
+          <span flex="20">digitizedLandmarks:</span>
+          <div flex>{{app.experiment.digitizedLandmarks}}</div>
+        </md-list-item>
+        <md-list-item layout="row" class="even">
+          <span flex="20">startedAtTime:</span>
+          <div flex>{{app.experiment.startedAtTime}}</div>
+        </md-list-item>
+        <md-list-item layout="row" class="even">
+          <span flex="20">endedAtTime:</span>
+          <div flex>{{app.experiment.endedAtTime}}</div>
+        </md-list-item>
+        <md-list-item layout="row" class="even">
+          <span flex="20">Device name:</span>
+          <div flex>{{app.device.name}}</div>
+        </md-list-item>
+        <md-list-item layout="row" class="even">
+          <span flex="20">Device manufacturer:</span>
+          <div flex>{{app.device.manufacturer}}</div>
+        </md-list-item>
+        <md-list-item layout="row" class="even">
+          <span flex="20">Device model name:</span>
+          <div flex>{{app.device.model_name}}</div>
+        </md-list-item>
+        <md-list-item layout="row" class="even">
+          <span flex="20">Device software version:</span>
+          <div flex>{{app.device.software_version}}</div>
+        </md-list-item>
+        <md-list-item layout="row" class="even">
+          <span flex="20">Device serial number:</span>
+          <div flex>{{app.device.serial_number}}</div>
+        </md-list-item>
+        <md-list-item layout="row" class="even">
+          <span flex="20">Device distribution:</span>
+          <div flex>{{app.device.distribution.downloadURL}}</div>
+        </md-list-item>
+        <md-list-item layout="row" class="even">
+          <span flex="20">Device description:</span>
+          <div flex>{{app.device.description}}</div>
+        </md-list-item>
+        <md-list-item layout="row" class="even">
+          <span flex="20">Sensors name:</span>
+          <div flex>{{app.sensors.name}}</div>
+        </md-list-item>
+        <md-list-item layout="row" class="even">
+          <span flex="20">Sensors description:</span>
+          <div flex>{{app.sensors.description}}</div>
+        </md-list-item>
+        <md-list-item layout="row" class="even">
+          <span flex="20">Sensors coordinate units:</span>
+          <div flex>{{app.sensors.coordinate_units}}</div>
+        </md-list-item>
+        <md-list-item layout="row" class="even">
+          <span flex="20">Sensors coordinate system:</span>
+          <div flex>{{app.sensors.coordinate_system.downloadURL}}</div>
+        </md-list-item>
+        <md-list-item layout="row" class="even">
+          <span flex="20">Experimentalist(s):</span>
+          <div flex>
+              <span ng-repeat="person in app.people">
+                {{person.givenName}} {{person.familyName}}
+              </span>
+          </div>
+        </md-list-item>
+        <md-list-item layout="row" class="even">
+          <span flex="20">Task name:</span>
+          <div flex>{{app.task.name}}</div>
+        </md-list-item>
+        <!-- todo: remaining task fields -->
+      </md-list>
+
+      <div layout="column">
+        <h4 class="md-headline">Data files</h4>
+        <div flex>
+          <md-list>
+            <md-list-item ng-repeat="file_url in app.data_files">
+              <div ng-if="app.validURL(file_url)">
+                  <md-button class="md-fab" aria-label="Open/close data visualizer" ng-click="app.showVisualizer = !app.showVisualizer">
+                      <md-tooltip md-direction="top">View data</md-tooltip>
+                      <md-icon>timeline</md-icon>
+                  </md-button>
+                  <md-button class="md-fab" aria-label="Download data file" ng-href="{{file_url}}" target="_blank" style="padding-top: 12px;">
+                      <md-tooltip md-direction="top">Download</md-tooltip>
+                      <md-icon>save_alt</md-icon>
+                  </md-button>
+                  {{app.relativePath(file_url)}}
+                  <div ng-show="app.showVisualizer">
+                    <visualizer-view
+                      source="{{file_url}}"
+                      height=300>
+                    </visualizer-view>
+                  </div>
+              </div>
+              <span ng-if="!app.validURL(file_url)">{{file_url}}</span>
+            </md-list-item>
+          </md-list>
+        </div>
+
+    </md-content>
+</div>

@@ -83,6 +83,14 @@ Author: Andrew P. Davison, UNIC, CNRS
         templateUrl: '/app/templates/eeg.tpl.html',
         controller: 'EEGController as app'
       })
+      .state('MEG-list', {
+        url: '/meg',
+        component: 'meglistcomponent'
+      })
+      .state('meg-instance', {
+        url: '/meg/{instanceId}',
+        component: 'megcomponent'
+      })
       .state('fMRI', {
         url: '/fMRI',
         templateUrl: '/app/templates/fMRI.tpl.html',
