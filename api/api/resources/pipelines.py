@@ -43,7 +43,7 @@ async def get_pipeline(
     result_tree = {starting_point.id: {"obj": starting_point, "children": []}}
     starting_entry = result_tree[starting_point.id]
 
-    def follow_links(entry, pipeline):
+    def follow_links(entry, pipeline, depth):
         print(entry["obj"].name)
         # determine if starting point is an entity or an activity
         # (or do we require it to be an entity)?
@@ -57,8 +57,10 @@ async def get_pipeline(
             entry["children"].append(child_entry)
             new_pipeline = Pipeline.from_kg_object(child, kg_client, include_generation=True)
             pipeline.children.append(new_pipeline)
-            follow_links(child_entry, new_pipeline)
+            if depth < max_depth:
+                follow_links(child_entry, new_pipeline, depth + 1)
 
     pipeline = Pipeline.from_kg_object(starting_entry["obj"], kg_client, include_generation=False)
-    follow_links(starting_entry, pipeline)
+    depth = 0
+    follow_links(starting_entry, pipeline, depth)
     return [pipeline]
