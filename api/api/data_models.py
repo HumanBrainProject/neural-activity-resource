@@ -141,7 +141,7 @@ class MissingActivityError(Exception):
 
 class Pipeline(BaseModel):
     label: str
-    type_: str
+    type_: List[str]
     uri: AnyUrl
     timestamp: str  # todo: use datetime
     attributed_to: str = None  # todo: use Person schema; could also call 'started_by'
@@ -157,7 +157,7 @@ class Pipeline(BaseModel):
             activity = entity.generated_by.resolve(client, api="nexus")
             script = activity.script.resolve(client, api="nexus")
             return cls(
-                type_="entity",
+                type_=entity.type,
                 label=entity.name,
                 uri=entity.id,
                 timestamp=get_timestamp(entity),
@@ -172,7 +172,7 @@ class Pipeline(BaseModel):
             )
         else:  # usually for the first stage in a pipeline
             return cls(
-                type_="entity",
+                type_=entity.type,
                 label=entity.name,
                 uri=entity.id,
                 timestamp=get_timestamp(entity),
