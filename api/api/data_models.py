@@ -142,6 +142,7 @@ class MissingActivityError(Exception):
 class Pipeline(BaseModel):
     label: str
     type_: str
+    uri: AnyUrl
     timestamp: str  # todo: use datetime
     attributed_to: str = None  # todo: use Person schema; could also call 'started_by'
     output: Output
@@ -158,6 +159,7 @@ class Pipeline(BaseModel):
             return cls(
                 type_="entity",
                 label=entity.name,
+                uri=entity.id,
                 timestamp=get_timestamp(entity),
                 attributed_to=get_responsible_person(entity, client),
                 output=Output(
@@ -172,6 +174,7 @@ class Pipeline(BaseModel):
             return cls(
                 type_="entity",
                 label=entity.name,
+                uri=entity.id,
                 timestamp=get_timestamp(entity),
                 output=Output(
                     location=get_data_location(entity)
