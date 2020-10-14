@@ -152,13 +152,17 @@ class Pipeline(BaseModel):
     children: List["Pipeline"] = []
 
     @classmethod
+    def build_type(cls):
+        return cls.__module__.split(".")[1] + "." + cls.__name__
+
+    @classmethod
     def from_kg_object(cls, entity, client, include_generation=True):
         if include_generation and entity.generated_by is not None:
             activity = entity.generated_by.resolve(client, api="nexus")
             script = activity.script.resolve(client, api="nexus")
             return cls(
                 #type_=entity.type,
-                type_=cls.__module__.split(".")[1] + "." + cls.__name__,
+                type_=cls.build_type(),
                 label=entity.name,
                 uri=entity.id,
                 timestamp=get_timestamp(entity),
@@ -173,7 +177,7 @@ class Pipeline(BaseModel):
             )
         else:  # usually for the first stage in a pipeline
             return cls(
-                type_=entity.type,
+                type_=cls.build_type(),
                 label=entity.name,
                 uri=entity.id,
                 timestamp=get_timestamp(entity),
