@@ -141,7 +141,7 @@ class MissingActivityError(Exception):
 
 class Pipeline(BaseModel):
     label: str
-    type_: List[str]
+    type_: str
     uri: AnyUrl
     timestamp: str  # todo: use datetime
     attributed_to: str = None  # todo: use Person schema; could also call 'started_by'
