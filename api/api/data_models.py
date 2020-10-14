@@ -157,7 +157,8 @@ class Pipeline(BaseModel):
             activity = entity.generated_by.resolve(client, api="nexus")
             script = activity.script.resolve(client, api="nexus")
             return cls(
-                type_=entity.type,
+                #type_=entity.type,
+                type_=cls.__module__.split(".")[1] + "." + cls.__name__,
                 label=entity.name,
                 uri=entity.id,
                 timestamp=get_timestamp(entity),
