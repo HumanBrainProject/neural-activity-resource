@@ -52,7 +52,7 @@ async def get_pipeline(
 
         # todo: generalize this using KGQuery to get any type of object with derived_from
         children = AnalysisResult.list(kg_client, api="nexus", derived_from=entry["obj"])
-        for child in as_list(children):
+        for child in sorted(as_list(children), key=lambda obj: obj.timestamp):
             child_entry = {"obj": child, "children": []}
             entry["children"].append(child_entry)
             new_pipeline = Pipeline.from_kg_object(child, kg_client, include_generation=True)
