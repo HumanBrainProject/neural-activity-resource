@@ -174,7 +174,7 @@ class Pipeline(BaseModel):
                 attributed_to=get_responsible_person(entity, client),
                 output=Output(
                     location=get_data_location(entity),
-                    description=entity.description
+                    description=getattr(entity, "description")
                 ),
                 code=script and Code.from_kg_object(script, client) or None,
                 #configuration:
