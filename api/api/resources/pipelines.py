@@ -29,6 +29,7 @@ async def get_pipeline(
     id: UUID,
     direction: str = "downstream",  # todo: make this an Enum
     max_depth: int = 10,
+    include_generation: bool = True,
     token: HTTPAuthorizationCredentials = Depends(auth),
 ):
     try:
@@ -55,12 +56,12 @@ async def get_pipeline(
         for child in sorted(as_list(children), key=lambda obj: obj.timestamp):
             child_entry = {"obj": child, "children": []}
             entry["children"].append(child_entry)
-            new_pipeline = Pipeline.from_kg_object(child, kg_client, include_generation=True)
+            new_pipeline = Pipeline.from_kg_object(child, kg_client, include_generation=include_generation)
             pipeline.children.append(new_pipeline)
             if depth < max_depth:
                 follow_links(child_entry, new_pipeline, depth + 1)
 
-    pipeline = Pipeline.from_kg_object(starting_entry["obj"], kg_client, include_generation=False)
+    pipeline = Pipeline.from_kg_object(starting_entry["obj"], kg_client, include_generation=include_generation)
     depth = 0
     follow_links(starting_entry, pipeline, depth)
     return [pipeline]
