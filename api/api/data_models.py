@@ -158,8 +158,13 @@ class Pipeline(BaseModel):
     @classmethod
     def from_kg_object(cls, entity, client, include_generation=True):
         if include_generation and entity.generated_by is not None:
-            activity = entity.generated_by.resolve(client, api="nexus")
-            script = activity.script.resolve(client, api="nexus")
+            try:
+                activity = entity.generated_by.resolve(client, api="nexus")
+                script = activity.script.resolve(client, api="nexus")
+            except TypeError as err:
+                # todo: add logging
+                activity = None
+                script = None
             return cls(
                 #type_=entity.type,
                 type_=build_type(entity),
@@ -171,9 +176,9 @@ class Pipeline(BaseModel):
                     location=get_data_location(entity),
                     description=entity.description
                 ),
-                code=Code.from_kg_object(script, client),
+                code=script and Code.from_kg_object(script, client) or None,
                 #configuration:
-                description=activity.description
+                description=activity and activity.description or None
             )
         else:  # usually for the first stage in a pipeline
             return cls(
