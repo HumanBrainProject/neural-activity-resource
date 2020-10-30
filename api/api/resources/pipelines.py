@@ -16,7 +16,7 @@ from fairgraph.analysis import AnalysisResult
 from ..data_models import (Pipeline, MissingActivityError)
 from ..auth import get_kg_client
 
-logger = logging.getLogger("validation_service_v2")
+logger = logging.getLogger("nar")
 
 auth = HTTPBearer()
 router = APIRouter()

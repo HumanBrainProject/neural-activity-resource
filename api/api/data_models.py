@@ -2,6 +2,9 @@ from uuid import UUID
 from enum import Enum
 from typing import List
 
+from fairgraph.commons import QuantitativeValue
+from fairgraph.base import as_list
+
 from pydantic import BaseModel, HttpUrl, AnyUrl, validator, ValidationError
 
 import fairgraph
@@ -143,6 +146,7 @@ def build_type(obj):
     cls = obj.__class__
     return cls.__module__.split(".")[1] + "." + cls.__name__
 
+
 class Pipeline(BaseModel):
     label: str
     type_: str
@@ -191,5 +195,84 @@ class Pipeline(BaseModel):
                 )
             )
 
-
 Pipeline.update_forward_refs()  # because model is self-referencing
+
+
+class Channel(BaseModel):
+    label: str
+    units: str = None
+
+
+class Quantity(BaseModel):
+    units: str
+    value: float
+
+
+def build_channels(entity):
+    if hasattr(entity, "channel"):
+        return [Channel(label=str(entity.channel), units=entity.data_unit)]
+    elif hasattr(entity, "channel_names"):
+        if isinstance(entity.channel_names, list) and isinstance(entity.data_unit, list):
+            return [
+                Channel(label=name, units=units)
+                for (name, units) in zip(entity.channel_names, entity.data_unit)
+            ]
+        else:
+            return [Channel(label=entity.channel_names, units=entity.data_unit)]
+
+
+class Recording(BaseModel):
+    label: str
+    data_location: Output
+    #generation_metadata,
+    channels: List[Channel] = None
+    time_step: Quantity = None
+    #part_of:
+    timestamp: str = None  # todo: use datetime
+    uri: AnyUrl
+    #modality: str  # todo: use Enum
+    # todo: add metadata from qualifiedGeneration objects and maybe from generating activity
+
+    @classmethod
+    def from_kg_object(cls, entity, client):
+        return cls(
+            label=entity.name,
+            data_location=Output(
+                location=get_data_location(entity)
+            ),
+            channels=build_channels(entity),
+            time_step={"value": entity.time_step.value, "units": entity.time_step.unit_text},
+            timestamp=getattr(entity, "retrieval_date", None),
+            uri=entity.id,
+            #modality=
+        )
+
+
+class Dataset(BaseModel):
+    name: str
+    datasetDOI: List[str] = None
+    license: List[str] = None
+    identifier: str
+    methods: List[str] = None
+    custodians: List[str] = None
+    description: str = None
+    uri: HttpUrl
+
+    @validator("datasetDOI", pre=True)
+    def _as_list(cls, v):
+        return as_list(v)
+
+    @classmethod
+    def from_kg_object(cls, entity):
+        return cls(
+            name=entity.name,
+            #doi=entity.dataset_doi,
+            license=getattr(entity.license, "name", None),
+            identifier=entity.identifier
+        )
+
+    @classmethod
+    def from_kg_query(cls, result):
+        uri = result.pop("@id")
+        result["uri"] = uri
+        return cls(**result)
