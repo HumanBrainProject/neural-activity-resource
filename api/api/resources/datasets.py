@@ -37,7 +37,7 @@ async def get_dataset(
         response = kgq_client.get(path)
         datasets = response["results"]
     if datasets:
-        if isinstance(datasets[0], FGDataset):
+        if isinstance(datasets, FGDataset) or isinstance(datasets[0], FGDataset):
             return [Dataset.from_kg_object(dataset) for dataset in as_list(datasets)]
         else:
             return [Dataset.from_kg_query(dataset) for dataset in as_list(datasets)]
