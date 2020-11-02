@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 
 const USE_EXAMPLE_DATA = false;
 const baseUrl = "https://neural-activity-resource.brainsimulation.eu"
 
 function get_datasets(auth) {
-  let url = baseUrl + "/datasets/?name=reach-to-grasp";
+  let url = baseUrl + "/datasets/";
   let config = {
     headers: {
       'Authorization': 'Bearer ' + auth.token,
@@ -17,16 +19,23 @@ function get_datasets(auth) {
 
 
 export default function AllDatasets(props) {
+  const [datasets, setDatasets] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    //console.log("Getting pipeline data")
+    // React calls this when the component is mounted, updated or unmounted
+    // see https://reactjs.org/docs/hooks-effect.html
+    // Here we use it to load data
     if (USE_EXAMPLE_DATA) {
       console.log("todo");
     } else {
+      setLoading(true);
       get_datasets(props.auth)
       .then(res => {
         console.log("Got datasets");
         console.log(res.data);
+        setDatasets(res.data);
+        setLoading(false);
       })
       .catch(err => {
         console.log('Error: ', err.message);
@@ -34,9 +43,23 @@ export default function AllDatasets(props) {
     }
   }, []);
 
-  return (
-    <div>
-      <p>Coming soon...</p>
-    </div>
-  );
+  if (loading) {
+    return (
+      <div style={{display: 'flex', justifyContent: 'center', marginTop: '200px'}}>
+          <CircularProgress />
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        <ul>
+        {
+          datasets.map((dataset, index) => (
+            <li>{dataset.name}</li>
+          ))
+        }
+        </ul>
+      </div>
+    );
+  }
 }
