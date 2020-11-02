@@ -61,13 +61,13 @@ export default function App(props) {
       <main>
         <Switch>
           <Route path="/patch-clamp">
-            <PatchClamp />
+            <PatchClamp auth={props.auth} />
           </Route>
           <Route path="/datasets">
-            <AllDatasets />
+            <AllDatasets auth={props.auth} />
           </Route>
           <Route path="/">
-            <Home />
+            <Home auth={props.auth} />
           </Route>
         </Switch>
       </main>
