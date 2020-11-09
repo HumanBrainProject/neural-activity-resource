@@ -8,6 +8,7 @@
 apps/nar-browser/node_modules
 apps/nar-browser/old_node_modules
 apps/nar-browser/lib
+apps/nar-v2/node_modules
 
 
 # Python stuff

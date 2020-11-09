@@ -248,31 +248,61 @@ class Recording(BaseModel):
         )
 
 
+def get_names(objects):
+    if objects:
+        return [obj.name for obj in as_list(objects)]
+    else:
+        return []
+
+
 class Dataset(BaseModel):
     name: str
-    datasetDOI: List[str] = None
+    doi: List[str] = None
     license: List[str] = None
     identifier: str
     methods: List[str] = None
-    custodians: List[str] = None
+    contributors: List[str] = None # todo: use Person
+    custodians: List[str] = None   # todo: use Person
     description: str = None
     uri: HttpUrl
+    download: HttpUrl = None
+    methods: List[str] = None
+    preparation: str = None
+    brain_region: List[str] = None
+    publications: List[str] = None
 
-    @validator("datasetDOI", pre=True)
+    @validator("doi", pre=True)
     def _as_list(cls, v):
         return as_list(v)
 
     @classmethod
     def from_kg_object(cls, entity):
-        return cls(
+        data = dict(
             name=entity.name,
-            #doi=entity.dataset_doi,
-            license=getattr(entity.license, "name", None),
-            identifier=entity.identifier
+            doi=getattr(entity, "dataset_doi"),
+            license=as_list(getattr(entity.license, "name", None)),
+            identifier=entity.identifier,
+            uri=entity.id,
+            download=entity.container_url,
+            #activity.protocols
+            description=entity.description,
+            #release_date
+            contributors=get_names(entity.contributors),
+            custodians=get_names(entity.owners),
+            brain_region=get_names(entity.parcellation_region),
+            publications=[pub.cite for pub in as_list(entity.publications)],
+            #specimen_group.subjects
         )
+        if entity.activity:
+            data.update(
+                methods=get_names(entity.activity.methods),
+                preparation=getattr(entity.activity.preparation, "name", None),
+            )
+        return cls(**data)
 
     @classmethod
     def from_kg_query(cls, result):
         uri = result.pop("@id")
         result["uri"] = uri
+        result["doi"] = result.pop("datasetDOI", None)
         return cls(**result)
