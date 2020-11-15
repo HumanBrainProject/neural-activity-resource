@@ -491,7 +491,7 @@ class AnalysisResult(BaseModel):
             description=result.description,
             code=code,
             #configuration=,
-            inputs=[result.derived_from.id],
+            inputs=[obj.id for obj in as_list(result.derived_from)],
             outputs=[File.from_kg_object(file_obj) for file_obj in as_list(result.result_file)],
             timestamp=result.timestamp,
             #end_timestamp=
@@ -554,4 +554,3 @@ class AnalysisResult(BaseModel):
 
         return kg_objects
         #os.remove(tmp_config_file.name)
-
