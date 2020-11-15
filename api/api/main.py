@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.middleware.cors import CORSMiddleware
 
-from .resources import pipelines, recordings, vocab, auth, datasets
+from .resources import pipelines, recordings, vocab, auth, datasets, analyses
 from . import settings
 
 
@@ -35,6 +35,7 @@ app.add_middleware(
 
 app.include_router(auth.router, tags=["Authentication and authorization"])
 app.include_router(recordings.router, tags=["Electrophysiology recordings"])
+app.include_router(analyses.router, tags=["Data analysis results"])
 app.include_router(pipelines.router, tags=["Data analysis pipelines"])
 app.include_router(datasets.router, tags=["Datasets"])
 app.include_router(vocab.router, tags=["Controlled vocabularies"])
