@@ -16,8 +16,10 @@ import fairgraph
 from .auth import get_user_from_token
 
 
-fairgraph.core.use_namespace(fairgraph.electrophysiology.DEFAULT_NAMESPACE)
-fairgraph.analysis.use_namespace(fairgraph.electrophysiology.DEFAULT_NAMESPACE)
+#fairgraph.core.use_namespace(fairgraph.electrophysiology.DEFAULT_NAMESPACE)
+fairgraph.core.use_namespace("modelvalidation")
+#fairgraph.analysis.use_namespace(fairgraph.electrophysiology.DEFAULT_NAMESPACE)
+fairgraph.analysis.use_namespace("modelvalidation")
 
 
 def get_timestamp(obj):
