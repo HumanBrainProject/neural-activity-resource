@@ -218,7 +218,7 @@ class Pipeline(BaseModel):
             try:
                 activity = entity.generated_by.resolve(client, api="nexus")
                 script = activity.script.resolve(client, api="nexus")
-            except TypeError as err:
+            except (TypeError, AttributeError) as err:
                 # todo: add logging
                 activity = None
                 script = None
