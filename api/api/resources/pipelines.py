@@ -12,6 +12,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from fairgraph.base import KGQuery, registry, as_list
 from fairgraph.analysis import AnalysisResult
+from fairgraph.brainsimulation import SimulationOutput
 
 from ..data_models import (Pipeline, MissingActivityError)
 from ..auth import get_kg_client
@@ -52,8 +53,11 @@ async def get_pipeline(
         # add activities later
 
         # todo: generalize this using KGQuery to get any type of object with derived_from
-        children = AnalysisResult.list(kg_client, api="nexus", derived_from=entry["obj"])
-        for child in sorted(as_list(children), key=lambda obj: obj.timestamp):
+        children_analysis = AnalysisResult.list(kg_client, api="nexus", derived_from=entry["obj"])
+        children_simulation = SimulationOutput.list(kg_client, api="nexus", derived_from=entry["obj"])
+        children = as_list(children_analysis) + as_list(children_simulation)
+        logger.debug(f"Retrieved {len(children)} children of {entry['obj'].id}")
+        for child in sorted(children, key=lambda obj: obj.timestamp):
             child_entry = {"obj": child, "children": []}
             entry["children"].append(child_entry)
             new_pipeline = Pipeline.from_kg_object(child, kg_client, include_generation=include_generation)

@@ -54,8 +54,10 @@ def get_responsible_person(obj, kg_client):
 def get_data_location(obj):
     if hasattr(obj, "result_file"):
         return obj.result_file.location
-    else:
+    elif hasattr(obj, "data_location"):
         return obj.data_location.location
+    else:
+        return None
 
 
 class Species(str, Enum):
@@ -204,7 +206,7 @@ class Pipeline(BaseModel):
     uri: AnyUrl
     timestamp: str  # todo: use datetime
     attributed_to: str = None  # todo: use Person schema; could also call 'started_by'
-    output: Output
+    output: Output = None
     code: Code = None
     #configuration:
     description: str = None
@@ -212,7 +214,7 @@ class Pipeline(BaseModel):
 
     @classmethod
     def from_kg_object(cls, entity, client, include_generation=True):
-        if include_generation and entity.generated_by is not None:
+        if include_generation and hasattr(entity, "generated_by") and entity.generated_by is not None:
             try:
                 activity = entity.generated_by.resolve(client, api="nexus")
                 script = activity.script.resolve(client, api="nexus")
@@ -236,14 +238,17 @@ class Pipeline(BaseModel):
                 description=activity and activity.description or None
             )
         else:  # usually for the first stage in a pipeline
+            data_location = get_data_location(entity)
+            if data_location:
+                output = Output(location=get_data_location(entity))
+            else:
+                output = None
             return cls(
                 type_=build_type(entity),
                 label=entity.name,
                 uri=entity.id,
                 timestamp=get_timestamp(entity),
-                output=Output(
-                    location=get_data_location(entity)
-                )
+                output=output
             )
 
 Pipeline.update_forward_refs()  # because model is self-referencing
