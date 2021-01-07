@@ -25,11 +25,20 @@ kg_client = get_kg_client()
 @router.get("/analyses/", response_model=List[AnalysisResult])
 async def query_analysis_results(
     id: List[UUID] = None,
+    attributed_to: str = None,  # todo: use Person schema; could also call 'started_by'
     size: int = Query(100, description="Maximum number of responses"),
     from_index: int = Query(0, description="Index of the first response returned"),
     token: HTTPAuthorizationCredentials = Depends(auth),
 ):
-    results = fairgraph.analysis.AnalysisResult.list(kg_client, api="nexus", size=size, from_index=from_index)
+    filters = {}
+    if attributed_to:
+        people = as_list(fairgraph.core.Person.list(kg_client, api="nexus", family_name=attributed_to))
+        if len(people) > 1:
+            # todo: handle this better
+            people = people[0]
+        if people:
+            filters["attributed_to"] = people
+    results = fairgraph.analysis.AnalysisResult.list(kg_client, api="nexus", size=size, from_index=from_index, **filters)
     return [
         AnalysisResult.from_kg_object(result, kg_client)
         for result in results
