@@ -25,10 +25,15 @@ kg_client = get_kg_client()
 @router.get("/analyses/", response_model=List[AnalysisResult])
 async def query_analysis_results(
     id: List[UUID] = None,
-    name: str = None,
+    size: int = Query(100, description="Maximum number of responses"),
+    from_index: int = Query(0, description="Index of the first response returned"),
     token: HTTPAuthorizationCredentials = Depends(auth),
 ):
-    pass
+    results = fairgraph.analysis.AnalysisResult.list(kg_client, api="nexus", size=size, from_index=from_index)
+    return [
+        AnalysisResult.from_kg_object(result, kg_client)
+        for result in results
+    ]
 
 
 @router.get("/analyses/{result_id}", response_model=AnalysisResult)
