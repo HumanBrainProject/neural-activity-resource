@@ -30,18 +30,17 @@ async def query_analysis_results(
     from_index: int = Query(0, description="Index of the first response returned"),
     token: HTTPAuthorizationCredentials = Depends(auth),
 ):
-    filters = {}
+    all_results = []
     if attributed_to:
         people = as_list(fairgraph.core.Person.list(kg_client, api="nexus", family_name=attributed_to))
-        if len(people) > 1:
-            # todo: handle this better
-            people = people[0]
-        if people:
+        for person in people:
+            filters = {}
             filters["attributed_to"] = people
-    results = fairgraph.analysis.AnalysisResult.list(kg_client, api="nexus", size=size, from_index=from_index, **filters)
+            results = as_list(fairgraph.analysis.AnalysisResult.list(kg_client, api="nexus", size=size, from_index=from_index, **filters))
+            all_results.extend(results)
     return [
         AnalysisResult.from_kg_object(result, kg_client)
-        for result in results
+        for result in all_results
     ]
 
 
