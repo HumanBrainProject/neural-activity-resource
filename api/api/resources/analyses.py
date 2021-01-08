@@ -35,7 +35,7 @@ async def query_analysis_results(
         people = as_list(fairgraph.core.Person.list(kg_client, api="nexus", family_name=attributed_to))
         for person in people:
             filters = {}
-            filters["attributed_to"] = people
+            filters["attributed_to"] = person
             results = as_list(fairgraph.analysis.AnalysisResult.list(kg_client, api="nexus", size=size, from_index=from_index, **filters))
             all_results.extend(results)
     return [
