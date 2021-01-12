@@ -63,11 +63,13 @@ async def get_recording(
         })
     if modality:
         modality_type_map = {
-            "patchclamp": ["nsg:StimulusExperiment", "prov:Activity"],
+            "patchclamp": "nsg:PatchedCell",
+            "sharpintra": "nsg:IntraCellularSharpElectrodeRecordedCell",
+            "extracellular": "nsg:ImplantedBrainTissue"
             # todo: complete this
         }
         filters.append({
-            "path": "prov:wasGeneratedBy / @type",
+            "path": "prov:wasGeneratedBy / prov:used / rdf:type",
             "op": "eq",
             "value": modality_type_map[modality]
         })
