@@ -46,3 +46,19 @@ async def get_dataset(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="No such dataset",
         )
+
+
+@router.get("/datasets/{identifier}", response_model=Dataset)
+async def get_dataset_by_identifier(
+    identifier: str = Path(..., title="Identifier", description="Identifier of the dataset to be retrieved"),
+    token: HTTPAuthorizationCredentials = Depends(auth),
+):
+    dataset = FGDataset.list(kg_client, identifier=identifier, api="query", scope="released",
+                             resolved=True)
+    if dataset:
+        return Dataset.from_kg_object(dataset[0])
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No such dataset",
+        )

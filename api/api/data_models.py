@@ -1,11 +1,12 @@
 from uuid import UUID
 from enum import Enum
 from typing import List
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import urlparse, parse_qs, quote
 from datetime import datetime, timezone
 import tempfile
 import json
 import hashlib
+import logging
 
 from fairgraph.commons import QuantitativeValue
 from fairgraph.base import KGQuery, KGProxy, as_list, IRI, Distribution
@@ -15,6 +16,7 @@ from pydantic import BaseModel, HttpUrl, AnyUrl, validator, ValidationError
 import fairgraph
 from .auth import get_user_from_token
 
+logger = logging.getLogger("nar")
 
 #fairgraph.core.use_namespace(fairgraph.electrophysiology.DEFAULT_NAMESPACE)
 fairgraph.core.use_namespace("modelvalidation")
@@ -49,15 +51,6 @@ def get_responsible_person(obj, kg_client):
     else: # todo: get wasAssociatedWith from Action that generated the obj
         person = "<placeholder>"
     return person
-
-
-def get_data_location(obj):
-    if hasattr(obj, "result_file"):
-        return obj.result_file.location
-    elif hasattr(obj, "data_location"):
-        return obj.data_location.location
-    else:
-        return None
 
 
 class Species(str, Enum):
@@ -156,10 +149,24 @@ class Person(BaseModel):
 
 
 class Output(BaseModel):
-    location: AnyUrl
+    location: str  #AnyUrl - need to clean up KG because some values aren't URLs
     description: str = None
     #size: int
     #hash:
+
+
+def get_data_locations(obj):
+    if hasattr(obj, "result_file"):
+        data_locations = obj.data_location
+    elif hasattr(obj, "data_location"):
+        data_locations = obj.data_location
+    else:
+        data_locations = None
+    if data_locations:
+        #logger.debug(data_locations)
+        return [Output(location=item.location) for item in as_list(data_locations)]
+    else:
+        return None
 
 
 class Code(BaseModel):
@@ -206,7 +213,7 @@ class Pipeline(BaseModel):
     uri: AnyUrl
     timestamp: str  # todo: use datetime
     attributed_to: str = None  # todo: use Person schema; could also call 'started_by'
-    output: Output = None
+    output: List[Output] = None
     code: Code = None
     #configuration:
     description: str = None
@@ -229,26 +236,18 @@ class Pipeline(BaseModel):
                 uri=entity.id,
                 timestamp=get_timestamp(entity),
                 attributed_to=get_responsible_person(entity, client),
-                output=Output(
-                    location=get_data_location(entity),
-                    description=getattr(entity, "description", None)
-                ),
+                output=get_data_locations(entity),
                 code=script and Code.from_kg_object(script, client) or None,
                 #configuration:
                 description=activity and activity.description or None
             )
         else:  # usually for the first stage in a pipeline
-            data_location = get_data_location(entity)
-            if data_location:
-                output = Output(location=get_data_location(entity))
-            else:
-                output = None
             return cls(
                 type_=build_type(entity),
                 label=entity.name,
                 uri=entity.id,
                 timestamp=get_timestamp(entity),
-                output=output
+                output=get_data_locations(entity)
             )
 
 Pipeline.update_forward_refs()  # because model is self-referencing
@@ -274,34 +273,34 @@ def build_channels(entity):
                 for (name, units) in zip(entity.channel_names, entity.data_unit)
             ]
         else:
-            return [Channel(label=entity.channel_names, units=entity.data_unit)]
+            #logger.debug(entity.channel_names)
+            return [Channel(label=str(entity.channel_names), units=entity.data_unit)]
 
 
-class Recording(BaseModel):
-    label: str
-    data_location: Output
-    #generation_metadata,
-    channels: List[Channel] = None
-    time_step: Quantity = None
-    #part_of:
-    timestamp: str = None  # todo: use datetime
-    uri: AnyUrl
-    #modality: str  # todo: use Enum
-    # todo: add metadata from qualifiedGeneration objects and maybe from generating activity
 
-    @classmethod
-    def from_kg_object(cls, entity, client):
-        return cls(
-            label=entity.name,
-            data_location=Output(
-                location=get_data_location(entity)
-            ),
-            channels=build_channels(entity),
-            time_step={"value": entity.time_step.value, "units": entity.time_step.unit_text},
-            timestamp=getattr(entity, "retrieval_date", None),
-            uri=entity.id,
-            #modality=
-        )
+class PatchClampMetadata(BaseModel):
+
+    # Field("repetition", int, "repetition"),
+    # Field("at_time", datetime, "atTime"),
+    # Field("provider_experiment_id", str, "providerExperimentId"),
+    # Field("provider_experiment_name", str, "providerExperimentName"),
+    # #Field("traces", (Trace, MultiChannelMultiTrialRecording), "^foo"),
+    # Field("holding_potential", QuantitativeValue, "targetHoldingPotential"),
+    # Field("measured_holding_potential", QuantitativeValue, "measuredHoldingPotential"),
+    # Field("input_resistance", QuantitativeValue, "inputResistance"),
+    # Field("series_resistance", QuantitativeValue, "seriesResistance"),
+    # Field("compensation_current", QuantitativeValue, "compensationCurrent")
+    # Field("sweeps", int, "sweep", multiple=True, required=True),
+    # Field("channel_type", str, "channelType"),
+    # Field("sampling_frequency", QuantitativeValue, "samplingFrequency"),
+    # Field("power_line_frequency", QuantitativeValue, "powerLineFrequency")
+    pass
+
+class IntraSharpMetadata(BaseModel):
+    pass
+
+class ElectrodeArrayMetadata(BaseModel):
+    pass
 
 
 def get_names(objects):
@@ -362,6 +361,143 @@ class Dataset(BaseModel):
         result["uri"] = uri
         result["doi"] = result.pop("datasetDOI", None)
         return cls(**result)
+
+
+class Stimulation(BaseModel):
+    pass
+
+
+class TissueSample(BaseModel):
+    type: str  # todo: enum ("cell", "slice", "tissue", "brain region", "whole brain")
+    location: List[BrainRegion] = None
+    species: Species = None
+    subject_name: str = None
+    cell_type: CellType = None
+        # Field("seal_resistance", QuantitativeValue, "sealResistance"),
+        # Field("pipette_resistance", QuantitativeValue, "pipetteResistance"),
+        # Field("liquid_junction_potential", QuantitativeValue, "liquidJunctionPotential"),
+        # Field("start_membrane_potential", QuantitativeValue, "startMembranePotential"),
+        # Field("end_membrane_potential", QuantitativeValue, "endMembranePotential"),
+        # Field("pipette_solution", str, "solution"),
+        # Field("labeling_compound", str, "labelingCompound"),
+        # Field("reversal_potential_cl", QuantitativeValue, "chlorideReversalPotential"),
+        # Field("description", str, "description")
+
+    @classmethod
+    def from_kg_object(cls, entity, client):
+        if isinstance(entity, fairgraph.electrophysiology.PatchedCell):
+            logger.debug(entity)
+            collection = as_list(entity.collection.resolve(client, api="nexus"))
+            logger.debug(collection)
+            if collection:
+                if len(as_list(collection)) > 1:
+                    collection_ids = [c.id for c in collection]
+                    logger.error(f"patched cell {entity.id} is linked to more than one cell collection: {collection_ids}. Taking the first of these.")
+                logger.debug(collection[0].slice)
+                patched_slice = collection[0].slice.resolve(client, api="nexus")
+                logger.debug(f"patched_slice = {patched_slice}")
+            else:
+                patched_slice = None
+            if patched_slice:
+                slice = patched_slice.slice.resolve(client, api="nexus")
+                logger.debug(slice)
+                logger.debug(slice.subject)
+                try:
+                    subject = slice.subject.resolve(client, api="nexus")
+                except ValueError:
+                    logger.error("Problem retrieving subject")
+                    species = None
+                    subject_name = None
+                    location = None
+                else:
+                    species = Species(subject.species.label)
+                    subject_name = subject.name
+                    location = [BrainRegion(item.label) for item in as_list(patched_slice.brain_location)]
+            else:
+                species = None
+                subject_name = "unknown"
+                location = None
+            if entity.cell_type:
+                cell_type = CellType(entity.cell_type.label)
+            else:
+                cell_type = None
+            return cls(
+                type="cell",
+                location=location or None,  # replace empty list with None
+                species=species,
+                subject_name=subject_name,
+                cell_type=cell_type
+            )
+        else:
+            return None  # todo
+
+
+class Recording(BaseModel):
+    label: str
+    data_location: List[Output]
+    #generation_metadata: Union[PatchClampMetadata, IntraSharpMetadata, ElectrodeArrayMetadata]
+    channels: List[Channel] = None
+    time_step: Quantity = None
+    part_of: HttpUrl = None
+    timestamp: str = None  # todo: use datetime
+    uri: AnyUrl
+    performed_by: List[Person] = None
+    stimulation: str = None  #Stimulation
+    recorded_from: TissueSample = None
+    #modality: str  # todo: use Enum
+    # todo: add metadata from qualifiedGeneration objects and maybe from generating activity
+
+    @classmethod
+    def from_kg_object(cls, entity, client, base_url):
+        #generation_metadata =
+        experiment = entity.generated_by.resolve(client, api="nexus")
+        if hasattr(experiment, "people"):  # temporary, can be removed when fairgraph next pushed and pulled to server
+            performed_by = [Person.from_kg_object(person, client) for person in as_list(experiment.people)] or None
+        else:
+            performed_by = None
+        #protocol =
+        if experiment.stimulation:
+            stimulation = experiment.stimulation.resolve(client, api="nexus").__class__.__name__
+        else:
+            stimulation = None
+        #acquisition_device
+        if hasattr(experiment, "recorded_cell") and experiment.recorded_cell is not None:
+            logger.debug(experiment.recorded_cell)
+            recorded_tissue_sample = TissueSample.from_kg_object(
+                experiment.recorded_cell.resolve(client, api="nexus"),
+                client
+            )
+        elif hasattr(experiment, "implanted_brain_tissues"):
+            recorded_tissue_sample = TissueSample.from_kg_object(
+                experiment.implanted_brain_tissues.resolve(client, api="nexus"),
+                client
+            )
+        else:
+            recorded_tissue_sample = None
+        part_of = entity.part_of.resolve(client, api="query", scope="released")
+        return cls(
+            label=entity.name,
+            data_location=get_data_locations(entity),
+            channels=build_channels(entity),
+            time_step={"value": entity.time_step.value, "units": entity.time_step.unit_text},
+            timestamp=getattr(entity, "retrieval_date", None),
+            uri=entity.id,
+            performed_by=performed_by,
+            stimulation=stimulation,
+            recorded_from=recorded_tissue_sample,
+            part_of=f"{base_url}/datasets/{part_of.identifier}"
+            #modality=
+        )
+
+
+class PaginatedRecording(BaseModel):
+    #size: int = 100
+    from_index: int = 0
+    #next: HttpUrl = None
+    #previous: HttpUrl = None
+    total: int
+    count: int
+    results: List[Recording]
 
 
 class SoftwareDependency(BaseModel):
