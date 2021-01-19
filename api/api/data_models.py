@@ -1,6 +1,6 @@
 from uuid import UUID
 from enum import Enum
-from typing import List
+from typing import List, Union
 from urllib.parse import urlparse, parse_qs, quote
 from datetime import datetime, timezone
 import tempfile
@@ -8,8 +8,9 @@ import json
 import hashlib
 import logging
 
-from fairgraph.commons import QuantitativeValue
+
 from fairgraph.base import KGQuery, KGProxy, as_list, IRI, Distribution
+from fairgraph.electrophysiology import PatchedCell
 
 from pydantic import BaseModel, HttpUrl, AnyUrl, validator, ValidationError
 
@@ -51,6 +52,14 @@ def get_responsible_person(obj, kg_client):
     else: # todo: get wasAssociatedWith from Action that generated the obj
         person = "<placeholder>"
     return person
+
+
+modality_type_map = {
+    "patchclamp": "nsg:PatchedCell",
+    "sharpintra": "nsg:IntraCellularSharpElectrodeRecordedCell",
+    "extracellular": "nsg:ImplantedBrainTissue"
+    # todo: complete this
+}
 
 
 class Species(str, Enum):
@@ -129,6 +138,15 @@ License = Enum(
     "License",
     [(name.replace(" ", "_"), name) for name in fairgraph.commons.License.iri_map.keys()],
 )
+
+
+class QuantitativeValue(BaseModel):
+    value: Union[int, float]
+    units: str
+
+    @classmethod
+    def from_kg_object(cls, qv):
+        return cls(value=qv.value, units=qv.unit_text)
 
 
 class Person(BaseModel):
@@ -279,22 +297,63 @@ def build_channels(entity):
 
 
 class PatchClampMetadata(BaseModel):
+    repetition: int = None
+    at_time: datetime = None
+    provider_experiment_id: str = None
+    provider_experiment_name: str = None
+    holding_potential: QuantitativeValue = None
+    measured_holding_potential: QuantitativeValue = None
+    input_resistance: QuantitativeValue = None
+    series_resistance: QuantitativeValue = None
+    compensation_current: QuantitativeValue = None
+    sweeps: List[int] = None  # "sweep"
+    channel_type: str = None
+    sampling_frequency: QuantitativeValue = None
+    power_line_frequency: QuantitativeValue = None
+    seal_resistance: QuantitativeValue = None
+    pipette_resistance: QuantitativeValue = None
+    liquid_junction_potential: QuantitativeValue = None
+    start_membrane_potential: QuantitativeValue = None
+    end_membrane_potential: QuantitativeValue = None
+    pipette_solution: str = None
+    labeling_compound: str = None
+    reversal_potential_cl: QuantitativeValue = None
 
-    # Field("repetition", int, "repetition"),
-    # Field("at_time", datetime, "atTime"),
-    # Field("provider_experiment_id", str, "providerExperimentId"),
-    # Field("provider_experiment_name", str, "providerExperimentName"),
-    # #Field("traces", (Trace, MultiChannelMultiTrialRecording), "^foo"),
-    # Field("holding_potential", QuantitativeValue, "targetHoldingPotential"),
-    # Field("measured_holding_potential", QuantitativeValue, "measuredHoldingPotential"),
-    # Field("input_resistance", QuantitativeValue, "inputResistance"),
-    # Field("series_resistance", QuantitativeValue, "seriesResistance"),
-    # Field("compensation_current", QuantitativeValue, "compensationCurrent")
-    # Field("sweeps", int, "sweep", multiple=True, required=True),
-    # Field("channel_type", str, "channelType"),
-    # Field("sampling_frequency", QuantitativeValue, "samplingFrequency"),
-    # Field("power_line_frequency", QuantitativeValue, "powerLineFrequency")
-    pass
+
+    @classmethod
+    def from_kg_objects(cls, qualrec, recorded_cell):
+        def qv(obj):
+            if obj is None:
+                return obj
+            else:
+                return QuantitativeValue.from_kg_object(obj)
+        sweeps = getattr(qualrec, "sweeps", getattr(qualrec, "sweep", None))
+        if sweeps is not None:
+            sweeps = as_list(sweeps)
+        return cls(
+            repetition=getattr(qualrec, "repetition", None),
+            at_time=getattr(qualrec, "at_time", None),
+            provider_experiment_id=getattr(qualrec, "provider_experiment_id", None),
+            provider_experiment_name=getattr(qualrec, "provider_experiment_name", None),
+            holding_potential=qv(getattr(qualrec, "holding_potential", None)),
+            measured_holding_potential=qv(getattr(qualrec, "measured_holding_potential", None)),
+            input_resistance=qv(getattr(qualrec, "input_resistance", None)),
+            series_resistance=qv(getattr(qualrec, "series_resistance", None)),
+            compensation_current=qv(getattr(qualrec, "compensation_current", None)),
+            sweeps=sweeps,
+            channel_type=getattr(qualrec, "channel_type", None),
+            sampling_frequency=qv(getattr(qualrec, "sampling_frequency", None)),
+            power_line_frequency=qv(getattr(qualrec, "power_line_frequency", None)),
+            seal_resistance=qv(recorded_cell.seal_resistance),
+            pipette_resistance=qv(recorded_cell.pipette_resistance),
+            liquid_junction_potential=qv(recorded_cell.liquid_junction_potential),
+            start_membrane_potential=qv(recorded_cell.start_membrane_potential),
+            end_membrane_potential=qv(recorded_cell.end_membrane_potential),
+            pipette_solution=recorded_cell.pipette_solution,
+            labeling_compound=recorded_cell.labeling_compound,
+            reversal_potential_cl=qv(recorded_cell.reversal_potential_cl)
+        )
+
 
 class IntraSharpMetadata(BaseModel):
     pass
@@ -373,15 +432,6 @@ class TissueSample(BaseModel):
     species: Species = None
     subject_name: str = None
     cell_type: CellType = None
-        # Field("seal_resistance", QuantitativeValue, "sealResistance"),
-        # Field("pipette_resistance", QuantitativeValue, "pipetteResistance"),
-        # Field("liquid_junction_potential", QuantitativeValue, "liquidJunctionPotential"),
-        # Field("start_membrane_potential", QuantitativeValue, "startMembranePotential"),
-        # Field("end_membrane_potential", QuantitativeValue, "endMembranePotential"),
-        # Field("pipette_solution", str, "solution"),
-        # Field("labeling_compound", str, "labelingCompound"),
-        # Field("reversal_potential_cl", QuantitativeValue, "chlorideReversalPotential"),
-        # Field("description", str, "description")
 
     @classmethod
     def from_kg_object(cls, entity, client):
@@ -421,6 +471,7 @@ class TissueSample(BaseModel):
                 cell_type = CellType(entity.cell_type.label)
             else:
                 cell_type = None
+            logger.debug("ready to create TissueSample")
             return cls(
                 type="cell",
                 location=location or None,  # replace empty list with None
@@ -435,7 +486,7 @@ class TissueSample(BaseModel):
 class Recording(BaseModel):
     label: str
     data_location: List[Output]
-    #generation_metadata: Union[PatchClampMetadata, IntraSharpMetadata, ElectrodeArrayMetadata]
+    generation_metadata: Union[PatchClampMetadata, IntraSharpMetadata, ElectrodeArrayMetadata]
     channels: List[Channel] = None
     time_step: Quantity = None
     part_of: HttpUrl = None
@@ -444,12 +495,11 @@ class Recording(BaseModel):
     performed_by: List[Person] = None
     stimulation: str = None  #Stimulation
     recorded_from: TissueSample = None
-    #modality: str  # todo: use Enum
+    modality: str  # todo: use Enum
     # todo: add metadata from qualifiedGeneration objects and maybe from generating activity
 
     @classmethod
     def from_kg_object(cls, entity, client, base_url):
-        #generation_metadata =
         experiment = entity.generated_by.resolve(client, api="nexus")
         if hasattr(experiment, "people"):  # temporary, can be removed when fairgraph next pushed and pulled to server
             performed_by = [Person.from_kg_object(person, client) for person in as_list(experiment.people)] or None
@@ -461,20 +511,44 @@ class Recording(BaseModel):
         else:
             stimulation = None
         #acquisition_device
+        modality = None
         if hasattr(experiment, "recorded_cell") and experiment.recorded_cell is not None:
             logger.debug(experiment.recorded_cell)
+            recorded_object = experiment.recorded_cell.resolve(client, api="nexus")
+            logger.debug(recorded_object)
+            for key, value in modality_type_map.items():
+                if value in recorded_object.__class__.type:
+                    modality = key
+                    break
             recorded_tissue_sample = TissueSample.from_kg_object(
-                experiment.recorded_cell.resolve(client, api="nexus"),
+                recorded_object,
                 client
             )
         elif hasattr(experiment, "implanted_brain_tissues"):
+            recorded_object = experiment.implanted_brain_tissues.resolve(client, api="nexus"),
             recorded_tissue_sample = TissueSample.from_kg_object(
-                experiment.implanted_brain_tissues.resolve(client, api="nexus"),
+                recorded_object,
                 client
             )
+            # todo: extract modality
         else:
+            recorded_object = None
             recorded_tissue_sample = None
-        part_of = entity.part_of.resolve(client, api="query", scope="released")
+        generation_metadata = None
+        if isinstance(recorded_object, PatchedCell):
+            logger.debug(entity.generation_metadata)
+            genm = entity.generation_metadata.resolve(client, api="nexus")
+            logger.debug(genm)
+            generation_metadata = PatchClampMetadata.from_kg_objects(
+                genm, recorded_object
+            )
+        # todo: generation_metadata for other types of recorded object
+        if entity.part_of:
+            part_of = entity.part_of.resolve(client, api="query", scope="released")
+            part_of_url = f"{base_url}/datasets/{part_of.identifier}"
+        else:
+            part_of_url = None
+            logger.warning(f"Not linked to a dataset: {entity}")
         return cls(
             label=entity.name,
             data_location=get_data_locations(entity),
@@ -485,8 +559,9 @@ class Recording(BaseModel):
             performed_by=performed_by,
             stimulation=stimulation,
             recorded_from=recorded_tissue_sample,
-            part_of=f"{base_url}/datasets/{part_of.identifier}"
-            #modality=
+            part_of=part_of_url,
+            modality=modality,
+            generation_metadata=generation_metadata
         )
 
 

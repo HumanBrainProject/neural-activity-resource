@@ -14,7 +14,7 @@ from fairgraph.base import KGQuery, as_list
 from fairgraph.electrophysiology import Trace, MultiChannelMultiTrialRecording
 from fairgraph.minds import Dataset
 
-from ..data_models import PaginatedRecording, Recording, BrainRegion
+from ..data_models import PaginatedRecording, Recording, BrainRegion, modality_type_map
 from ..auth import get_kg_client
 
 logger = logging.getLogger("nar")
@@ -70,12 +70,6 @@ async def get_recording(
             "value": name
         })
     if modality:
-        modality_type_map = {
-            "patchclamp": "nsg:PatchedCell",
-            "sharpintra": "nsg:IntraCellularSharpElectrodeRecordedCell",
-            "extracellular": "nsg:ImplantedBrainTissue"
-            # todo: complete this
-        }
         filters.append({
             "path": "prov:wasGeneratedBy / prov:used / rdf:type",
             "op": "eq",
