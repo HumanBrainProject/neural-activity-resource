@@ -492,6 +492,7 @@ class Recording(BaseModel):
     part_of: HttpUrl = None
     timestamp: str = None  # todo: use datetime
     uri: AnyUrl
+    identifier: str
     performed_by: List[Person] = None
     stimulation: str = None  #Stimulation
     recorded_from: TissueSample = None
@@ -556,12 +557,27 @@ class Recording(BaseModel):
             time_step={"value": entity.time_step.value, "units": entity.time_step.unit_text},
             timestamp=getattr(entity, "retrieval_date", None),
             uri=entity.id,
+            identifier=entity.uuid,
             performed_by=performed_by,
             stimulation=stimulation,
             recorded_from=recorded_tissue_sample,
             part_of=part_of_url,
             modality=modality,
             generation_metadata=generation_metadata
+        )
+
+
+class RecordingSummary(BaseModel):
+    label: str
+    identifier: str
+    uri: HttpUrl
+
+    @classmethod
+    def from_kg_object(cls, entity, base_url):
+        return cls(
+            label=entity.name,
+            identifier=entity.uuid,
+            uri=f"{base_url}/recordings/{entity.uuid}"
         )
 
 
@@ -573,6 +589,16 @@ class PaginatedRecording(BaseModel):
     total: int
     count: int
     results: List[Recording]
+
+
+class PaginatedRecordingSummary(BaseModel):
+    #size: int = 100
+    from_index: int = 0
+    #next: HttpUrl = None
+    #previous: HttpUrl = None
+    total: int
+    count: int
+    results: List[RecordingSummary]
 
 
 class SoftwareDependency(BaseModel):

@@ -3,7 +3,7 @@
 import logging
 from os import times
 from uuid import UUID
-from typing import List
+from typing import List, Union
 
 from pydantic import HttpUrl
 
@@ -14,7 +14,10 @@ from fairgraph.base import KGQuery, as_list
 from fairgraph.electrophysiology import Trace, MultiChannelMultiTrialRecording
 from fairgraph.minds import Dataset
 
-from ..data_models import PaginatedRecording, Recording, BrainRegion, modality_type_map
+from ..data_models import (
+    PaginatedRecording, Recording, BrainRegion, modality_type_map,
+    PaginatedRecordingSummary, RecordingSummary
+)
 from ..auth import get_kg_client
 
 logger = logging.getLogger("nar")
@@ -26,9 +29,10 @@ kg_client = get_kg_client()
 
 
 #@router.get("/recordings/", response_model=List[Recording])
-@router.get("/recordings/", response_model=PaginatedRecording)
-async def get_recording(
+@router.get("/recordings/", response_model=Union[PaginatedRecording, PaginatedRecordingSummary])
+async def query_recordings(
     request: Request,
+    summary: bool = False,
     modality: str = None,  # todo: make this an Enum
     multi_channel: bool = None,
     name: str = None,
@@ -157,12 +161,56 @@ async def get_recording(
     # todo: build URLs for next and previous
     #if from_index + size < cumul_counts[-1]:
     #    next = build_url("/recordings/",
-    return PaginatedRecording(
-        #size=size,
-        from_index=from_index,
-        #next=url_next,
-        #previous=url_previous,
-        total=sum_counts,
-        count=len(objects),
-        results=[Recording.from_kg_object(obj, kg_client, base_url) for obj in objects]
-    )
+    if summary:
+        return PaginatedRecordingSummary(
+            #size=size,
+            from_index=from_index,
+            #next=url_next,
+            #previous=url_previous,
+            total=sum_counts,
+            count=len(objects),
+            results=[RecordingSummary.from_kg_object(obj, base_url) for obj in objects]
+        )
+    else:
+        return PaginatedRecording(
+            #size=size,
+            from_index=from_index,
+            #next=url_next,
+            #previous=url_previous,
+            total=sum_counts,
+            count=len(objects),
+            results=[Recording.from_kg_object(obj, kg_client, base_url) for obj in objects]
+        )
+
+
+@router.get("/recordings/{recording_id}", response_model=Recording)
+async def get_recording(
+    request: Request,
+    recording_id: str = Path(..., title="Identifier", description="Identifier of the recording to be retrieved"),
+    token: HTTPAuthorizationCredentials = Depends(auth),
+):
+    MultiChannelMultiTrialRecording.set_strict_mode(False, "generated_by")
+    Trace.set_strict_mode(False, "generated_by")
+
+    classes = [MultiChannelMultiTrialRecording, Trace]
+    path_versions = {
+        MultiChannelMultiTrialRecording: ("multitrace/v0.2.0", "multitrace/v0.1.2", "multitrace/v0.1.0"),
+        Trace: ("trace/v0.1.0", "trace/v1.0.0")  # todo: check for others in use
+    }
+
+    recording = None
+    for cls in classes:
+        for path in path_versions[cls]:
+            cls._path = f"/electrophysiology/{path}"
+            recording = cls.from_id(recording_id, kg_client, api="nexus")
+            if recording:
+                break
+        if recording:
+            break
+    if recording is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No such recording",
+        )
+    base_url = f"{request.url.scheme}://{request.url.netloc}"
+    return Recording.from_kg_object(recording, kg_client, base_url)
