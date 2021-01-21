@@ -445,6 +445,7 @@ class TissueSample(BaseModel):
     def from_kg_object(cls, entity, client):
         if isinstance(entity, fairgraph.electrophysiology.PatchedCell):
             logger.debug(entity)
+            location = [BrainRegion(item.label) for item in as_list(entity.brain_location)]
             collection = as_list(entity.collection.resolve(client, api="nexus"))
             logger.debug(collection)
             if collection:
@@ -466,15 +467,14 @@ class TissueSample(BaseModel):
                     logger.error("Problem retrieving subject")
                     species = None
                     subject_name = None
-                    location = None
                 else:
                     species = Species(subject.species.label)
                     subject_name = subject.name
-                    location = [BrainRegion(item.label) for item in as_list(patched_slice.brain_location)]
+                    if not location:  # location set on cell takes priority over set on slice
+                        location = [BrainRegion(item.label) for item in as_list(patched_slice.brain_location)]
             else:
                 species = None
                 subject_name = "unknown"
-                location = None
             if entity.cell_type:
                 cell_type = CellType(entity.cell_type.label)
             else:
