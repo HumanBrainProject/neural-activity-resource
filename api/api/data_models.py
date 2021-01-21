@@ -422,6 +422,12 @@ class Dataset(BaseModel):
         return cls(**result)
 
 
+class DatasetSummary(BaseModel):
+    name: str
+    identifier: str
+    uri: HttpUrl
+
+
 class Stimulation(BaseModel):
     pass
 
@@ -431,6 +437,8 @@ class TissueSample(BaseModel):
     location: List[BrainRegion] = None
     species: Species = None
     subject_name: str = None
+    # todo: subject sex, age, strain
+    # todo: sample preparation (brain slicing, etc.)
     cell_type: CellType = None
 
     @classmethod
@@ -489,7 +497,7 @@ class Recording(BaseModel):
     generation_metadata: Union[PatchClampMetadata, IntraSharpMetadata, ElectrodeArrayMetadata]
     channels: List[Channel] = None
     time_step: Quantity = None
-    part_of: HttpUrl = None
+    part_of: DatasetSummary = None
     timestamp: str = None  # todo: use datetime
     uri: AnyUrl
     identifier: str
@@ -546,9 +554,13 @@ class Recording(BaseModel):
         # todo: generation_metadata for other types of recorded object
         if entity.part_of:
             part_of = entity.part_of.resolve(client, api="query", scope="released")
-            part_of_url = f"{base_url}/datasets/{part_of.identifier}"
+            dataset = DatasetSummary(
+                name=part_of.name,
+                identifier=part_of.identifier,
+                uri=f"https://search.kg.ebrains.eu/instances/Dataset/{part_of.identifier}"
+            )
         else:
-            part_of_url = None
+            dataset = None
             logger.warning(f"Not linked to a dataset: {entity}")
         return cls(
             label=entity.name,
@@ -561,7 +573,7 @@ class Recording(BaseModel):
             performed_by=performed_by,
             stimulation=stimulation,
             recorded_from=recorded_tissue_sample,
-            part_of=part_of_url,
+            part_of=dataset,
             modality=modality,
             generation_metadata=generation_metadata
         )
