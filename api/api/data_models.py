@@ -504,12 +504,15 @@ class Recording(BaseModel):
     performed_by: List[Person] = None
     stimulation: str = None  #Stimulation
     recorded_from: TissueSample = None
-    modality: str  = None  # todo: use Enum
+    modality: str  = None # todo: use Enum
     # todo: add metadata from qualifiedGeneration objects and maybe from generating activity
 
     @classmethod
     def from_kg_object(cls, entity, client, base_url):
-        experiment = entity.generated_by.resolve(client, api="nexus")
+        try:
+            experiment = entity.generated_by.resolve(client, api="nexus")
+        except ValueError as err:
+            raise ValueError(f"{err} - id = {entity.generated_by}")
         if hasattr(experiment, "people"):  # temporary, can be removed when fairgraph next pushed and pulled to server
             performed_by = [Person.from_kg_object(person, client) for person in as_list(experiment.people)] or None
         else:
