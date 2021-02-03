@@ -516,7 +516,8 @@ class Recording(BaseModel):
             performed_by = None
         #protocol =
         if experiment.stimulation:
-            stimulation = experiment.stimulation.resolve(client, api="nexus").__class__.__name__
+            stimulation = ", ".join(stim.resolve(client, api="nexus").__class__.__name__
+                                    for stim in as_list(experiment.stimulation))
         else:
             stimulation = None
         #acquisition_device
