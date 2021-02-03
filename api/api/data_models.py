@@ -534,7 +534,7 @@ class Recording(BaseModel):
                 recorded_object,
                 client
             )
-        elif hasattr(experiment, "implanted_brain_tissues"):
+        elif hasattr(experiment, "implanted_brain_tissues") and experiment.implanted_brain_tissues is not None:
             recorded_object = experiment.implanted_brain_tissues.resolve(client, api="nexus"),
             recorded_tissue_sample = TissueSample.from_kg_object(
                 recorded_object,
