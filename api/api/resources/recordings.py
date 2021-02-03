@@ -128,7 +128,10 @@ async def query_recordings(
     for cls in classes:
         for path in path_versions[cls]:
             cls._path = f"/electrophysiology/{path}"
-            count = KGQuery(cls, query, context).count(kg_client, api="nexus")
+            if filters:
+                count = KGQuery(cls, query, context).count(kg_client, api="nexus")
+            else:
+                count = cls.count(kg_client, api="nexus")
             logger.debug(f"path={path} count={count} query={query['nexus']}")
             sum_counts += count
             cumul_counts.append(sum_counts)
@@ -147,7 +150,12 @@ async def query_recordings(
                 logger.info(cls.path)
                 logger.info(query)
                 logger.info(context)
-                results = KGQuery(cls, query, context).resolve(kg_client, api="nexus", size=n_requested)
+                if filters:
+                    results = KGQuery(cls, query, context).resolve(
+                        kg_client, api="nexus", size=n_requested, from_index=current_index)
+                else:
+                    results = cls.list(
+                        kg_client, api="nexus", size=n_requested, from_index=current_index)
                 objects.extend(as_list(results))
                 n_needed -= n_requested
                 current_index = threshold
