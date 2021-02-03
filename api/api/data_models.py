@@ -494,7 +494,7 @@ class TissueSample(BaseModel):
 class Recording(BaseModel):
     label: str
     data_location: List[Output]
-    generation_metadata: Union[PatchClampMetadata, IntraSharpMetadata, ElectrodeArrayMetadata]
+    generation_metadata: Union[PatchClampMetadata, IntraSharpMetadata, ElectrodeArrayMetadata] = None
     channels: List[Channel] = None
     time_step: Quantity = None
     part_of: DatasetSummary = None
@@ -504,7 +504,7 @@ class Recording(BaseModel):
     performed_by: List[Person] = None
     stimulation: str = None  #Stimulation
     recorded_from: TissueSample = None
-    modality: str  # todo: use Enum
+    modality: str  = None  # todo: use Enum
     # todo: add metadata from qualifiedGeneration objects and maybe from generating activity
 
     @classmethod
