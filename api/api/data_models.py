@@ -463,7 +463,7 @@ class TissueSample(BaseModel):
                 logger.debug(slice.subject)
                 try:
                     subject = slice.subject.resolve(client, api="nexus")
-                except ValueError:
+                except Exception:
                     logger.error("Problem retrieving subject")
                     species = None
                     subject_name = None
