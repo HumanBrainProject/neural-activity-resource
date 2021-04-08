@@ -408,9 +408,16 @@ class Dataset(BaseModel):
             #specimen_group.subjects
         )
         if entity.activity:
+            methods = []
+            preparations = []
+            for activity in as_list(entity.activity):
+                methods.extend(get_names(activity.methods))
+                prep = getattr(activity.preparation, "name", None)
+                if prep:
+                    preparations.append(prep)
             data.update(
-                methods=get_names(entity.activity.methods),
-                preparation=getattr(entity.activity.preparation, "name", None),
+                methods=methods,
+                preparation=preparations[0],
             )
         return cls(**data)
 
