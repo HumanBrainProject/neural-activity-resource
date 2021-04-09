@@ -13,7 +13,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fairgraph.base import KGQuery, as_list
 from fairgraph.minds import Dataset as FGDataset
 
-from ..data_models import Dataset
+from ..data_models import Dataset, PaginatedDataset
 from ..auth import get_kg_client
 
 logger = logging.getLogger("nar")
@@ -23,24 +23,35 @@ router = APIRouter()
 kg_client = get_kg_client()
 
 
-@router.get("/datasets/", response_model=List[Dataset])
+@router.get("/datasets/", response_model=PaginatedDataset)
 async def get_dataset(
     name: str = None,
+    size: int = Query(100, description="Maximum number of responses"),
+    from_index: int = Query(0, description="Index of the first response returned"),
     token: HTTPAuthorizationCredentials = Depends(auth),
 ):
     if name:
         datasets = FGDataset.by_name(name, kg_client, api="query", resolved=True)
+        total = len(as_list(datasets))
     else:
         kgq_client = kg_client._kg_query_client
         #datasets = FGDataset.list(kg_client, api="query", scope="released", resolved=True, size=1000)
-        path = "/minds/core/dataset/v1.0.0/narBrowser/instances?databaseScope=RELEASED&vocab=https://schema.hbp.eu/NARQuery/&size=1000"
+        path = f"/minds/core/dataset/v1.0.0/narBrowser/instances?databaseScope=RELEASED&vocab=https://schema.hbp.eu/NARQuery/&size={size}&from_index={from_index}"
         response = kgq_client.get(path)
         datasets = response["results"]
+        total = response["total"]
     if datasets:
         if isinstance(datasets, FGDataset) or isinstance(datasets[0], FGDataset):
-            return [Dataset.from_kg_object(dataset) for dataset in as_list(datasets)]
+            results = [Dataset.from_kg_object(dataset)
+                       for dataset in as_list(datasets)[from_index: from_index + size]]
         else:
-            return [Dataset.from_kg_query(dataset) for dataset in as_list(datasets)]
+            results = [Dataset.from_kg_query(dataset) for dataset in as_list(datasets)]
+        return PaginatedDataset(
+            results=results,
+            from_index=from_index,
+            total=total,
+            count=len(results)
+        )
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

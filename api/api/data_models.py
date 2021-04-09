@@ -435,6 +435,13 @@ class DatasetSummary(BaseModel):
     uri: HttpUrl
 
 
+class PaginatedDataset(BaseModel):
+    from_index: int = 0
+    total: int
+    count: int
+    results: List[Dataset]
+
+
 class Stimulation(BaseModel):
     pass
 
