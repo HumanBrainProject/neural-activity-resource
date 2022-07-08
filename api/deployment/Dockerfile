@@ -21,9 +21,11 @@ RUN unset DEBIAN_FRONTEND
 
 RUN pip3 install --upgrade pip
 
-RUN git clone https://github.com/HumanBrainProject/pyxus.git pyxus_src
-RUN pip3 install -r pyxus_src/pyxus/requirements.txt; pip install pyxus_src/pyxus
-RUN git clone https://github.com/apdavison/fairgraph.git
+#RUN git clone https://github.com/HumanBrainProject/pyxus.git pyxus_src
+#RUN pip3 install -r pyxus_src/pyxus/requirements.txt; pip install pyxus_src/pyxus
+ADD https://api.github.com/repos/HumanBrainProject/fairgraph/git/refs/heads/stable fairgraph_version.json
+RUN git clone --branch stable https://github.com/apdavison/fairgraph.git
+RUN pip3 install -r fairgraph/requirements.txt
 RUN pip3 install ./fairgraph
 
 ENV SITEDIR /home/docker/site
