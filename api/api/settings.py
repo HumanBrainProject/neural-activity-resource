@@ -1,12 +1,10 @@
 import os
 
 NEXUS_ENDPOINT = "https://nexus.humanbrainproject.org/v0"
-OIDC_HOST = "https://services.humanbrainproject.eu/oidc"
+OIDC_HOST = "https://iam.ebrains.eu/auth/realms/hbp"
 HBP_IDENTITY_SERVICE_URL_V2 = (
     "https://iam.ebrains.eu/auth/realms/hbp/protocol/openid-connect"
 )
-HBP_COLLAB_SERVICE_URL = "https://services.humanbrainproject.eu/collab/v0/"
-KG_SERVICE_ACCOUNT_REFRESH_TOKEN = os.environ["KG_SERVICE_ACCOUNT_REFRESH_TOKEN"]
 KG_SERVICE_ACCOUNT_CLIENT_ID = os.environ.get("KG_SERVICE_ACCOUNT_CLIENT_ID")
 KG_SERVICE_ACCOUNT_SECRET = os.environ.get("KG_SERVICE_ACCOUNT_SECRET")
 EBRAINS_IAM_CONF_URL = "https://iam.ebrains.eu/auth/realms/hbp/.well-known/openid-configuration"

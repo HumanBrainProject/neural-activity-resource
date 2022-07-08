@@ -34,7 +34,6 @@ def get_kg_client():
         kg_client = KGClient(
             client_id=settings.KG_SERVICE_ACCOUNT_CLIENT_ID,
             client_secret=settings.KG_SERVICE_ACCOUNT_SECRET,
-            refresh_token=settings.KG_SERVICE_ACCOUNT_REFRESH_TOKEN,
             oidc_host=settings.OIDC_HOST,
             nexus_endpoint=settings.NEXUS_ENDPOINT,
         )

@@ -10,7 +10,8 @@ from pydantic import HttpUrl
 from fastapi import APIRouter, Depends, Query, Path, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
-from fairgraph.base import KGQuery, registry, as_list
+from fairgraph.base import KGQuery, as_list
+from fairgraph.registry import registry
 from fairgraph.analysis import AnalysisResult
 from fairgraph.brainsimulation import SimulationOutput
 
