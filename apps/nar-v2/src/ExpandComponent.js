@@ -8,7 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-const baseUrl = "https://neural-activity-resource.brainsimulation.eu";
+import { baseUrl } from "./globals";
 
 function getRecordings(auth, dataset_id) {
   let url = baseUrl + "/recordings/?summary=true&dataset=" + dataset_id;
@@ -93,7 +93,9 @@ function ExpandComponent(props) {
           id="panel1a-header"
         >
           <Typography className={classes.heading} component={"span"}>
-            {loadedRecordings ? `${recordings.length} recordings` : "Show recordings" }
+            {loadedRecordings
+              ? `${recordings.length} recordings`
+              : "Show recordings"}
           </Typography>
         </AccordionSummary>
         <AccordionDetails>

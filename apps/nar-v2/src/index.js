@@ -1,10 +1,9 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
-import './index.css';
-import initAuth from './auth';
-import App from './App';
-
+import "./index.css";
+import initAuth from "./auth";
+import App from "./App";
 
 function renderApp(auth) {
   ReactDOM.render(
@@ -13,8 +12,8 @@ function renderApp(auth) {
         <App auth={auth} />
       </BrowserRouter>
     </React.StrictMode>,
-    document.getElementById('root')
+    document.getElementById("root")
   );
-};
+}
 
-window.addEventListener('DOMContentLoaded', () => initAuth(renderApp));
+window.addEventListener("DOMContentLoaded", () => initAuth(renderApp));

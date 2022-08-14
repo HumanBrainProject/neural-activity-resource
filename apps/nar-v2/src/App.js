@@ -1,6 +1,11 @@
 import React from "react";
 import { Switch, Route, Link as RouterLink } from "react-router-dom";
 
+import { ThemeProvider } from "@material-ui/core/styles";
+import { createMuiTheme } from "@material-ui/core/styles";
+import teal from "@material-ui/core/colors/teal";
+import orange from "@material-ui/core/colors/orange";
+
 import AppBar from "@material-ui/core/AppBar";
 import MenuIcon from "@material-ui/icons/Menu";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -8,14 +13,21 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Link from "@material-ui/core/Link";
-import IconButton from '@material-ui/core/IconButton';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import IconButton from "@material-ui/core/IconButton";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
 import Home from "./Home";
 import PatchClamp from "./PatchClamp";
 import AllDatasets from "./AllDatasets";
 import CurationDashboard from "./CurationDashboard";
+
+const globalTheme = createMuiTheme({
+  palette: {
+    primary: teal,
+    secondary: orange,
+  },
+});
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -28,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   link: {
     color: "inherit",
     textDecoration: "inherit",
-  }
+  },
 }));
 
 function Copyright() {
@@ -57,12 +69,17 @@ export default function App(props) {
   };
 
   return (
-    <React.Fragment>
+    <ThemeProvider theme={globalTheme}>
       <CssBaseline />
 
       <AppBar position="relative">
         <Toolbar>
-          <IconButton color="inherit" aria-controls="navigation-menu" aria-haspopup="true" onClick={handleClick}>
+          <IconButton
+            color="inherit"
+            aria-controls="navigation-menu"
+            aria-haspopup="true"
+            onClick={handleClick}
+          >
             <MenuIcon className={classes.icon} />
           </IconButton>
           <Menu
@@ -72,17 +89,29 @@ export default function App(props) {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-
-              <MenuItem onClick={handleClose}>
-                <Link component={RouterLink} to="/" className={classes.link}>Home</Link>
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <Link component={RouterLink} to="/patch-clamp" className={classes.link}>Patch clamp recordings</Link>
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <Link component={RouterLink} to="/datasets" className={classes.link}>Datasets</Link>
-              </MenuItem>
-
+            <MenuItem onClick={handleClose}>
+              <Link component={RouterLink} to="/" className={classes.link}>
+                Home
+              </Link>
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <Link
+                component={RouterLink}
+                to="/patch-clamp"
+                className={classes.link}
+              >
+                Patch clamp recordings
+              </Link>
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <Link
+                component={RouterLink}
+                to="/datasets"
+                className={classes.link}
+              >
+                Datasets
+              </Link>
+            </MenuItem>
           </Menu>
           <Typography variant="h6" color="inherit" noWrap>
             Neural Activity Resource v2 (alpha)
@@ -126,6 +155,6 @@ export default function App(props) {
         <Copyright />
       </footer>
       {/* End footer */}
-    </React.Fragment>
+    </ThemeProvider>
   );
 }

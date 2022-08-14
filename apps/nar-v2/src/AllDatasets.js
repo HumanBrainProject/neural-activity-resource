@@ -14,17 +14,18 @@ import CardHeader from "@material-ui/core/CardHeader";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Chip from "@material-ui/core/Chip";
-import Tooltip from '@material-ui/core/Tooltip';
+import Tooltip from "@material-ui/core/Tooltip";
 
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 
-import Collapse from '@material-ui/core/Collapse';
+import Collapse from "@material-ui/core/Collapse";
 import ExpandComponent from "./ExpandComponent";
 //import classes from '*.module.css';
+import { baseUrl } from "./globals";
+
 
 const USE_EXAMPLE_DATA = false;
-const baseUrl = "https://neural-activity-resource.brainsimulation.eu";
 
 function get_datasets(auth) {
   let url = baseUrl + "/datasets/?size=3";
@@ -86,7 +87,7 @@ export default function AllDatasets(props) {
     },
     methods: {
       marginRight: theme.spacing(0.5),
-      marginBottom: theme.spacing(1)
+      marginBottom: theme.spacing(1),
     },
   }));
 
@@ -137,36 +138,35 @@ export default function AllDatasets(props) {
           //Créer une version statique et strucutrer des champs de la dataset
           datasets.map((dataset, index) => (
             <Card key={index} className={classes.card}>
-                <CardHeader
-                  title={dataset.name}
-                  subheader={dataset.custodians[0]}
-                  action={
-<Tooltip  title="Open in Knowledge Graph Search">
-                <IconButton target="_blank" href={`https://search.kg.ebrains.eu/instances/Dataset/${dataset.identifier}`}>
-                  <OpenInNewIcon/>
-                </IconButton>
-                </Tooltip>
-                  }
-                />
+              <CardHeader
+                title={dataset.name}
+                subheader={dataset.custodians[0]}
+                action={
+                  <Tooltip title="Open in Knowledge Graph Search">
+                    <IconButton
+                      target="_blank"
+                      href={`https://search.kg.ebrains.eu/instances/Dataset/${dataset.identifier}`}
+                    >
+                      <OpenInNewIcon />
+                    </IconButton>
+                  </Tooltip>
+                }
+              />
               <CardContent>
-                {getDatasetsMethods(dataset.methods).map(
-                    (method, index) => {
-                      return (
-                        <Chip
-                          key={index}
-                          label={method}
-                          color="primary"
-                          className={classes.methods}
-                          variant="outlined"
-                        />
-                      );
-                    }
-                  )}
+                {getDatasetsMethods(dataset.methods).map((method, index) => {
+                  return (
+                    <Chip
+                      key={index}
+                      label={method}
+                      color="primary"
+                      className={classes.methods}
+                      variant="outlined"
+                    />
+                  );
+                })}
                 <Typography variant="body1">{dataset.description}</Typography>
               </CardContent>
-              <CardActions>
-
-              </CardActions>
+              <CardActions></CardActions>
               <ExpandComponent dataset={dataset} auth={props.auth} />
             </Card>
           ))

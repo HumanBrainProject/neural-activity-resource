@@ -12,7 +12,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Chip from "@material-ui/core/Chip";
 
-const baseUrl = "https://neural-activity-resource.brainsimulation.eu";
+import { baseUrl } from "./globals";
 
 const useStyles = makeStyles((theme) => ({
   cardGrid: {
