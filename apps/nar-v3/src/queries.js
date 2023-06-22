@@ -50,15 +50,16 @@ function simpleProperty(name) {
 function linkProperty(name, structure, options) {
     const defaultOptions = {
         expectSingle: true,
-        filter: ""
+        filter: "",
+        required: false
     }
-    const {expectSingle, filter} = {...defaultOptions, ...options}
+    const {expectSingle, filter, required} = {...defaultOptions, ...options}
     let prop = simpleProperty(name);
 
     if (expectSingle) {
         prop.singleValue = "FIRST"
     }
-    if (structure) {
+    if (structure && structure.length > 0) {
         prop.structure = structure
     }
     if (filter) {
@@ -67,6 +68,9 @@ function linkProperty(name, structure, options) {
             value: filter
         }
     }
+    if (required) {
+        prop.required = true
+    }
     return prop
 }
 
@@ -74,10 +78,11 @@ function reverseLinkProperty(forwardName, reverseName, structure, options) {
     const defaultOptions = {
         expectSingle: true,
         filter: "",
+        required: false,
         type: null
     }
-    const {expectSingle, filter, type} = {...defaultOptions, ...options}
-    let prop = linkProperty(forwardName, structure, {expectSingle: expectSingle, filter: filter})
+    const {expectSingle, filter, required, type} = {...defaultOptions, ...options}
+    let prop = linkProperty(forwardName, structure, {expectSingle: expectSingle, required: required, filter: filter})
     prop.path = {
         "@id": `https://openminds.ebrains.eu/vocab/${reverseName}`,
         reverse: true
