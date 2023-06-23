@@ -1,13 +1,25 @@
 import Link from "@mui/material/Link";
 
-function uuidFromUri(uri) {
-  const parts = uri.split("/");
-  return parts[parts.length - 1];
-}
+import { uuidFromUri } from "../utility.js";
+
 
 function getKGSearchUrl(uri) {
   const uuid = uuidFromUri(uri);
   return `https://search.kg.ebrains.eu/instances/${uuid}`;
+}
+
+
+function AgeDisplay(props) {
+  const age = props.age
+  if (age) {
+    if (age.value) {
+      return <span>{age.value} {age.unit}</span>
+    } else {
+      return <span>{age.minValue} {age.minValueUnit}-{age.maxValue} {age.maxValueUnit}</span>
+    }
+  } else {
+    return ""
+  }
 }
 
 function PatchClampRecordingCard(props) {
@@ -38,12 +50,14 @@ function PatchClampRecordingCard(props) {
         <dd>{tissueSample.biologicalSex}</dd>
         <dt>Age</dt>
         <dd>
-          {tissueSample.studiedState[0].age.minValue} {tissueSample.studiedState[0].age.minValueUnit}-{tissueSample.studiedState[0].age.maxValue} {tissueSample.studiedState[0].age.maxValueUnit}
+        <AgeDisplay age={tissueSample.studiedState[0].age} />
         </dd>
         <dt>Additional remarks</dt>
         <dd>{tissueSample.studiedState[0].additionalRemarks}</dd>
         <dt>Part of collection:</dt>
         <dd>{tissueSampleCollectionState.lookupLabel} ({tissueSampleCollectionState.isStateOf.type})</dd>
+        <dt>Techniques</dt>
+        <dd>{tissueSample.belongsToDataset.technique.join(", ")}</dd>
       </dl>
     </div>
   );

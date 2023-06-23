@@ -24,7 +24,11 @@ function buildKGQuery(baseType, structure) {
 }
 
 
-function simpleProperty(name) {
+function simpleProperty(name, options) {
+    const defaultOptions = {
+        sort: false
+    }
+    const {sort} = {...defaultOptions, ...options}
     let propertyName, path;
     if (name == "@id") {
         propertyName = "query:id";
@@ -40,10 +44,14 @@ function simpleProperty(name) {
         propertyName = `query:${name}`
         path = `https://openminds.ebrains.eu/vocab/${name}`
     }
-    return {
+    let prop = {
         propertyName: propertyName,
         path: path
     }
+    if (sort) {
+        prop.sort = true
+    }
+    return prop
 }
 
 

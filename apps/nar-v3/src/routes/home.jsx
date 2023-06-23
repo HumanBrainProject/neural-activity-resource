@@ -10,30 +10,15 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Chip from "@mui/material/Chip";
 
+import { datastore } from "../datastore";
+import { query as patchClampRecordingsQuery } from "./patchClampRecordings";
 
-// const useStyles = makeStyles((theme) => ({
-//   cardGrid: {
-//     paddingTop: theme.spacing(8),
-//     paddingBottom: theme.spacing(8),
-//   },
-//   card: {
-//     height: "100%",
-//     display: "flex",
-//     flexDirection: "column",
-//   },
-//   cardMedia: {
-//     paddingTop: "56.25%", // 16:9
-//   },
-//   cardContent: {
-//     flexGrow: 1,
-//   },
-//   link: {
-//     color: "inherit",
-//     textDecoration: "inherit",
-//   },
-// }));
 
-function getModalityCount(auth, modality, setCount) {
+function getModalityCount(modality) {
+  console.log(modality);
+  if (modality === "patchclamp") {
+    return 1; //await datastore.count(patchClampRecordingsQuery);
+  }
   return 0;
 }
 
@@ -42,14 +27,15 @@ function getDatasetCount(auth, setCount) {
 }
 
 function ModalityCard(props) {
-  const { label, image, text, path, modality, auth, getCount } = props;
+  const { label, image, text, path, modality, getCount } = props;
   const [count, setCount] = useState(0);
 
   useEffect(() => {
     if (getCount) {
-      getCount(auth, setCount);
+      const newCount = getCount();
+      setCount(newCount);
     }
-  }, []);
+  }, [count]);
 
   return (
     <Grid
@@ -81,58 +67,45 @@ export default function Home(props) {
           label="Patch clamp recording"
           path="/patch-clamp"
           image="/images/WholeCellPatchClamp-03.jpg"
-          modality="patchclamp"
-          auth={props.auth}
-          getCount={(auth, setCount) =>
-            getModalityCount(auth, "patchclamp", setCount)
+          getCount={() =>
+            getModalityCount("patchclamp")
           }
         />
         <ModalityCard
           label="Intracellular sharp-electrode recording"
           path="/sharp-electrode"
           image="/images/320px-Microscope_for_Electrophysiological_Research_and_Recording_Equipment.jpg"
-          modality="sharpintra"
-          auth={props.auth}
-          getCount={(auth, setCount) =>
-            getModalityCount(auth, "sharpintra", setCount)
-          }
         />
         <ModalityCard
           label="ECoG"
           path="/ecog"
           image="/images/electrocorticography.png"
-          auth={props.auth}
         />
         <ModalityCard
           label="EEG"
           path="/eeg"
           image="/images/Human_EEG_with_prominent_alpha-rhythm.png"
-          auth={props.auth}
         />
         <ModalityCard
           label="Multi-electrode array recording"
           path="/mea"
           image="/images/640px-Utah_array_pat5215088.jpg"
-          auth={props.auth}
         />
         <ModalityCard
           label="Two-photon calcium imaging"
           path="/2-photon"
           image="/images/calcium_imaging.png"
-          auth={props.auth}
         />
         <ModalityCard
           label="fMRI"
           path="/fmri"
           image="/images/1206_FMRI.jpg"
-          auth={props.auth}
         />
         <ModalityCard
           label="All neural activity datasets"
           path="/datasets"
           image="/images/dataset_search.png"
           text=""
-          auth={props.auth}
           getCount={getDatasetCount}
         />
       </Grid>

@@ -3,7 +3,8 @@ import { Await, defer, useLoaderData } from "react-router-dom";
 
 import { buildKGQuery, simpleProperty as S, linkProperty as L, reverseLinkProperty as R } from "../queries";
 import { datastore } from "../datastore";
-//import Navigation from "../components/Navigation";
+import { uuidFromUri } from "../utility.js";
+import Navigation from "../components/Navigation";
 import PatchClampRecordingCard from "../components/PatchClampRecordingCard";
 import ProgressIndicator from "../components/ProgressIndicator";
 
@@ -53,7 +54,7 @@ const query = buildKGQuery(
             S("fullName"),
             S("shortName"),
             S("@id"),
-            L("technique/name", [], {filter: "patch clamp", expectSingle: false}),
+            L("technique/name", [], {filter: "patch clamp", expectSingle: false, required: true}),
             L("accessibility/name", [], {filter: "free access", required: true}),
             R("isVersionOf", "hasVersion", [S("shortName"), S("fullName")])
         ], {required: true})
@@ -73,14 +74,21 @@ function PatchClamp(props) {
 
   return (
     <div id="tissueSample">
-      {/* <Navigation location={["Patch Clamp Recordings", {params.expId}]} /> */}
-
       <React.Suspense fallback={<ProgressIndicator />}>
         <Await
           resolve={data.tissueSample}
           errorElement={<p>Error loading tissueSample.</p>}
         >
-          {(tissueSample) => <PatchClampRecordingCard tissueSample={tissueSample} />}
+          {(tissueSample) => {
+
+            return (
+              <>
+              <Navigation location={["Patch Clamp Recordings", uuidFromUri(tissueSample.id)]} />
+              <PatchClampRecordingCard tissueSample={tissueSample} />
+              </>
+            )
+
+          }}
         </Await>
       </React.Suspense>
     </div>

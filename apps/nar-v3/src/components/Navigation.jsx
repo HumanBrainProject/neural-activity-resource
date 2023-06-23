@@ -36,7 +36,7 @@ function Navigation(props) {
     <Toolbar>
       <Breadcrumbs aria-label="breadcrumb">
         <LinkRouter underline="hover" color="inherit" to="/">
-          Workflows
+          Home
         </LinkRouter>
         {paths.map((item) => getBreadcrumb(item))}
       </Breadcrumbs>
