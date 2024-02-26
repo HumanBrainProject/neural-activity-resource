@@ -43,7 +43,7 @@ function PatchClampRecordingCard(props) {
         <dt>Location</dt>
         <dd>{tissueSample.anatomicalLocation[0].name}</dd>
         <dt>Species/strain</dt>
-        <dd>{tissueSample.species.name}</dd>
+        <dd>{tissueSample.species ? tissueSample.species.name : "not available"}</dd>
         <dt>Cell type</dt>
         <dd>{tissueSample.origin.name}</dd>
         <dt>Sex</dt>

@@ -6,10 +6,11 @@ import { Avatar, CssBaseline, AppBar, Toolbar, Typography, Container } from "@mu
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { green } from '@mui/material/colors';
 
-import Home from "./routes/home";
+import Home, { loader as statsLoader } from "./routes/home";
 import ErrorPage from "./error-page";
 import initAuth from './auth';
 import Datasets, { loader as datasetsLoader } from "./routes/datasets";
+import Dataset, { loader as datasetLoader } from "./routes/dataset";
 import PatchClampIndex, { loader as patchClampIndexLoader } from "./routes/patchClampRecordings";
 import PatchClamp, { loader as patchClampLoader } from "./routes/patchClampRecording";
 
@@ -42,17 +43,18 @@ const router = createBrowserRouter([
     path: "/",
     element: <Home />,
     errorElement: <ErrorPage />,
+    loader: statsLoader,
   },
   {
     path: "datasets/",
     element: <Datasets />,
     loader: datasetsLoader,
   },
-  // {
-  //   path: "datasets/:datasetId",
-  //   element: <Dataset />,
-  //   loader: datasetLoader,
-  // },
+  {
+    path: "datasets/:datasetId",
+    element: <Dataset />,
+    loader: datasetLoader,
+  },
   {
     path: "patch-clamp/",
     element: <PatchClampIndex />,
@@ -92,5 +94,5 @@ function renderApp(auth) {
 };
 
 
-window.addEventListener('DOMContentLoaded', () => initAuth(renderApp));
-//window.addEventListener('DOMContentLoaded', () => renderApp(null));
+//window.addEventListener('DOMContentLoaded', () => initAuth(renderApp));
+window.addEventListener('DOMContentLoaded', () => renderApp(null));

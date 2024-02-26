@@ -1,6 +1,7 @@
 import { kgUrl } from "./globals";
 import { buildKGQuery, simpleProperty as S, linkProperty as L, reverseLinkProperty as R } from "./queries";
-
+import { uuidFromUri } from "./utility.js";
+import examplePatchClampData from "./example_data/example_patch_clamp_dataset.json";
 
 function isEmpty(obj) {
   return Object.keys(obj).length === 0;
@@ -26,9 +27,11 @@ class DataStore {
     this.baseUrl = baseUrl;
     this.cache = {
       "datasets summary": {},
+      "datasets detail": {},
       "patch clamp recordings summary": {},
       "patch clamp recordings detail": {}
     };
+    this.cache["datasets detail"][uuidFromUri(examplePatchClampData["@id"])] = examplePatchClampData;
   }
 
   buildRequestConfig(method="GET", body={}) {
@@ -52,9 +55,7 @@ class DataStore {
     const config = this.buildRequestConfig("POST", JSON.stringify(kgQuery));
     const response = await fetch(url, config);
     const result = await response.json();
-    const items = result.data;
-    console.log(items);
-    return items;
+    return result;
   }
 
   async getKGItem(cacheLabel, kgQuery, instanceId, stage = "RELEASED") {
@@ -68,7 +69,7 @@ class DataStore {
     return this.cache[cacheLabel][instanceId];
   }
 
-  async getKGData(cacheLabel, kgQuery, searchFilters, stage = "RELEASED", size = 20, from = 0) {
+  async getKGData(cacheLabel, kgQuery, searchFilters, stage = "RELEASED", size = 1000, from = 0) {
     console.log("getKGData " + cacheLabel);
     if (isEmpty(this.cache[cacheLabel])) {
       // if the cache is empty we need to fill it

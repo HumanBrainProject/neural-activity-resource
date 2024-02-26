@@ -61,7 +61,7 @@ const query = buildKGQuery(
     ]
   )
 
-console.log(query);
+//console.log(query);
 
 export async function loader({ params }) {
   const tissueSamplePromise = datastore.getKGItem("patch clamp recordings detail", query, params.expId);

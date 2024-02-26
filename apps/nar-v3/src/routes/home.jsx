@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Await, defer, useLoaderData, Link as RouterLink } from "react-router-dom";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -12,30 +12,30 @@ import Chip from "@mui/material/Chip";
 
 import { datastore } from "../datastore";
 import { query as patchClampRecordingsQuery } from "./patchClampRecordings";
+import ProgressIndicator from "../components/ProgressIndicator";
 
 
-function getModalityCount(modality) {
-  console.log(modality);
-  if (modality === "patchclamp") {
-    return 1; //await datastore.count(patchClampRecordingsQuery);
-  }
-  return 0;
+export async function loader() {
+  const statisticsPromise = datastore.count(patchClampRecordingsQuery);
+  console.log(statisticsPromise);
+  return defer({ counts: statisticsPromise });
 }
 
-function getDatasetCount(auth, setCount) {
-  return 0;
-}
+
+// function getModalityCount(modality) {
+//   console.log(modality);
+//   if (modality === "patchclamp") {
+//     return 1; //await datastore.count(patchClampRecordingsQuery);
+//   }
+//   return 0;
+// }
+
+// function getDatasetCount(auth, setCount) {
+//   return 0;
+// }
 
 function ModalityCard(props) {
-  const { label, image, text, path, modality, getCount } = props;
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    if (getCount) {
-      const newCount = getCount();
-      setCount(newCount);
-    }
-  }, [count]);
+  const { label, image, text, path, modality, count } = props;
 
   return (
     <Grid
@@ -60,55 +60,73 @@ function ModalityCard(props) {
 }
 
 export default function Home(props) {
+  const data = useLoaderData();
+
   return (
+    <React.Suspense fallback={<ProgressIndicator />}>
+    <Await
+      resolve={data.counts}
+      errorElement={<p>Error loading tissueSample.</p>}
+    >
+      {(counts) => {
+
+        return (
     <Container maxWidth="lg" sx={{paddingTop: 8, paddingBottom: 8}}>
       <Grid container spacing={4}>
         <ModalityCard
           label="Patch clamp recording"
           path="/patch-clamp"
           image="/images/WholeCellPatchClamp-03.jpg"
-          getCount={() =>
-            getModalityCount("patchclamp")
-          }
+          count={counts}
         />
         <ModalityCard
           label="Intracellular sharp-electrode recording"
           path="/sharp-electrode"
           image="/images/320px-Microscope_for_Electrophysiological_Research_and_Recording_Equipment.jpg"
+          count={0}
         />
         <ModalityCard
           label="ECoG"
           path="/ecog"
           image="/images/electrocorticography.png"
+          count={0}
         />
         <ModalityCard
           label="EEG"
           path="/eeg"
           image="/images/Human_EEG_with_prominent_alpha-rhythm.png"
+          count={0}
         />
         <ModalityCard
           label="Multi-electrode array recording"
           path="/mea"
           image="/images/640px-Utah_array_pat5215088.jpg"
+          count={0}
         />
         <ModalityCard
           label="Two-photon calcium imaging"
           path="/2-photon"
           image="/images/calcium_imaging.png"
+          count={0}
         />
         <ModalityCard
           label="fMRI"
           path="/fmri"
           image="/images/1206_FMRI.jpg"
+          count={0}
         />
         <ModalityCard
           label="All neural activity datasets"
           path="/datasets"
           image="/images/dataset_search.png"
           text=""
-          getCount={getDatasetCount}
+          count={0}
         />
       </Grid>
     </Container>
+        )
+      }}
+      </Await>
+      </React.Suspense>
   );
 }
