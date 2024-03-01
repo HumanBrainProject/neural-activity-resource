@@ -13,12 +13,12 @@ jobs:
         with:
           source_repo: "HumanBrainProject/neural-activity-resource"
           source_branch: "master"
-          destination_repo: "https://ghpusher:${{ secrets.EBRAINS_GITLAB_ACCESS_TOKEN }}@gitlab.ebrains.eu/https://gitlab.ebrains.eu/data-services/neural-activity-resource.git"
+          destination_repo: "https://ghpusher:${{ secrets.EBRAINS_GITLAB_ACCESS_TOKEN }}@gitlab.ebrains.eu/data-services/neural-activity-resource.git"
           destination_branch: "main"
       - name: synctags
         uses: wei/git-sync@v3
         with:
           source_repo: "HumanBrainProject/neural-activity-resource"
           source_branch: "refs/tags/*"
-          destination_repo: "https://ghpusher:${{ secrets.EBRAINS_GITLAB_ACCESS_TOKEN }}@gitlab.ebrains.eu/neuromorphic/nmpi-job-manager-app.git"
+          destination_repo: "https://ghpusher:${{ secrets.EBRAINS_GITLAB_ACCESS_TOKEN }}@gitlab.ebrains.eu/data-services/neural-activity-resource.git"
           destination_branch: "refs/tags/*"
