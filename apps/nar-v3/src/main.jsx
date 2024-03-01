@@ -94,5 +94,5 @@ function renderApp(auth) {
 };
 
 
-//window.addEventListener('DOMContentLoaded', () => initAuth(renderApp));
-window.addEventListener('DOMContentLoaded', () => renderApp(null));
+window.addEventListener('DOMContentLoaded', () => initAuth(renderApp));
+//window.addEventListener('DOMContentLoaded', () => renderApp(null));
