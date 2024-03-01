@@ -1,1 +1,1 @@
-export const kgUrl = "https://core.kg-ppd.ebrains.eu/v3";
+export const kgUrl = "https://core.kg.ebrains.eu/v3";
