@@ -1,0 +1,44 @@
+
+# see https://stackoverflow.com/questions/6477239/anonymize-ip-logging-in-nginx
+
+map $remote_addr $ip_anonym1 {
+default 0.0.0;
+"~(?P<ip>(\d+)\.(\d+)\.(\d+))\.\d+" $ip;
+"~(?P<ip>[^:]+:[^:]+):" $ip;
+}
+
+map $remote_addr $ip_anonym2 {
+default .0;
+"~(?P<ip>(\d+)\.(\d+)\.(\d+))\.\d+" .0;
+"~(?P<ip>[^:]+:[^:]+):" ::;
+}
+
+map $ip_anonym1$ip_anonym2 $ip_anonymized {
+default 0.0.0.0;
+"~(?P<ip>.*)" $ip;
+}
+
+log_format anonymized '$ip_anonymized - $remote_user [$time_local] '
+'"$request" $status $body_bytes_sent '
+'"$http_referer" "$http_user_agent"';
+
+access_log off;
+error_log off;
+
+server {
+    root /usr/share/nginx/html;
+    index index.html;
+
+    listen 443 ssl;
+    server_name         nar-browser-app.brainsimulation.eu;
+    ssl_certificate     /etc/letsencrypt/live/nar-browser-app.brainsimulation.eu/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/nar-browser-app.brainsimulation.eu/privkey.pem;
+
+    access_log /var/log/nginx/access.log anonymized;
+    error_log /var/log/nginx/error.log crit;
+
+    location / {
+        try_files $uri /index.html;
+    }
+
+}

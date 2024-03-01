@@ -1,0 +1,15 @@
+stages:
+  - build
+
+build_image_production:
+  stage: build
+  only:
+    variables:
+      - $CI_COMMIT_BRANCH == "main"
+  script:
+    - docker build -f deployment/Dockerfile -t docker-registry.ebrains.eu/neuralactivity/nar-app-v3:latest .
+    - echo $DOCKER_REGISTRY_USER
+    - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_SECRET docker-registry.ebrains.eu
+    - docker push docker-registry.ebrains.eu/neuralactivity/nar-app-v3:latest
+  tags:
+    - shell-runner
