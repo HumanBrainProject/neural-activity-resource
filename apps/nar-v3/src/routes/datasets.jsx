@@ -3,7 +3,7 @@ import { Await, defer, useLoaderData } from "react-router-dom";
 
 import { buildKGQuery, simpleProperty as S, linkProperty as L, reverseLinkProperty as R } from "../queries";
 import { datastore } from "../datastore";
-//import Navigation from "../components/Navigation";
+import Navigation from "../components/Navigation";
 import DatasetList from "../components/DatasetList";
 import ProgressIndicator from "../components/ProgressIndicator";
 
@@ -34,7 +34,7 @@ function Datasets(props) {
 
   return (
     <div id="datasets">
-      {/* <Navigation location={["Datasets"]} /> */}
+      <Navigation location={["Datasets"]} />
 
       <React.Suspense fallback={<ProgressIndicator />}>
         <Await

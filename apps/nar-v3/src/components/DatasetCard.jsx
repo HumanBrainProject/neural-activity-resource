@@ -24,8 +24,7 @@ const UNITS_SYMBOLS = {
 const styles = {
   entity: { borderRadius: 5, width: "600px", padding: 2 },
   activity: { width: "800px", padding: 2 },
-}
-
+};
 
 function formatUnits(units) {
   return UNITS_SYMBOLS[units.name] || units.name;
@@ -104,8 +103,10 @@ function SubjectCard(props) {
         </p>
         {/* todo: add subject group information */}
         <dl>
-          <dt>Species</dt><dd>TO DO</dd>
-          <dt>Strain</dt><dd>TO DO</dd>
+          <dt>Species</dt>
+          <dd>TO DO</dd>
+          <dt>Strain</dt>
+          <dd>TO DO</dd>
           <dt>Age</dt>
           <dd>
             <AgeDisplay age={subject.states[0].age} />
@@ -363,83 +364,99 @@ function DatasetCard(props) {
     }
   };
 
+  console.log("Rendering dataset in DatasetCard.jsx");
+  console.log(dataset);
+
   return (
     <div>
       <h1>{dataset.fullName}</h1>
       <h2>
-        <Link href={getKGSearchUrl(dataset["@id"])} target="_blank">
+        <Link
+          href={getKGSearchUrl(dataset["@id"] || dataset.id)}
+          target="_blank"
+        >
           KG Search
         </Link>
       </h2>
 
-    <Stack direction="column" alignItems="center" spacing={2} sx={{marginBottom: 5}}>
-      <SubjectCard
-        subjects={dataset.subjects}
-        index={subjectIndex}
-        setIndex={setSubjectIndex}
-      />
+      {dataset.subjects ? (
+        <Stack
+          direction="column"
+          alignItems="center"
+          spacing={2}
+          sx={{ marginBottom: 5 }}
+        >
+          <SubjectCard
+            subjects={dataset.subjects}
+            index={subjectIndex}
+            setIndex={setSubjectIndex}
+          />
 
-      <Connection />
+          <Connection />
 
-      <SlicePreparationCard
-        activity={dataset.subjects[subjectIndex].states[0].slicePreparation[0]}
-      />
+          <SlicePreparationCard
+            activity={
+              dataset.subjects[subjectIndex].states[0].slicePreparation[0]
+            }
+          />
 
-      <Connection />
+          <Connection />
 
-      <SliceCard
-        slices={
-          dataset.subjects[subjectIndex].states[0].slicePreparation[0].slices
-        }
-        index={sliceIndex}
-        setIndex={setSliceIndex}
-      />
+          <SliceCard
+            slices={
+              dataset.subjects[subjectIndex].states[0].slicePreparation[0]
+                .slices
+            }
+            index={sliceIndex}
+            setIndex={setSliceIndex}
+          />
 
-      <Connection />
+          <Connection />
 
-      <CellPatchingCard
-        activity={
-          dataset.subjects[subjectIndex].states[0].slicePreparation[0].slices[
-            sliceIndex
-          ].cellPatching[0]
-        }
-      />
+          <CellPatchingCard
+            activity={
+              dataset.subjects[subjectIndex].states[0].slicePreparation[0]
+                .slices[sliceIndex].cellPatching[0]
+            }
+          />
 
-      <Connection />
+          <Connection />
 
-      <PatchedCellCard
-        cell={
-          dataset.subjects[subjectIndex].states[0].slicePreparation[0].slices[
-            sliceIndex
-          ].cellPatching[0].patchedCells[0]
-        }
-      />
+          <PatchedCellCard
+            cell={
+              dataset.subjects[subjectIndex].states[0].slicePreparation[0]
+                .slices[sliceIndex].cellPatching[0].patchedCells[0]
+            }
+          />
 
-      <Connection />
+          <Connection />
 
-      <RecordingCard
-        recording={
-          dataset.subjects[subjectIndex].states[0].slicePreparation[0].slices[
-            sliceIndex
-          ].cellPatching[0].patchedCells[0].recordingActivity[0]
-        }
-        stimulation={
-          dataset.subjects[subjectIndex].states[0].slicePreparation[0].slices[
-            sliceIndex
-          ].cellPatching[0].patchedCells[0].stimulationActivity[0]
-        }
-      />
+          <RecordingCard
+            recording={
+              dataset.subjects[subjectIndex].states[0].slicePreparation[0]
+                .slices[sliceIndex].cellPatching[0].patchedCells[0]
+                .recordingActivity[0]
+            }
+            stimulation={
+              dataset.subjects[subjectIndex].states[0].slicePreparation[0]
+                .slices[sliceIndex].cellPatching[0].patchedCells[0]
+                .stimulationActivity[0]
+            }
+          />
 
-      <Connection />
+          <Connection />
 
-      <DataFileCard
-        fileObj={
-          dataset.subjects[subjectIndex].states[0].slicePreparation[0].slices[
-            sliceIndex
-          ].cellPatching[0].patchedCells[0].recordingActivity[0].files[0]
-        }
-      />
-      </Stack>
+          <DataFileCard
+            fileObj={
+              dataset.subjects[subjectIndex].states[0].slicePreparation[0]
+                .slices[sliceIndex].cellPatching[0].patchedCells[0]
+                .recordingActivity[0].files[0]
+            }
+          />
+        </Stack>
+      ) : (
+        ""
+      )}
     </div>
   );
 }
