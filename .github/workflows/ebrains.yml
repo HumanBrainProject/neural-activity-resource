@@ -2,7 +2,8 @@ name: Mirror to EBRAINS
 
 on:
   push:
-    branches: [master]
+    branches:
+      - master
 
 jobs:
   to_ebrains:
