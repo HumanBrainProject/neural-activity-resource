@@ -58,16 +58,16 @@ query = Query(
         QP("@type"),
         QP(
             f"{vocab}studiedSpecimen",
-            name="subjects",
+            name="studiedSpecimen",
             type_filter=omcore.Subject.type_[0],
             properties=[
-                QP(f"{vocab}lookupLabel", name="label"),
+                QP(f"{vocab}lookupLabel", name="lookupLabel"),
                 QP("@type"),
                 QP(
                     f"{vocab}studiedState",
-                    name="states",
+                    name="studiedState",
                     properties=[
-                        QP(f"{vocab}lookupLabel", name="label"),
+                        QP(f"{vocab}lookupLabel", name="lookupLabel"),
                         QP("@type"),
                         QP(
                             f"{vocab}age",
@@ -105,7 +105,7 @@ query = Query(
                         ),
                         QP(
                             f"{vocab}pathology",
-                            name="pathologies",
+                            name="pathology",
                             properties=[QP(f"{vocab}name", name="name")],
                         ),
                         QP(

@@ -5,15 +5,15 @@
   "@type": [
     "https://openminds.ebrains.eu/core/DatasetVersion"
   ],
-  "subjects": [
+  "studiedSpecimen": [
     {
-      "label": "AD-Ctrl_s95",
+      "lookupLabel": "AD-Ctrl_s95",
       "@type": [
         "https://openminds.ebrains.eu/core/Subject"
       ],
-      "states": [
+      "studiedState": [
         {
-          "label": "AD-Ctrl_s95-state01",
+          "lookupLabel": "AD-Ctrl_s95-state01",
           "@type": [
             "https://openminds.ebrains.eu/core/SubjectState"
           ],
@@ -1937,13 +1937,13 @@
       ]
     },
     {
-      "label": "AD-Ctrl_s86",
+      "lookupLabel": "AD-Ctrl_s86",
       "@type": [
         "https://openminds.ebrains.eu/core/Subject"
       ],
-      "states": [
+      "studiedState": [
         {
-          "label": "AD-Ctrl_s86-state01",
+          "lookupLabel": "AD-Ctrl_s86-state01",
           "@type": [
             "https://openminds.ebrains.eu/core/SubjectState"
           ],
@@ -2947,13 +2947,13 @@
       ]
     },
     {
-      "label": "AD-Ctrl_s76",
+      "lookupLabel": "AD-Ctrl_s76",
       "@type": [
         "https://openminds.ebrains.eu/core/Subject"
       ],
-      "states": [
+      "studiedState": [
         {
-          "label": "AD-Ctrl_s76-state01",
+          "lookupLabel": "AD-Ctrl_s76-state01",
           "@type": [
             "https://openminds.ebrains.eu/core/SubjectState"
           ],
@@ -4417,13 +4417,13 @@
       ]
     },
     {
-      "label": "AD-Ctrl_s75",
+      "lookupLabel": "AD-Ctrl_s75",
       "@type": [
         "https://openminds.ebrains.eu/core/Subject"
       ],
-      "states": [
+      "studiedState": [
         {
-          "label": "AD-Ctrl_s75-state01",
+          "lookupLabel": "AD-Ctrl_s75-state01",
           "@type": [
             "https://openminds.ebrains.eu/core/SubjectState"
           ],
@@ -5197,13 +5197,13 @@
       ]
     },
     {
-      "label": "AD-Ctrl-s27",
+      "lookupLabel": "AD-Ctrl-s27",
       "@type": [
         "https://openminds.ebrains.eu/core/Subject"
       ],
-      "states": [
+      "studiedState": [
         {
-          "label": "AD-Ctrl-s27-state01",
+          "lookupLabel": "AD-Ctrl-s27-state01",
           "@type": [
             "https://openminds.ebrains.eu/core/SubjectState"
           ],
@@ -5747,13 +5747,13 @@
       ]
     },
     {
-      "label": "AD-Ctrl-s31",
+      "lookupLabel": "AD-Ctrl-s31",
       "@type": [
         "https://openminds.ebrains.eu/core/Subject"
       ],
-      "states": [
+      "studiedState": [
         {
-          "label": "AD-Ctrl-s31-state01",
+          "lookupLabel": "AD-Ctrl-s31-state01",
           "@type": [
             "https://openminds.ebrains.eu/core/SubjectState"
           ],
@@ -6987,13 +6987,13 @@
       ]
     },
     {
-      "label": "AD-Ctrl-s24",
+      "lookupLabel": "AD-Ctrl-s24",
       "@type": [
         "https://openminds.ebrains.eu/core/Subject"
       ],
-      "states": [
+      "studiedState": [
         {
-          "label": "AD-Ctrl-s24-state01",
+          "lookupLabel": "AD-Ctrl-s24-state01",
           "@type": [
             "https://openminds.ebrains.eu/core/SubjectState"
           ],
@@ -8457,13 +8457,13 @@
       ]
     },
     {
-      "label": "APPPS_s96",
+      "lookupLabel": "APPPS_s96",
       "@type": [
         "https://openminds.ebrains.eu/core/Subject"
       ],
-      "states": [
+      "studiedState": [
         {
-          "label": "APPPS_s96-state01",
+          "lookupLabel": "APPPS_s96-state01",
           "@type": [
             "https://openminds.ebrains.eu/core/SubjectState"
           ],
@@ -10161,13 +10161,13 @@
       ]
     },
     {
-      "label": "APPPS_s87",
+      "lookupLabel": "APPPS_s87",
       "@type": [
         "https://openminds.ebrains.eu/core/Subject"
       ],
-      "states": [
+      "studiedState": [
         {
-          "label": "APPPS_s87-state01",
+          "lookupLabel": "APPPS_s87-state01",
           "@type": [
             "https://openminds.ebrains.eu/core/SubjectState"
           ],
@@ -12095,13 +12095,13 @@
       ]
     },
     {
-      "label": "APPPS_s77",
+      "lookupLabel": "APPPS_s77",
       "@type": [
         "https://openminds.ebrains.eu/core/Subject"
       ],
-      "states": [
+      "studiedState": [
         {
-          "label": "APPPS_s77-state01",
+          "lookupLabel": "APPPS_s77-state01",
           "@type": [
             "https://openminds.ebrains.eu/core/SubjectState"
           ],
@@ -13799,13 +13799,13 @@
       ]
     },
     {
-      "label": "APPPS_s26",
+      "lookupLabel": "APPPS_s26",
       "@type": [
         "https://openminds.ebrains.eu/core/Subject"
       ],
-      "states": [
+      "studiedState": [
         {
-          "label": "APPPS_s26-state01",
+          "lookupLabel": "APPPS_s26-state01",
           "@type": [
             "https://openminds.ebrains.eu/core/SubjectState"
           ],
@@ -14353,13 +14353,13 @@
       ]
     },
     {
-      "label": "APPPS_s22",
+      "lookupLabel": "APPPS_s22",
       "@type": [
         "https://openminds.ebrains.eu/core/Subject"
       ],
-      "states": [
+      "studiedState": [
         {
-          "label": "APPPS_s22-state01",
+          "lookupLabel": "APPPS_s22-state01",
           "@type": [
             "https://openminds.ebrains.eu/core/SubjectState"
           ],
@@ -15827,13 +15827,13 @@
       ]
     },
     {
-      "label": "APPPS_s23",
+      "lookupLabel": "APPPS_s23",
       "@type": [
         "https://openminds.ebrains.eu/core/Subject"
       ],
-      "states": [
+      "studiedState": [
         {
-          "label": "APPPS_s23-state01",
+          "lookupLabel": "APPPS_s23-state01",
           "@type": [
             "https://openminds.ebrains.eu/core/SubjectState"
           ],

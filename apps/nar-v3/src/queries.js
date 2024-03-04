@@ -59,9 +59,10 @@ function linkProperty(name, structure, options) {
     const defaultOptions = {
         expectSingle: true,
         filter: "",
-        required: false
+        required: false,
+        type: null
     }
-    const {expectSingle, filter, required} = {...defaultOptions, ...options}
+    const {expectSingle, filter, required, type} = {...defaultOptions, ...options}
     let prop = simpleProperty(name);
 
     if (expectSingle) {
@@ -69,6 +70,16 @@ function linkProperty(name, structure, options) {
     }
     if (structure && structure.length > 0) {
         prop.structure = structure
+    }
+    if (type) {
+        if (typeof prop.path === 'string') {
+            prop.path = [{
+                "@id": prop.path
+            }]
+        }
+        prop.path[0].typeFilter = {
+            "@id": `https://openminds.ebrains.eu/${type}`
+        }
     }
     if (filter) {
         prop.filter = {
