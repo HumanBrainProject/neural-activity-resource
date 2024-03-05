@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import Markdown from 'react-markdown'
 
 import { uuidFromUri } from "../utility.js";
 
@@ -519,7 +520,7 @@ function DatasetCard(props) {
           View in KG Search
         </Button>
       </h1>
-      <Typography variant="h6">{formatAuthors(dataset)}</Typography>
+      <Typography variant="h6" gutterBottom>{formatAuthors(dataset)}</Typography>
       <Stack direction="row" spacing={2} alignItems="center">
         <div>
           <b>Licence: </b>
@@ -534,11 +535,11 @@ function DatasetCard(props) {
           {dataset.versionIdentifier}
         </div>
         <div>
-          <b>Release date: </b>
+          <b>Released: </b>
           {dataset.releaseDate}
         </div>
       </Stack>
-      <p>{dataset.description || dataset.isVersionOf.description}</p>
+      <Markdown>{dataset.description || dataset.isVersionOf.description}</Markdown>
 
       {subjects ? (
         <Stack
