@@ -18,7 +18,9 @@ const query = buildKGQuery(
       S("versionIdentifier"),
       R("isVersionOf", "hasVersion", [S("fullName"), S("description"), S("shortName")]),
       L("accessibility/name", [], {filter: "free access", required: true}),
-      L("experimentalApproach/name", [], {filter: "electrophysiology", required: true})
+      L("experimentalApproach/name", [], {filter: "electrophysiology", required: true}),
+      L("studiedSpecimen", [S("lookupLabel")], { type: "core/Subject", expectSingle: false }),
+      R("activities", "isPartOf", [S("@id"), S("@type")], {expectSingle: false})
   ]
 )
 

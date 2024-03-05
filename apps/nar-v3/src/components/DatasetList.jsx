@@ -1,18 +1,40 @@
 import { Link as RouterLink } from "react-router-dom";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 
 import { uuidFromUri } from "../utility";
 
 function DatasetList(props) {
   return (
-    <ul>
+    <Table>
+        <TableHead>
+            <TableRow>
+                <TableCell component="th">Name</TableCell>
+                <TableCell component="th">Subjects</TableCell>
+                <TableCell component="th">Activities</TableCell>
+            </TableRow>
+        </TableHead>
+        <TableBody>
       {props.datasets.map((dataset) => (
-        <li key={dataset.id}>
+        <TableRow key={dataset.id}><TableCell>
           <RouterLink to={uuidFromUri(dataset.id)}>
             {dataset.fullName || dataset.isVersionOf.fullName}
           </RouterLink>
-        </li>
+        </TableCell>
+        <TableCell>
+        {dataset.studiedSpecimen.length}
+        </TableCell>
+        <TableCell>
+        {dataset.activities.length}
+        </TableCell>
+        </TableRow>
       ))}
-    </ul>
+      </TableBody>
+    </Table>
   );
 }
 
