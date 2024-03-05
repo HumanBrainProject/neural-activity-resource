@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import Markdown from 'react-markdown'
+import Markdown from "react-markdown";
 
 import { uuidFromUri } from "../utility.js";
 
@@ -41,8 +41,10 @@ function formatQuant(val) {
     }
   } else if (val.maxValue) {
     return `<=${val.maxValue} ${formatUnits(val.maxValueUnit)}`;
-  } else {
+  } else if (val.value) {
     return `${val.value} ${formatUnits(val.unit)}`;
+  } else {
+    return "";
   }
 }
 
@@ -132,7 +134,7 @@ function SubjectCard(props) {
           <dd>{subject.studiedState[0].ageCategory}</dd>
           <dt>Pathologies</dt>
           <dd>
-            {subject.studiedState[0].pathology
+            {subject.studiedState[0].pathology.length > 0
               ? subject.studiedState[0].pathology[0].name
               : "none"}
           </dd>
@@ -161,17 +163,20 @@ function SlicePreparationCard(props) {
           <p>{activity.label}</p>
           <dl>
             <dt>Device name</dt>
-            <dd>{activity.deviceUsage[0].device.name}</dd>
+            <dd>{activity.device[0].device.name}</dd>
             <dt>Device type</dt>
-            <dd>{activity.deviceUsage[0].device.deviceType.name}</dd>
+            <dd>{activity.device[0].device.deviceType}</dd>
             <dt>Manufacturer</dt>
-            <dd>{activity.deviceUsage[0].device.manufacturer.fullName}</dd>
+            <dd>
+              {activity.device[0].device.manufacturer.fullName ||
+                activity.device[0].device.manufacturer.shortName}
+            </dd>
             <dt>Slice thickness</dt>
-            <dd>{formatQuant(activity.deviceUsage[0].sliceThickness)}</dd>
+            <dd>{formatQuant(activity.device[0].sliceThickness)}</dd>
             <dt>Slicing plane</dt>
-            <dd>{activity.deviceUsage[0].slicingPlane.name}</dd>
+            <dd>{activity.device[0].slicingPlane}</dd>
             <dt>Study targets</dt>
-            <dd>{activity.studyTargets.map((item) => item.name).join(", ")}</dd>
+            <dd>{activity.studyTarget.join(", ")}</dd>
             <dt>Temperature</dt>
             <dd>{formatQuant(activity.temperature)}</dd>
             <dt>Dissecting solution (full details to come)</dt>
@@ -243,26 +248,26 @@ function CellPatchingCard(props) {
 
           <dl>
             <dt>Electrode description</dt>
-            <dd>{activity.deviceUsage[0].device.description}</dd>
-            {/* activity.deviceUsage[0].device.deviceType.name */}
-            {/* activity.deviceUsage[0].device.manufacturer.fullName */}
+            <dd>{activity.device[0].device.description}</dd>
+            {/* activity.device[0].device.deviceType.name */}
+            {/* activity.device[0].device.manufacturer.fullName */}
             <dt>Pipette solution (more details to come)</dt>
-            <dd>{activity.deviceUsage[0].pipetteSolution.name}</dd>
+            <dd>{activity.device[0].pipetteSolution.name}</dd>
             <dt>Seal resistance</dt>
             <dd>
-              {activity.deviceUsage[0].sealResistance.values
+              {activity.device[0].sealResistance.value
                 .map((item) => formatQuant(item))
                 .join(", ")}
             </dd>
             <dt>Series resistance</dt>
             <dd>
-              {activity.deviceUsage[0].seriesResistance.values
+              {activity.device[0].seriesResistance.value
                 .map((item) => formatQuant(item))
                 .join(", ")}
             </dd>
             <dt>Holding potential</dt>
             <dd>
-              {activity.deviceUsage[0].holdingPotential.values
+              {activity.device[0].holdingPotential.value
                 .map((item) => formatQuant(item))
                 .join(", ")}
             </dd>
@@ -274,7 +279,7 @@ function CellPatchingCard(props) {
             <dt>Description</dt>
             <dd>{activity.description}</dd>
             <dt>Type</dt>
-            <dd>{activity.variation.name}</dd>
+            <dd>{activity.variation}</dd>
           </dl>
         </Box>
       </>
@@ -314,7 +319,7 @@ function RecordingCard(props) {
 
   if (recording) {
     const stimulusSpec = JSON.parse(
-      stimulation.stimulus[0].specifications[0].configuration
+      stimulation.stimulus[0].specification.configuration
     );
 
     return (
@@ -327,15 +332,15 @@ function RecordingCard(props) {
             <dt>Description</dt>
             <dd>{recording.description}</dd>
             <dt>Additional remarks</dt>
-            <dd>{recording.recording[0].metadata.additionalRemarks}</dd>
+            <dd>{recording.device.metadata.additionalRemarks}</dd>
             <dt>Sampling frequency</dt>
             <dd>
-              {formatQuant(recording.recording[0].metadata.samplingFrequency)}
+              {formatQuant(recording.device.metadata.samplingFrequency)}
             </dd>
             <dt>Channels</dt>
             <dd>
               <ul>
-                {recording.recording[0].metadata.channels.map((item) => (
+                {recording.device.metadata.channel.map((item) => (
                   <li key={item.internalIdentifier}>
                     {item.internalIdentifier} ({formatUnits(item.unit)})
                   </li>
@@ -350,7 +355,7 @@ function RecordingCard(props) {
             <dt>Type</dt>
             <dd>Current injection</dd>
             <dt>Description</dt>
-            <dd>{stimulation.stimulus[0].label}</dd>
+            <dd>{stimulation.stimulus[0].lookupLabel}</dd>
             <dt>Epoch duration</dt>
             <dd>{formatQuant(stimulation.stimulus[0].epoch)}</dd>
             <dt>Identifier</dt>
@@ -379,7 +384,7 @@ function DataFileCard(props) {
   if (fileObj) {
     return (
       <>
-        <Connector />
+        <Connection />
         <Box sx={styles.entity} component={Paper} variant="outlined">
           <h2>File {fileObj.name}</h2>
           <dl>
@@ -396,7 +401,7 @@ function DataFileCard(props) {
               ))}
             </dd>
             <dt>Size</dt>
-            <dd>{formatQuant(fileObj.size)}</dd>
+            <dd>{formatQuant(fileObj.storageSize)}</dd>
           </dl>
         </Box>
       </>
@@ -426,7 +431,7 @@ function DatasetCard(props) {
     if (
       index >= 0 &&
       index <
-        subjects[subjectIndex].studiedState[0].slicePreparation[0].slices.length
+        subjects[subjectIndex].studiedState[0].slicePreparation[0].output.length
     ) {
       _setSliceIndex(index);
     }
@@ -444,7 +449,7 @@ function DatasetCard(props) {
   const getSlices = (subjectIndex) => {
     const slicePrep = getSlicePreparation(subjectIndex);
     if (slicePrep) {
-      return slicePrep.slices;
+      return slicePrep.output;
     } else {
       return null;
     }
@@ -454,6 +459,8 @@ function DatasetCard(props) {
     const slices = getSlices(subjectIndex);
     if (slices) {
       const slice = slices[sliceIndex];
+      console.log("cell patching:");
+      console.log(slice.cellPatching[0]);
       return slice.cellPatching[0];
     } else {
       return null;
@@ -463,7 +470,9 @@ function DatasetCard(props) {
   const getPatchedCell = (subjectIndex, sliceIndex) => {
     const cellPatching = getCellPatching(subjectIndex, sliceIndex);
     if (cellPatching) {
-      return cellPatching.patchedCells[0];
+      console.log("patched cell:");
+      console.log(cellPatching.output[0]);
+      return cellPatching.output[0];
     } else {
       return null;
     }
@@ -490,7 +499,7 @@ function DatasetCard(props) {
   const getDataFiles = (subjectIndex, sliceIndex) => {
     const recordingActivity = getRecordingActivity(subjectIndex, sliceIndex);
     if (recordingActivity) {
-      return recordingActivity.files[0];
+      return recordingActivity.output[0];
     } else {
       return null;
     }
@@ -520,7 +529,9 @@ function DatasetCard(props) {
           View in KG Search
         </Button>
       </h1>
-      <Typography variant="h6" gutterBottom>{formatAuthors(dataset)}</Typography>
+      <Typography variant="h6" gutterBottom>
+        {formatAuthors(dataset)}
+      </Typography>
       <Stack direction="row" spacing={2} alignItems="center">
         <div>
           <b>Licence: </b>
@@ -539,7 +550,9 @@ function DatasetCard(props) {
           {dataset.releaseDate}
         </div>
       </Stack>
-      <Markdown>{dataset.description || dataset.isVersionOf.description}</Markdown>
+      <Markdown>
+        {dataset.description || dataset.isVersionOf.description}
+      </Markdown>
 
       {subjects ? (
         <Stack
