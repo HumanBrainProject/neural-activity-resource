@@ -24,7 +24,6 @@ import Connection from "./Connection";
 import { NavigateNext, NavigatePrevious } from "./Navigation";
 import styles from "../styles";
 
-
 function SliceCard(props) {
   if (props.slices) {
     const slice = props.slices[props.index].slice;
@@ -36,9 +35,7 @@ function SliceCard(props) {
           <Stack direction="row" spacing={1}>
             <Stack sx={{ width: "60px" }} justifyContent="center">
               {props.index > 0 ? (
-                <NavigatePrevious
-                  onClick={() => props.setIndex(props.index - 1)}
-                />
+                <NavigatePrevious onClick={() => props.setIndex(props.index - 1)} />
               ) : (
                 ""
               )}
@@ -50,9 +47,7 @@ function SliceCard(props) {
               </p>
               <dl>
                 <dt>Location (todo: add link outs)</dt>
-                <dd>
-                  {slice.anatomicalLocation.map((item) => item.name).join(", ")}
-                </dd>
+                <dd>{slice.anatomicalLocation.map((item) => item.name).join(", ")}</dd>
               </dl>
             </Box>
             <Stack sx={{ width: "60px" }} justifyContent="center">

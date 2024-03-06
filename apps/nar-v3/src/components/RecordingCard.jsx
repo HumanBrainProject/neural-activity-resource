@@ -30,9 +30,7 @@ function RecordingCard(props) {
   const stimulation = props.stimulation;
 
   if (recording) {
-    const stimulusSpec = JSON.parse(
-      stimulation.stimulus[0].specification.configuration
-    );
+    const stimulusSpec = JSON.parse(stimulation.stimulus[0].specification.configuration);
 
     return (
       <>

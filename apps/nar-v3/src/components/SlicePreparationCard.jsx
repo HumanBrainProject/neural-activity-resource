@@ -24,7 +24,6 @@ import { formatQuant } from "../utility";
 import Connection from "./Connection";
 import styles from "../styles";
 
-
 function SlicePreparationCard(props) {
   const activity = props.activity;
 

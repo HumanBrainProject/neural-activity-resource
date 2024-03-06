@@ -38,10 +38,7 @@ const solutionQuery = [
   S("@id"),
   L(
     "hasPart",
-    [
-      L("amount", quantValQuery),
-      L("chemicalProduct", [S("name"), S("@id"), S("@type")])
-    ],
+    [L("amount", quantValQuery), L("chemicalProduct", [S("name"), S("@id"), S("@type")])],
     MULTIPLE
   ),
 ];
@@ -121,110 +118,102 @@ const query = buildKGQuery("core/DatasetVersion", [
                     L("anatomicalLocation", [S("name"), S("@type")], MULTIPLE),
                     L("type/name"),
                   ]),
-                  R("cellPatching", "input", [
-                    S("lookupLabel"),
-                    S("@type"),
-                    L("device", [
-                      // device usage
-                      S("lookupLabel"),
-                      deviceQuery,
-                      L("pipetteSolution", solutionQuery),
-                      L("sealResistance", [
-                        L("value", quantValQuery, MULTIPLE),
-                      ]),
-                      L("seriesResistance", [
-                        L("value", quantValQuery, MULTIPLE),
-                      ]),
-                      L("holdingPotential", [
-                        L("value", quantValQuery, MULTIPLE),
-                      ]),
-                    ], MULTIPLE),
-                    L("tissueBathSolution", solutionQuery),
-                    L("bathTemperature", quantValQuery),
-                    S("description"),
-                    L("variation/name"),
-                    L("output", [
-                      // patched cells
+                  R(
+                    "cellPatching",
+                    "input",
+                    [
                       S("lookupLabel"),
                       S("@type"),
-                      R("cell", "studiedState", [
-                        S("internalIdentifier"),
-                        L(
-                          "anatomicalLocation",
-                          [S("name"), S("@type")],
-                          MULTIPLE
-                        ),
-                        L("type/name"),
-                      ]),
-                      R(
-                        "recordingActivity",
-                        "input",
+                      L(
+                        "device",
                         [
+                          // device usage
                           S("lookupLabel"),
-                          S("@type"),
-                          S("description"),
-                          S("internalIdentifier"),
-                          L("device", [
-                            R("metadata", "recordedWith", [
-                              S("name"),
-                              S("additionalRemarks"),
-                              L("samplingFrequency", quantValQuery),
-                              L(
-                                "channel",
-                                [S("internalIdentifier"), L("unit/name")],
-                                MULTIPLE
-                              ),
-                            ]),
-                          ]),
-                          L(
-                            "output",
-                            [
-                              S("@id"),
-                              S("name"),
-                              S("IRI"),
-                              S("dataType/name"),
-                              S("format/name"),
-                              L(
-                                "hash",
-                                [S("algorithm"), S("digest")],
-                                MULTIPLE
-                              ),
-                              L("storageSize", [S("value"), L("unit/name")]),
-                            ],
-                            MULTIPLE
-                          ),
+                          deviceQuery,
+                          L("pipetteSolution", solutionQuery),
+                          L("sealResistance", [L("value", quantValQuery, MULTIPLE)]),
+                          L("seriesResistance", [L("value", quantValQuery, MULTIPLE)]),
+                          L("holdingPotential", [L("value", quantValQuery, MULTIPLE)]),
                         ],
-                        { type: "ephys/RecordingActivity", expectSingle: false }
+                        MULTIPLE
                       ),
-                      R(
-                        "stimulationActivity",
-                        "input",
+                      L("tissueBathSolution", solutionQuery),
+                      L("bathTemperature", quantValQuery),
+                      S("description"),
+                      L("variation/name"),
+                      L(
+                        "output",
                         [
+                          // patched cells
                           S("lookupLabel"),
                           S("@type"),
-                          L(
-                            "stimulus",
+                          R("cell", "studiedState", [
+                            S("internalIdentifier"),
+                            L("anatomicalLocation", [S("name"), S("@type")], MULTIPLE),
+                            L("type/name"),
+                          ]),
+                          R(
+                            "recordingActivity",
+                            "input",
                             [
                               S("lookupLabel"),
                               S("@type"),
                               S("description"),
-                              L("epoch", quantValQuery),
                               S("internalIdentifier"),
-                              L("specification", [
-                                S("lookupLabel"),
-                                S("configuration"),
+                              L("device", [
+                                R("metadata", "recordedWith", [
+                                  S("name"),
+                                  S("additionalRemarks"),
+                                  L("samplingFrequency", quantValQuery),
+                                  L("channel", [S("internalIdentifier"), L("unit/name")], MULTIPLE),
+                                ]),
                               ]),
+                              L(
+                                "output",
+                                [
+                                  S("@id"),
+                                  S("name"),
+                                  S("IRI"),
+                                  S("dataType/name"),
+                                  S("format/name"),
+                                  L("hash", [S("algorithm"), S("digest")], MULTIPLE),
+                                  L("storageSize", [S("value"), L("unit/name")]),
+                                ],
+                                MULTIPLE
+                              ),
                             ],
-                            MULTIPLE
+                            { type: "ephys/RecordingActivity", expectSingle: false }
+                          ),
+                          R(
+                            "stimulationActivity",
+                            "input",
+                            [
+                              S("lookupLabel"),
+                              S("@type"),
+                              L(
+                                "stimulus",
+                                [
+                                  S("lookupLabel"),
+                                  S("@type"),
+                                  S("description"),
+                                  L("epoch", quantValQuery),
+                                  S("internalIdentifier"),
+                                  L("specification", [S("lookupLabel"), S("configuration")]),
+                                ],
+                                MULTIPLE
+                              ),
+                            ],
+                            {
+                              type: "stimulation/StimulationActivity",
+                              expectSingle: false,
+                            }
                           ),
                         ],
-                        {
-                          type: "stimulation/StimulationActivity",
-                          expectSingle: false,
-                        }
+                        MULTIPLE
                       ),
-                    ], MULTIPLE),
-                  ], MULTIPLE),
+                    ],
+                    MULTIPLE
+                  ),
                 ],
                 MULTIPLE
               ),
@@ -240,11 +229,7 @@ const query = buildKGQuery("core/DatasetVersion", [
 ]);
 
 export async function loader({ params }) {
-  const datasetPromise = datastore.getKGItem(
-    "datasets detail",
-    query,
-    params.datasetId
-  );
+  const datasetPromise = datastore.getKGItem("datasets detail", query, params.datasetId);
   console.log(datasetPromise);
   return defer({ dataset: datasetPromise });
 }
@@ -255,21 +240,13 @@ function Dataset() {
   return (
     <div id="dataset">
       <React.Suspense fallback={<ProgressIndicator />}>
-        <Await
-          resolve={data.dataset}
-          errorElement={<p>Error loading dataset.</p>}
-        >
+        <Await resolve={data.dataset} errorElement={<p>Error loading dataset.</p>}>
           {(dataset) => {
             console.log("Resolving dataset in dataset.jsx");
             console.log(dataset);
             return (
               <>
-                <Navigation
-                  location={[
-                    "Datasets",
-                    uuidFromUri(dataset.id || dataset["@id"]),
-                  ]}
-                />
+                <Navigation location={["Datasets", uuidFromUri(dataset.id || dataset["@id"])]} />
                 <DatasetCard dataset={dataset} />
               </>
             );

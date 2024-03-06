@@ -22,8 +22,7 @@ import Paper from "@mui/material/Paper";
 
 import Connection from "./Connection";
 import styles from "../styles";
-import {formatQuant} from "../utility";
-
+import { formatQuant } from "../utility";
 
 function CellPatchingCard(props) {
   const activity = props.activity;
@@ -45,9 +44,7 @@ function CellPatchingCard(props) {
             <dd>{activity.device[0].pipetteSolution.name}</dd>
             <dt>Seal resistance</dt>
             <dd>
-              {activity.device[0].sealResistance.value
-                .map((item) => formatQuant(item))
-                .join(", ")}
+              {activity.device[0].sealResistance.value.map((item) => formatQuant(item)).join(", ")}
             </dd>
             <dt>Series resistance</dt>
             <dd>

@@ -27,25 +27,25 @@ class DataStore {
       "datasets summary": {},
       "datasets detail": {},
       "patch clamp recordings summary": {},
-      "patch clamp recordings detail": {}
+      "patch clamp recordings detail": {},
     };
     //this.cache["datasets detail"][uuidFromUri(examplePatchClampData["@id"])] = examplePatchClampData;
     this.cache["datasets detail"]["example"] = examplePatchClampData;
   }
 
-  buildRequestConfig(method="GET", body={}) {
+  buildRequestConfig(method = "GET", body = {}) {
     let token = sessionStorage.getItem("token");
     let config = {
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      method: method
-    }
+      method: method,
+    };
     if (body) {
-      config.body = body
+      config.body = body;
     }
-    return config
+    return config;
   }
 
   async queryKG(kgQuery, searchParams) {
@@ -60,7 +60,7 @@ class DataStore {
   async getKGItem(cacheLabel, kgQuery, instanceId, stage = kgDefaultStage) {
     console.log("getKGItem " + cacheLabel + instanceId);
     if (!this.cache[cacheLabel][instanceId]) {
-      const searchParams = {stage: stage, instanceId: instanceId};
+      const searchParams = { stage: stage, instanceId: instanceId };
       const result = await this.queryKG(kgQuery, searchParams);
       const items = result.data;
       this.cache[cacheLabel][instanceId] = items[0];
@@ -68,7 +68,14 @@ class DataStore {
     return this.cache[cacheLabel][instanceId];
   }
 
-  async getKGData(cacheLabel, kgQuery, searchFilters, stage = kgDefaultStage, size = 1000, from = 0) {
+  async getKGData(
+    cacheLabel,
+    kgQuery,
+    searchFilters,
+    stage = kgDefaultStage,
+    size = 1000,
+    from = 0
+  ) {
     console.log("getKGData " + cacheLabel);
     if (isEmpty(this.cache[cacheLabel])) {
       // if the cache is empty we need to fill it
@@ -77,10 +84,10 @@ class DataStore {
         returnTotalResults: true,
         stage: stage,
         size: size,
-        from: from
-      }
+        from: from,
+      };
       if (searchFilters) {
-        searchParams = {...searchParams, searchFilters}
+        searchParams = { ...searchParams, searchFilters };
       }
       const result = await this.queryKG(kgQuery, searchParams);
       const items = result.data;
@@ -90,7 +97,7 @@ class DataStore {
     }
     const itemArray = Object.values(this.cache[cacheLabel]);
     console.log(itemArray);
-    return itemArray
+    return itemArray;
   }
 
   async count(kgQuery, searchFilters, stage = kgDefaultStage) {
@@ -98,13 +105,13 @@ class DataStore {
       returnTotalResults: true,
       stage: stage,
       size: 1,
-      from: 0
-    }
+      from: 0,
+    };
     if (searchFilters) {
-      searchParams = {...searchParams, searchFilters}
+      searchParams = { ...searchParams, searchFilters };
     }
     const result = await this.queryKG(kgQuery, searchParams);
-    return result.total
+    return result.total;
   }
 }
 

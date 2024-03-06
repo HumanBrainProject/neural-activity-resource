@@ -50,8 +50,7 @@ function DatasetCard(props) {
   const setSliceIndex = (index) => {
     if (
       index >= 0 &&
-      index <
-        subjects[subjectIndex].studiedState[0].slicePreparation[0].output.length
+      index < subjects[subjectIndex].studiedState[0].slicePreparation[0].output.length
     ) {
       _setSliceIndex(index);
     }
@@ -126,11 +125,8 @@ function DatasetCard(props) {
   };
 
   const formatAuthors = (dataset) => {
-    const authors =
-      dataset.author.length > 0 ? dataset.author : dataset.isVersionOf.author;
-    return authors
-      .map((person) => `${person.givenName} ${person.familyName}`)
-      .join(", ");
+    const authors = dataset.author.length > 0 ? dataset.author : dataset.isVersionOf.author;
+    return authors.map((person) => `${person.givenName} ${person.familyName}`).join(", ");
   };
 
   console.log("Rendering dataset in DatasetCard.jsx");
@@ -170,9 +166,7 @@ function DatasetCard(props) {
           {dataset.releaseDate}
         </div>
       </Stack>
-      <Markdown>
-        {dataset.description || dataset.isVersionOf.description}
-      </Markdown>
+      <Markdown>{dataset.description || dataset.isVersionOf.description}</Markdown>
 
       {subjects ? (
         <Stack
@@ -181,23 +175,13 @@ function DatasetCard(props) {
           spacing={2}
           sx={{ marginBottom: 5, marginTop: 3 }}
         >
-          <SubjectCard
-            subjects={subjects}
-            index={subjectIndex}
-            setIndex={setSubjectIndex}
-          />
+          <SubjectCard subjects={subjects} index={subjectIndex} setIndex={setSubjectIndex} />
 
           <SlicePreparationCard activity={getSlicePreparation(subjectIndex)} />
 
-          <SliceCard
-            slices={getSlices(subjectIndex)}
-            index={sliceIndex}
-            setIndex={setSliceIndex}
-          />
+          <SliceCard slices={getSlices(subjectIndex)} index={sliceIndex} setIndex={setSliceIndex} />
 
-          <CellPatchingCard
-            activity={getCellPatching(subjectIndex, sliceIndex)}
-          />
+          <CellPatchingCard activity={getCellPatching(subjectIndex, sliceIndex)} />
 
           <PatchedCellCard cell={getPatchedCell(subjectIndex, sliceIndex)} />
 

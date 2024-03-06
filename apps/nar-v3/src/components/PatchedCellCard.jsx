@@ -22,7 +22,6 @@ import Paper from "@mui/material/Paper";
 import Connection from "./Connection";
 import styles from "../styles";
 
-
 function PatchedCellCard(props) {
   if (props.cell) {
     const cell = props.cell.cell;
@@ -35,9 +34,7 @@ function PatchedCellCard(props) {
             <h2>Patched cell #{cell.internalIdentifier}</h2>
             <dl>
               <dt>Location</dt>
-              <dd>
-                {cell.anatomicalLocation.map((item) => item.name).join(", ")}
-              </dd>
+              <dd>{cell.anatomicalLocation.map((item) => item.name).join(", ")}</dd>
             </dl>
           </Box>
         </>

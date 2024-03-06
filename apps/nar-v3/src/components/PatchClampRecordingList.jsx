@@ -10,9 +10,7 @@ function PatchClampRecordingList(props) {
     <ul>
       {props.tissueSamples.map((tissueSample) => (
         <li key={tissueSample.id}>
-          <RouterLink to={uuidFromUri(tissueSample.id)}>
-            {tissueSample.lookupLabel}
-          </RouterLink>
+          <RouterLink to={uuidFromUri(tissueSample.id)}>{tissueSample.lookupLabel}</RouterLink>
         </li>
       ))}
     </ul>

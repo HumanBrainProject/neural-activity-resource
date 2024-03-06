@@ -24,7 +24,6 @@ import { formatUnits } from "../utility";
 import { NavigateNext, NavigatePrevious } from "./Navigation";
 import styles from "../styles";
 
-
 function AgeDisplay(props) {
   const age = props.age;
   if (age) {
