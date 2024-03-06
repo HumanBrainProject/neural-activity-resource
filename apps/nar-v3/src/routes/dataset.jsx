@@ -62,6 +62,7 @@ const query = buildKGQuery("core/DatasetVersion", [
   L("ethicsAssessment/name"),
   L("license/shortName"),
   S("releaseDate"),
+  L("technique/name", [], MULTIPLE),
   L("custodian", actorQuery, MULTIPLE),
   L("author", actorQuery, MULTIPLE),
   R("isVersionOf", "hasVersion", [

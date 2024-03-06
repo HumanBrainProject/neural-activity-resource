@@ -13,6 +13,7 @@ function DatasetList(props) {
       <TableHead>
         <TableRow>
           <TableCell component="th">Name</TableCell>
+          <TableCell component="th">Techniques</TableCell>
           <TableCell component="th">Subjects</TableCell>
           <TableCell component="th">Activities</TableCell>
         </TableRow>
@@ -25,6 +26,7 @@ function DatasetList(props) {
                 {dataset.fullName || dataset.isVersionOf.fullName}
               </RouterLink>
             </TableCell>
+            <TableCell>{dataset.technique.join(", ")}</TableCell>
             <TableCell>{dataset.studiedSpecimen.length}</TableCell>
             <TableCell>{dataset.activities.length}</TableCell>
           </TableRow>

@@ -12,6 +12,8 @@ import Navigation from "../components/Navigation";
 import DatasetList from "../components/DatasetList";
 import ProgressIndicator from "../components/ProgressIndicator";
 
+const MULTIPLE = { expectSingle: false };
+
 const query = buildKGQuery("core/DatasetVersion", [
   S("@id"),
   S("fullName"),
@@ -21,8 +23,9 @@ const query = buildKGQuery("core/DatasetVersion", [
   R("isVersionOf", "hasVersion", [S("fullName"), S("description"), S("shortName")]),
   L("accessibility/name", [], { filter: "free access", required: true }),
   L("experimentalApproach/name", [], { filter: "electrophysiology", required: true }),
+  L("technique/name", [], MULTIPLE),
   L("studiedSpecimen", [S("lookupLabel")], { type: "core/Subject", expectSingle: false }),
-  R("activities", "isPartOf", [S("@id"), S("@type")], { expectSingle: false }),
+  R("activities", "isPartOf", [S("@id"), S("@type")], MULTIPLE),
 ]);
 
 export async function loader() {
