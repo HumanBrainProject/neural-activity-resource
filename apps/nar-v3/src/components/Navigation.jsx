@@ -44,4 +44,13 @@ function Navigation(props) {
   );
 }
 
+function NavigateNext(props) {
+  return <div className="pointer-right" onClick={props.onClick} />;
+}
+
+function NavigatePrevious(props) {
+  return <div className="pointer-left" onClick={props.onClick} />;
+}
+
+export { Navigation, NavigateNext, NavigatePrevious }
 export default Navigation;

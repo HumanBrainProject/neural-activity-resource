@@ -1,9 +1,41 @@
+const UNITS_SYMBOLS = {
+  "degree Celsius": "℃",
+  micrometer: "µm",
+  gigaohm: "GΩ",
+  megaohm: "MΩ",
+  millivolt: "mV",
+  hertz: "Hz",
+  millisecond: "ms",
+};
 
+function formatUnits(units) {
+  return UNITS_SYMBOLS[units] || units + "s";
+}
+
+function formatQuant(val) {
+  if (val.minValue) {
+    if (val.maxValue) {
+      return `${val.minValue}-${val.maxValue} ${formatUnits(val.minValueUnit)}`;
+    } else {
+      return `>=${val.minValue} ${formatUnits(val.minValueUnit)}`;
+    }
+  } else if (val.maxValue) {
+    return `<=${val.maxValue} ${formatUnits(val.maxValueUnit)}`;
+  } else if (val.value) {
+    return `${val.value} ${formatUnits(val.unit)}`;
+  } else {
+    return "";
+  }
+}
 
 function uuidFromUri(uri) {
-    const parts = uri.split("/");
-    return parts[parts.length - 1];
-  }
+  const parts = uri.split("/");
+  return parts[parts.length - 1];
+}
 
+function getKGSearchUrl(uri) {
+  const uuid = uuidFromUri(uri);
+  return `https://search.kg.ebrains.eu/instances/${uuid}`;
+}
 
-export { uuidFromUri }
+export { formatQuant, formatUnits, uuidFromUri, getKGSearchUrl };

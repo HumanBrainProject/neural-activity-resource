@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Await, defer, useLoaderData, Link as RouterLink } from "react-router-dom";
 
 import Card from "@mui/material/Card";
@@ -35,7 +35,7 @@ export async function loader() {
 // }
 
 function ModalityCard(props) {
-  const { label, image, text, path, modality, count } = props;
+  const { label, image, path, count } = props;
 
   return (
     <Grid
@@ -46,7 +46,7 @@ function ModalityCard(props) {
       md={4}
     >
       <Card sx={{height: "100%"}}>
-        <CardActionArea component={RouterLink} to={props.path}>
+        <CardActionArea component={RouterLink} to={path}>
         <CardMedia component="img" height="200" image={image} title={label} />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
@@ -59,7 +59,7 @@ function ModalityCard(props) {
   );
 }
 
-export default function Home(props) {
+export default function Home() {
   const data = useLoaderData();
 
   return (

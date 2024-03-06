@@ -31,7 +31,7 @@ export async function loader() {
   return defer({ datasets: datasetsPromise });
 }
 
-function Datasets(props) {
+function Datasets() {
   const data = useLoaderData();
 
   return (

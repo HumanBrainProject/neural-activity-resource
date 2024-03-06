@@ -69,8 +69,7 @@ const router = createBrowserRouter([
 ]);
 
 
-function renderApp(auth) {
-  //datastore.auth = auth;
+function renderApp() {
   ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
       <ThemeProvider theme={theme}>
@@ -91,8 +90,8 @@ function renderApp(auth) {
       </ThemeProvider>
     </React.StrictMode>
   );
-};
+}
 
 
 window.addEventListener('DOMContentLoaded', () => initAuth(renderApp));
-//window.addEventListener('DOMContentLoaded', () => renderApp(null));
+//window.addEventListener('DOMContentLoaded', () => renderApp());

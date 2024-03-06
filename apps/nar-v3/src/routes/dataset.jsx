@@ -249,7 +249,7 @@ export async function loader({ params }) {
   return defer({ dataset: datasetPromise });
 }
 
-function Dataset(props) {
+function Dataset() {
   const data = useLoaderData();
 
   return (

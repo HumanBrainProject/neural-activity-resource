@@ -1,26 +1,24 @@
 import { kgUrl, kgDefaultStage } from "./globals";
-import { buildKGQuery, simpleProperty as S, linkProperty as L, reverseLinkProperty as R } from "./queries";
-import { uuidFromUri } from "./utility.js";
 import examplePatchClampData from "./example_data/example_patch_clamp_dataset.json";
 
 function isEmpty(obj) {
   return Object.keys(obj).length === 0;
 }
 
-function isAlmostEmpty(obj) {
-  return Object.keys(obj).length <= 1;
-}
+// function isAlmostEmpty(obj) {
+//   return Object.keys(obj).length <= 1;
+// }
 
-function byDate(obj1, obj2) {
-  // most recent first
-  if (obj1.stages[0].start_time < obj2.stages[0].start_time) {
-    return 1;
-  }
-  if (obj1.stages[0].start_time > obj2.stages[0].start_time) {
-    return -1;
-  }
-  return 0;
-}
+// function byDate(obj1, obj2) {
+//   // most recent first
+//   if (obj1.stages[0].start_time < obj2.stages[0].start_time) {
+//     return 1;
+//   }
+//   if (obj1.stages[0].start_time > obj2.stages[0].start_time) {
+//     return -1;
+//   }
+//   return 0;
+// }
 
 class DataStore {
   constructor(baseUrl) {

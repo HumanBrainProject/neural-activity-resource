@@ -69,7 +69,7 @@ export async function loader({ params }) {
   return defer({ tissueSample: tissueSamplePromise });
 }
 
-function PatchClamp(props) {
+function PatchClamp() {
   const data = useLoaderData();
 
   return (
