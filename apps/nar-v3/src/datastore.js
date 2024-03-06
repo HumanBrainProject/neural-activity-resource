@@ -1,5 +1,5 @@
 import { kgUrl, kgDefaultStage } from "./globals";
-import examplePatchClampData from "./example_data/example_patch_clamp_dataset.json";
+//import examplePatchClampData from "./example_data/example_patch_clamp_dataset.json";
 
 function isEmpty(obj) {
   return Object.keys(obj).length === 0;
@@ -26,11 +26,12 @@ class DataStore {
     this.cache = {
       "datasets summary": {},
       "datasets detail": {},
+      "datasets techniques": {},
       "patch clamp recordings summary": {},
       "patch clamp recordings detail": {},
     };
     //this.cache["datasets detail"][uuidFromUri(examplePatchClampData["@id"])] = examplePatchClampData;
-    this.cache["datasets detail"]["example"] = examplePatchClampData;
+    //this.cache["datasets detail"]["example"] = examplePatchClampData;
   }
 
   buildRequestConfig(method = "GET", body = {}) {
