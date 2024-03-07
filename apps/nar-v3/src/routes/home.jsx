@@ -12,10 +12,14 @@ import Chip from "@mui/material/Chip";
 
 import { datastore } from "../datastore";
 import { query as patchClampRecordingsQuery } from "./patchClampRecordings";
+import { ephysDatasetsQuery } from "./queryLibrary";
 import ProgressIndicator from "../components/ProgressIndicator";
 
 export async function loader() {
-  const statisticsPromise = datastore.count(patchClampRecordingsQuery);
+  const statisticsPromise = Promise.all([
+    datastore.count(patchClampRecordingsQuery),
+    datastore.count(ephysDatasetsQuery),
+  ]);
   console.log(statisticsPromise);
   return defer({ counts: statisticsPromise });
 }
@@ -57,7 +61,7 @@ export default function Home() {
   return (
     <React.Suspense fallback={<ProgressIndicator />}>
       <Await resolve={data.counts} errorElement={<p>Error loading tissueSample.</p>}>
-        {(counts) => {
+        {([patchClampCounts, datasetCounts]) => {
           return (
             <Container maxWidth="lg" sx={{ paddingTop: 8, paddingBottom: 8 }}>
               <Grid container spacing={4}>
@@ -65,7 +69,7 @@ export default function Home() {
                   label="Patch clamp recording"
                   path="/patch-clamp"
                   image="/images/WholeCellPatchClamp-03.jpg"
-                  count={counts}
+                  count={patchClampCounts}
                 />
                 <ModalityCard
                   label="Intracellular sharp-electrode recording"
@@ -103,7 +107,7 @@ export default function Home() {
                   path="/datasets"
                   image="/images/dataset_search.png"
                   text=""
-                  count={0}
+                  count={datasetCounts}
                 />
               </Grid>
             </Container>
