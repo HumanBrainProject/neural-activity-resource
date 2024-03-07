@@ -22,6 +22,7 @@ import Stack from "@mui/material/Stack";
 
 import { formatUnits } from "../utility";
 import { NavigateNext, NavigatePrevious } from "./Navigation";
+import KeyValueTable from "./KeyValueTable";
 import styles from "../styles";
 
 function AgeDisplay(props) {
@@ -60,6 +61,20 @@ function SubjectCard(props) {
     }
   }
 
+  const data = {
+    Species: species,
+    Strain: strain,
+    Age: <AgeDisplay age={subject.studiedState[0].age} />,
+    "Age category": subject.studiedState[0].ageCategory,
+    Pathologies:
+      subject.studiedState[0].pathology.length > 0
+        ? subject.studiedState[0].pathology[0].name
+        : "none",
+  };
+  if (!strain) {
+    delete data.Strain;
+  }
+
   return (
     <Stack direction="row" spacing={1}>
       <Stack sx={{ width: "60px" }} justifyContent="center">
@@ -75,30 +90,7 @@ function SubjectCard(props) {
           ({props.index + 1} of {props.subjects.length})
         </p>
         {/* todo: add subject group information */}
-        <dl>
-          <dt>Species</dt>
-          <dd>{species}</dd>
-          {strain ? (
-            <>
-              <dt>Strain</dt>
-              <dd>{strain}</dd>
-            </>
-          ) : (
-            ""
-          )}
-          <dt>Age</dt>
-          <dd>
-            <AgeDisplay age={subject.studiedState[0].age} />
-          </dd>
-          <dt>Age category</dt>
-          <dd>{subject.studiedState[0].ageCategory}</dd>
-          <dt>Pathologies</dt>
-          <dd>
-            {subject.studiedState[0].pathology.length > 0
-              ? subject.studiedState[0].pathology[0].name
-              : "none"}
-          </dd>
-        </dl>
+        <KeyValueTable boldKeys data={data} />
       </Box>
       <Stack sx={{ width: "60px" }} justifyContent="center">
         {props.index < props.subjects.length - 1 ? (

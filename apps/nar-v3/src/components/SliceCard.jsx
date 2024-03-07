@@ -21,6 +21,7 @@ import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 
 import Connection from "./Connection";
+import KeyValueTable from "./KeyValueTable";
 import { NavigateNext, NavigatePrevious } from "./Navigation";
 import styles from "../styles";
 
@@ -29,6 +30,11 @@ function SliceCard(props) {
     const slice = props.slices[props.index].slice;
 
     if (slice) {
+      const data = {
+        "Location (todo: add link outs)": slice.anatomicalLocation
+          .map((item) => item.name)
+          .join(", "),
+      };
       return (
         <>
           <Connection />
@@ -45,10 +51,7 @@ function SliceCard(props) {
               <p>
                 ({props.index + 1} of {props.slices.length})
               </p>
-              <dl>
-                <dt>Location (todo: add link outs)</dt>
-                <dd>{slice.anatomicalLocation.map((item) => item.name).join(", ")}</dd>
-              </dl>
+              <KeyValueTable boldKeys data={data} />
             </Box>
             <Stack sx={{ width: "60px" }} justifyContent="center">
               {props.index < props.slices.length - 1 ? (

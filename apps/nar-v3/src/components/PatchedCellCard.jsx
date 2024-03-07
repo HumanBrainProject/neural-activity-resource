@@ -20,6 +20,7 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 
 import Connection from "./Connection";
+import KeyValueTable from "./KeyValueTable";
 import styles from "../styles";
 
 function PatchedCellCard(props) {
@@ -27,15 +28,15 @@ function PatchedCellCard(props) {
     const cell = props.cell.cell;
 
     if (cell) {
+      const data = {
+        Location: cell.anatomicalLocation.map((item) => item.name).join(", "),
+      };
       return (
         <>
           <Connection />
           <Box sx={styles.entity} component={Paper} variant="outlined">
             <h2>Patched cell #{cell.internalIdentifier}</h2>
-            <dl>
-              <dt>Location</dt>
-              <dd>{cell.anatomicalLocation.map((item) => item.name).join(", ")}</dd>
-            </dl>
+            <KeyValueTable boldKeys data={data} />
           </Box>
         </>
       );

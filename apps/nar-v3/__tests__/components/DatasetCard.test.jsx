@@ -2,9 +2,7 @@ import { describe, test, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
-
 import DatasetCard from "../../src/components/DatasetCard";
-
 
 describe("DatasetCard component", () => {
   test("should render without errors", async () => {
@@ -545,7 +543,7 @@ describe("DatasetCard component", () => {
           ],
           biologicalSex: "male",
         },
-      ]
+      ],
     };
 
     render(<DatasetCard dataset={dataset} />);

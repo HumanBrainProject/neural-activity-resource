@@ -21,10 +21,26 @@ import Paper from "@mui/material/Paper";
 
 import { formatQuant } from "../utility";
 import Connection from "./Connection";
+import KeyValueTable from "./KeyValueTable";
 import styles from "../styles";
 
 function DataFileCard(props) {
   const fileObj = props.fileObj;
+
+  const data = {
+    "Data type": fileObj.dataType ? fileObj.dataType.name : "unknown",
+    Format: fileObj.format ? fileObj.format.name : "unknown",
+    Hash: (
+      <>
+        {fileObj.hash.map((item) => (
+          <span key={item.algorithm}>
+            {item.algorithm}: {item.digest}&nbsp;
+          </span>
+        ))}
+      </>
+    ),
+    Size: formatQuant(fileObj.storageSize),
+  };
 
   if (fileObj) {
     return (
@@ -32,22 +48,8 @@ function DataFileCard(props) {
         <Connection />
         <Box sx={styles.entity} component={Paper} variant="outlined">
           <h2>File {fileObj.name}</h2>
-          <dl>
-            <dt>Data type</dt>
-            <dd>{fileObj.dataType ? fileObj.dataType.name : "unknown"}</dd>
-            <dt>Format</dt>
-            <dd>{fileObj.format ? fileObj.format.name : "unknown"}</dd>
-            <dt>Hash</dt>
-            <dd>
-              {fileObj.hash.map((item) => (
-                <span key={item.algorithm}>
-                  {item.algorithm}: {item.digest}&nbsp;
-                </span>
-              ))}
-            </dd>
-            <dt>Size</dt>
-            <dd>{formatQuant(fileObj.storageSize)}</dd>
-          </dl>
+
+          <KeyValueTable boldKeys data={data} />
         </Box>
       </>
     );

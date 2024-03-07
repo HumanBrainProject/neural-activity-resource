@@ -17,11 +17,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Fragment } from "react";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 
 import Connection from "./Connection";
+import KeyValueTable from "./KeyValueTable";
 import styles from "../styles";
 import { formatQuant, formatUnits } from "../utility";
 
@@ -30,6 +30,26 @@ function RecordingCard(props) {
   const stimulation = props.stimulation;
 
   if (recording) {
+    const recordingData = {
+      Description: recording.description,
+      "Additional remarks": recording.device.metadata.additionalRemarks,
+      "Sampling frequency": formatQuant(recording.device.metadata.samplingFrequency),
+      Channels: (
+        <ul>
+          {recording.device.metadata.channel.map((item) => (
+            <li key={item.internalIdentifier}>
+              {item.internalIdentifier} ({formatUnits(item.unit)})
+            </li>
+          ))}
+        </ul>
+      ),
+    };
+    const stimulationData = {
+      Type: "Current injection",
+      Description: stimulation.stimulus[0].lookupLabel,
+      "Epoch duration": formatQuant(stimulation.stimulus[0].epoch),
+      Identifier: stimulation.stimulus[0].internalIdentifier,
+    };
     const stimulusSpec = JSON.parse(stimulation.stimulus[0].specification.configuration);
 
     return (
@@ -38,46 +58,14 @@ function RecordingCard(props) {
         <Box sx={styles.activity} component={Paper} variant="outlined">
           <h2>Recording</h2>
           <p>{recording.label}</p>
-          <dl>
-            <dt>Description</dt>
-            <dd>{recording.description}</dd>
-            <dt>Additional remarks</dt>
-            <dd>{recording.device.metadata.additionalRemarks}</dd>
-            <dt>Sampling frequency</dt>
-            <dd>{formatQuant(recording.device.metadata.samplingFrequency)}</dd>
-            <dt>Channels</dt>
-            <dd>
-              <ul>
-                {recording.device.metadata.channel.map((item) => (
-                  <li key={item.internalIdentifier}>
-                    {item.internalIdentifier} ({formatUnits(item.unit)})
-                  </li>
-                ))}
-              </ul>
-            </dd>
-          </dl>
+          <KeyValueTable boldKeys data={recordingData} />
 
           <h2>Stimulation</h2>
           <p>{stimulation.label}</p>
-          <dl>
-            <dt>Type</dt>
-            <dd>Current injection</dd>
-            <dt>Description</dt>
-            <dd>{stimulation.stimulus[0].lookupLabel}</dd>
-            <dt>Epoch duration</dt>
-            <dd>{formatQuant(stimulation.stimulus[0].epoch)}</dd>
-            <dt>Identifier</dt>
-            <dd>{stimulation.stimulus[0].internalIdentifier}</dd>
-          </dl>
+          <KeyValueTable boldKeys data={stimulationData} />
+
           <h3>Specification</h3>
-          <dl>
-            {Object.entries(stimulusSpec).map((item, index) => (
-              <Fragment key={index}>
-                <dt key={`key${index}`}>{item[0]}</dt>
-                <dd key={`value${index}`}>{item[1]}</dd>
-              </Fragment>
-            ))}
-          </dl>
+          <KeyValueTable boldKeys data={stimulusSpec} />
         </Box>
       </>
     );

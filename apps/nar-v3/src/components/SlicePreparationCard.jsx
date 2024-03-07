@@ -22,39 +22,32 @@ import Paper from "@mui/material/Paper";
 
 import { formatQuant } from "../utility";
 import Connection from "./Connection";
+import KeyValueTable from "./KeyValueTable";
 import styles from "../styles";
 
 function SlicePreparationCard(props) {
   const activity = props.activity;
 
   if (activity) {
+    const data = {
+      "Device name": activity.device[0].device.name,
+      "Device type": activity.device[0].device.deviceType,
+      Manufacturer:
+        activity.device[0].device.manufacturer.fullName ||
+        activity.device[0].device.manufacturer.shortName,
+      "Slice thickness": formatQuant(activity.device[0].sliceThickness),
+      "Slicing plane": activity.device[0].slicingPlane,
+      "Study targets": activity.studyTarget.join(", "),
+      Temperature: formatQuant(activity.temperature),
+      "Dissecting solution (full details to come)": activity.tissueBathSolution.name,
+    };
     return (
       <>
         <Connection />
         <Box sx={styles.activity} component={Paper} variant="outlined">
           <h2>Slice preparation</h2>
           <p>{activity.label}</p>
-          <dl>
-            <dt>Device name</dt>
-            <dd>{activity.device[0].device.name}</dd>
-            <dt>Device type</dt>
-            <dd>{activity.device[0].device.deviceType}</dd>
-            <dt>Manufacturer</dt>
-            <dd>
-              {activity.device[0].device.manufacturer.fullName ||
-                activity.device[0].device.manufacturer.shortName}
-            </dd>
-            <dt>Slice thickness</dt>
-            <dd>{formatQuant(activity.device[0].sliceThickness)}</dd>
-            <dt>Slicing plane</dt>
-            <dd>{activity.device[0].slicingPlane}</dd>
-            <dt>Study targets</dt>
-            <dd>{activity.studyTarget.join(", ")}</dd>
-            <dt>Temperature</dt>
-            <dd>{formatQuant(activity.temperature)}</dd>
-            <dt>Dissecting solution (full details to come)</dt>
-            <dd>{activity.tissueBathSolution.name}</dd>
-          </dl>
+          <KeyValueTable boldKeys data={data} />
         </Box>
       </>
     );

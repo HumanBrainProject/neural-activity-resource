@@ -21,11 +21,30 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 
 import Connection from "./Connection";
+import KeyValueTable from "./KeyValueTable";
 import styles from "../styles";
 import { formatQuant } from "../utility";
 
 function CellPatchingCard(props) {
   const activity = props.activity;
+
+  const data = {
+    "Electrode description": activity.device[0].device.description,
+    "Pipette solution (more details to come)": activity.device[0].pipetteSolution.name,
+    "Seal resistance": activity.device[0].sealResistance.value
+      .map((item) => formatQuant(item))
+      .join(", "),
+    "Series resistance": activity.device[0].seriesResistance.value
+      .map((item) => formatQuant(item))
+      .join(", "),
+    "Holding potential": activity.device[0].holdingPotential.value
+      .map((item) => formatQuant(item))
+      .join(", "),
+    "Bath solution (more details to come)": activity.tissueBathSolution.name,
+    "Bath temperature": formatQuant(activity.bathTemperature),
+    Description: activity.description,
+    Type: activity.variation,
+  };
 
   if (activity) {
     return (
@@ -34,40 +53,7 @@ function CellPatchingCard(props) {
         <Box sx={styles.activity} component={Paper} variant="outlined">
           <h2>Cell patching</h2>
           <p>{activity.label}</p>
-
-          <dl>
-            <dt>Electrode description</dt>
-            <dd>{activity.device[0].device.description}</dd>
-            {/* activity.device[0].device.deviceType.name */}
-            {/* activity.device[0].device.manufacturer.fullName */}
-            <dt>Pipette solution (more details to come)</dt>
-            <dd>{activity.device[0].pipetteSolution.name}</dd>
-            <dt>Seal resistance</dt>
-            <dd>
-              {activity.device[0].sealResistance.value.map((item) => formatQuant(item)).join(", ")}
-            </dd>
-            <dt>Series resistance</dt>
-            <dd>
-              {activity.device[0].seriesResistance.value
-                .map((item) => formatQuant(item))
-                .join(", ")}
-            </dd>
-            <dt>Holding potential</dt>
-            <dd>
-              {activity.device[0].holdingPotential.value
-                .map((item) => formatQuant(item))
-                .join(", ")}
-            </dd>
-
-            <dt>Bath solution (more details to come)</dt>
-            <dd>{activity.tissueBathSolution.name}</dd>
-            <dt>Bath temperature</dt>
-            <dd>{formatQuant(activity.bathTemperature)}</dd>
-            <dt>Description</dt>
-            <dd>{activity.description}</dd>
-            <dt>Type</dt>
-            <dd>{activity.variation}</dd>
-          </dl>
+          <KeyValueTable boldKeys data={data} />
         </Box>
       </>
     );
