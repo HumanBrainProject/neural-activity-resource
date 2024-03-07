@@ -23,14 +23,14 @@ import Paper from "@mui/material/Paper";
 import Connection from "./Connection";
 import KeyValueTable from "./KeyValueTable";
 import styles from "../styles";
-import { formatQuant } from "../utility";
+import { formatQuant, formatSolution } from "../utility";
 
 function CellPatchingCard(props) {
   const activity = props.activity;
 
   const data = {
     "Electrode description": activity.device[0].device.description,
-    "Pipette solution (more details to come)": activity.device[0].pipetteSolution.name,
+    "Pipette solution": formatSolution(activity.device[0].pipetteSolution.hasPart),
     "Seal resistance": activity.device[0].sealResistance.value
       .map((item) => formatQuant(item))
       .join(", "),
@@ -40,7 +40,7 @@ function CellPatchingCard(props) {
     "Holding potential": activity.device[0].holdingPotential.value
       .map((item) => formatQuant(item))
       .join(", "),
-    "Bath solution (more details to come)": activity.tissueBathSolution.name,
+    "Bath solution": formatSolution(activity.tissueBathSolution.hasPart),
     "Bath temperature": formatQuant(activity.bathTemperature),
     Description: activity.description,
     Type: activity.variation,

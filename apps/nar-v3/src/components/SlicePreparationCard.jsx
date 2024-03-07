@@ -20,7 +20,7 @@ limitations under the License.
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 
-import { formatQuant } from "../utility";
+import { formatQuant, formatSolution } from "../utility";
 import Connection from "./Connection";
 import KeyValueTable from "./KeyValueTable";
 import styles from "../styles";
@@ -39,7 +39,7 @@ function SlicePreparationCard(props) {
       "Slicing plane": activity.device[0].slicingPlane,
       "Study targets": activity.studyTarget.join(", "),
       Temperature: formatQuant(activity.temperature),
-      "Dissecting solution (full details to come)": activity.tissueBathSolution.name,
+      "Dissecting solution": formatSolution(activity.tissueBathSolution.hasPart),
     };
     return (
       <>

@@ -28,6 +28,16 @@ function formatQuant(val) {
   }
 }
 
+function formatSolution(components) {
+  const parts = [];
+  components.forEach((component) => {
+    const amount = formatQuant(component.amount);
+    const symbol = component.chemicalProduct ? component.chemicalProduct.name : "[missing]";
+    parts.push(`${amount} ${symbol}`);
+  });
+  return parts.join(", ");
+}
+
 function uuidFromUri(uri) {
   const parts = uri.split("/");
   return parts[parts.length - 1];
@@ -38,4 +48,4 @@ function getKGSearchUrl(uri) {
   return `https://search.kg.ebrains.eu/instances/${uuid}`;
 }
 
-export { formatQuant, formatUnits, uuidFromUri, getKGSearchUrl };
+export { formatQuant, formatUnits, formatSolution, uuidFromUri, getKGSearchUrl };

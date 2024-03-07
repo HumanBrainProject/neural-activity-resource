@@ -78,8 +78,6 @@ function DatasetCard(props) {
     const slices = getSlices(subjectIndex);
     if (slices) {
       const slice = slices[sliceIndex];
-      console.log("cell patching:");
-      console.log(slice.cellPatching[0]);
       return slice.cellPatching[0];
     } else {
       return null;
@@ -89,8 +87,6 @@ function DatasetCard(props) {
   const getPatchedCell = (subjectIndex, sliceIndex) => {
     const cellPatching = getCellPatching(subjectIndex, sliceIndex);
     if (cellPatching) {
-      console.log("patched cell:");
-      console.log(cellPatching.output[0]);
       return cellPatching.output[0];
     } else {
       return null;

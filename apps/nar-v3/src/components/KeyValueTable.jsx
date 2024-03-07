@@ -33,9 +33,9 @@ function KeyValueTable(props) {
   }
 
   return (
-      <Table size="small" aria-label="key-value table">
-        <TableBody>{rows}</TableBody>
-      </Table>
+    <Table size="small" aria-label="key-value table">
+      <TableBody>{rows}</TableBody>
+    </Table>
   );
 }
 
