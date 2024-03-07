@@ -14,14 +14,14 @@ function formatUnits(units) {
 }
 
 function formatQuant(val) {
-  // note that using !== matches both null and undefined
-  if (val.minValue !== null) {
-    if (val.maxValue !== null) {
+  // note that using != matches both null and undefined
+  if (val.minValue != null) {
+    if (val.maxValue != null) {
       return `${val.minValue}-${val.maxValue} ${formatUnits(val.minValueUnit)}`;
     } else {
       return `>=${val.minValue} ${formatUnits(val.minValueUnit)}`;
     }
-  } else if (val.maxValue !== null) {
+  } else if (val.maxValue != null) {
     return `<=${val.maxValue} ${formatUnits(val.maxValueUnit)}`;
   } else if (val.value != null) {
     return `${val.value} ${formatUnits(val.unit)}`;
