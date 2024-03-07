@@ -6,6 +6,7 @@ const UNITS_SYMBOLS = {
   millivolt: "mV",
   hertz: "Hz",
   millisecond: "ms",
+  millimolar: "mM",
 };
 
 function formatUnits(units) {
@@ -13,28 +14,32 @@ function formatUnits(units) {
 }
 
 function formatQuant(val) {
-  if (val.minValue) {
-    if (val.maxValue) {
+  // note that using !== matches both null and undefined
+  if (val.minValue !== null) {
+    if (val.maxValue !== null) {
       return `${val.minValue}-${val.maxValue} ${formatUnits(val.minValueUnit)}`;
     } else {
       return `>=${val.minValue} ${formatUnits(val.minValueUnit)}`;
     }
-  } else if (val.maxValue) {
+  } else if (val.maxValue !== null) {
     return `<=${val.maxValue} ${formatUnits(val.maxValueUnit)}`;
-  } else if (val.value) {
+  } else if (val.value != null) {
     return `${val.value} ${formatUnits(val.unit)}`;
   } else {
     return "";
   }
 }
 
-function formatSolution(components) {
+function formatSolution(solution) {
   const parts = [];
-  components.forEach((component) => {
+  solution.hasPart.forEach((component) => {
     const amount = formatQuant(component.amount);
     const symbol = component.chemicalProduct ? component.chemicalProduct.name : "[missing]";
     parts.push(`${amount} ${symbol}`);
   });
+  if (solution.additionalRemarks) {
+    parts.push(solution.additionalRemarks);
+  }
   return parts.join(", ");
 }
 

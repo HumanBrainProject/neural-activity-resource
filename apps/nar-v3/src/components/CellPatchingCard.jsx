@@ -30,7 +30,7 @@ function CellPatchingCard(props) {
 
   const data = {
     "Electrode description": activity.device[0].device.description,
-    "Pipette solution": formatSolution(activity.device[0].pipetteSolution.hasPart),
+    "Pipette solution": formatSolution(activity.device[0].pipetteSolution),
     "Seal resistance": activity.device[0].sealResistance.value
       .map((item) => formatQuant(item))
       .join(", "),
@@ -40,7 +40,7 @@ function CellPatchingCard(props) {
     "Holding potential": activity.device[0].holdingPotential.value
       .map((item) => formatQuant(item))
       .join(", "),
-    "Bath solution": formatSolution(activity.tissueBathSolution.hasPart),
+    "Bath solution": formatSolution(activity.tissueBathSolution),
     "Bath temperature": formatQuant(activity.bathTemperature),
     Description: activity.description,
     Type: activity.variation,

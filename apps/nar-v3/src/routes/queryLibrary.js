@@ -28,6 +28,7 @@ const quantValProperties = [
 const solutionProperties = [
   S("name"),
   S("@id"),
+  S("additionalRemarks"),
   L(
     "hasPart",
     [L("amount", quantValProperties), L("chemicalProduct", [S("name"), S("@id"), S("@type")])],

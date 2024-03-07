@@ -39,7 +39,7 @@ function SlicePreparationCard(props) {
       "Slicing plane": activity.device[0].slicingPlane,
       "Study targets": activity.studyTarget.join(", "),
       Temperature: formatQuant(activity.temperature),
-      "Dissecting solution": formatSolution(activity.tissueBathSolution.hasPart),
+      "Dissecting solution": formatSolution(activity.tissueBathSolution),
     };
     return (
       <>
