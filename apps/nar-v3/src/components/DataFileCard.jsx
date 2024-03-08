@@ -27,22 +27,22 @@ import styles from "../styles";
 function DataFileCard(props) {
   const fileObj = props.fileObj;
 
-  const data = {
-    "Data type": fileObj.dataType ? fileObj.dataType.name : "unknown",
-    Format: fileObj.format ? fileObj.format.name : "unknown",
-    Hash: (
-      <>
-        {fileObj.hash.map((item) => (
-          <span key={item.algorithm}>
-            {item.algorithm}: {item.digest}&nbsp;
-          </span>
-        ))}
-      </>
-    ),
-    Size: formatQuant(fileObj.storageSize),
-  };
-
   if (fileObj) {
+    const data = {
+      "Data type": fileObj.dataType ? fileObj.dataType.name : "unknown",
+      Format: fileObj.format ? fileObj.format.name : "unknown",
+      Hash: (
+        <>
+          {fileObj.hash.map((item) => (
+            <span key={item.algorithm}>
+              {item.algorithm}: {item.digest}&nbsp;
+            </span>
+          ))}
+        </>
+      ),
+      Size: formatQuant(fileObj.storageSize),
+    };
+
     return (
       <>
         <Connection />

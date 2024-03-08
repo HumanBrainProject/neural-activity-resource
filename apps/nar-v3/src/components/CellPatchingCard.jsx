@@ -28,25 +28,25 @@ import { formatQuant, formatSolution } from "../utility";
 function CellPatchingCard(props) {
   const activity = props.activity;
 
-  const data = {
-    "Electrode description": activity.device[0].device.description,
-    "Pipette solution": formatSolution(activity.device[0].pipetteSolution),
-    "Seal resistance": activity.device[0].sealResistance.value
-      .map((item) => formatQuant(item))
-      .join(", "),
-    "Series resistance": activity.device[0].seriesResistance.value
-      .map((item) => formatQuant(item))
-      .join(", "),
-    "Holding potential": activity.device[0].holdingPotential.value
-      .map((item) => formatQuant(item))
-      .join(", "),
-    "Bath solution": formatSolution(activity.tissueBathSolution),
-    "Bath temperature": formatQuant(activity.bathTemperature),
-    Description: activity.description,
-    Type: activity.variation,
-  };
-
   if (activity) {
+    const data = {
+      "Electrode description": activity.device[0].device.description,
+      "Pipette solution": formatSolution(activity.device[0].pipetteSolution),
+      "Seal resistance": activity.device[0].sealResistance.value
+        .map((item) => formatQuant(item))
+        .join(", "),
+      "Series resistance": activity.device[0].seriesResistance.value
+        .map((item) => formatQuant(item))
+        .join(", "),
+      "Holding potential": activity.device[0].holdingPotential.value
+        .map((item) => formatQuant(item))
+        .join(", "),
+      "Bath solution": formatSolution(activity.tissueBathSolution),
+      "Bath temperature": formatQuant(activity.bathTemperature),
+      Description: activity.description,
+      Type: activity.variation,
+    };
+
     return (
       <>
         <Connection />
