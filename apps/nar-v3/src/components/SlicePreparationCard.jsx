@@ -25,6 +25,15 @@ import Connection from "./Connection";
 import KeyValueTable from "./KeyValueTable";
 import styles from "../styles";
 
+
+function formatManufacturer(manufacturer) {
+  if (manufacturer) {
+    return manufacturer.fullName || manufacturer.shortName;
+  } else {
+    return "unknown";
+  }
+}
+
 function SlicePreparationCard(props) {
   const activity = props.activity;
 
@@ -32,9 +41,7 @@ function SlicePreparationCard(props) {
     const data = {
       "Device name": activity.device[0].device.name,
       "Device type": activity.device[0].device.deviceType,
-      Manufacturer:
-        activity.device[0].device.manufacturer.fullName ||
-        activity.device[0].device.manufacturer.shortName,
+      Manufacturer: formatManufacturer(activity.device[0].device.manufacturer),
       "Slice thickness": formatQuant(activity.device[0].sliceThickness),
       "Slicing plane": activity.device[0].slicingPlane,
       "Study targets": activity.studyTarget.join(", "),
