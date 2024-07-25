@@ -36,26 +36,34 @@ class DataStore {
 
   buildRequestConfig(method = "GET", body = {}) {
     let token = sessionStorage.getItem("token");
-    let config = {
-      headers: {
-        Authorization: "Bearer " + token,
-        "Content-Type": "application/json",
-      },
-      method: method,
-    };
-    if (body) {
-      config.body = body;
+    if (token) {
+      let config = {
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
+        },
+        method: method,
+      };
+      if (body) {
+        config.body = body;
+      }
+      return config;
+    } else {
+      return null;
     }
-    return config;
   }
 
   async queryKG(kgQuery, searchParams) {
     const searchParamStr = new URLSearchParams(searchParams).toString();
     let url = `${this.baseUrl}/queries?${searchParamStr}`;
     const config = this.buildRequestConfig("POST", JSON.stringify(kgQuery));
-    const response = await fetch(url, config);
-    const result = await response.json();
-    return result;
+    if (config) {
+      const response = await fetch(url, config);
+      const result = await response.json();
+      return result;
+    } else {
+      return null;
+    }
   }
 
   async getKGItem(cacheLabel, kgQuery, instanceId, stage = kgDefaultStage) {
@@ -63,8 +71,10 @@ class DataStore {
     if (!this.cache[cacheLabel][instanceId]) {
       const searchParams = { stage: stage, instanceId: instanceId };
       const result = await this.queryKG(kgQuery, searchParams);
-      const items = result.data;
-      this.cache[cacheLabel][instanceId] = items[0];
+      if (result) {
+        const items = result.data;
+        this.cache[cacheLabel][instanceId] = items[0];
+      }
     }
     return this.cache[cacheLabel][instanceId];
   }
@@ -91,9 +101,11 @@ class DataStore {
         searchParams = { ...searchParams, searchFilters };
       }
       const result = await this.queryKG(kgQuery, searchParams);
-      const items = result.data;
-      for (const index in items) {
-        this.cache[cacheLabel][items[index].id] = items[index];
+      if (result) {
+        const items = result.data;
+        for (const index in items) {
+          this.cache[cacheLabel][items[index].id] = items[index];
+        }
       }
     }
     const itemArray = Object.values(this.cache[cacheLabel]);
@@ -112,7 +124,11 @@ class DataStore {
       searchParams = { ...searchParams, searchFilters };
     }
     const result = await this.queryKG(kgQuery, searchParams);
-    return result.total;
+    if (result) {
+      return result.total;
+    } else {
+      return 0;
+    }
   }
 }
 
