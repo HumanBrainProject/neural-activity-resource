@@ -28,7 +28,7 @@ import { formatQuant, formatSolution } from "../utility";
 
 function formatQuantList(value) {
   if (value) {
-    return value.map((item) => formatQuant(item)).join(", ")
+    return value.value.map((item) => formatQuant(item)).join(", ")
   } else {
     return ""
   }
@@ -42,9 +42,9 @@ function CellPatchingCard(props) {
     const data = {
       "Electrode description": activity.device[0].device.description,
       "Pipette solution": formatSolution(activity.device[0].pipetteSolution),
-      "Seal resistance": formatQuantList(activity.device[0].sealResistance.value),
-      "Series resistance": formatQuantList(activity.device[0].seriesResistance.value),
-      "Holding potential": formatQuantList(activity.device[0].holdingPotential.value),
+      "Seal resistance": formatQuantList(activity.device[0].sealResistance),
+      "Series resistance": formatQuantList(activity.device[0].seriesResistance),
+      "Holding potential": formatQuantList(activity.device[0].holdingPotential),
       "Bath solution": formatSolution(activity.tissueBathSolution),
       "Bath temperature": formatQuant(activity.bathTemperature),
       Description: activity.description,
