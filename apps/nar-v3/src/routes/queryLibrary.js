@@ -129,6 +129,7 @@ const patchClampDatasetQuery = buildKGQuery("core/DatasetVersion", [
                 // slice preparation
                 S("lookupLabel"),
                 S("@type"),
+                S("description"),
                 L(
                   "device",
                   [
@@ -137,6 +138,7 @@ const patchClampDatasetQuery = buildKGQuery("core/DatasetVersion", [
                     deviceProperty,
                     L("sliceThickness", quantValProperties),
                     L("slicingPlane/name"),
+                    L("slicingAngle", quantValProperties)
                   ],
                   MULTIPLE
                 ),

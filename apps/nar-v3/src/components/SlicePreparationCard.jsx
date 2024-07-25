@@ -39,11 +39,13 @@ function SlicePreparationCard(props) {
 
   if (activity) {
     const data = {
+      "Description": activity.description,
       "Device name": activity.device[0].device.name,
       "Device type": activity.device[0].device.deviceType,
       Manufacturer: formatManufacturer(activity.device[0].device.manufacturer),
       "Slice thickness": formatQuant(activity.device[0].sliceThickness),
       "Slicing plane": activity.device[0].slicingPlane,
+      "Slicing angle": formatQuant(activity.device[0].slicingAngle),
       "Study targets": activity.studyTarget.join(", "),
       Temperature: formatQuant(activity.temperature),
       "Dissecting solution": formatSolution(activity.tissueBathSolution),
