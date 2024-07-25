@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - development
 
 jobs:
   to_ebrains:
@@ -16,6 +17,13 @@ jobs:
           source_branch: "master"
           destination_repo: "https://ghpusher:${{ secrets.EBRAINS_GITLAB_ACCESS_TOKEN }}@gitlab.ebrains.eu/data-services/neural-activity-resource.git"
           destination_branch: "main"
+      - name: syncdev
+        uses: wei/git-sync@v3
+        with:
+          source_repo: "HumanBrainProject/neural-activity-resource"
+          source_branch: "development"
+          destination_repo: "https://ghpusher:${{ secrets.EBRAINS_GITLAB_ACCESS_TOKEN }}@gitlab.ebrains.eu/data-services/neural-activity-resource.git"
+          destination_branch: "development"
       - name: synctags
         uses: wei/git-sync@v3
         with:
