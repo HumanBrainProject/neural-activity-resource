@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider, Link as RouterLink } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import { Avatar, CssBaseline, AppBar, Link, Toolbar, Typography, Container } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -65,9 +65,6 @@ const router = createBrowserRouter([
   },
 ]);
 
-function LinkRouter(props) {
-  return <Link {...props} component={RouterLink} />;
-}
 
 function renderApp() {
   ReactDOM.createRoot(document.getElementById("root")).render(
@@ -81,7 +78,7 @@ function renderApp() {
           <Toolbar>
             <Avatar sx={{ mr: 2 }} alt="EBRAINS" src="/favicon.png" />
             <Typography variant="h6" color="inherit" noWrap>
-              <LinkRouter underline="hover" color="inherit" to="/">EBRAINS: Neural Activity Resource (alpha)</LinkRouter>
+              <Link underline="hover" color="inherit" to="/">EBRAINS: Neural Activity Resource (alpha)</Link>
             </Typography>
           </Toolbar>
         </AppBar>
