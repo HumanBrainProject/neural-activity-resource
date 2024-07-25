@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Avatar, CssBaseline, AppBar, Toolbar, Typography, Container } from "@mui/material";
+import { createBrowserRouter, RouterProvider, Link as RouterLink } from "react-router-dom";
+
+import { Avatar, CssBaseline, AppBar, Link, Toolbar, Typography, Container } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { green } from "@mui/material/colors";
 
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
   },
 ]);
 
+function LinkRouter(props) {
+  return <Link {...props} component={RouterLink} />;
+}
+
 function renderApp() {
   ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
@@ -76,7 +81,7 @@ function renderApp() {
           <Toolbar>
             <Avatar sx={{ mr: 2 }} alt="EBRAINS" src="/favicon.png" />
             <Typography variant="h6" color="inherit" noWrap>
-              EBRAINS: Neural Activity Resource (alpha)
+              <LinkRouter underline="hover" color="inherit" to="/">EBRAINS: Neural Activity Resource (alpha)</LinkRouter>
             </Typography>
           </Toolbar>
         </AppBar>

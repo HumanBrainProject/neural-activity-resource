@@ -60,7 +60,7 @@ export default function Home() {
 
   return (
     <React.Suspense fallback={<ProgressIndicator />}>
-      <Await resolve={data.counts} errorElement={<p>Error loading tissueSample.</p>}>
+      <Await resolve={data.counts} errorElement={<p>Error loading statistics.</p>}>
         {([patchClampCounts, datasetCounts]) => {
           return (
             <Container maxWidth="lg" sx={{ paddingTop: 8, paddingBottom: 8 }}>
