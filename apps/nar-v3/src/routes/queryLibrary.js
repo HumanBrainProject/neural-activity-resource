@@ -139,7 +139,7 @@ const patchClampDatasetQuery = buildKGQuery("core/DatasetVersion", [
                     deviceProperty,
                     L("sliceThickness", quantValProperties),
                     L("slicingPlane/name"),
-                    L("slicingAngle", quantValProperties)
+                    L("slicingAngle", quantValProperties),
                   ],
                   MULTIPLE
                 ),
@@ -156,7 +156,19 @@ const patchClampDatasetQuery = buildKGQuery("core/DatasetVersion", [
                       S("lookupLabel"),
                       S("@type"),
                       S("internalIdentifier"),
-                      L("anatomicalLocation", [S("name"), S("@type")], MULTIPLE),
+                      L(
+                        "anatomicalLocation",
+                        [
+                          S("name"),
+                          S("@type"),
+                          S("definition"),
+                          S("description"),
+                          S("interlexIdentifier"),
+                          S("knowledgeSpaceLink"),
+                          S("preferredOntologyIdentifier"),
+                        ],
+                        MULTIPLE
+                      ),
                       L("type/name"),
                     ]),
                     R(
@@ -263,7 +275,7 @@ const patchClampDatasetQuery = buildKGQuery("core/DatasetVersion", [
                   ],
                   MULTIPLE
                 ),
-                L("variation/name")
+                L("variation/name"),
               ],
               MULTIPLE
             ),
