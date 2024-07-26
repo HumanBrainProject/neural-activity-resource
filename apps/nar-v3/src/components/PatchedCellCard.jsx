@@ -30,6 +30,7 @@ function PatchedCellCard(props) {
     if (cell) {
       const data = {
         Location: cell.anatomicalLocation.map((item) => item.name).join(", "),
+        "Cell type": cell.origin,
       };
       return (
         <>

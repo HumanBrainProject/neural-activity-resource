@@ -192,6 +192,7 @@ const patchClampDatasetQuery = buildKGQuery("core/DatasetVersion", [
                               S("internalIdentifier"),
                               L("anatomicalLocation", [S("name"), S("@type")], MULTIPLE),
                               L("type/name"),
+                              L("origin/name"),
                             ]),
                             R(
                               "recordingActivity",
