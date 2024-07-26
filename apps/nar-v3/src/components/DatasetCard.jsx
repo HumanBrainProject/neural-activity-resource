@@ -37,6 +37,7 @@ function DatasetCard(props) {
 
   const [subjectIndex, _setSubjectIndex] = useState(0);
   const [sliceIndex, _setSliceIndex] = useState(0);
+  const [fileIndex, _setFileIndex] = useState(0);
 
   const setSubjectIndex = (index) => {
     if (index >= 0 && index < subjects.length) {
@@ -114,9 +115,19 @@ function DatasetCard(props) {
   const getDataFiles = (subjectIndex, sliceIndex) => {
     const recordingActivity = getRecordingActivity(subjectIndex, sliceIndex);
     if (recordingActivity) {
-      return recordingActivity.output[0];
+      return recordingActivity.output;
     } else {
       return null;
+    }
+  };
+
+  const setFileIndex = (index) => {
+    const dataFiles = getDataFiles(subjectIndex, sliceIndex);
+    if (
+      index >= 0 &&
+      index < dataFiles.length
+    ) {
+      _setFileIndex(index);
     }
   };
 
@@ -186,7 +197,7 @@ function DatasetCard(props) {
             stimulation={getStimulationActivity(subjectIndex, sliceIndex)}
           />
 
-          <DataFileCard fileObj={getDataFiles(subjectIndex, sliceIndex)} />
+          <DataFileCard fileObjects={getDataFiles(subjectIndex, sliceIndex)} index={fileIndex} setIndex={setFileIndex} />
         </Stack>
       ) : (
         ""

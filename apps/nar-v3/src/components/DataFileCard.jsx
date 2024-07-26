@@ -18,14 +18,16 @@ limitations under the License.
 
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
 
 import { formatQuant } from "../utility";
+import { NavigateNext, NavigatePrevious } from "./Navigation";
 import Connection from "./Connection";
 import KeyValueTable from "./KeyValueTable";
 import styles from "../styles";
 
 function DataFileCard(props) {
-  const fileObj = props.fileObj;
+  const fileObj = props.fileObjects[props.index];
 
   if (fileObj) {
     const data = {
@@ -46,11 +48,27 @@ function DataFileCard(props) {
     return (
       <>
         <Connection />
-        <Box sx={styles.entity} component={Paper} variant="outlined">
-          <h2>File {fileObj.name}</h2>
+        <Stack direction="row" spacing={1}>
+          <Stack sx={{ width: "60px" }} justifyContent="center">
+            {props.index > 0 ? (
+              <NavigatePrevious onClick={() => props.setIndex(props.index - 1)} />
+            ) : (
+              ""
+            )}
+          </Stack>
+          <Box sx={styles.entity} component={Paper} variant="outlined">
+            <h2>File {fileObj.name}</h2>
 
-          <KeyValueTable boldKeys data={data} />
-        </Box>
+            <KeyValueTable boldKeys data={data} />
+          </Box>
+          <Stack sx={{ width: "60px" }} justifyContent="center">
+            {props.index < props.fileObjects.length - 1 ? (
+              <NavigateNext onClick={() => props.setIndex(props.index + 1)} />
+            ) : (
+              ""
+            )}
+          </Stack>
+        </Stack>
       </>
     );
   } else {
