@@ -40,15 +40,16 @@ function CellPatchingCard(props) {
 
   if (activity) {
     const data = {
+      Type: activity.variation,
+      Description: activity.description,
       "Electrode description": activity.device[0].device.description,
+      "Electrode material": activity.device[0].device.material,
       "Pipette solution": formatSolution(activity.device[0].pipetteSolution),
       "Seal resistance": formatQuantList(activity.device[0].sealResistance),
       "Series resistance": formatQuantList(activity.device[0].seriesResistance),
       "Holding potential": formatQuantList(activity.device[0].holdingPotential),
       "Bath solution": formatSolution(activity.tissueBathSolution),
       "Bath temperature": formatQuant(activity.bathTemperature),
-      Description: activity.description,
-      Type: activity.variation,
     };
 
     return (

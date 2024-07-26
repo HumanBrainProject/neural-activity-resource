@@ -42,6 +42,7 @@ const deviceProperty = L("device", [
   S("@type"),
   S("internalIdentifier"),
   S("description"),
+  L("material/name"),
   L("deviceType/name"),
   L("manufacturer", [S("shortName", S("longName"))]),
 ]);
@@ -261,6 +262,7 @@ const patchClampDatasetQuery = buildKGQuery("core/DatasetVersion", [
                   ],
                   MULTIPLE
                 ),
+                L("variation/name")
               ],
               MULTIPLE
             ),

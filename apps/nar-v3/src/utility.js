@@ -7,6 +7,7 @@ const UNITS_SYMBOLS = {
   hertz: "Hz",
   millisecond: "ms",
   millimolar: "mM",
+  "arcdegree": "°"
 };
 
 function formatUnits(units) {

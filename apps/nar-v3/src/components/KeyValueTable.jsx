@@ -14,21 +14,24 @@ function KeyValueTable(props) {
   let rows = [];
   if (props.data) {
     for (const [key, value] of Object.entries(props.data)) {
-      let valueStr = value;
-      if (!isValidElement(value)) {
-        // allow passing JSX as values
-        valueStr = String(value);
-        if (Array.isArray(value)) {
-          valueStr = value.join(", ");
+      if (value !== null) {
+        // empty strings are included in the table, but null/undefined are not
+        let valueStr = value;
+        if (!isValidElement(value)) {
+          // allow passing JSX as values
+          valueStr = String(value);
+          if (Array.isArray(value)) {
+            valueStr = value.join(", ");
+          }
         }
-      }
 
-      rows.push(
-        <TableRow key={key} sx={{ "&:last-child td": { border: 0 } }}>
-          <TableCell>{formatKey(key)}</TableCell>
-          <TableCell sx={{ whiteSpace: "normal", wordBreak: "break-word" }}>{valueStr}</TableCell>
-        </TableRow>
-      );
+        rows.push(
+          <TableRow key={key} sx={{ "&:last-child td": { border: 0 } }}>
+            <TableCell>{formatKey(key)}</TableCell>
+            <TableCell sx={{ whiteSpace: "normal", wordBreak: "break-word" }}>{valueStr}</TableCell>
+          </TableRow>
+        );
+      }
     }
   }
 
