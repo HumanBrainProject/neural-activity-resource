@@ -43,7 +43,15 @@ const deviceProperty = L("device", [
   S("internalIdentifier"),
   S("description"),
   L("material/name"),
-  L("deviceType/name"),
+  L("deviceType", [
+    S("name"),
+    S("@type"),
+    S("definition"),
+    S("description"),
+    S("interlexIdentifier"),
+    S("knowledgeSpaceLink"),
+    S("preferredOntologyIdentifier"),
+  ]),
   L("manufacturer", [S("shortName", S("longName"))]),
 ]);
 
@@ -138,12 +146,32 @@ const patchClampDatasetQuery = buildKGQuery("core/DatasetVersion", [
                     S("lookupLabel"),
                     deviceProperty,
                     L("sliceThickness", quantValProperties),
-                    L("slicingPlane/name"),
+                    L("slicingPlane", [
+                      S("name"),
+                      S("@type"),
+                      S("definition"),
+                      S("description"),
+                      S("interlexIdentifier"),
+                      S("knowledgeSpaceLink"),
+                      S("preferredOntologyIdentifier"),
+                    ]),
                     L("slicingAngle", quantValProperties),
                   ],
                   MULTIPLE
                 ),
-                L("studyTarget/name", [], MULTIPLE),
+                L(
+                  "studyTarget",
+                  [
+                    S("name"),
+                    S("@type"),
+                    S("definition"),
+                    S("description"),
+                    S("interlexIdentifier"),
+                    S("knowledgeSpaceLink"),
+                    S("preferredOntologyIdentifier"),
+                  ],
+                  MULTIPLE
+                ),
                 L("temperature", [S("value"), L("unit/name")]),
                 L("tissueBathSolution", solutionProperties),
                 L(

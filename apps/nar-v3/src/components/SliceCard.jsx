@@ -19,24 +19,13 @@ limitations under the License.
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
-import Tooltip from "@mui/material/Tooltip";
 
 import Connection from "./Connection";
 import KeyValueTable from "./KeyValueTable";
+import ControlledTerm from "./ControlledTerm";
 import { NavigateNext, NavigatePrevious } from "./Navigation";
 import styles from "../styles";
 
-function ControlledTerm(props) {
-  if (props.term.definition) {
-    return (
-      <Tooltip title={props.term.definition + props.term.description}>
-        <span>{props.term.name}</span>
-      </Tooltip>
-    );
-  } else {
-    return props.term.name;
-  }
-}
 
 function SliceCard(props) {
   if (props.slices) {

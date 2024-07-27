@@ -23,6 +23,7 @@ import Paper from "@mui/material/Paper";
 import { formatQuant, formatSolution } from "../utility";
 import Connection from "./Connection";
 import KeyValueTable from "./KeyValueTable";
+import ControlledTerm from "./ControlledTerm";
 import styles from "../styles";
 
 
@@ -39,14 +40,20 @@ function SlicePreparationCard(props) {
 
   if (activity) {
     const data = {
-      "Description": activity.description,
+      Description: activity.description,
       "Device name": activity.device[0].device.name,
-      "Device type": activity.device[0].device.deviceType,
+      "Device type": <ControlledTerm term={activity.device[0].device.deviceType} />,
       Manufacturer: formatManufacturer(activity.device[0].device.manufacturer),
       "Slice thickness": formatQuant(activity.device[0].sliceThickness),
-      "Slicing plane": activity.device[0].slicingPlane,
+      "Slicing plane": <ControlledTerm term={activity.device[0].slicingPlane} />,
       "Slicing angle": formatQuant(activity.device[0].slicingAngle),
-      "Study targets": activity.studyTarget.join(", "),
+      "Study targets": (
+        <>
+          {activity.studyTarget.map((item) => (
+            <ControlledTerm key={item.name} term={item} />
+          ))}
+        </>
+      ),
       Temperature: formatQuant(activity.temperature),
       "Dissecting solution": formatSolution(activity.tissueBathSolution),
     };
