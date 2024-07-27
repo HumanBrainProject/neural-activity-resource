@@ -21,6 +21,7 @@ import Paper from "@mui/material/Paper";
 
 import Connection from "./Connection";
 import KeyValueTable from "./KeyValueTable";
+import ControlledTerm from "./ControlledTerm";
 import styles from "../styles";
 
 function PatchedCellCard(props) {
@@ -29,8 +30,14 @@ function PatchedCellCard(props) {
 
     if (cell) {
       const data = {
-        Location: cell.anatomicalLocation.map((item) => item.name).join(", "),
-        "Cell type": cell.origin,
+        Location: (
+          <>
+            {cell.anatomicalLocation.map((item) => (
+              <ControlledTerm key={item.name} term={item} />
+            ))}
+          </>
+        ),
+        "Cell type": <ControlledTerm term={cell.origin} />,
       };
       return (
         <>

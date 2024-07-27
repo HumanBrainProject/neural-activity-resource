@@ -25,6 +25,16 @@ const quantValProperties = [
   L("maxValueUnit/name"),
 ];
 
+const controlledTermProperties = [
+  S("name"),
+  S("@type"),
+  S("definition"),
+  S("description"),
+  S("interlexIdentifier"),
+  S("knowledgeSpaceLink"),
+  S("preferredOntologyIdentifier"),
+];
+
 const solutionProperties = [
   S("name"),
   S("@id"),
@@ -43,15 +53,7 @@ const deviceProperty = L("device", [
   S("internalIdentifier"),
   S("description"),
   L("material/name"),
-  L("deviceType", [
-    S("name"),
-    S("@type"),
-    S("definition"),
-    S("description"),
-    S("interlexIdentifier"),
-    S("knowledgeSpaceLink"),
-    S("preferredOntologyIdentifier"),
-  ]),
+  L("deviceType", controlledTermProperties),
   L("manufacturer", [S("shortName", S("longName"))]),
 ]);
 
@@ -146,32 +148,12 @@ const patchClampDatasetQuery = buildKGQuery("core/DatasetVersion", [
                     S("lookupLabel"),
                     deviceProperty,
                     L("sliceThickness", quantValProperties),
-                    L("slicingPlane", [
-                      S("name"),
-                      S("@type"),
-                      S("definition"),
-                      S("description"),
-                      S("interlexIdentifier"),
-                      S("knowledgeSpaceLink"),
-                      S("preferredOntologyIdentifier"),
-                    ]),
+                    L("slicingPlane", controlledTermProperties),
                     L("slicingAngle", quantValProperties),
                   ],
                   MULTIPLE
                 ),
-                L(
-                  "studyTarget",
-                  [
-                    S("name"),
-                    S("@type"),
-                    S("definition"),
-                    S("description"),
-                    S("interlexIdentifier"),
-                    S("knowledgeSpaceLink"),
-                    S("preferredOntologyIdentifier"),
-                  ],
-                  MULTIPLE
-                ),
+                L("studyTarget", controlledTermProperties, MULTIPLE),
                 L("temperature", [S("value"), L("unit/name")]),
                 L("tissueBathSolution", solutionProperties),
                 L(
@@ -184,19 +166,7 @@ const patchClampDatasetQuery = buildKGQuery("core/DatasetVersion", [
                       S("lookupLabel"),
                       S("@type"),
                       S("internalIdentifier"),
-                      L(
-                        "anatomicalLocation",
-                        [
-                          S("name"),
-                          S("@type"),
-                          S("definition"),
-                          S("description"),
-                          S("interlexIdentifier"),
-                          S("knowledgeSpaceLink"),
-                          S("preferredOntologyIdentifier"),
-                        ],
-                        MULTIPLE
-                      ),
+                      L("anatomicalLocation", controlledTermProperties, MULTIPLE),
                       L("type/name"),
                     ]),
                     R(
@@ -221,7 +191,7 @@ const patchClampDatasetQuery = buildKGQuery("core/DatasetVersion", [
                         L("tissueBathSolution", solutionProperties),
                         L("bathTemperature", quantValProperties),
                         S("description"),
-                        L("variation/name"),
+                        L("variation", controlledTermProperties),
                         L(
                           "output",
                           [
@@ -230,9 +200,8 @@ const patchClampDatasetQuery = buildKGQuery("core/DatasetVersion", [
                             S("@type"),
                             R("cell", "studiedState", [
                               S("internalIdentifier"),
-                              L("anatomicalLocation", [S("name"), S("@type")], MULTIPLE),
-                              L("type/name"),
-                              L("origin/name"),
+                              L("anatomicalLocation", controlledTermProperties, MULTIPLE),
+                              L("origin", controlledTermProperties),
                             ]),
                             R(
                               "recordingActivity",

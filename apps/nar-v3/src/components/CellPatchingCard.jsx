@@ -22,6 +22,7 @@ import Paper from "@mui/material/Paper";
 
 import Connection from "./Connection";
 import KeyValueTable from "./KeyValueTable";
+import ControlledTerm from "./ControlledTerm";
 import styles from "../styles";
 import { formatQuant, formatSolution } from "../utility";
 
@@ -40,7 +41,7 @@ function CellPatchingCard(props) {
 
   if (activity) {
     const data = {
-      Type: activity.variation,
+      Type: <ControlledTerm term={activity.variation} />,
       Description: activity.description,
       "Electrode description": activity.device[0].device.description,
       "Electrode material": activity.device[0].device.material,
