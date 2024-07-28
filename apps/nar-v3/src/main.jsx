@@ -6,13 +6,13 @@ import { Avatar, CssBaseline, AppBar, Link, Toolbar, Typography, Container } fro
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { green } from "@mui/material/colors";
 
-import Home, { loader as statsLoader } from "./routes/home";
+import Home, { getLoader as statsLoader } from "./routes/home";
 import ErrorPage from "./error-page";
 import initAuth from "./auth";
-import Datasets, { loader as datasetsLoader } from "./routes/datasets";
-import Dataset, { loader as datasetLoader } from "./routes/dataset";
-import PatchClampIndex, { loader as patchClampIndexLoader } from "./routes/patchClampRecordings";
-import PatchClamp, { loader as patchClampLoader } from "./routes/patchClampRecording";
+import Datasets, { getLoader as datasetsLoader } from "./routes/datasets";
+import Dataset, { getLoader as datasetLoader } from "./routes/dataset";
+import PatchClampIndex, { getLoader as patchClampIndexLoader } from "./routes/patchClampRecordings";
+import PatchClamp, { getLoader as patchClampLoader } from "./routes/patchClampRecording";
 
 const theme = createTheme({
   typography: {
@@ -36,37 +36,38 @@ const theme = createTheme({
   },
 });
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-    errorElement: <ErrorPage />,
-    loader: statsLoader,
-  },
-  {
-    path: "datasets/",
-    element: <Datasets />,
-    loader: datasetsLoader,
-  },
-  {
-    path: "datasets/:datasetId",
-    element: <Dataset />,
-    loader: datasetLoader,
-  },
-  {
-    path: "patch-clamp/",
-    element: <PatchClampIndex />,
-    loader: patchClampIndexLoader,
-  },
-  {
-    path: "patch-clamp/:expId",
-    element: <PatchClamp />,
-    loader: patchClampLoader,
-  },
-]);
+function getRouter(auth) {
+  return createBrowserRouter([
+    {
+      path: "/",
+      element: <Home />,
+      errorElement: <ErrorPage />,
+      loader: statsLoader(auth),
+    },
+    {
+      path: "datasets/",
+      element: <Datasets />,
+      loader: datasetsLoader(auth),
+    },
+    {
+      path: "datasets/:datasetId",
+      element: <Dataset />,
+      loader: datasetLoader(auth),
+    },
+    {
+      path: "patch-clamp/",
+      element: <PatchClampIndex />,
+      loader: patchClampIndexLoader(auth),
+    },
+    {
+      path: "patch-clamp/:expId",
+      element: <PatchClamp />,
+      loader: patchClampLoader(auth),
+    },
+  ]);
+}
 
-
-function renderApp() {
+function renderApp(auth) {
   ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
       <ThemeProvider theme={theme}>
@@ -78,13 +79,15 @@ function renderApp() {
           <Toolbar>
             <Avatar sx={{ mr: 2 }} alt="EBRAINS" src="/favicon.png" />
             <Typography variant="h6" color="inherit" noWrap>
-              <Link underline="hover" color="inherit" to="/">EBRAINS: Neural Activity Resource (alpha)</Link>
+              <Link underline="hover" color="inherit" to="/">
+                EBRAINS: Neural Activity Resource (alpha)
+              </Link>
             </Typography>
           </Toolbar>
         </AppBar>
         <main>
           <Container maxWidth="xl">
-            <RouterProvider router={router} />
+            <RouterProvider router={getRouter(auth)} />
           </Container>
         </main>
       </ThemeProvider>

@@ -4,12 +4,12 @@ import { Link as RouterLink, useLocation } from "react-router-dom";
 function getBreadcrumb(item) {
   if (item.path) {
     return (
-      <LinkRouter underline="hover" color="inherit" to={item.path}>
+      <LinkRouter underline="hover" color="inherit" key={item.name} to={item.path}>
         {item.name}
       </LinkRouter>
     );
   } else {
-    return <Typography>{item.name}</Typography>;
+    return <Typography key={item.name}>{item.name}</Typography>;
   }
 }
 

@@ -2,7 +2,7 @@ import Keycloak from "keycloak-js";
 
 // We start by configuring the Keycloak javascript client
 // It needs to know your app id in order to authenticate users for it
-const keycloak = Keycloak({
+const keycloak = new Keycloak({
   url: "https://iam.ebrains.eu/auth",
   realm: "hbp",
   clientId: "neural-activity-resource",
@@ -53,7 +53,6 @@ function checkAuth(main) {
     }
     if (isAuthenticated) {
       console.log("...which is authenticated, starting business logic...");
-      sessionStorage.setItem("token", keycloak.token);
       return main(keycloak);
     }
   }

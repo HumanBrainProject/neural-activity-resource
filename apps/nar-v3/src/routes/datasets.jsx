@@ -1,16 +1,19 @@
 import React from "react";
 import { Await, defer, useLoaderData } from "react-router-dom";
 
-import { datastore } from "../datastore";
+import { getKGData } from "../datastore";
 import Navigation from "../components/Navigation";
 import DatasetList from "../components/DatasetList";
 import ProgressIndicator from "../components/ProgressIndicator";
 import { ephysDatasetsQuery } from "./queryLibrary";
 
-export async function loader() {
-  const datasetsPromise = datastore.getKGData("datasets summary", ephysDatasetsQuery);
-  console.log(datasetsPromise);
-  return defer({ datasets: datasetsPromise });
+export function getLoader(auth) {
+  const loader = async () => {
+    const datasetsPromise = getKGData("datasets summary", ephysDatasetsQuery, auth);
+    console.log(datasetsPromise);
+    return defer({ datasets: datasetsPromise });
+  };
+  return loader;
 }
 
 function Datasets() {

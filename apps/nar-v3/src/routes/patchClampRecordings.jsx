@@ -7,7 +7,7 @@ import {
   linkProperty as L,
   reverseLinkProperty as R,
 } from "../queries";
-import { datastore } from "../datastore";
+import { getKGData } from "../datastore";
 import Navigation from "../components/Navigation";
 import PatchClampRecordingList from "../components/PatchClampRecordingList";
 import ProgressIndicator from "../components/ProgressIndicator";
@@ -26,11 +26,14 @@ export const query = buildKGQuery("core/TissueSample", [
   ),
 ]);
 
-export async function loader() {
-  const tissueSamplesPromise = datastore.getKGData("patch clamp recordings summary", query);
+export function getLoader(auth) {
+  const loader = async () => {
+    const tissueSamplesPromise = getKGData("patch clamp recordings summary", query, auth);
 
-  console.log(tissueSamplesPromise);
-  return defer({ tissueSamples: tissueSamplesPromise });
+    console.log(tissueSamplesPromise);
+    return defer({ tissueSamples: tissueSamplesPromise });
+  };
+  return loader;
 }
 
 function PatchClampIndex() {

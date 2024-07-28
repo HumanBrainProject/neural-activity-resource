@@ -200,6 +200,7 @@ const patchClampDatasetQuery = buildKGQuery("core/DatasetVersion", [
                             S("@type"),
                             R("cell", "studiedState", [
                               S("internalIdentifier"),
+                              // todo: handle the case where anatomicalLocation is a ParcellationEntityVersion
                               L("anatomicalLocation", controlledTermProperties, MULTIPLE),
                               L("origin", controlledTermProperties),
                             ]),

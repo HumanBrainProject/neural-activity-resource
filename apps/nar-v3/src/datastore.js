@@ -5,132 +5,115 @@ function isEmpty(obj) {
   return Object.keys(obj).length === 0;
 }
 
-// function isAlmostEmpty(obj) {
-//   return Object.keys(obj).length <= 1;
-// }
+let cache = {
+  "datasets summary": {},
+  "datasets detail": {},
+  "datasets techniques": {},
+  "patch clamp recordings summary": {},
+  "patch clamp recordings detail": {},
+};
+//cache["datasets detail"][uuidFromUri(examplePatchClampData["@id"])] = examplePatchClampData;
+//cache["datasets detail"]["example"] = examplePatchClampData;
 
-// function byDate(obj1, obj2) {
-//   // most recent first
-//   if (obj1.stages[0].start_time < obj2.stages[0].start_time) {
-//     return 1;
-//   }
-//   if (obj1.stages[0].start_time > obj2.stages[0].start_time) {
-//     return -1;
-//   }
-//   return 0;
-// }
-
-class DataStore {
-  constructor(baseUrl) {
-    this.baseUrl = baseUrl;
-    this.cache = {
-      "datasets summary": {},
-      "datasets detail": {},
-      "datasets techniques": {},
-      "patch clamp recordings summary": {},
-      "patch clamp recordings detail": {},
+function buildRequestConfig(auth, method = "GET", body = {}) {
+  if (auth.token) {
+    let config = {
+      headers: {
+        Authorization: "Bearer " + auth.token,
+        "Content-Type": "application/json",
+      },
+      method: method,
     };
-    //this.cache["datasets detail"][uuidFromUri(examplePatchClampData["@id"])] = examplePatchClampData;
-    //this.cache["datasets detail"]["example"] = examplePatchClampData;
-  }
-
-  buildRequestConfig(method = "GET", body = {}) {
-    let token = sessionStorage.getItem("token");
-    if (token) {
-      let config = {
-        headers: {
-          Authorization: "Bearer " + token,
-          "Content-Type": "application/json",
-        },
-        method: method,
-      };
-      if (body) {
-        config.body = body;
-      }
-      return config;
-    } else {
-      return null;
+    if (body) {
+      config.body = body;
     }
+    return config;
+  } else {
+    return null;
   }
+}
 
-  async queryKG(kgQuery, searchParams) {
-    const searchParamStr = new URLSearchParams(searchParams).toString();
-    let url = `${this.baseUrl}/queries?${searchParamStr}`;
-    const config = this.buildRequestConfig("POST", JSON.stringify(kgQuery));
-    if (config) {
-      const response = await fetch(url, config);
+async function queryKG(kgQuery, searchParams, auth) {
+  const searchParamStr = new URLSearchParams(searchParams).toString();
+  let url = `${kgUrl}/queries?${searchParamStr}`;
+  const config = buildRequestConfig(auth, "POST", JSON.stringify(kgQuery));
+  if (config) {
+    const response = await fetch(url, config);
+    if (response.ok) {
       const result = await response.json();
       return result;
     } else {
       return null;
     }
+  } else {
+    return null;
   }
+}
 
-  async getKGItem(cacheLabel, kgQuery, instanceId, stage = kgDefaultStage) {
-    console.log("getKGItem " + cacheLabel + instanceId);
-    if (!this.cache[cacheLabel][instanceId]) {
-      const searchParams = { stage: stage, instanceId: instanceId };
-      const result = await this.queryKG(kgQuery, searchParams);
-      if (result) {
-        const items = result.data;
-        this.cache[cacheLabel][instanceId] = items[0];
-      }
+async function getKGItem(cacheLabel, kgQuery, instanceId, auth, stage = kgDefaultStage) {
+  console.log("getKGItem " + cacheLabel + instanceId);
+  if (!cache[cacheLabel][instanceId]) {
+    const searchParams = { stage: stage, instanceId: instanceId };
+    const result = await queryKG(kgQuery, searchParams, auth);
+    if (result) {
+      const items = result.data;
+      cache[cacheLabel][instanceId] = items[0];
     }
-    return this.cache[cacheLabel][instanceId];
   }
+  return cache[cacheLabel][instanceId];
+}
 
-  async getKGData(
-    cacheLabel,
-    kgQuery,
-    searchFilters,
-    stage = kgDefaultStage,
-    size = 1000,
-    from = 0
-  ) {
-    console.log("getKGData " + cacheLabel);
-    if (isEmpty(this.cache[cacheLabel])) {
-      // if the cache is empty we need to fill it
-      console.log(this.baseUrl);
-      let searchParams = {
-        returnTotalResults: true,
-        stage: stage,
-        size: size,
-        from: from,
-      };
-      if (searchFilters) {
-        searchParams = { ...searchParams, searchFilters };
-      }
-      const result = await this.queryKG(kgQuery, searchParams);
-      if (result) {
-        const items = result.data;
-        for (const index in items) {
-          this.cache[cacheLabel][items[index].id] = items[index];
-        }
-      }
-    }
-    const itemArray = Object.values(this.cache[cacheLabel]);
-    console.log(itemArray);
-    return itemArray;
-  }
-
-  async count(kgQuery, searchFilters, stage = kgDefaultStage) {
+async function getKGData(
+  cacheLabel,
+  kgQuery,
+  auth,
+  searchFilters,
+  stage = kgDefaultStage,
+  size = 1000,
+  from = 0
+) {
+  console.log("getKGData " + cacheLabel);
+  if (isEmpty(cache[cacheLabel])) {
+    // if the cache is empty we need to fill it
+    console.log(kgUrl);
     let searchParams = {
       returnTotalResults: true,
       stage: stage,
-      size: 1,
-      from: 0,
+      size: size,
+      from: from,
     };
     if (searchFilters) {
       searchParams = { ...searchParams, searchFilters };
     }
-    const result = await this.queryKG(kgQuery, searchParams);
+    const result = await queryKG(kgQuery, searchParams, auth);
     if (result) {
-      return result.total;
-    } else {
-      return 0;
+      const items = result.data;
+      for (const index in items) {
+        cache[cacheLabel][items[index].id] = items[index];
+      }
     }
+  }
+  const itemArray = Object.values(cache[cacheLabel]);
+  console.log(itemArray);
+  return itemArray;
+}
+
+async function count(kgQuery, auth, searchFilters, stage = kgDefaultStage) {
+  let searchParams = {
+    returnTotalResults: true,
+    stage: stage,
+    size: 1,
+    from: 0,
+  };
+  if (searchFilters) {
+    searchParams = { ...searchParams, searchFilters };
+  }
+  const result = await queryKG(kgQuery, searchParams, auth);
+  if (result) {
+    return result.total;
+  } else {
+    return 0;
   }
 }
 
-const datastore = new DataStore(kgUrl);
-export { datastore };
+export { queryKG, getKGItem, getKGData, count };

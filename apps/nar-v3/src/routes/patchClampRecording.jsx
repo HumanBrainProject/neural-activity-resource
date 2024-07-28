@@ -7,7 +7,7 @@ import {
   linkProperty as L,
   reverseLinkProperty as R,
 } from "../queries";
-import { datastore } from "../datastore";
+import { getKGItem } from "../datastore";
 import { uuidFromUri } from "../utility.js";
 import Navigation from "../components/Navigation";
 import PatchClampRecordingCard from "../components/PatchClampRecordingCard";
@@ -68,14 +68,18 @@ const query = buildKGQuery("core/TissueSample", [
 
 //console.log(query);
 
-export async function loader({ params }) {
-  const tissueSamplePromise = datastore.getKGItem(
-    "patch clamp recordings detail",
-    query,
-    params.expId
-  );
-  console.log(tissueSamplePromise);
-  return defer({ tissueSample: tissueSamplePromise });
+export function getLoader(auth) {
+  const loader = async ({ params }) => {
+    const tissueSamplePromise = getKGItem(
+      "patch clamp recordings detail",
+      query,
+      params.expId,
+      auth
+    );
+    console.log(tissueSamplePromise);
+    return defer({ tissueSample: tissueSamplePromise });
+  };
+  return loader;
 }
 
 function PatchClamp() {

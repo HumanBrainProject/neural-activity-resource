@@ -10,24 +10,27 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Chip from "@mui/material/Chip";
 
-import { datastore } from "../datastore";
+import { count } from "../datastore";
 import { query as patchClampRecordingsQuery } from "./patchClampRecordings";
 import { ephysDatasetsQuery } from "./queryLibrary";
 import ProgressIndicator from "../components/ProgressIndicator";
 
-export async function loader() {
-  const statisticsPromise = Promise.all([
-    datastore.count(patchClampRecordingsQuery),
-    datastore.count(ephysDatasetsQuery),
-  ]);
-  console.log(statisticsPromise);
-  return defer({ counts: statisticsPromise });
+export function getLoader(auth) {
+  const loader = async () => {
+    const statisticsPromise = Promise.all([
+      count(patchClampRecordingsQuery, auth),
+      count(ephysDatasetsQuery, auth),
+    ]);
+    console.log(statisticsPromise);
+    return defer({ counts: statisticsPromise });
+  };
+  return loader;
 }
 
 // function getModalityCount(modality) {
 //   console.log(modality);
 //   if (modality === "patchclamp") {
-//     return 1; //await datastore.count(patchClampRecordingsQuery);
+//     return 1; //await count(patchClampRecordingsQuery);
 //   }
 //   return 0;
 // }
