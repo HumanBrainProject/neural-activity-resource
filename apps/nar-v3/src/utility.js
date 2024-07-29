@@ -7,7 +7,7 @@ const UNITS_SYMBOLS = {
   hertz: "Hz",
   millisecond: "ms",
   millimolar: "mM",
-  "arcdegree": "°"
+  arcdegree: "°",
 };
 
 function formatUnits(units) {
@@ -15,17 +15,21 @@ function formatUnits(units) {
 }
 
 function formatQuant(val) {
-  // note that using != matches both null and undefined
-  if (val.minValue != null) {
-    if (val.maxValue != null) {
-      return `${val.minValue}-${val.maxValue} ${formatUnits(val.minValueUnit)}`;
+  if (val) {
+    // note that using != matches both null and undefined
+    if (val.minValue != null) {
+      if (val.maxValue != null) {
+        return `${val.minValue}-${val.maxValue} ${formatUnits(val.minValueUnit)}`;
+      } else {
+        return `>=${val.minValue} ${formatUnits(val.minValueUnit)}`;
+      }
+    } else if (val.maxValue != null) {
+      return `<=${val.maxValue} ${formatUnits(val.maxValueUnit)}`;
+    } else if (val.value != null) {
+      return `${val.value} ${formatUnits(val.unit)}`;
     } else {
-      return `>=${val.minValue} ${formatUnits(val.minValueUnit)}`;
+      return "";
     }
-  } else if (val.maxValue != null) {
-    return `<=${val.maxValue} ${formatUnits(val.maxValueUnit)}`;
-  } else if (val.value != null) {
-    return `${val.value} ${formatUnits(val.unit)}`;
   } else {
     return "";
   }
