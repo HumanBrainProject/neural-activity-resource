@@ -69,6 +69,13 @@ export default function Home() {
             <Container maxWidth="lg" sx={{ paddingTop: 8, paddingBottom: 8 }}>
               <Grid container spacing={4}>
                 <ModalityCard
+                  label="All neural activity datasets"
+                  path="/datasets"
+                  image="/images/dataset_search.png"
+                  text=""
+                  count={datasetCounts}
+                />
+                <ModalityCard
                   label="Patch clamp recording"
                   path="/patch-clamp"
                   image="/images/WholeCellPatchClamp-03.jpg"
@@ -105,13 +112,6 @@ export default function Home() {
                   count={0}
                 />
                 <ModalityCard label="fMRI" path="/fmri" image="/images/1206_FMRI.jpg" count={0} />
-                <ModalityCard
-                  label="All neural activity datasets"
-                  path="/datasets"
-                  image="/images/dataset_search.png"
-                  text=""
-                  count={datasetCounts}
-                />
               </Grid>
             </Container>
           );
