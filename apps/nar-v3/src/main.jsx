@@ -96,4 +96,11 @@ function renderApp(auth) {
 }
 
 window.addEventListener("DOMContentLoaded", () => initAuth(renderApp));
-//window.addEventListener('DOMContentLoaded', () => renderApp());
+
+
+// -- for development, comment out the previous line and uncomment the following ones
+
+// const auth = {
+//   token: "<paste token here>"
+// };
+// window.addEventListener('DOMContentLoaded', () => renderApp(auth));
