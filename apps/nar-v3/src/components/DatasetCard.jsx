@@ -40,24 +40,6 @@ function DatasetCard(props) {
   const [fileIndex, _setFileIndex] = useState(0);
   const [stimulationIndex, _setStimulationIndex] = useState(0);
 
-  const setSubjectIndex = (index) => {
-    if (index >= 0 && index < subjects.length) {
-      _setSubjectIndex(index);
-      if (subjects[index].studiedState[0].slicePreparation) {
-        setSliceIndex(0);
-      }
-    }
-  };
-
-  const setSliceIndex = (index) => {
-    if (
-      index >= 0 &&
-      index < subjects[subjectIndex].studiedState[0].slicePreparation[0].output.length
-    ) {
-      _setSliceIndex(index);
-    }
-  };
-
   const getSlicePreparation = (subjectIndex) => {
     const state = subjects[subjectIndex].studiedState[0];
     if (state.slicePreparation) {
@@ -122,13 +104,20 @@ function DatasetCard(props) {
     }
   };
 
-  const setFileIndex = (index) => {
-    const dataFiles = getDataFiles(subjectIndex, sliceIndex, stimulationIndex);
+  const setSubjectIndex = (index) => {
+    if (index >= 0 && index < subjects.length) {
+      _setSubjectIndex(index);
+      setSliceIndex(0);
+    }
+  };
+
+  const setSliceIndex = (index) => {
     if (
       index >= 0 &&
-      index < dataFiles.length
+      index < subjects[subjectIndex].studiedState[0].slicePreparation[0].output.length
     ) {
-      _setFileIndex(index);
+      _setSliceIndex(index);
+      setStimulationIndex(0);
     }
   };
 
@@ -139,6 +128,17 @@ function DatasetCard(props) {
       index < stimulations.length
     ) {
       _setStimulationIndex(index);
+      setFileIndex(0);
+    }
+  };
+
+  const setFileIndex = (index) => {
+    const dataFiles = getDataFiles(subjectIndex, sliceIndex, stimulationIndex);
+    if (
+      index >= 0 &&
+      index < dataFiles.length
+    ) {
+      _setFileIndex(index);
     }
   };
 
