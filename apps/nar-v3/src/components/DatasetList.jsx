@@ -7,12 +7,28 @@ import TableRow from "@mui/material/TableRow";
 
 import { uuidFromUri } from "../utility";
 
+function formatAuthors(authors) {
+  console.log(authors);
+  if (authors && authors.length > 0) {
+    if (authors.length == 1) {
+      return authors[0].familyName;
+    } else if (authors.length == 2) {
+      return authors[0].familyName + " & " + authors[1].familyName;
+    } else {
+      return authors[0].familyName + " et al.";
+    }
+  } else {
+    return "";
+  }
+}
+
 function DatasetList(props) {
   return (
     <Table>
       <TableHead>
         <TableRow>
           <TableCell component="th">Name</TableCell>
+          <TableCell component="th">Authors</TableCell>
           <TableCell component="th">Techniques</TableCell>
           <TableCell component="th">Subjects</TableCell>
           <TableCell component="th">Activities</TableCell>
@@ -26,6 +42,7 @@ function DatasetList(props) {
                 {dataset.fullName || dataset.isVersionOf.fullName}
               </RouterLink>
             </TableCell>
+            <TableCell>{formatAuthors(dataset.author.length > 0 ? dataset.author : dataset.isVersionOf.author)}</TableCell>
             <TableCell>{dataset.technique.join(", ")}</TableCell>
             <TableCell>{dataset.studiedSpecimen.length}</TableCell>
             <TableCell>{dataset.activities.length}</TableCell>
