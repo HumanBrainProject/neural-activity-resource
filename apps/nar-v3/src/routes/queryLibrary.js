@@ -124,7 +124,7 @@ const patchClampDatasetQuery = buildKGQuery("core/DatasetVersion", [
       "studiedSpecimen",
       [
         S("lookupLabel"),
-        L("species", [S("name"), L("species/name")]),
+        L("species", [...controlledTermProperties, ...[L("species/name")]]),
         L("biologicalSex/name"),
         L(
           "studiedState",
@@ -154,7 +154,7 @@ const patchClampDatasetQuery = buildKGQuery("core/DatasetVersion", [
                   MULTIPLE
                 ),
                 L("studyTarget", controlledTermProperties, MULTIPLE),
-                L("temperature", [S("value"), L("unit/name")]),
+                L("temperature", quantValProperties),
                 L("tissueBathSolution", solutionProperties),
                 L(
                   "output",

@@ -23,6 +23,7 @@ import Stack from "@mui/material/Stack";
 import { formatUnits } from "../utility";
 import { NavigateNext, NavigatePrevious } from "./Navigation";
 import KeyValueTable from "./KeyValueTable";
+import ControlledTerm from "./ControlledTerm";
 import styles from "../styles";
 
 function AgeDisplay(props) {
@@ -35,12 +36,20 @@ function AgeDisplay(props) {
         </span>
       );
     } else {
-      return (
-        <span>
-          {age.minValue} {formatUnits(age.minValueUnit)}-{age.maxValue}{" "}
-          {formatUnits(age.maxValueUnit)}
-        </span>
-      );
+      if (age.minValueUnit === age.maxValueUnit) {
+        return (
+          <span>
+            {age.minValue}-{age.maxValue} {formatUnits(age.maxValueUnit)}
+          </span>
+        );
+      } else {
+        return (
+          <span>
+            {age.minValue} {formatUnits(age.minValueUnit)}-{age.maxValue}{" "}
+            {formatUnits(age.maxValueUnit)}
+          </span>
+        );
+      }
     }
   } else {
     return "";
@@ -54,7 +63,7 @@ function SubjectCard(props) {
   let strain = "";
   if (subject.species) {
     if (subject.species.species) {
-      strain = subject.species.name;
+      strain = <ControlledTerm term={subject.species} />;
       species = subject.species.species;
     } else {
       species = subject.species.name;
