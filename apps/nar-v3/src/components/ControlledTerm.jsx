@@ -2,8 +2,8 @@ import Tooltip from "@mui/material/Tooltip";
 
 function ControlledTerm(props) {
   if (props.term) {
-    if (props.term.definition) {
-      let tooltipContent = props.term.definition;
+    if (props.term.definition || props.term.description) {
+      let tooltipContent = props.term.definition || "";
       if (props.term.description) {
           tooltipContent += props.term.description;
       }
