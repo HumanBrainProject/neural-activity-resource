@@ -57,6 +57,9 @@ function SlicePreparationCard(props) {
       Temperature: formatQuant(activity.temperature),
       "Dissecting solution": formatSolution(activity.tissueBathSolution),
     };
+    if (activity.device[0].slicingAngle == null) {
+      delete data["Slicing angle"];
+    }
     return (
       <>
         <Connection />
