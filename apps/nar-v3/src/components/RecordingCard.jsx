@@ -19,15 +19,17 @@ limitations under the License.
 
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
 
 import Connection from "./Connection";
 import KeyValueTable from "./KeyValueTable";
+import { NavigateNext, NavigatePrevious } from "./Navigation";
 import styles from "../styles";
 import { formatQuant, formatUnits } from "../utility";
 
 function RecordingCard(props) {
   const recording = props.recording;
-  const stimulation = props.stimulation;
+  const stimulation = props.stimulations[props.index];
 
   if (recording) {
     const recordingData = {
@@ -55,18 +57,34 @@ function RecordingCard(props) {
     return (
       <>
         <Connection />
-        <Box sx={styles.activity} component={Paper} variant="outlined">
-          <h2>Recording</h2>
-          <p>{recording.label}</p>
-          <KeyValueTable boldKeys data={recordingData} />
+        <Stack direction="row" spacing={1}>
+          <Stack sx={{ width: "60px" }} justifyContent="center">
+            {props.index > 0 ? (
+              <NavigatePrevious onClick={() => props.setIndex(props.index - 1)} />
+            ) : (
+              ""
+            )}
+          </Stack>
+          <Box sx={styles.activity} component={Paper} variant="outlined">
+            <h2>Recording</h2>
+            <p>{recording.label}</p>
+            <KeyValueTable boldKeys data={recordingData} />
 
-          <h2>Stimulation</h2>
-          <p>{stimulation.label}</p>
-          <KeyValueTable boldKeys data={stimulationData} />
+            <h2>Stimulation</h2>
+            <p>{stimulation.label}</p>
+            <KeyValueTable boldKeys data={stimulationData} />
 
-          <h3>Specification</h3>
-          <KeyValueTable boldKeys data={stimulusSpec} />
-        </Box>
+            <h3>Specification</h3>
+            <KeyValueTable boldKeys data={stimulusSpec} />
+          </Box>
+          <Stack sx={{ width: "60px" }} justifyContent="center">
+            {props.index < props.stimulations.length - 1 ? (
+              <NavigateNext onClick={() => props.setIndex(props.index + 1)} />
+            ) : (
+              ""
+            )}
+          </Stack>
+        </Stack>
       </>
     );
   } else {

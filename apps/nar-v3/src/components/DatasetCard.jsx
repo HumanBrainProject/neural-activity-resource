@@ -38,6 +38,7 @@ function DatasetCard(props) {
   const [subjectIndex, _setSubjectIndex] = useState(0);
   const [sliceIndex, _setSliceIndex] = useState(0);
   const [fileIndex, _setFileIndex] = useState(0);
+  const [stimulationIndex, _setStimulationIndex] = useState(0);
 
   const setSubjectIndex = (index) => {
     if (index >= 0 && index < subjects.length) {
@@ -103,31 +104,41 @@ function DatasetCard(props) {
     }
   };
 
-  const getStimulationActivity = (subjectIndex, sliceIndex) => {
+  const getStimulationActivities = (subjectIndex, sliceIndex) => {
     const patchedCell = getPatchedCell(subjectIndex, sliceIndex);
     if (patchedCell) {
-      return patchedCell.stimulationActivity[0];
+      return patchedCell.stimulationActivity;
     } else {
       return null;
     }
   };
 
-  const getDataFiles = (subjectIndex, sliceIndex) => {
-    const recordingActivity = getRecordingActivity(subjectIndex, sliceIndex);
-    if (recordingActivity) {
-      return recordingActivity.output;
+  const getDataFiles = (subjectIndex, sliceIndex, stimulationIndex) => {
+    const stimulationActivity = getStimulationActivities(subjectIndex, sliceIndex)[stimulationIndex];
+    if (stimulationActivity) {
+      return stimulationActivity.output;
     } else {
       return null;
     }
   };
 
   const setFileIndex = (index) => {
-    const dataFiles = getDataFiles(subjectIndex, sliceIndex);
+    const dataFiles = getDataFiles(subjectIndex, sliceIndex, stimulationIndex);
     if (
       index >= 0 &&
       index < dataFiles.length
     ) {
       _setFileIndex(index);
+    }
+  };
+
+  const setStimulationIndex = (index) => {
+    const stimulations = getStimulationActivities(subjectIndex, sliceIndex);
+    if (
+      index >= 0 &&
+      index < stimulations.length
+    ) {
+      _setStimulationIndex(index);
     }
   };
 
@@ -194,10 +205,12 @@ function DatasetCard(props) {
 
           <RecordingCard
             recording={getRecordingActivity(subjectIndex, sliceIndex)}
-            stimulation={getStimulationActivity(subjectIndex, sliceIndex)}
+            stimulations={getStimulationActivities(subjectIndex, sliceIndex)}
+            index={stimulationIndex}
+            setIndex={setStimulationIndex}
           />
 
-          <DataFileCard fileObjects={getDataFiles(subjectIndex, sliceIndex)} index={fileIndex} setIndex={setFileIndex} />
+          <DataFileCard fileObjects={getDataFiles(subjectIndex, sliceIndex, stimulationIndex)} index={fileIndex} setIndex={setFileIndex} />
         </Stack>
       ) : (
         ""

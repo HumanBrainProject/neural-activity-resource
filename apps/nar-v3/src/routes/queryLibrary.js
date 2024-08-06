@@ -75,6 +75,16 @@ const minimalDatasetProperties = [
   L("technique/name", [], MULTIPLE),
 ];
 
+const fileProperties = [
+  S("@id"),
+  S("name"),
+  S("IRI"),
+  S("dataType/name"),
+  S("format/name"),
+  L("hash", [S("algorithm"), S("digest")], MULTIPLE),
+  L("storageSize", [S("value"), L("unit/name")]),
+];
+
 const basicDatasetProperties = [
   ...minimalDatasetProperties,
   ...[L("ethicsAssessment/name"), L("license/shortName"), S("releaseDate")],
@@ -224,19 +234,7 @@ const patchClampDatasetQuery = buildKGQuery("core/DatasetVersion", [
                                     ),
                                   ]),
                                 ]),
-                                L(
-                                  "output",
-                                  [
-                                    S("@id"),
-                                    S("name"),
-                                    S("IRI"),
-                                    S("dataType/name"),
-                                    S("format/name"),
-                                    L("hash", [S("algorithm"), S("digest")], MULTIPLE),
-                                    L("storageSize", [S("value"), L("unit/name")]),
-                                  ],
-                                  MULTIPLE
-                                ),
+                                L("output", fileProperties, MULTIPLE),
                               ],
                               { type: "ephys/RecordingActivity", expectSingle: false }
                             ),
@@ -258,6 +256,7 @@ const patchClampDatasetQuery = buildKGQuery("core/DatasetVersion", [
                                   ],
                                   MULTIPLE
                                 ),
+                                L("output", fileProperties, MULTIPLE),
                               ],
                               {
                                 type: "stimulation/StimulationActivity",
