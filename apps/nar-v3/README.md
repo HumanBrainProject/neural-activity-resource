@@ -17,6 +17,9 @@ Data are retrieved from the EBRAINS Knowledge Graph using the [KG Core API](http
 
 ### Setting up a development environment
 
+Ensure you have Node.js version 20.
+[nvm](https://github.com/nvm-sh/nvm) is a helpful tool for managing your Node versions.
+
 The main code repository is https://gitlab.ebrains.eu/data-services/neural-activity-resource.
 You should fork this into your own account.
 
