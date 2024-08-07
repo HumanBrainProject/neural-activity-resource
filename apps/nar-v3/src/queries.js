@@ -86,6 +86,8 @@ function linkProperty(name, structure, options) {
 
   if (expectSingle) {
     prop.singleValue = "FIRST";
+  } else {
+    prop.ensureOrder = true;
   }
   if (structure && structure.length > 0) {
     prop.structure = structure;
