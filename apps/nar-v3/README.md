@@ -12,15 +12,32 @@ Code is licenced under the Apache 2.0 licence.
 
 ## Developers' Guide
 
-The main code repository is https://gitlab.ebrains.eu/data-services/neural-activity-resource.
-
 The app is implemented using React Router v6, with Material UI for layout and design.
 Data are retrieved from the EBRAINS Knowledge Graph using the [KG Core API](https://docs.kg.ebrains.eu/).
+
+### Setting up a development environment
+
+The main code repository is https://gitlab.ebrains.eu/data-services/neural-activity-resource.
+You should fork this into your own account.
+
+  $ git clone https://gitlab.ebrains.eu/<your account>/neural-activity-resource
+
+  $ cd neural-activity-resource/apps/nar-v3
+  $ npm install
 
 To run a development server, you will need to obtain an EBRAINS IAM authorization token,
 paste it into src/main.jsx, then run:
 
   $ npm run dev
+
+Before committing changes, make sure the test suite passes:
+
+  $ npm run test
+
+To see which code needs more tests:
+
+  $ npm run coverage
+
 
 ### Deployment
 

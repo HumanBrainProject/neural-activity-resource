@@ -514,6 +514,43 @@ describe("DatasetCard component", () => {
                                       },
                                     },
                                   ],
+                                  output: [
+                                    {
+                                      metadata: {
+                                        channel: [
+                                          {
+                                            internalIdentifier: "IN 0",
+                                            unit: "picoampere",
+                                          },
+                                          {
+                                            internalIdentifier: "leak1",
+                                            unit: "picoampere",
+                                          },
+                                        ],
+                                        samplingFrequency: {
+                                          value: 20000,
+                                          unit: "hertz",
+                                        },
+                                        name: "Metadata about whole-cell patch clamp recording stored in file sub-42_sample-1234.abf",
+                                        additionalRemarks: "voltage clamp",
+                                      },
+                                      dataType: [],
+                                      storageSize: {
+                                        value: 1307648,
+                                        unit: "byte",
+                                      },
+                                      IRI: "https://example.com/sub-42_sample-1234.abf",
+                                      format: [],
+                                      name: "sub-42_sample-1234.abf",
+                                      hash: [
+                                        {
+                                          digest: "11ef1742029bcca0c12c428d4c9e8a6d",
+                                          algorithm: "MD5",
+                                        },
+                                      ],
+                                      id: "https://kg.ebrains.eu/api/instances/03edaf5e-8fee-4e4d-a674-862c5af916b6",
+                                    },
+                                  ],
                                 },
                               ],
                             },
