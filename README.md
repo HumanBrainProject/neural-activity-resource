@@ -14,4 +14,4 @@ This repository previously contained substantial other material, such as metadat
 such as [openMINDS](https://openminds-documentation.readthedocs.io/).
 
 ### Acknowledgements
-This open source software code was developed in part or in whole in the Human Brain Project, funded from the European Union's Horizon 2020 Framework Programme for Research and Innovation under Specific Grant Agreements 720270, 785907 and 945539 (Human Brain Project SGA1, SGA2 and SGA3).
+This open source software code was developed in part or in whole in the Human Brain Project, funded from the European Union's Horizon 2020 Framework Programme for Research and Innovation under Specific Grant Agreements 720270, 785907 and 945539 (Human Brain Project SGA1, SGA2 and SGA3), and in EBRAINS 2.0, funded from the EU Horizon Europe programme under grant agreement 101147319.
