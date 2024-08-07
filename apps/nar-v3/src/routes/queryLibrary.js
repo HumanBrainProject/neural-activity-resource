@@ -222,18 +222,6 @@ const patchClampDatasetQuery = buildKGQuery("core/DatasetVersion", [
                                 S("@type"),
                                 S("description"),
                                 S("internalIdentifier"),
-                                L("device", [
-                                  R("metadata", "recordedWith", [
-                                    S("name"),
-                                    S("additionalRemarks"),
-                                    L("samplingFrequency", quantValProperties),
-                                    L(
-                                      "channel",
-                                      [S("internalIdentifier"), L("unit/name")],
-                                      MULTIPLE
-                                    ),
-                                  ]),
-                                ]),
                                 L("output", fileProperties, MULTIPLE),
                               ],
                               { type: "ephys/RecordingActivity", expectSingle: false }
@@ -256,7 +244,25 @@ const patchClampDatasetQuery = buildKGQuery("core/DatasetVersion", [
                                   ],
                                   MULTIPLE
                                 ),
-                                L("output", fileProperties, MULTIPLE),
+                                L(
+                                  "output",
+                                  [
+                                    ...fileProperties,
+                                    ...[
+                                      R("metadata", "dataLocation", [
+                                        S("name"),
+                                        S("additionalRemarks"),
+                                        L("samplingFrequency", quantValProperties),
+                                        L(
+                                          "channel",
+                                          [S("internalIdentifier"), L("unit/name")],
+                                          MULTIPLE
+                                        ),
+                                      ]),
+                                    ],
+                                  ],
+                                  MULTIPLE
+                                ),
                               ],
                               {
                                 type: "stimulation/StimulationActivity",

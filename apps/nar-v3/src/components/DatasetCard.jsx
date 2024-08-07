@@ -147,7 +147,6 @@ function DatasetCard(props) {
     return authors.map((person) => `${person.givenName} ${person.familyName}`).join(", ");
   };
 
-  console.log("Rendering dataset in DatasetCard.jsx");
   console.log(dataset);
 
   return (

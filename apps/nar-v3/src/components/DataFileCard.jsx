@@ -20,7 +20,7 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 
-import { formatQuant } from "../utility";
+import { formatQuant, formatUnits } from "../utility";
 import { NavigateNext, NavigatePrevious } from "./Navigation";
 import Connection from "./Connection";
 import KeyValueTable from "./KeyValueTable";
@@ -31,6 +31,16 @@ function DataFileCard(props) {
 
   if (fileObj) {
     const data = {
+      "Sampling frequency": formatQuant(fileObj.metadata.samplingFrequency),
+      Channels: (
+        <ul>
+          {fileObj.metadata.channel.map((item) => (
+            <li key={item.internalIdentifier}>
+              {item.internalIdentifier} ({formatUnits(item.unit)})
+            </li>
+          ))}
+        </ul>
+      ),
       "Data type": fileObj.dataType ? fileObj.dataType.name : "unknown",
       Format: fileObj.format ? fileObj.format.name : "unknown",
       Hash: (
@@ -43,6 +53,7 @@ function DataFileCard(props) {
         </>
       ),
       Size: formatQuant(fileObj.storageSize),
+      "Additional remarks": fileObj.metadata.additionalRemarks,
     };
 
     return (

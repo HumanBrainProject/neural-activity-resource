@@ -25,7 +25,7 @@ import Connection from "./Connection";
 import KeyValueTable from "./KeyValueTable";
 import { NavigateNext, NavigatePrevious } from "./Navigation";
 import styles from "../styles";
-import { formatQuant, formatUnits } from "../utility";
+import { formatQuant } from "../utility";
 
 function RecordingCard(props) {
   const recording = props.recording;
@@ -34,17 +34,6 @@ function RecordingCard(props) {
   if (recording) {
     const recordingData = {
       Description: recording.description,
-      "Additional remarks": recording.device.metadata.additionalRemarks,
-      "Sampling frequency": formatQuant(recording.device.metadata.samplingFrequency),
-      Channels: (
-        <ul>
-          {recording.device.metadata.channel.map((item) => (
-            <li key={item.internalIdentifier}>
-              {item.internalIdentifier} ({formatUnits(item.unit)})
-            </li>
-          ))}
-        </ul>
-      ),
     };
     const stimulationData = {
       Type: "Current injection",
