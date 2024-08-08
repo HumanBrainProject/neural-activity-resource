@@ -70,7 +70,7 @@ function ModalityCard(props) {
           <CardMedia component="img" height="200" image={image} title={label} />
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
-              {label} <Chip label={count} />
+              {label} <Chip label={count} title={`${label} count`} />
             </Typography>
           </CardContent>
         </CardActionArea>

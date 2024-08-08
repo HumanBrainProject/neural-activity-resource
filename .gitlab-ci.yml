@@ -1,5 +1,16 @@
 stages:
+  - test
   - build
+
+test_app:
+  stage: test
+  script:
+    - cd apps/nar-v3
+    - npm ci
+    - npm run testci  # runs all tests whose name does _not_ contain "KG"
+  tags:
+    - docker-runner
+  image: docker-registry.ebrains.eu/neuralactivity/node:20-alpine
 
 build_image_production:
   stage: build

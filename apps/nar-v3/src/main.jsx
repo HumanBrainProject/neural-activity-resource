@@ -88,8 +88,10 @@ function getRouter(auth) {
   ]);
 }
 
-function renderApp(auth) {
-  ReactDOM.createRoot(document.getElementById("root")).render(
+export default function App(props) {
+  const auth = props.auth;
+
+  return (
     <React.StrictMode>
       <ThemeProvider theme={theme}>
         <CssBaseline />
@@ -113,6 +115,13 @@ function renderApp(auth) {
         </main>
       </ThemeProvider>
     </React.StrictMode>
+  )
+
+}
+
+function renderApp(auth) {
+  ReactDOM.createRoot(document.getElementById("root")).render(
+    <App auth={auth} />
   );
 }
 
