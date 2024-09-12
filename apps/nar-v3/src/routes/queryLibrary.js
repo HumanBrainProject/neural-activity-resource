@@ -228,6 +228,7 @@ const patchClampDatasetQuery = buildKGQuery("core/DatasetVersion", [
                             L("sealResistance", [L("value", quantValProperties, MULTIPLE)]),
                             L("seriesResistance", [L("value", quantValProperties, MULTIPLE)]),
                             L("holdingPotential", [L("value", quantValProperties, MULTIPLE)]),
+                            L("liquidJunctionPotential", [L("value", quantValProperties, MULTIPLE)]),
                           ],
                           MULTIPLE
                         ),

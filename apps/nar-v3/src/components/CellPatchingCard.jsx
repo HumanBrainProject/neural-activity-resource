@@ -49,6 +49,7 @@ function CellPatchingCard(props) {
       "Seal resistance": formatQuantList(activity.device[0].sealResistance),
       "Series resistance": formatQuantList(activity.device[0].seriesResistance),
       "Holding potential": formatQuantList(activity.device[0].holdingPotential),
+      "Liquid junction potential correction": formatQuantList(activity.device[0].liquidJunctionPotential),
       "Bath solution": formatSolution(activity.tissueBathSolution),
       "Bath temperature": formatQuant(activity.bathTemperature),
     };

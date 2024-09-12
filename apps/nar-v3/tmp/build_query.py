@@ -384,6 +384,34 @@ query = Query(
                                                                 )
                                                             ],
                                                         ),
+                                                        QP(
+                                                            f"{vocab}liquidJunctionPotential",
+                                                            name="liquidJunctionPotential",
+                                                            expect_single=True,
+                                                            properties=[
+                                                                QP(
+                                                                    f"{vocab}value",
+                                                                    name="values",
+                                                                    properties=[
+                                                                        QP(
+                                                                            f"{vocab}value",
+                                                                            name="value",
+                                                                        ),
+                                                                        QP(
+                                                                            f"{vocab}unit",
+                                                                            name="units",
+                                                                            expect_single=True,
+                                                                            properties=[
+                                                                                QP(
+                                                                                    f"{vocab}name",
+                                                                                    name="name",
+                                                                                )
+                                                                            ],
+                                                                        ),
+                                                                    ],
+                                                                )
+                                                            ],
+                                                        ),
                                                     ],
                                                 ),
                                                 Q_tissue_bath_solution,
