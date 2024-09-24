@@ -96,9 +96,14 @@ function DatasetCard(props) {
   };
 
   const getDataFiles = (subjectIndex, sliceIndex, stimulationIndex) => {
-    const stimulationActivity = getStimulationActivities(subjectIndex, sliceIndex)[stimulationIndex];
-    if (stimulationActivity) {
-      return stimulationActivity.output;
+    const stimulationActivities = getStimulationActivities(subjectIndex, sliceIndex);
+    if (stimulationActivities) {
+      const stimulationActivity = stimulationActivities[stimulationIndex];
+      if (stimulationActivity) {
+        return stimulationActivity.output;
+      } else {
+        return null;
+      }
     } else {
       return null;
     }

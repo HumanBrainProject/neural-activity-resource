@@ -27,7 +27,10 @@ import KeyValueTable from "./KeyValueTable";
 import styles from "../styles";
 
 function DataFileCard(props) {
-  const fileObj = props.fileObjects[props.index];
+  let fileObj = null;
+  if (props.fileObjects) {
+    fileObj = props.fileObjects[props.index];
+  }
 
   if (fileObj) {
     const data = {

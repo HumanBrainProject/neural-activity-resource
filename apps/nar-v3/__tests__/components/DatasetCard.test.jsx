@@ -5,7 +5,7 @@ import "@testing-library/jest-dom";
 import DatasetCard from "../../src/components/DatasetCard";
 
 describe("DatasetCard component", () => {
-  test("should render without errors", async () => {
+  test("should render a detailed dataset without errors", async () => {
     const dataset = {
       "@context": {
         "@vocab": "https://schema.hbp.eu/myQuery/",
@@ -576,6 +576,88 @@ describe("DatasetCard component", () => {
                   type: ["https://openminds.ebrains.eu/specimenPrep/TissueSampleSlicing"],
                 },
               ],
+            },
+          ],
+          biologicalSex: "male",
+        },
+      ],
+    };
+
+    render(<DatasetCard dataset={dataset} />);
+
+    expect(screen.getByText(/An example patch clamp dataset/i)).toBeInTheDocument();
+  });
+
+  test("should render a basic dataset without errors", async () => {
+    const dataset = {
+      "@context": {
+        "@vocab": "https://schema.hbp.eu/myQuery/",
+      },
+      fullName: "",
+      description: "",
+      id: "https://kg.ebrains.eu/api/instances/ff19f5db-e829-4b85-92eb-fc56991541f1",
+      author: [],
+      shortName: "An example patch clamp dataset",
+      custodian: [],
+      isVersionOf: {
+        author: [
+          {
+            givenName: "Stanley",
+            shortName: null,
+            familyName: "Laurel",
+            fullName: null,
+            type: ["https://openminds.ebrains.eu/core/Person"],
+            id: "https://kg.ebrains.eu/api/instances/a0993482-69dd-468b-a1d3-ff9589b485ae",
+          },
+          {
+            givenName: "Oliver",
+            shortName: null,
+            familyName: "Hardy",
+            fullName: null,
+            type: ["https://openminds.ebrains.eu/core/Person"],
+            id: "https://kg.ebrains.eu/api/instances/9fe3ffd5-bd56-4aee-979a-6ed15f65d235",
+          },
+        ],
+        shortName: "An example patch clamp dataset",
+        custodian: [
+          {
+            givenName: "Stanley",
+            shortName: null,
+            familyName: "Laurel",
+            fullName: null,
+            type: ["https://openminds.ebrains.eu/core/Person"],
+            id: "https://kg.ebrains.eu/api/instances/a0993482-69dd-468b-a1d3-ff9589b485ae",
+          },
+        ],
+        fullName: "An example patch clamp dataset, this is the long version of the name",
+        description:
+          "In this study we analyzed the intrinsic electrophysiological properties of foo in a mouse model of ...",
+      },
+      releaseDate: "2024-04-01",
+      license: "CC BY 4.0",
+      ethicsAssessment: "EU compliant, non sensitive",
+      versionIdentifier: "v1",
+      studiedSpecimen: [
+        {
+          species: {
+            species: null,
+            name: "Mus musculus",
+          },
+          lookupLabel: "sub-42",
+          studiedState: [
+            {
+              age: {
+                maxValue: 10,
+                minValue: 9,
+                maxValueUnit: "month",
+                value: null,
+                unit: null,
+                minValueUnit: "month",
+              },
+              ageCategory: "adult",
+              lookupLabel: "sub-42-state01",
+              pathology: [],
+              slicePreparation: []
             },
           ],
           biologicalSex: "male",

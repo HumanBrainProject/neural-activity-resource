@@ -29,7 +29,10 @@ import { formatQuant } from "../utility";
 
 function RecordingCard(props) {
   const recording = props.recording;
-  const stimulation = props.stimulations[props.index];
+  let stimulation = null;
+  if (props.stimulations) {
+    stimulation = props.stimulations[props.index];
+  }
 
   if (recording) {
     const recordingData = {
