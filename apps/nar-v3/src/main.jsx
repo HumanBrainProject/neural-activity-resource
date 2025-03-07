@@ -29,7 +29,7 @@ import { green } from "@mui/material/colors";
 
 import Home, { getLoader as statsLoader } from "./routes/home";
 import ErrorPage from "./error-page";
-import initAuth from "./auth";
+import { initAuth, checkPermissions } from "./auth";
 import Datasets, { getLoader as datasetsLoader } from "./routes/datasets";
 import Dataset, { getLoader as datasetLoader } from "./routes/dataset";
 import PatchClampIndex, { getLoader as patchClampIndexLoader } from "./routes/patchClampRecordings";
@@ -120,6 +120,7 @@ export default function App(props) {
 }
 
 function renderApp(auth) {
+  checkPermissions(auth);
   ReactDOM.createRoot(document.getElementById("root")).render(
     <App auth={auth} />
   );

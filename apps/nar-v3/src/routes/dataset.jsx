@@ -31,11 +31,16 @@ import { basicDatasetQuery, patchClampDatasetQuery, techniquesQuery } from "./qu
 
 export function getLoader(auth) {
   const loader = async ({ params }) => {
+    let stage = "RELEASED";
+    if (auth.isCurator) {
+      stage = "IN_PROGRESS";
+    }
     const techniques = await getKGItem(
       "datasets techniques",
       techniquesQuery,
       params.datasetId,
-      auth
+      auth,
+      stage
     );
     console.log(techniques.technique);
     let query = basicDatasetQuery;
@@ -45,7 +50,7 @@ export function getLoader(auth) {
     } else {
       console.log("Using basic dataset query");
     }
-    const datasetPromise = getKGItem("datasets detail", query, params.datasetId, auth);
+    const datasetPromise = getKGItem("datasets detail", query, params.datasetId, auth, stage);
     console.log(datasetPromise);
     return defer({ dataset: datasetPromise });
   };

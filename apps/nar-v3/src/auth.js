@@ -31,7 +31,7 @@ const keycloak = new Keycloak({
 });
 const YOUR_APP_SCOPES = "team email profile"; // full list at https://iam.ebrains.eu/auth/realms/hbp/.well-known/openid-configuration
 
-export default function initAuth(main) {
+function initAuth(main) {
   console.log("DOM content is loaded, initialising Keycloak client...");
   keycloak
     .init({ flow: "implicit" })
@@ -129,3 +129,40 @@ function verifyMessage(event) {
   // Login otherwise
   return login(YOUR_APP_SCOPES);
 }
+
+function checkPermissions(auth) {
+  const config = {
+    headers: {
+      Authorization: "Bearer " + auth.token,
+    },
+  };
+
+  const corsProxyUrl = "https://corsproxy.apps.tc.humanbrainproject.eu/";
+  const userInfoUrl =
+    corsProxyUrl +
+    "https://iam.ebrains.eu/auth/realms/hbp/protocol/openid-connect/userinfo";
+  return fetch(userInfoUrl, config)
+    .then(response => response.json())
+    .then((userInfo) => {
+      //return auth.loadUserInfo().then((userInfo) => {
+
+
+      console.log(userInfo);
+      if (
+        userInfo.roles.group.includes(
+          "group-dataset-curators"
+        ) &&
+        userInfo.roles.group.includes(
+          "group-in-depth-curators"
+        )
+      ) {
+        console.log("User is a curator");
+        auth.isCurator = true;
+      } else {
+        console.log("User is not a curator");
+        auth.isCurator = false;
+      }
+    });
+}
+
+export { initAuth, checkPermissions }

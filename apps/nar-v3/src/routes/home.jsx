@@ -38,9 +38,13 @@ import ProgressIndicator from "../components/ProgressIndicator";
 
 export function getLoader(auth) {
   const loader = async () => {
+    let stage = "RELEASED";
+    if (auth.isCurator) {
+      stage = "IN_PROGRESS";
+    }
     const statisticsPromise = Promise.all([
-      count(patchClampRecordingsQuery, auth),
-      count(ephysDatasetsQuery, auth),
+      count(patchClampRecordingsQuery, auth, {}, stage),
+      count(ephysDatasetsQuery, auth, {}, stage),
     ]);
     console.log(statisticsPromise);
     return defer({ counts: statisticsPromise });

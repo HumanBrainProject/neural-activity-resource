@@ -91,11 +91,16 @@ const query = buildKGQuery("core/TissueSample", [
 
 export function getLoader(auth) {
   const loader = async ({ params }) => {
+    let stage = "RELEASED";
+    if (auth.isCurator) {
+      stage = "IN_PROGRESS";
+    }
     const tissueSamplePromise = getKGItem(
       "patch clamp recordings detail",
       query,
       params.expId,
-      auth
+      auth,
+      stage
     );
     console.log(tissueSamplePromise);
     return defer({ tissueSample: tissueSamplePromise });
