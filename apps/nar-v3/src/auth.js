@@ -137,7 +137,7 @@ function checkPermissions(auth) {
     },
   };
 
-  const corsProxyUrl = ""  //"https://corsproxy.apps.ebrains.eu/";
+  const corsProxyUrl = "https://corsproxy.apps.ebrains.eu/";
   const userInfoUrl =
     corsProxyUrl +
     "https://iam.ebrains.eu/auth/realms/hbp/protocol/openid-connect/userinfo";
