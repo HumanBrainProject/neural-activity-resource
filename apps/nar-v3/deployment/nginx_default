@@ -23,16 +23,16 @@ log_format anonymized '$ip_anonymized - $remote_user [$time_local] '
 '"$http_referer" "$http_user_agent"';
 
 access_log off;
-error_log off;
+error_log /dev/null;
 
 server {
     root /usr/share/nginx/html;
     index index.html;
 
-    listen 80;
+    listen 8080;
 
-    access_log /var/log/nginx/access.log anonymized;
-    error_log /var/log/nginx/error.log crit;
+    access_log /dev/stdout anonymized;
+    error_log /dev/stderr crit;
 
     location / {
         try_files $uri /index.html;
