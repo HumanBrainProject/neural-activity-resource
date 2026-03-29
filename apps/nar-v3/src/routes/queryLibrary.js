@@ -123,19 +123,19 @@ const basicDatasetProperties = [
 
 // The library of pre-defined queries
 
-const ephysDatasetsQuery = buildKGQuery("core/DatasetVersion", [
+const ephysDatasetsQuery = buildKGQuery("DatasetVersion", [
   ...minimalDatasetProperties,
   ...[
     L("accessibility/name", [], { filter: "free access", required: true }),
     L("experimentalApproach/name", [], { filter: "electrophysiology", required: true }),
-    L("studiedSpecimen", [S("lookupLabel")], { type: "core/Subject", expectSingle: false }),
+    L("studiedSpecimen", [S("lookupLabel")], { type: "Subject", expectSingle: false }),
     R("activities", "isPartOf", [S("@id"), S("@type")], MULTIPLE),
   ],
 ]);
 
-const techniquesQuery = buildKGQuery("core/DatasetVersion", [L("technique/name", [], MULTIPLE)]);
+const techniquesQuery = buildKGQuery("DatasetVersion", [L("technique/name", [], MULTIPLE)]);
 
-const basicDatasetQuery = buildKGQuery("core/DatasetVersion", [
+const basicDatasetQuery = buildKGQuery("DatasetVersion", [
   ...basicDatasetProperties,
   ...[
     L(
@@ -155,12 +155,12 @@ const basicDatasetQuery = buildKGQuery("core/DatasetVersion", [
           MULTIPLE
         ),
       ],
-      { type: "core/Subject", expectSingle: false }
+      { type: "Subject", expectSingle: false }
     ),
   ],
 ]);
 
-const patchClampDatasetQuery = buildKGQuery("core/DatasetVersion", [
+const patchClampDatasetQuery = buildKGQuery("DatasetVersion", [
   ...basicDatasetProperties,
   ...[
     L(
@@ -258,7 +258,7 @@ const patchClampDatasetQuery = buildKGQuery("core/DatasetVersion", [
                                 S("internalIdentifier"),
                                 L("output", fileProperties, MULTIPLE),
                               ],
-                              { type: "ephys/RecordingActivity", expectSingle: false }
+                              { type: "RecordingActivity", expectSingle: false }
                             ),
                             R(
                               "stimulationActivity",
@@ -299,7 +299,7 @@ const patchClampDatasetQuery = buildKGQuery("core/DatasetVersion", [
                                 ),
                               ],
                               {
-                                type: "stimulation/StimulationActivity",
+                                type: "StimulationActivity",
                                 expectSingle: false,
                               }
                             ),
@@ -320,7 +320,7 @@ const patchClampDatasetQuery = buildKGQuery("core/DatasetVersion", [
           MULTIPLE
         ),
       ],
-      { type: "core/Subject", expectSingle: false }
+      { type: "Subject", expectSingle: false }
     ),
   ],
 ]);

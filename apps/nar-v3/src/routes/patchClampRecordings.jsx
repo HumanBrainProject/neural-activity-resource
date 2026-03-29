@@ -32,7 +32,7 @@ import Navigation from "../components/Navigation";
 import PatchClampRecordingList from "../components/PatchClampRecordingList";
 import ProgressIndicator from "../components/ProgressIndicator";
 
-export const query = buildKGQuery("core/TissueSample", [
+export const query = buildKGQuery("TissueSample", [
   S("@id"),
   S("lookupLabel", { sort: true }),
   R(

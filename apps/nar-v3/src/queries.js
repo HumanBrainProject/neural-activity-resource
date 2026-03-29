@@ -37,7 +37,7 @@ function buildKGQuery(baseType, structure) {
       },
     },
     meta: {
-      type: `https://openminds.ebrains.eu/${baseType}`,
+      type: `https://openminds.om-i.org/types/${baseType}`,
       responseVocab: "https://schema.hbp.eu/myQuery/",
     },
     structure: structure,
@@ -59,10 +59,10 @@ function simpleProperty(name, options) {
   } else if (name.includes("/")) {
     const pathParts = name.split("/");
     propertyName = `query:${pathParts[0]}`;
-    path = pathParts.map((part) => `https://openminds.ebrains.eu/vocab/${part}`);
+    path = pathParts.map((part) => `https://openminds.om-i.org/props/${part}`);
   } else {
     propertyName = `query:${name}`;
-    path = `https://openminds.ebrains.eu/vocab/${name}`;
+    path = `https://openminds.om-i.org/props/${name}`;
   }
   let prop = {
     propertyName: propertyName,
@@ -101,7 +101,7 @@ function linkProperty(name, structure, options) {
       ];
     }
     prop.path[0].typeFilter = {
-      "@id": `https://openminds.ebrains.eu/${type}`,
+      "@id": `https://openminds.om-i.org/types/${type}`,
     };
   }
   if (filter) {
@@ -130,12 +130,12 @@ function reverseLinkProperty(forwardName, reverseName, structure, options) {
     filter: filter,
   });
   prop.path = {
-    "@id": `https://openminds.ebrains.eu/vocab/${reverseName}`,
+    "@id": `https://openminds.om-i.org/props/${reverseName}`,
     reverse: true,
   };
   if (type) {
     prop.path.typeFilter = {
-      "@id": `https://openminds.ebrains.eu/${type}`,
+      "@id": `https://openminds.om-i.org/types/${type}`,
     };
   }
   return prop;

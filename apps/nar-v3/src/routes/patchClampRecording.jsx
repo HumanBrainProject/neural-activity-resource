@@ -34,7 +34,7 @@ import Navigation from "../components/Navigation";
 import PatchClampRecordingCard from "../components/PatchClampRecordingCard";
 import ProgressIndicator from "../components/ProgressIndicator";
 
-const query = buildKGQuery("core/TissueSample", [
+const query = buildKGQuery("TissueSample", [
   S("@id"),
   S("lookupLabel"),
   L("anatomicalLocation", [S("name"), S("@type")], { expectSingle: false }),
