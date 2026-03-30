@@ -26,5 +26,13 @@ export default defineConfig({
       provider: "v8", // or "istanbul"
     },
     setupFiles: ["./__tests__/setup.js"],
+    server: {
+      deps: {
+        // Force Vite to process these packages so CJS/ESM interop is handled
+        // correctly in jsdom. Without this, react-plotly.js resolves as a plain
+        // object instead of a component, crashing any test that renders a Visualizer.
+        inline: ["neural-activity-visualizer-react", "react-plotly.js"],
+      },
+    },
   },
 });

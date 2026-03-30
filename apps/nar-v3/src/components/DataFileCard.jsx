@@ -19,12 +19,90 @@ limitations under the License.
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
+import Visualizer from "neural-activity-visualizer-react";
+import "neural-activity-visualizer-react/style.css";
 
 import { formatQuant, formatUnits } from "../utility";
 import { NavigateNext, NavigatePrevious } from "./Navigation";
 import Connection from "./Connection";
 import KeyValueTable from "./KeyValueTable";
 import styles from "../styles";
+
+const NEO_FORMAT_NAMES = new Set([
+  "application/vnd.alphaomega-eng",
+  "application/vnd.blackrockmicrosystems.neuralevents",
+  "application/vnd.blackrockmicrosystems.neuralsignals.1",
+  "application/vnd.blackrockmicrosystems.neuralsignals.2",
+  "application/vnd.blackrockmicrosystems.neuralsignals.3",
+  "application/vnd.blackrockmicrosystems.neuralsignals.4",
+  "application/vnd.blackrockmicrosystems.neuralsignals.5",
+  "application/vnd.blackrockmicrosystems.neuralsignals.6",
+  "application/vnd.blackrockmicrosystems.neuralsignals.7",
+  "application/vnd.blackrockmicrosystems.neuralsignals.8",
+  "application/vnd.blackrockmicrosystems.neuralsignals.9",
+  "application/vnd.blackrockmicrosystems.parallelrecordings",
+  "application/vnd.brainvision.binary",
+  "application/vnd.brainvision.header",
+  "application/vnd.brainvision.marker",
+  "application/vnd.brainproducts",
+  "application/vnd.edf",
+  "application/vnd.edf+",
+  "application/vnd.eeglab",
+  "application/vnd.elan.event",
+  "application/vnd.g-node.nix.neo",
+  "application/vnd.hyland.brainwaredam",
+  "application/vnd.hyland.brainwaref32",
+  "application/vnd.hyland.brainwaresrc",
+  "application/vnd.igorpro",
+  "application/vnd.indec-biosystems.axonrawformat",
+  "application/vnd.intan.technology",
+  "application/vnd.klustakwik",
+  "application/vnd.kwik",
+  "application/vnd.mearec",
+  "application/vnd.micromed",
+  "application/vnd.micromedgroup",
+  "application/vnd.moleculardevices.axon",
+  "application/vnd.neo.ascii.signal",
+  "application/vnd.neo.ascii.spiketrain",
+  "application/vnd.nest-simulator.recording",
+  "application/vnd.neuralynx",
+  "application/vnd.nsdf",
+  "application/vnd.nwb.nwbn+hdf",
+  "application/vnd.openephys",
+  "application/vnd.plexon",
+  "application/vnd.plexon.neuroexplorer",
+  "application/vnd.raw.binarysignal",
+  "application/vnd.raw.mcs",
+  "application/vnd.rawbinarysignal",
+  "application/vnd.spike2.sonpy.son",
+  "application/vnd.spikeglx.system",
+  "application/vnd.stimfit",
+  "application/vnd.tdt",
+  "application/vnd.wavemetrics.igorpro",
+  "application/vnd.winedr",
+  "application/vnd.winwcp",
+]);
+
+const NEO_EXTENSIONS = new Set([
+  ".map", ".nev", ".ns1", ".ns2", ".ns3", ".ns4", ".ns5", ".ns6", ".ns7", ".ns8", ".ns9",
+  ".eeg", ".vhdr", ".vmrk", ".edf", ".sat", ".pos", ".nix",
+  ".dam", ".f32", ".src",
+  ".ibw", ".pxp", ".arf", ".rhd", ".rhs",
+  ".kwik", ".trc", ".abf", ".asc", ".gdf", ".dat",
+  ".ncs", ".nse", ".ntt", ".nsdf", ".nwb",
+  ".plx", ".nex", ".raw", ".smr",
+  ".abf2", ".atf", ".axgx", ".axgd", ".cfs", ".heka", ".hdf5",
+  ".igor", ".edr", ".wcp",
+]);
+
+function isNeoReadable(fileObj) {
+  if (fileObj.format && fileObj.format.name) {
+    return NEO_FORMAT_NAMES.has(fileObj.format.name);
+  }
+  const dot = fileObj.name.lastIndexOf(".");
+  const ext = dot >= 0 ? fileObj.name.slice(dot).toLowerCase() : "";
+  return NEO_EXTENSIONS.has(ext);
+}
 
 function DataFileCard(props) {
   let fileObj = null;
@@ -74,6 +152,7 @@ function DataFileCard(props) {
             <h2>File {fileObj.name}</h2>
 
             <KeyValueTable boldKeys data={data} />
+            {isNeoReadable(fileObj) && <Box sx={{ pt: 8 }}><Visualizer source={fileObj.IRI} /></Box>}
           </Box>
           <Stack sx={{ width: "60px" }} justifyContent="center">
             {props.index < props.fileObjects.length - 1 ? (

@@ -32,7 +32,7 @@ function ControlledTerm(props) {
       const parts = [props.term.definition, props.term.description].filter(Boolean);
       const tooltipContent = parts.join("\n\n");
       return (
-        <Tooltip title={<Markdown components={{a: ({node, ...p}) => <a {...p} style={{color: "lightblue"}} />}}>{tooltipContent}</Markdown>}>
+        <Tooltip title={<Markdown components={{a: ({node, ...p}) => <a {...p} style={{color: "lightblue"}} />}}>{tooltipContent}</Markdown>}> {/* eslint-disable-line no-unused-vars */}
           <span style={{color: "darkgreen"}}>{props.term.name}</span>
         </Tooltip>
       );

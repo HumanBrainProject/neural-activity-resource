@@ -27,7 +27,7 @@ import TableRow from "@mui/material/TableRow";
 import { uuidFromUri } from "../utility";
 
 function formatAuthors(authors) {
-  console.log(authors);
+  //console.log(authors);
   if (authors && authors.length > 0) {
     if (authors.length == 1) {
       return authors[0].familyName;

@@ -49,8 +49,8 @@ function SlicePreparationCard(props) {
       "Slicing angle": formatQuant(activity.device[0].slicingAngle),
       "Study targets": (
         <>
-          {activity.studyTarget.map((item) => (
-            <ControlledTerm key={item.name} term={item} />
+          {activity.studyTarget.map((item, index) => (
+            <ControlledTerm key={item.id || item.name || index} term={item} />
           ))}
         </>
       ),
