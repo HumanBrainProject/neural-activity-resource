@@ -24,16 +24,15 @@ limitations under the License.
 
 
 import Tooltip from "@mui/material/Tooltip";
+import Markdown from "react-markdown";
 
 function ControlledTerm(props) {
   if (props.term) {
     if (props.term.definition || props.term.description) {
-      let tooltipContent = props.term.definition || "";
-      if (props.term.description) {
-          tooltipContent += props.term.description;
-      }
+      const parts = [props.term.definition, props.term.description].filter(Boolean);
+      const tooltipContent = parts.join("\n\n");
       return (
-        <Tooltip title={tooltipContent}>
+        <Tooltip title={<Markdown components={{a: ({node, ...p}) => <a {...p} style={{color: "lightblue"}} />}}>{tooltipContent}</Markdown>}>
           <span style={{color: "darkgreen"}}>{props.term.name}</span>
         </Tooltip>
       );
