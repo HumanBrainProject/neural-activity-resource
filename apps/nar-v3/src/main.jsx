@@ -23,7 +23,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import { Avatar, CssBaseline, AppBar, Link, Toolbar, Typography, Container } from "@mui/material";
+import { Avatar, CssBaseline, AppBar, Link, Toolbar, Tooltip, Typography, Container } from "@mui/material";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { green } from "@mui/material/colors";
 
@@ -106,6 +107,9 @@ export default function App(props) {
                 EBRAINS: Neural Activity Resource (alpha)
               </Link>
             </Typography>
+            <Tooltip title={auth.isCurator ? "Curator" : "Not a curator"}>
+              <ManageAccountsIcon sx={{ ml: "auto", opacity: auth.isCurator ? 1 : 0.4 }} />
+            </Tooltip>
           </Toolbar>
         </AppBar>
         <main>
