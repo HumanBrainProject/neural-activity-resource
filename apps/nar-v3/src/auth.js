@@ -137,10 +137,9 @@ function checkPermissions(auth) {
     },
   };
 
-  const corsProxyUrl = "https://corsproxy.apps.ebrains.eu/";
-  const userInfoUrl =
-    corsProxyUrl +
-    "https://iam.ebrains.eu/auth/realms/hbp/protocol/openid-connect/userinfo";
+  const userInfoUrl = import.meta.env.DEV
+    ? "/dev-userinfo"
+    : "https://corsproxy.apps.ebrains.eu/https://iam.ebrains.eu/auth/realms/hbp/protocol/openid-connect/userinfo";
   return fetch(userInfoUrl, config)
     .then(response => response.json())
     .then((userInfo) => {

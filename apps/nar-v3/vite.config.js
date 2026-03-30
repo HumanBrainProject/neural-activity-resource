@@ -7,6 +7,14 @@ export default defineConfig({
   plugins: [react(), eslint()],
   server: {
     port: 3000,
+    proxy: {
+      "/dev-userinfo": {
+        target: "https://iam.ebrains.eu",
+        changeOrigin: true,
+        rewrite: () =>
+          "/auth/realms/hbp/protocol/openid-connect/userinfo",
+      },
+    },
   },
   build: {
     target: "esnext",
