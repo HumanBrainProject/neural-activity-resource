@@ -30,10 +30,7 @@ import { ephysDatasetsQuery } from "./queryLibrary";
 
 export function getLoader(auth) {
   const loader = async () => {
-    let stage = "RELEASED";
-    if (auth.isCurator) {
-      stage = "IN_PROGRESS";
-    }
+    const stage = auth.isCurator ? ["IN_PROGRESS", "RELEASED"] : "RELEASED";
     const datasetsPromise = getKGData("datasets summary", ephysDatasetsQuery, auth, {}, stage);
     console.log(datasetsPromise);
     return defer({ datasets: datasetsPromise });

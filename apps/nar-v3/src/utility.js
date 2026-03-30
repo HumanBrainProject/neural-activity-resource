@@ -78,4 +78,80 @@ function getKGSearchUrl(uri) {
   return `https://search.kg.ebrains.eu/instances/${uuid}`;
 }
 
-export { formatQuant, formatUnits, formatSolution, uuidFromUri, getKGSearchUrl };
+function isEmptyValue(val) {
+  if (val === null || val === undefined || val === "") return true;
+  if (Array.isArray(val)) return val.length === 0;
+  if (typeof val === "object") return Object.keys(val).length === 0;
+  return false;
+}
+
+function getMatchKey(item) {
+  if (!item || typeof item !== "object") return null;
+  return item.id || item.lookupLabel || item.internalIdentifier || null;
+}
+
+function mergeArrays(primary, fallback) {
+  // Merge two arrays by matching elements on id, lookupLabel, or internalIdentifier.
+  // Falls back to positional matching for items without a key.
+  if (!primary || primary.length === 0) return fallback || [];
+  if (!fallback || fallback.length === 0) return primary;
+
+  const fallbackByKey = {};
+  const fallbackPositional = [];
+  for (const item of fallback) {
+    const key = getMatchKey(item);
+    if (key) {
+      fallbackByKey[key] = item;
+    } else {
+      fallbackPositional.push(item);
+    }
+  }
+
+  let positionalIndex = 0;
+  const result = primary.map((item) => {
+    const key = getMatchKey(item);
+    if (key && fallbackByKey[key]) {
+      return mergeItems(item, fallbackByKey[key]);
+    } else if (!key && fallbackPositional[positionalIndex]) {
+      return mergeItems(item, fallbackPositional[positionalIndex++]);
+    }
+    return item;
+  });
+
+  // Add fallback items whose key wasn't present in primary
+  const primaryKeys = new Set(primary.map(getMatchKey).filter(Boolean));
+  for (const item of fallback) {
+    const key = getMatchKey(item);
+    if (key && !primaryKeys.has(key)) {
+      result.push(item);
+    }
+  }
+
+  return result;
+}
+
+function mergeItems(primary, fallback) {
+  // Deep-merge two KG items. Primary (IN_PROGRESS) wins for non-empty fields;
+  // empty primary fields are filled from fallback (RELEASED).
+  if (primary === null || primary === undefined) return fallback;
+  if (typeof primary !== "object") return primary;
+  if (fallback === null || fallback === undefined || typeof fallback !== "object") return primary;
+  const result = { ...primary };
+  for (const key of Object.keys(fallback)) {
+    if (isEmptyValue(result[key])) {
+      result[key] = fallback[key];
+    } else if (Array.isArray(result[key]) && Array.isArray(fallback[key])) {
+      result[key] = mergeArrays(result[key], fallback[key]);
+    } else if (
+      typeof result[key] === "object" &&
+      !Array.isArray(result[key]) &&
+      typeof fallback[key] === "object" &&
+      !Array.isArray(fallback[key])
+    ) {
+      result[key] = mergeItems(result[key], fallback[key]);
+    }
+  }
+  return result;
+}
+
+export { formatQuant, formatUnits, formatSolution, uuidFromUri, getKGSearchUrl, isEmptyValue, mergeItems };

@@ -19,6 +19,7 @@ limitations under the License.
 */
 
 import { kgUrl, kgDefaultStage } from "./globals";
+import { mergeItems } from "./utility";
 //import examplePatchClampData from "./example_data/example_patch_clamp_dataset.json";
 
 function isEmpty(obj) {
@@ -73,11 +74,24 @@ async function queryKG(kgQuery, searchParams, auth) {
 async function getKGItem(cacheLabel, kgQuery, instanceId, auth, stage = kgDefaultStage) {
   console.log("getKGItem " + cacheLabel + instanceId);
   if (!cache[cacheLabel][instanceId]) {
-    const searchParams = { stage: stage, instanceId: instanceId };
-    const result = await queryKG(kgQuery, searchParams, auth);
-    if (result) {
-      const items = result.data;
-      cache[cacheLabel][instanceId] = items[0];
+    if (Array.isArray(stage)) {
+      // Curators pass stage as an array (e.g. ["IN_PROGRESS", "RELEASED"]) so that
+      // we can fetch the same item under both stages in parallel and merge the results.
+      // This is necessary because IN_PROGRESS sometimes returns less complete data
+      // than RELEASED — for example, nested arrays that are empty in IN_PROGRESS but
+      // populated in RELEASED. mergeItems fills those gaps while keeping IN_PROGRESS
+      // values wherever they are present, so curators see the union of both.
+      const results = await Promise.all(
+        stage.map((s) => queryKG(kgQuery, { stage: s, instanceId }, auth))
+      );
+      const items = results.map((r) => r?.data?.[0]);
+      cache[cacheLabel][instanceId] = mergeItems(items[0], items[1]);
+    } else {
+      const searchParams = { stage: stage, instanceId: instanceId };
+      const result = await queryKG(kgQuery, searchParams, auth);
+      if (result) {
+        cache[cacheLabel][instanceId] = result.data[0];
+      }
     }
   }
   return cache[cacheLabel][instanceId];
@@ -96,20 +110,36 @@ async function getKGData(
   if (isEmpty(cache[cacheLabel])) {
     // if the cache is empty we need to fill it
     console.log(kgUrl);
-    let searchParams = {
-      returnTotalResults: true,
-      stage: stage,
-      size: size,
-      from: from,
-    };
-    if (searchFilters) {
-      searchParams = { ...searchParams, searchFilters };
-    }
-    const result = await queryKG(kgQuery, searchParams, auth);
-    if (result) {
-      const items = result.data;
-      for (const index in items) {
-        cache[cacheLabel][items[index].id] = items[index];
+    if (Array.isArray(stage)) {
+      const fetchForStage = async (s) => {
+        let searchParams = { returnTotalResults: true, stage: s, size, from };
+        if (searchFilters) searchParams = { ...searchParams, searchFilters };
+        const result = await queryKG(kgQuery, searchParams, auth);
+        return result ? result.data : [];
+      };
+      const [primaryItems, fallbackItems] = await Promise.all(stage.map(fetchForStage));
+      const primaryById = Object.fromEntries(primaryItems.map((i) => [i.id, i]));
+      const fallbackById = Object.fromEntries(fallbackItems.map((i) => [i.id, i]));
+      const allIds = new Set([...Object.keys(primaryById), ...Object.keys(fallbackById)]);
+      for (const id of allIds) {
+        cache[cacheLabel][id] = mergeItems(primaryById[id], fallbackById[id]);
+      }
+    } else {
+      let searchParams = {
+        returnTotalResults: true,
+        stage: stage,
+        size: size,
+        from: from,
+      };
+      if (searchFilters) {
+        searchParams = { ...searchParams, searchFilters };
+      }
+      const result = await queryKG(kgQuery, searchParams, auth);
+      if (result) {
+        const items = result.data;
+        for (const index in items) {
+          cache[cacheLabel][items[index].id] = items[index];
+        }
       }
     }
   }

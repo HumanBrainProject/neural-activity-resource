@@ -48,11 +48,8 @@ export const query = buildKGQuery("TissueSample", [
 
 export function getLoader(auth) {
   const loader = async () => {
-    let stage = "RELEASED";
-    if (auth.isCurator) {
-      stage = "IN_PROGRESS";
-    }
-    const tissueSamplesPromise = getKGData("patch clamp recordings summary", query, auth, stage);
+    const stage = auth.isCurator ? ["IN_PROGRESS", "RELEASED"] : "RELEASED";
+    const tissueSamplesPromise = getKGData("patch clamp recordings summary", query, auth, {}, stage);
 
     console.log(tissueSamplesPromise);
     return defer({ tissueSamples: tissueSamplesPromise });

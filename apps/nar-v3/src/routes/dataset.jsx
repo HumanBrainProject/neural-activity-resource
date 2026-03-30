@@ -31,10 +31,7 @@ import { basicDatasetQuery, patchClampDatasetQuery, techniquesQuery } from "./qu
 
 export function getLoader(auth) {
   const loader = async ({ params }) => {
-    let stage = "RELEASED";
-    if (auth.isCurator) {
-      stage = "IN_PROGRESS";
-    }
+    const stage = auth.isCurator ? ["IN_PROGRESS", "RELEASED"] : "RELEASED";
     const techniques = await getKGItem(
       "datasets techniques",
       techniquesQuery,
