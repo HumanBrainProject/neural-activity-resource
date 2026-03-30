@@ -6,7 +6,7 @@ test_app:
   stage: test
   script:
     - cd apps/nar-v3
-    - npm ci
+    - npm ci --legacy-peer-deps
     - npm run testci  # runs all tests whose name does _not_ contain "KG"
   tags:
     - docker-runner
