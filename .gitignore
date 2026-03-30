@@ -15,6 +15,9 @@ apps/nar-browser/lib
 __pycache__
 .ipynb_checkpoints
 
+# secrets
+apps/nar-v3/.env.local
+
 # other
 *.log
 *.DS_Store

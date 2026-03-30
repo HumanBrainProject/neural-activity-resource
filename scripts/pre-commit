@@ -1,0 +1,11 @@
+#!/bin/sh
+# Pre-commit hook: block commits that contain JWT tokens.
+# Install by running: scripts/install-hooks.sh
+
+jwt_pattern='eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}'
+
+if git diff --cached --unified=0 | grep '^+' | grep -qE "$jwt_pattern"; then
+    echo "ERROR: Possible JWT token detected in staged changes."
+    echo "Remove the token and try again. To store dev tokens safely, use .env.local."
+    exit 1
+fi
