@@ -54,7 +54,7 @@ function DatasetList(props) {
         </TableRow>
       </TableHead>
       <TableBody>
-        {props.datasets.map((dataset) => (
+        {[...props.datasets].sort((a, b) => b.activities.length - a.activities.length).map((dataset) => (
           <TableRow key={dataset.id}>
             <TableCell>
               <RouterLink to={uuidFromUri(dataset.id)}>
