@@ -119,8 +119,8 @@ export default function App(props) {
 
 }
 
-function renderApp(auth) {
-  checkPermissions(auth);
+async function renderApp(auth) {
+  await checkPermissions(auth);
   ReactDOM.createRoot(document.getElementById("root")).render(
     <App auth={auth} />
   );
