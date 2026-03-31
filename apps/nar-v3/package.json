@@ -34,8 +34,8 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@eslint/js": "^9.0.0",
-    "@vitejs/plugin-react": "^4.3.1",
-    "@vitest/coverage-v8": "^2.0.5",
+    "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/coverage-v8": "^4.1.2",
     "eslint": "^9.0.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.0",
@@ -43,8 +43,8 @@
     "globals": "^16.0.0",
     "jsdom": "^29.0.1",
     "prettier": "3.8.1",
-    "vite": "^5.4.14",
-    "vitest": "^2.0.5",
+    "vite": "^8.0.3",
+    "vitest": "^4.1.2",
     "vitest-fetch-mock": "^0.4.5"
   }
 }
