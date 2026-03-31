@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { defer } from "react-router-dom";
-
 import {
   buildKGQuery,
   simpleProperty as S,
@@ -88,7 +86,7 @@ export function getLoader(auth) {
       stage
     );
     console.log(tissueSamplePromise);
-    return defer({ tissueSample: tissueSamplePromise });
+    return { tissueSample: tissueSamplePromise };
   };
   return loader;
 }

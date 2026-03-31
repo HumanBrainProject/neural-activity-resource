@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { defer } from "react-router-dom";
-
 import { count } from "../../datastore";
 import { query as patchClampRecordingsQuery } from "./patchClampRecordings";
 import { ephysDatasetsQuery } from "../queryLibrary";
@@ -31,7 +29,7 @@ export function getLoader(auth) {
       count(ephysDatasetsQuery, auth, {}, stage),
     ]);
     console.log(statisticsPromise);
-    return defer({ counts: statisticsPromise });
+    return { counts: statisticsPromise };
   };
   return loader;
 }

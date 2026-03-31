@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { defer } from "react-router-dom";
-
 import { getKGData } from "../../datastore";
 import { ephysDatasetsQuery } from "../queryLibrary";
 
@@ -24,7 +22,7 @@ export function getLoader(auth) {
     const stage = auth.isCurator ? ["IN_PROGRESS", "RELEASED"] : "RELEASED";
     const datasetsPromise = getKGData("datasets summary", ephysDatasetsQuery, auth, {}, stage);
     console.log(datasetsPromise);
-    return defer({ datasets: datasetsPromise });
+    return { datasets: datasetsPromise };
   };
   return loader;
 }

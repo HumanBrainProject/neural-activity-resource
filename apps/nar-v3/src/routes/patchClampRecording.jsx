@@ -20,7 +20,7 @@ limitations under the License.
 
 
 import React from "react";
-import { Await, useLoaderData } from "react-router-dom";
+import { Await, useLoaderData } from "react-router";
 
 import { uuidFromUri } from "../utility.js";
 import Navigation from "../components/Navigation";

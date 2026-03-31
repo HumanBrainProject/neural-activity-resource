@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { defer } from "react-router-dom";
-
 import {
   buildKGQuery,
   simpleProperty as S,
@@ -44,7 +42,7 @@ export function getLoader(auth) {
     const tissueSamplesPromise = getKGData("patch clamp recordings summary", query, auth, {}, stage);
 
     console.log(tissueSamplesPromise);
-    return defer({ tissueSamples: tissueSamplesPromise });
+    return { tissueSamples: tissueSamplesPromise };
   };
   return loader;
 }

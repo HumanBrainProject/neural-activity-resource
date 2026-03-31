@@ -20,7 +20,7 @@ limitations under the License.
 
 
 import React from "react";
-import { Await, useLoaderData, Link as RouterLink } from "react-router-dom";
+import { Await, useLoaderData, Link as RouterLink } from "react-router";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -49,7 +49,7 @@ function ModalityCard(props) {
   const { label, image, path, count } = props;
 
   return (
-    <Grid item key={label} xs={12} sm={6} md={4}>
+    <Grid key={label} size={{ xs: 12, sm: 6, md: 4 }}>
       <Card sx={{ height: "100%" }}>
         <CardActionArea component={RouterLink} to={path}>
           <CardMedia component="img" height="200" image={image} title={label} />

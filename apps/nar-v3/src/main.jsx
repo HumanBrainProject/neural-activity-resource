@@ -21,7 +21,7 @@ limitations under the License.
 
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router";
 
 import { Avatar, CssBaseline, AppBar, Link, Toolbar, Tooltip, Typography, Container } from "@mui/material";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";

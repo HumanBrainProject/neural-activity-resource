@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { defer } from "react-router-dom";
-
 import { getKGItem } from "../../datastore";
 import { basicDatasetQuery, patchClampDatasetQuery, techniquesQuery } from "../queryLibrary";
 
@@ -39,7 +37,7 @@ export function getLoader(auth) {
     }
     const datasetPromise = getKGItem("datasets detail", query, params.datasetId, auth, stage);
     console.log(datasetPromise);
-    return defer({ dataset: datasetPromise });
+    return { dataset: datasetPromise };
   };
   return loader;
 }

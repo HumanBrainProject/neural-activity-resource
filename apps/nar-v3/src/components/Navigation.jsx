@@ -23,7 +23,7 @@ limitations under the License.
 
 
 import { Link, Typography, Toolbar, Breadcrumbs } from "@mui/material";
-import { Link as RouterLink, useLocation } from "react-router-dom";
+import { Link as RouterLink, useLocation } from "react-router";
 
 function getBreadcrumb(item) {
   if (item.path) {
