@@ -2,7 +2,7 @@
 # as it contains only the final built app
 
 # build environment
-FROM docker-registry.ebrains.eu/neuralactivity/node:20-alpine as build
+FROM docker-registry.ebrains.eu/neuralactivity/node:22-alpine as build
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json ./

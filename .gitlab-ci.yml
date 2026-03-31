@@ -10,7 +10,7 @@ test_app:
     - npm run testci  # runs all tests whose name does _not_ contain "KG"
   tags:
     - docker-runner
-  image: docker-registry.ebrains.eu/neuralactivity/node:20-alpine
+  image: docker-registry.ebrains.eu/neuralactivity/node:22-alpine
 
 build_image_production:
   stage: build
