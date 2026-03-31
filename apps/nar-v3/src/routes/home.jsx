@@ -20,7 +20,7 @@ limitations under the License.
 
 
 import React from "react";
-import { Await, defer, useLoaderData, Link as RouterLink } from "react-router-dom";
+import { Await, useLoaderData, Link as RouterLink } from "react-router-dom";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -31,26 +31,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Chip from "@mui/material/Chip";
 
-import { count } from "../datastore";
-import { query as patchClampRecordingsQuery } from "./patchClampRecordings";
-import { ephysDatasetsQuery } from "./queryLibrary";
 import ProgressIndicator from "../components/ProgressIndicator";
-
-export function getLoader(auth) {
-  const loader = async () => {
-    let stage = "RELEASED";
-    if (auth.isCurator) {
-      stage = "IN_PROGRESS";
-    }
-    const statisticsPromise = Promise.all([
-      count(patchClampRecordingsQuery, auth, {}, stage),
-      count(ephysDatasetsQuery, auth, {}, stage),
-    ]);
-    console.log(statisticsPromise);
-    return defer({ counts: statisticsPromise });
-  };
-  return loader;
-}
 
 // function getModalityCount(modality) {
 //   console.log(modality);

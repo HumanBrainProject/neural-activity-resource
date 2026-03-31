@@ -20,23 +20,11 @@ limitations under the License.
 
 
 import React from "react";
-import { Await, defer, useLoaderData } from "react-router-dom";
+import { Await, useLoaderData } from "react-router-dom";
 
-import { getKGData } from "../datastore";
 import Navigation from "../components/Navigation";
 import DatasetList from "../components/DatasetList";
 import ProgressIndicator from "../components/ProgressIndicator";
-import { ephysDatasetsQuery } from "./queryLibrary";
-
-export function getLoader(auth) {
-  const loader = async () => {
-    const stage = auth.isCurator ? ["IN_PROGRESS", "RELEASED"] : "RELEASED";
-    const datasetsPromise = getKGData("datasets summary", ephysDatasetsQuery, auth, {}, stage);
-    console.log(datasetsPromise);
-    return defer({ datasets: datasetsPromise });
-  };
-  return loader;
-}
 
 function Datasets() {
   const data = useLoaderData();

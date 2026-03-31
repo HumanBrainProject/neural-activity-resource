@@ -19,43 +19,11 @@ limitations under the License.
 */
 
 import React from "react";
-import { Await, defer, useLoaderData } from "react-router-dom";
+import { Await, useLoaderData } from "react-router-dom";
 
-import {
-  buildKGQuery,
-  simpleProperty as S,
-  linkProperty as L,
-  reverseLinkProperty as R,
-} from "../queries";
-import { getKGData } from "../datastore";
 import Navigation from "../components/Navigation";
 import PatchClampRecordingList from "../components/PatchClampRecordingList";
 import ProgressIndicator from "../components/ProgressIndicator";
-
-export const query = buildKGQuery("TissueSample", [
-  S("@id"),
-  S("lookupLabel", { sort: true }),
-  R(
-    "belongsToDataset",
-    "studiedSpecimen",
-    [
-      L("accessibility/name", [], { filter: "free access", required: true }),
-      L("technique/name", [], { filter: "patch clamp", expectSingle: false, required: true }),
-    ],
-    { required: true }
-  ),
-]);
-
-export function getLoader(auth) {
-  const loader = async () => {
-    const stage = auth.isCurator ? ["IN_PROGRESS", "RELEASED"] : "RELEASED";
-    const tissueSamplesPromise = getKGData("patch clamp recordings summary", query, auth, {}, stage);
-
-    console.log(tissueSamplesPromise);
-    return defer({ tissueSamples: tissueSamplesPromise });
-  };
-  return loader;
-}
 
 function PatchClampIndex() {
   const data = useLoaderData();

@@ -20,90 +20,12 @@ limitations under the License.
 
 
 import React from "react";
-import { Await, defer, useLoaderData } from "react-router-dom";
+import { Await, useLoaderData } from "react-router-dom";
 
-import {
-  buildKGQuery,
-  simpleProperty as S,
-  linkProperty as L,
-  reverseLinkProperty as R,
-} from "../queries";
-import { getKGItem } from "../datastore";
 import { uuidFromUri } from "../utility.js";
 import Navigation from "../components/Navigation";
 import PatchClampRecordingCard from "../components/PatchClampRecordingCard";
 import ProgressIndicator from "../components/ProgressIndicator";
-
-const query = buildKGQuery("TissueSample", [
-  S("@id"),
-  S("lookupLabel"),
-  L("anatomicalLocation", [S("name"), S("@type")], { expectSingle: false }),
-  L("biologicalSex/name"),
-  L("laterality/name"),
-  L("origin", [S("name"), S("@type")]),
-  L("species", [
-    S("name"),
-    S("@type"),
-    R("species", "species", [S("name")], { type: "core/Strain" }),
-  ]),
-  L("strain/name"),
-  L("type/name"),
-  L(
-    "studiedState",
-    [
-      S("lookupLabel"),
-      L("descendedFrom", [
-        S("lookupLabel"),
-        S("@type"),
-        R("isStateOf", "studiedState", [S("lookupLabel"), S("@id"), L("type/name")]),
-      ]),
-      L("age", [
-        S("value"),
-        S("uncertainty"),
-        S("minValue"),
-        S("maxValue"),
-        L("unit/name"),
-        L("minValueUnit/name"),
-        L("maxValueUnit/name"),
-      ]),
-      L("attribute", [S("name"), S("@type")], { expectSingle: false }),
-      S("additionalRemarks"),
-      L("pathology", [S("name"), S("@type")], { expectSingle: false }),
-    ],
-    { expectSingle: false }
-  ),
-  R(
-    "belongsToDataset",
-    "studiedSpecimen",
-    [
-      S("fullName"),
-      S("shortName"),
-      S("@id"),
-      L("technique/name", [], { filter: "patch clamp", expectSingle: false, required: true }),
-      L("accessibility/name", [], { filter: "free access", required: true }),
-      R("isVersionOf", "hasVersion", [S("shortName"), S("fullName")]),
-    ],
-    { required: true }
-  ),
-]);
-
-//console.log(query);
-
-export function getLoader(auth) {
-  const loader = async ({ params }) => {
-    const stage = auth.isCurator ? ["IN_PROGRESS", "RELEASED"] : "RELEASED";
-    const tissueSamplePromise = getKGItem(
-      "patch clamp recordings detail",
-      query,
-      params.expId,
-      auth,
-      stage
-    );
-    console.log(tissueSamplePromise);
-    return defer({ tissueSample: tissueSamplePromise });
-  };
-  return loader;
-}
 
 function PatchClamp() {
   const data = useLoaderData();

@@ -28,13 +28,18 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { green } from "@mui/material/colors";
 
-import Home, { getLoader as statsLoader } from "./routes/home";
+import Home from "./routes/home";
 import ErrorPage from "./error-page";
 import { initAuth, checkPermissions } from "./auth";
-import Datasets, { getLoader as datasetsLoader } from "./routes/datasets";
-import Dataset, { getLoader as datasetLoader } from "./routes/dataset";
-import PatchClampIndex, { getLoader as patchClampIndexLoader } from "./routes/patchClampRecordings";
-import PatchClamp, { getLoader as patchClampLoader } from "./routes/patchClampRecording";
+import Datasets from "./routes/datasets";
+import Dataset from "./routes/dataset";
+import PatchClampIndex from "./routes/patchClampRecordings";
+import PatchClamp from "./routes/patchClampRecording";
+import { getLoader as statsLoader } from "./routes/loaders/home";
+import { getLoader as datasetsLoader } from "./routes/loaders/datasets";
+import { getLoader as datasetLoader } from "./routes/loaders/dataset";
+import { getLoader as patchClampIndexLoader } from "./routes/loaders/patchClampRecordings";
+import { getLoader as patchClampLoader } from "./routes/loaders/patchClampRecording";
 
 const theme = createTheme({
   typography: {
